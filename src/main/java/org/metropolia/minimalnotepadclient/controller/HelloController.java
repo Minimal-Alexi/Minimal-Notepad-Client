@@ -1,11 +1,8 @@
-package org.metropolia.minimalnotepadclient;
+package org.metropolia.minimalnotepadclient.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 public class HelloController {
     @FXML
