@@ -13,7 +13,7 @@
          <children>
             <ImageView fitHeight="800.0" fitWidth="985.0" layoutX="-63.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="/img/helloPage.png" />
+                  <Image url="@../img/helloPage.png" />
                </image>
             </ImageView>
             <Label fx:id="logIn" layoutX="615.0" layoutY="577.0" onMouseClicked="#loginClicked" onMouseEntered="#loginMouseEnter" onMouseExited="#loginMouseExit" prefHeight="64.0" prefWidth="268.0" text="Log In Now...">
