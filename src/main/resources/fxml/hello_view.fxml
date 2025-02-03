@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1049.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.metropolia.minimalnotepadclient.controller.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1049.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HelloController">
    <children>
       <AnchorPane layoutX="71.0" prefHeight="808.0" prefWidth="1035.0">
          <children>
             <ImageView fitHeight="800.0" fitWidth="985.0" layoutX="-63.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/helloPage.png" />
+                  <Image url="/img/helloPage.png" />
                </image>
             </ImageView>
             <Label fx:id="logIn" layoutX="615.0" layoutY="577.0" onMouseClicked="#loginClicked" onMouseEntered="#loginMouseEnter" onMouseExited="#loginMouseExit" prefHeight="64.0" prefWidth="268.0" text="Log In Now...">

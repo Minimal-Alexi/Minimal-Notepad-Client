@@ -1,4 +1,4 @@
-package org.metropolia.minimalnotepadclient.view;
+package view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,11 +9,11 @@ import javafx.stage.Stage;
 public class HelloView extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("HelloView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/hello_view.fxml"));
         Parent root = fxmlLoader.load();
 
         stage.setScene(new Scene(root));
-        stage.setTitle("Metropolia Notepad Client");
+        stage.setTitle("Notebook");
         stage.show();
     }
 
