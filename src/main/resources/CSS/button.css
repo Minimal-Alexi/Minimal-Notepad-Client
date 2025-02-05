@@ -1,0 +1,18 @@
+.button {
+    -fx-background-color: #FFFFFF;
+    -fx-background-insets: 1,1,1;
+    -fx-background-radius: 10,10,10;
+    -fx-padding: 3 3 3 10;
+    -fx-text-fill: #898989;
+    -fx-alignment: center-left;
+}
+
+.button:hover {
+    -fx-background-color: #A276FF;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button:hover .icon {
+    -fx-fill: #FFFFFF;
+    -fx-stroke: derive(#A276FF, 30%);
+}

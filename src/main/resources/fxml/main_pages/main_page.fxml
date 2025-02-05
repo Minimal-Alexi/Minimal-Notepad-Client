@@ -21,7 +21,7 @@
    <left>
       <AnchorPane id="sidebar" prefHeight="853.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <children>
-            <Button graphicTextGap="10.0" layoutX="44.0" layoutY="179.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/main_page.css" text="My files">
+            <Button graphicTextGap="10.0" layoutX="44.0" layoutY="179.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/button.css" text="My files">
                <font>
                   <Font size="16.0" />
                </font>
@@ -47,7 +47,7 @@
                   <Font size="40.0" />
                </font>
             </Label>
-            <Button graphicTextGap="10.0" layoutX="44.0" layoutY="236.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/main_page.css" text="Share Notes">
+            <Button graphicTextGap="10.0" layoutX="44.0" layoutY="236.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/button.css" text="Share Notes">
                <font>
                   <Font size="16.0" />
                </font>
@@ -83,9 +83,9 @@
                               </Label>
                            </graphic>
                         </Label>
-                        <AnchorPane prefHeight="62.0" prefWidth="210.0">
+                        <AnchorPane prefHeight="62.0" prefWidth="210.0" stylesheets="@../../CSS/search_bar.css">
                            <children>
-                              <TextField cache="true" layoutX="5.0" layoutY="28.0" styleClass="search-box" stylesheets="@../../CSS/main_page.css" text="Search">
+                              <TextField cache="true" layoutX="5.0" layoutY="28.0" styleClass="search-box" stylesheets="@../../CSS/table_view.css" text="Search">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -117,7 +117,7 @@
                                     <Insets bottom="20.0" top="20.0" />
                                  </padding>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/main_page.css" text="+ New Note">
+                              <Button mnemonicParsing="false" onAction="#newNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/button.css" text="+ New Note">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -156,7 +156,7 @@
                               <Insets bottom="10.0" top="20.0" />
                            </padding>
                         </Label>
-                        <TableView fx:id="table" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../CSS/main_page.css">
+                        <TableView fx:id="table" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../CSS/table_view.css">
                           <columns>
                               <TableColumn fx:id="name" prefWidth="185.60003280639648" text="Name" />
                               <TableColumn fx:id="group" prefWidth="182.40000915527344" text="Group" />
