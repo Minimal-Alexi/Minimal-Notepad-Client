@@ -88,8 +88,8 @@
     -fx-background-insets: 0, 0 0 0 0;
 }
 
-.table-view .table-row-cell:selected {
-    -fx-background-color: #005797;
+.table-view .table-row-cell:hover {
+    -fx-background-color: #F6F7F9;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
