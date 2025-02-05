@@ -3,12 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
@@ -101,11 +104,6 @@
                   </AnchorPane>
                </children>
             </HBox>
-            <Label layoutX="27.0" layoutY="403.0" prefHeight="35.0" prefWidth="211.0" text="Your notes">
-               <font>
-                  <Font name="Gadugi Bold" size="20.0" />
-               </font>
-            </Label>
             <AnchorPane layoutX="630.0" layoutY="63.0" prefHeight="40.0" prefWidth="210.0">
                <children>
                   <TextField cache="true" prefHeight="40.0" prefWidth="210.0" styleClass="search-box" stylesheets="@../../CSS/main_page.css" text="Search">
@@ -120,6 +118,102 @@
                   <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="11.0" layoutY="9.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
                </children>
             </AnchorPane>
+            <VBox layoutX="30.0" layoutY="420.0" prefHeight="424.0" prefWidth="872.0">
+               <children>
+                  <Label prefHeight="35.0" prefWidth="211.0" text="Your notes">
+                     <font>
+                        <Font name="Gadugi Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane prefHeight="50.0" prefWidth="874.0">
+                     <children>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f6f7f9" height="50.0" stroke="WHITE" strokeType="INSIDE" width="872.0" />
+                        <HBox prefHeight="50.0" prefWidth="874.0">
+                           <children>
+                              <Label prefHeight="50.0" prefWidth="160.0" text="Name">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding>
+                              </Label>
+                              <Label prefHeight="50.0" prefWidth="170.0" text="Group">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding>
+                              </Label>
+                              <Label prefHeight="50.0" prefWidth="190.0" text="Owner">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding>
+                              </Label>
+                              <Label prefHeight="50.0" prefWidth="200.0" text="Category">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding>
+                              </Label>
+                              <Label prefHeight="50.0" prefWidth="180.0" text="Create Time">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="55.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle fill="WHITE" height="55.0" stroke="#ebebfd" strokeType="INSIDE" width="873.0" />
+                        <HBox prefHeight="55.0" prefWidth="873.0">
+                           <children>
+                              <Label prefHeight="55.0" prefWidth="160.0" text="Illustration packs">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <TableView prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="C1" />
+                      <TableColumn prefWidth="75.0" text="C2" />
+                    </columns>
+                  </TableView>
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
    </center>
