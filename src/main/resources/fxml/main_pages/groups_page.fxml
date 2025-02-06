@@ -12,12 +12,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainPageController">
+<BorderPane id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GroupsController">
    <left>
       <AnchorPane id="sidebar" prefHeight="853.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <children>
@@ -31,7 +29,7 @@
                   <Font size="40.0" />
                </font>
             </Label>
-            <Button graphicTextGap="10.0" layoutX="44.0" layoutY="179.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/button.css" text="My files">
+            <Button graphicTextGap="10.0" layoutX="44.0" layoutY="179.0" mnemonicParsing="false" onAction="#myFilesClicked" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/button.css" text="My files">
                <font>
                   <Font size="16.0" />
                </font>
@@ -62,7 +60,7 @@
                   </AnchorPane>
                </graphic>
             </Button>
-            <Button graphicTextGap="10.0" layoutX="44.0" layoutY="295.0" mnemonicParsing="false" onAction="#groupsClicked" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/button.css" text="Groups">
+            <Button graphicTextGap="10.0" layoutX="44.0" layoutY="295.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/button.css" text="Groups">
                <font>
                   <Font size="16.0" />
                </font>
@@ -121,50 +119,70 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </HBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox>
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="894.0">
                            <children>
-                              <Label prefHeight="70.0" prefWidth="748.0" text="Recently edited">
+                              <Label prefHeight="70.0" prefWidth="748.0" text="Create a new group">
                                  <font>
                                     <Font name="Gadugi Bold" size="20.0" />
                                  </font>
                                  <padding>
-                                    <Insets bottom="20.0" top="20.0" />
+                                    <Insets bottom="10.0" top="10.0" />
                                  </padding>
                               </Label>
-                              <Button mnemonicParsing="false" onAction="#newNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/button.css" text="+ New Note">
+                              <Button mnemonicParsing="false" onAction="#createGroupClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/button.css" text="+ Create">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Button>
                            </children>
                         </HBox>
-                        <HBox prefHeight="202.0" prefWidth="893.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="16.0" prefWidth="894.0">
                            <children>
-                              <AnchorPane prefHeight="56.0" prefWidth="914.0">
-                                 <children>
-                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f6f6f8" height="146.0" stroke="#f6f6f8" strokeType="INSIDE" width="201.0" />
-                                    <SVGPath content="M0 8C0 3.58172 3.58172 0 8 0H166C170.418 0 174 3.58172 174 8V131H0V8Z" fill="WHITE" layoutX="14.0" layoutY="14.0" />
-                                    <Circle fill="#a75923" layoutX="47.0" layoutY="44.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                                    <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#f4f6f6" height="15.0" layoutX="27.0" layoutY="72.0" stroke="#f4f6f6" strokeType="INSIDE" width="148.0" />
-                                    <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#f4f6f6" height="15.0" layoutX="27.0" layoutY="95.0" stroke="#f4f6f6" strokeType="INSIDE" width="148.0" />
-                                    <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#f4f6f6" height="15.0" layoutX="27.0" layoutY="117.0" stroke="#f4f6f6" strokeType="INSIDE" width="148.0" />
-                                    <Label alignment="BOTTOM_LEFT" contentDisplay="BOTTOM" layoutX="7.0" layoutY="153.0" prefHeight="25.0" prefWidth="187.0" text="NoteName">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label alignment="BOTTOM_LEFT" layoutX="7.0" layoutY="180.0" prefHeight="15.0" prefWidth="182.0" text="Edited 8m ago" textFill="#0000009a" />
-                                 </children>
-                              </AnchorPane>
+                              <Label text="Group Name: ">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextField promptText="Group name" styleClass="text-input" stylesheets="@../../CSS/text_input.css">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </TextField>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="16.0" prefWidth="894.0">
+                           <children>
+                              <Label text="Group description: ">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextField prefHeight="40.0" prefWidth="434.0" promptText="Group description" styleClass="text-input" stylesheets="@../../CSS/text_input.css">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox prefHeight="424.0" prefWidth="872.0">
+                  <VBox prefHeight="241.0" prefWidth="894.0">
                      <children>
-                        <Label prefHeight="35.0" prefWidth="211.0" text="Your notes">
+                        <Label prefHeight="35.0" prefWidth="211.0" text="Your groups">
                            <font>
                               <Font name="Gadugi Bold" size="20.0" />
                            </font>
@@ -174,12 +192,36 @@
                         </Label>
                         <TableView fx:id="table" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../CSS/table_view.css">
                           <columns>
-                              <TableColumn fx:id="name" prefWidth="185.60003280639648" text="Name" />
-                              <TableColumn fx:id="group" prefWidth="182.40000915527344" text="Group" />
-                              <TableColumn fx:id="owner" prefWidth="174.39996337890625" text="Owner" />
-                            <TableColumn fx:id="category" prefWidth="165.06671142578125" text="Category" />
-                            <TableColumn fx:id="createTime" prefWidth="204.2667236328125" text="Create Time" />
+                              <TableColumn fx:id="name" prefWidth="39.73330307006836" />
+                              <TableColumn fx:id="group" prefWidth="229.86671447753906" text="Group" />
+                              <TableColumn fx:id="owner" prefWidth="257.33331298828125" text="Owner" />
+                            <TableColumn fx:id="category" prefWidth="165.06671142578125" text="Description" />
+                            <TableColumn fx:id="createTime" prefWidth="204.2667236328125" />
                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="241.0" prefWidth="894.0">
+                     <children>
+                        <Label prefHeight="35.0" prefWidth="211.0" text="All groups">
+                           <font>
+                              <Font name="Gadugi Bold" size="20.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="10.0" top="20.0" />
+                           </padding>
+                        </Label>
+                        <TableView fx:id="table1" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../CSS/table_view.css">
+                           <columns>
+                              <TableColumn fx:id="name1" prefWidth="39.73330307006836" />
+                              <TableColumn fx:id="group1" prefWidth="229.86671447753906" text="Group" />
+                              <TableColumn fx:id="owner1" prefWidth="257.33331298828125" text="Owner" />
+                              <TableColumn fx:id="category1" prefWidth="165.06671142578125" text="Description" />
+                              <TableColumn fx:id="createTime1" prefWidth="204.2667236328125" />
+                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
