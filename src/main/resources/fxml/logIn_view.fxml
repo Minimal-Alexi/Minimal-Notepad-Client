@@ -12,11 +12,10 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LogInController">
    <children>
       <BorderPane layoutX="-11.0" layoutY="-8.0" prefHeight="1024.0" prefWidth="1440.0">
          <center>
@@ -68,7 +67,7 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Text>
-                                          <TextField prefHeight="100.0" prefWidth="423.0" promptText="Enter your username" />
+                                          <TextField fx:id="regUserInput" prefHeight="100.0" prefWidth="423.0" promptText="Enter your username" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="48.0" />
@@ -86,7 +85,7 @@
                                           </Text>
                                           <StackPane prefHeight="150.0" prefWidth="200.0">
                                              <children>
-                                                <PasswordField prefHeight="78.0" prefWidth="423.0" promptText="Confirm your Password">
+                                                <PasswordField fx:id="regPassInput" prefHeight="78.0" prefWidth="423.0" promptText="Confirm your Password">
                                                    <StackPane.margin>
                                                       <Insets />
                                                    </StackPane.margin>
@@ -127,16 +126,11 @@
                                     </BorderPane>
                                     <StackPane prefHeight="57.0" prefWidth="423.0">
                                        <children>
-                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a276ff" height="66.0" stroke="WHITE" strokeType="INSIDE" width="423.0">
-                                             <StackPane.margin>
-                                                <Insets />
-                                             </StackPane.margin>
-                                          </Rectangle>
-                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Register" textAlignment="CENTER">
+                                          <Button fx:id="registerBtn" mnemonicParsing="false" onMouseClicked="#registerBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="66.0" prefWidth="423.0" style="-fx-background-color: #a276ff;" text="Register" textFill="WHITE">
                                              <font>
-                                                <Font name="System Bold" size="16.0" />
+                                                <Font size="31.0" />
                                              </font>
-                                          </Text>
+                                          </Button>
                                        </children>
                                        <VBox.margin>
                                           <Insets top="31.0" />
@@ -170,7 +164,7 @@
                   </Pane>
                   <VBox prefHeight="757.0" prefWidth="505.0" styleClass="box-right">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="47.0" prefWidth="140.0" style="-fx-background-color: #a276ff;" text="Back" textFill="WHITE">
+                        <Button fx:id="backBtn" mnemonicParsing="false" onMouseClicked="#backBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="47.0" prefWidth="140.0" style="-fx-background-color: #a276ff;" text="Back" textFill="WHITE">
                            <VBox.margin>
                               <Insets left="600.0" />
                            </VBox.margin>
