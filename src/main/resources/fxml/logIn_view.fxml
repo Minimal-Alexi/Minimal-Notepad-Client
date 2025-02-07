@@ -67,7 +67,7 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Text>
-                                          <TextField fx:id="regUserInput" prefHeight="100.0" prefWidth="423.0" promptText="Enter your username" />
+                                          <TextField fx:id="loginUserInput" prefHeight="100.0" prefWidth="423.0" promptText="Enter your username" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="48.0" />
@@ -85,7 +85,7 @@
                                           </Text>
                                           <StackPane prefHeight="150.0" prefWidth="200.0">
                                              <children>
-                                                <PasswordField fx:id="regPassInput" prefHeight="78.0" prefWidth="423.0" promptText="Confirm your Password">
+                                                <PasswordField fx:id="loginPassInput" prefHeight="78.0" prefWidth="423.0" promptText="Confirm your Password">
                                                    <StackPane.margin>
                                                       <Insets />
                                                    </StackPane.margin>
@@ -126,7 +126,7 @@
                                     </BorderPane>
                                     <StackPane prefHeight="57.0" prefWidth="423.0">
                                        <children>
-                                          <Button fx:id="registerBtn" mnemonicParsing="false" onMouseClicked="#registerBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="66.0" prefWidth="423.0" style="-fx-background-color: #a276ff;" text="Register" textFill="WHITE">
+                                          <Button fx:id="loginBtn" mnemonicParsing="false" onMouseClicked="#registerBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="66.0" prefWidth="423.0" style="-fx-background-color: #a276ff;" text="Sign In" textFill="WHITE">
                                              <font>
                                                 <Font size="31.0" />
                                              </font>
@@ -141,12 +141,12 @@
                                           <Insets top="10.0" />
                                        </VBox.margin>
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Already have an Account?">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an Account">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                           </Text>
-                                          <Text fill="#a276ff" strokeType="OUTSIDE" strokeWidth="0.0" text="Log In">
+                                          <Text fill="#a276ff" strokeType="OUTSIDE" strokeWidth="0.0" text="Register">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -158,6 +158,11 @@
                                     </FlowPane>
                                  </children>
                               </VBox>
+                              <Button fx:id="testBtn" mnemonicParsing="false" onMouseClicked="#testBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="66.0" prefWidth="423.0" style="-fx-background-color: #a276ff;" text="Test" textFill="WHITE">
+                                 <font>
+                                    <Font size="31.0" />
+                                 </font>
+                              </Button>
                            </children>
                         </VBox>
                      </children>

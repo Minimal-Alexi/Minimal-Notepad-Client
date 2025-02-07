@@ -11,6 +11,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ControllerUtils {
+
+    Cursor handCursor = Cursor.HAND;
+    Cursor defaultCursor = Cursor.DEFAULT;
+
     public void updateStage(Stage stage, FXMLLoader fxmlLoader) {
         try {
 //            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/logIn_view.fxml"));
@@ -25,11 +29,11 @@ public class ControllerUtils {
     }
 
     public void setDefaultCursor(Button btn) {
-        btn.setCursor(Cursor.DEFAULT);
+        btn.setCursor(defaultCursor);
     }
 
     public void setHandcursor(Button btn) {
-        btn.setCursor(Cursor.HAND);
+        btn.setCursor(handCursor);
     }
 
 }
