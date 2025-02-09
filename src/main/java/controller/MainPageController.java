@@ -12,9 +12,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import model.Note;
+import model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import java.util.Objects;
 
 import static utils.MainPageServices.findAllMyNotes;
 import static utils.MainPageServices.updateTime;
+import static utils.NoteServices.findNoteById;
 
 public class MainPageController {
 
@@ -46,19 +49,19 @@ public class MainPageController {
     private TableColumn<Note, String> createTime;
 
     SVGPath svgPath = new SVGPath();
-
-    /*
-    private final ObservableList<Note> notes = FXCollections.observableArrayList(
-            new Note("Illustration packs", "Lorem ipsum dorime", "#FFD700", "Product needs", "Kurnia Majid", "Hobby", "Apr 10, 2022"),
-            new Note("Illustration packs", "Lorem ipsum dorime", "#FFD700", "Product needs", "Kurnia Majid", "Hobby", "Apr 10, 2022")
-    );
-
-     */
+    User user = User.getInstance();
 
 
     public void initialize() {
         ObservableList<Note> notes = FXCollections.observableArrayList();
-        ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTExMTcxMiwiZXhwIjoxNzM5MTk4MTEyfQ.uwVoxBRW6KkYE9avu-MZvsBM9JvOVyFhheraCapGIgk");
+
+        /*
+        The user info is hardcoded for now
+         */
+        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTEyODMwOCwiZXhwIjoxNzM5MjE0NzA4fQ.KzLRbNe1r8EkouVhMMawgEVhxZdPnHibM6X4Zrb6miw");
+        user.setId(5);
+
+        ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
 
         assert noteArrayList != null;
         notes.addAll(noteArrayList);
@@ -73,6 +76,20 @@ public class MainPageController {
         updateTime(localTime);
     }
 
+    /*
+    Click the content in table
+     */
+    public void tableClicked(MouseEvent mouseEvent) {
+        int id = 1;
+        if (mouseEvent.getClickCount() == 1) {
+            id = table.getSelectionModel().getSelectedItem().getOwnerId();
+            System.out.println("id: " + id);
+            System.out.println(table.getSelectionModel().getSelectedItem());
+        }
+
+        Note note = findNoteById("http://localhost:8093/api/note/", id, user.getToken());
+    }
+
 
     /*
     Go to another page
@@ -82,7 +99,7 @@ public class MainPageController {
     private Parent root;
 
     public void newNoteClicked(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/edit_note_page.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/create_note_page.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -96,4 +113,7 @@ public class MainPageController {
         stage.setScene(scene);
         stage.show();
     }
+
+
+
 }

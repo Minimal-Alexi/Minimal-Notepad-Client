@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 
-public class EditNoteController {
+public class CreateNoteController {
 
     @FXML
     private VBox textVBox;
@@ -32,12 +32,6 @@ public class EditNoteController {
     private TextArea textArea1;
 
     User user = User.getInstance();
-
-
-    // Initialize
-    public void initialize() {
-        textArea1.setText("");
-    }
 
     public void textAreaKeyPressed(KeyEvent keyEvent) {
         /*

@@ -5,16 +5,16 @@ public class Note {
     private String text;
     private String colour;
     private String group;
-    private String owner;
+    private int ownerId;
     private String category;
     private String createTime;
 
-    public Note(String title, String text, String color ,String group, String owner, String category, String createTime) {
+    public Note(String title, String text, String color ,String group, int ownerId, String category, String createTime) {
         this.title = title;
         this.text = text;
         this.colour = color;
         this.group = group;
-        this.owner = owner;
+        this.ownerId = ownerId;
         this.category = category;
         this.createTime = createTime;
     }
@@ -43,11 +43,11 @@ public class Note {
     public void setGroup(String group) {
         this.group = group;
     }
-    public String getOwner() {
-        return owner;
+    public int getOwnerId() {
+        return ownerId;
     }
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(int owner) {
+        this.ownerId = owner;
     }
     public String getCategory() {
         return category;
