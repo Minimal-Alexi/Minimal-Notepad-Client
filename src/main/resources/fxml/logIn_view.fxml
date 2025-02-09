@@ -134,7 +134,7 @@
                                           <Insets bottom="38.0" top="23.0" />
                                        </VBox.margin>
                                        <left>
-                                          <CheckBox mnemonicParsing="false" text="Remember me" BorderPane.alignment="CENTER">
+                                          <CheckBox fx:id="rememberBox" mnemonicParsing="false" text="Remember me" BorderPane.alignment="CENTER">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -170,7 +170,7 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Text>
-                                          <Text fx:id="registerLabel" fill="#a276ff" onMouseClicked="#registerClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Register">
+                                          <Text fx:id="registerLabel" fill="#a276ff" onMouseClicked="#registerClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Register">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>

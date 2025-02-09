@@ -8,16 +8,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
    <children>
-      <BorderPane layoutX="-11.0" layoutY="-8.0" prefHeight="1024.0" prefWidth="1440.0">
+      <BorderPane fx:id="registerPage" layoutX="-11.0" layoutY="-8.0" onKeyPressed="#registerPagePress" prefHeight="1033.0" prefWidth="1440.0">
          <center>
             <FlowPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER_RIGHT">
                <BorderPane.margin>
@@ -36,7 +36,7 @@
                                     <Font size="16.0" />
                                  </font>
                               </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sign up to " wrappingWidth="219.47006225585938">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Register to " wrappingWidth="219.47006225585938">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -57,53 +57,96 @@
                                     <Insets top="26.0" />
                                  </VBox.margin>
                                  <children>
+                                    <Text fx:id="errGeneral" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
                                     <VBox prefHeight="92.0" prefWidth="423.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                                          <HBox prefHeight="61.0" prefWidth="423.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Text>
+                                                <Text fx:id="errEmail" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Text>
+                                             </children>
                                              <VBox.margin>
-                                                <Insets bottom="9.0" />
+                                                <Insets />
                                              </VBox.margin>
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Text>
-                                          <TextField prefHeight="100.0" prefWidth="423.0" promptText="Enter Your email" />
+                                          </HBox>
+                                          <TextField fx:id="emailInput" prefHeight="80.0" prefWidth="423.0" promptText="Enter your email">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </TextField>
                                        </children>
-                                       <VBox.margin>
-                                          <Insets top="10.0" />
-                                       </VBox.margin>
                                     </VBox>
                                     <VBox prefHeight="92.0" prefWidth="423.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="User name">
+                                          <HBox prefHeight="61.0" prefWidth="423.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Text>
+                                                <Text fx:id="errUser" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Text>
+                                             </children>
                                              <VBox.margin>
-                                                <Insets bottom="9.0" />
+                                                <Insets top="10.0" />
                                              </VBox.margin>
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Text>
-                                          <TextField prefHeight="100.0" prefWidth="423.0" promptText="Enter your username" />
+                                          </HBox>
+                                          <TextField fx:id="userInput" prefHeight="100.0" prefWidth="423.0" promptText="Enter your username">
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </TextField>
                                        </children>
-                                       <VBox.margin>
-                                          <Insets top="24.0" />
-                                       </VBox.margin>
                                     </VBox>
                                     <VBox prefHeight="92.0" prefWidth="423.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
-                                             <VBox.margin>
-                                                <Insets bottom="9.0" />
-                                             </VBox.margin>
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Text>
+                                          <HBox prefHeight="61.0" prefWidth="423.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Text>
+                                                <Text fx:id="errPwd" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Text>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                          </HBox>
                                           <StackPane prefHeight="150.0" prefWidth="200.0">
                                              <children>
-                                                <PasswordField prefHeight="78.0" prefWidth="423.0" promptText="Confirm your Password">
+                                                <PasswordField fx:id="pwdInput" prefHeight="80.0" prefWidth="423.0" promptText="Type your password">
                                                    <StackPane.margin>
-                                                      <Insets />
+                                                      <Insets top="10.0" />
                                                    </StackPane.margin>
                                                 </PasswordField>
                                                 <ImageView fitHeight="101.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
@@ -118,24 +161,36 @@
                                           </StackPane>
                                        </children>
                                        <VBox.margin>
-                                          <Insets top="24.0" />
+                                          <Insets top="12.0" />
                                        </VBox.margin>
                                     </VBox>
                                     <VBox prefHeight="92.0" prefWidth="423.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password">
-                                             <VBox.margin>
-                                                <Insets bottom="9.0" />
-                                             </VBox.margin>
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Text>
+                                          <HBox prefHeight="61.0" prefWidth="423.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Text>
+                                                <Text fx:id="errConfirmPwd" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Text>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                          </HBox>
                                           <StackPane prefHeight="150.0" prefWidth="200.0">
                                              <children>
-                                                <PasswordField prefHeight="78.0" prefWidth="423.0" promptText="Confirm your Password">
+                                                <PasswordField fx:id="confirmPwdInput" prefHeight="80.0" prefWidth="423.0" promptText="Confirm your Password">
                                                    <StackPane.margin>
-                                                      <Insets />
+                                                      <Insets top="10.0" />
                                                    </StackPane.margin>
                                                 </PasswordField>
                                                 <ImageView fitHeight="101.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
@@ -150,25 +205,20 @@
                                           </StackPane>
                                        </children>
                                        <VBox.margin>
-                                          <Insets top="24.0" />
+                                          <Insets top="12.0" />
                                        </VBox.margin>
                                     </VBox>
                                     <StackPane prefHeight="57.0" prefWidth="423.0">
-                                       <children>
-                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a276ff" height="66.0" stroke="WHITE" strokeType="INSIDE" width="423.0">
-                                             <StackPane.margin>
-                                                <Insets />
-                                             </StackPane.margin>
-                                          </Rectangle>
-                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Register" textAlignment="CENTER">
-                                             <font>
-                                                <Font name="System Bold" size="16.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
                                        <VBox.margin>
                                           <Insets top="31.0" />
                                        </VBox.margin>
+                                       <children>
+                                          <Button fx:id="registerBtn" mnemonicParsing="false" onMouseClicked="#registerBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="66.0" prefWidth="423.0" style="-fx-background-color: #a276ff;" text="Register" textFill="WHITE">
+                                             <font>
+                                                <Font size="31.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
                                     </StackPane>
                                     <FlowPane alignment="CENTER" prefHeight="41.0" prefWidth="423.0">
                                        <VBox.margin>
@@ -180,7 +230,7 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Text>
-                                          <Text fill="#a276ff" strokeType="OUTSIDE" strokeWidth="0.0" text="Log In">
+                                          <Text fx:id="loginLabel" fill="#a276ff" onMouseClicked="#loginLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Log In">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -198,7 +248,7 @@
                   </Pane>
                   <VBox prefHeight="757.0" prefWidth="505.0" styleClass="box-right">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="47.0" prefWidth="140.0" style="-fx-background-color: #a276ff;" text="Back" textFill="WHITE">
+                        <Button fx:id="backBtn" mnemonicParsing="false" onMouseClicked="#backBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="47.0" prefWidth="140.0" style="-fx-background-color: #a276ff;" text="Back" textFill="WHITE">
                            <VBox.margin>
                               <Insets left="600.0" />
                            </VBox.margin>

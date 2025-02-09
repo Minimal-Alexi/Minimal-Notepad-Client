@@ -3,10 +3,7 @@ package controller;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -26,12 +23,12 @@ import utils.ControllerUtils;
 
 
 import java.io.IOException;
-//import java.awt.*;
+
 
 public class LogInController {
 
     @FXML
-    public Button loginBtn;
+    private Button loginBtn;
     @FXML
     private Button backBtn;
     @FXML
@@ -47,6 +44,12 @@ public class LogInController {
     private Text errUser;
     @FXML
     private Text errPwd;
+
+    @FXML
+    Text registerLabel;
+
+    @FXML
+    private CheckBox rememberBox;
 
 //    @FXML
 //    private Text registerLabel;
@@ -100,22 +103,46 @@ public class LogInController {
 
     @FXML
     private void mouseEnter() {
-        this.controllerUtil.setHandcursor(this.backBtn);
-        this.controllerUtil.setHandcursor(this.loginBtn);
+        this.controllerUtil.setHandCursor(this.backBtn);
+        this.controllerUtil.setHandCursor(this.loginBtn);
+        this.controllerUtil.setHandCursor(this.registerLabel);
     }
 
     @FXML
     private void mouseExit() {
         this.controllerUtil.setDefaultCursor(this.backBtn);
         this.controllerUtil.setDefaultCursor(this.loginBtn);
+        this.controllerUtil.setDefaultCursor(this.registerLabel);
     }
 
+
+    @FXML
+    private void registerClick() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/register_view.fxml"));
+        this.stage = this.getStage();
+        this.controllerUtil.updateStage(stage, fxmlLoader);
+    }
 
     private Stage getStage() {
         if (this.stage == null) {
             this.stage = (Stage) backBtn.getScene().getWindow();
         }
         return this.stage;
+    }
+
+    private boolean isRememberBoxChecked() {
+        if (this.rememberBox.isSelected()) {
+            return true;
+        }
+        return false;
+    }
+
+    private void handleRememberBox(String username, String password) {
+        if (isRememberBoxChecked()) {
+            TokenStorage.saveInfo(username, username);
+            TokenStorage.saveInfo(password, password);
+        }
+
     }
 
     private void handleInput(String username, String password) {
@@ -189,63 +216,39 @@ public class LogInController {
                 System.out.println("is error " + statusLine.toString().contains("404"));
                 Platform.runLater(() -> {
                     this.handleResponse(response, jsonResponse);
+                    this.handleRememberBox(username, password);
+                    if (this.isRememberBoxChecked()) {
+                        System.out.println("username " + TokenStorage.getInfo(username));
+                        System.out.println("password " + TokenStorage.getInfo(password));
 
+                    }
                 });
 
-                // 401
-                // 404
-                // 200
-//            controllerUtil.updateStage();
 
             } catch (IOException e) {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setContentText("Login: Unable to connect to server. Check your connection or try at a later time. To report this error please contact m@jhourlad.com.");
                 a.show();
             }
-//            finally {
-//                try {
-//
-//                    httpclient.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
+
         }
 
         ).start();
 
     }
-//        new Thread(() -> {
-//            try {
-////                client = ClientBuilder.newClient();
-////...
-////                URI uri = URI.create(<your rest server uri>);
-////
-////                Response response = client.target(uri).request().get();
-////        <your_java_type> entity = response.readEntity(<your_java_type>.class);
-//                client = ClientBuilder.newClient();
-//                URI uri = URI.create("localhost:8093/usersAuthentication/login");
-//                Response response = client.target(uri).request().get();
-//                System.out.println(response);
-//            } catch (Exception e) {
-//                System.out.println(e.getMessage());
-//            }
-////            Platform.runLater();
-//        }).start();
-//
-//    }
+
 
     private void handleResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
         String statusCode = response.getStatusLine().toString();
         try {
             String token = (String) jsonResponse.get("token");
             String username = (String) jsonResponse.get("username");
-            System.out.println("token: " + token);
-            System.out.println("username : " + username);
+//            System.out.println("token: " + token);
+//            System.out.println("username : " + username);
             TokenStorage.saveToken(username, token);
             String savedUsername = TokenStorage.getUser();
             String savedToken = TokenStorage.getToken();
-            System.out.println("username: " + savedUsername + " : " + savedToken);
+//            System.out.println("username: " + savedUsername + " : " + savedToken);
 
 
         } catch (JSONException e) {
@@ -255,10 +258,5 @@ public class LogInController {
 
     }
 
-    private void loginCick() {
-        System.out.println("go to register page");
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/register_view.fxml"));
-        this.stage = this.getStage();
 
-    }
 }

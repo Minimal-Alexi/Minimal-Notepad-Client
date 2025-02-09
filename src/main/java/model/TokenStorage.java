@@ -1,7 +1,6 @@
 package model;
 
 
-import javafx.util.Pair;
 
 import java.util.prefs.Preferences;
 
@@ -9,7 +8,6 @@ import java.util.prefs.Preferences;
 public class TokenStorage {
     private static final String STORAGE_KEY = "jwt";
     private static final Preferences storage = Preferences.userNodeForPackage(TokenStorage.class);
-
 
 
     public static void saveToken(String user, String token) {
@@ -34,6 +32,15 @@ public class TokenStorage {
         String token = value.split(" ")[1];
         return token;
     }
+
+    public static void saveInfo(String key, String value) {
+        storage.put(key, value);
+    }
+
+    public static String getInfo(String key) {
+        return storage.get(key, null);
+    }
+
 
     // refresh token
 
