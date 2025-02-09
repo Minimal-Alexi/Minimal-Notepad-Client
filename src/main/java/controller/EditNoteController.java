@@ -57,10 +57,13 @@ public class EditNoteController {
 
     }
 
+
+    /*
+    Go to another page
+     */
     private Stage stage;
     private Scene scene;
     private Parent root;
-
     public void groupsClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/groups_page.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -68,9 +71,4 @@ public class EditNoteController {
         stage.setScene(scene);
         stage.show();
     }
-
-    /*
-    Below is the tool methods:
-     */
-
 }

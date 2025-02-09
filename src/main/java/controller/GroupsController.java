@@ -12,16 +12,16 @@ import java.util.Objects;
 
 public class GroupsController {
 
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
-
-
     public void createGroupClicked(ActionEvent event) {
 
     }
 
+    /*
+    Go to another page
+     */
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
     public void myFilesClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/main_page.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

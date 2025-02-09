@@ -190,7 +190,8 @@
                         </Label>
                         <TableView fx:id="table" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../CSS/table_view.css">
                           <columns>
-                              <TableColumn fx:id="name" prefWidth="185.60003280639648" text="Name" />
+                              <TableColumn fx:id="icon" prefWidth="49.066646575927734" />
+                              <TableColumn fx:id="name" prefWidth="170.933349609375" text="Name" />
                               <TableColumn fx:id="group" prefWidth="182.40000915527344" text="Group" />
                               <TableColumn fx:id="owner" prefWidth="174.39996337890625" text="Owner" />
                             <TableColumn fx:id="category" prefWidth="165.06671142578125" text="Category" />

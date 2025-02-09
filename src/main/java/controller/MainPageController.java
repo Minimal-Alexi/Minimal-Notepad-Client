@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import model.Note;
 
@@ -21,6 +22,8 @@ import java.util.Objects;
 public class MainPageController {
     @FXML
     private TableView<Note> table;
+    @FXML
+    private TableColumn<Note, SVGPath> icon;
     @FXML
     private TableColumn<Note, String> name;
     @FXML
@@ -32,9 +35,9 @@ public class MainPageController {
     @FXML
     private TableColumn<Note, String> createTime;
 
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+    SVGPath svgPath = new SVGPath();
+
+
 
     private final ObservableList<Note> notes = FXCollections.observableArrayList(
             new Note("Illustration packs", "Product needs", "Kurnia Majid", "Hobby", "Apr 10, 2022"),
@@ -52,6 +55,12 @@ public class MainPageController {
         createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createTime"));
     }
 
+    /*
+    Go to another page
+     */
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
     public void newNoteClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/edit_note_page.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -59,7 +68,6 @@ public class MainPageController {
         stage.setScene(scene);
         stage.show();
     }
-
     public void groupsClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/groups_page.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
