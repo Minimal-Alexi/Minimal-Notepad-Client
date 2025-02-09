@@ -14,6 +14,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Note;
+import utils.EditNoteServices;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -54,7 +56,8 @@ public class EditNoteController {
     }
 
     public void saveNoteClicked(ActionEvent event) {
-
+        Note note = new Note("Illustration packs", textArea1.getText(), "#FFD700", "Product needs", "Kurnia Majid", "Hobby", "Apr 10, 2022");
+        EditNoteServices.createNote("http://localhost:8093/api/note/", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTExMzAwNCwiZXhwIjoxNzM5MTk5NDA0fQ.pyrxFlcbnCieqyV4PvVIzQSWlAGzeVI5ByasT_i_fK0", note);
     }
 
 
@@ -64,6 +67,7 @@ public class EditNoteController {
     private Stage stage;
     private Scene scene;
     private Parent root;
+
     public void groupsClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/groups_page.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

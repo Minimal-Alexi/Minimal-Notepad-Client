@@ -1,25 +1,41 @@
 package model;
 
 public class Note {
-    private String name;
+    private String title;
+    private String text;
+    private String colour;
     private String group;
     private String owner;
     private String category;
     private String createTime;
 
-    public Note(String name, String group, String owner, String category, String createTime) {
-        this.name = name;
+    public Note(String title, String text, String color ,String group, String owner, String category, String createTime) {
+        this.title = title;
+        this.text = text;
+        this.colour = color;
         this.group = group;
         this.owner = owner;
         this.category = category;
         this.createTime = createTime;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getText() {
+        return text;
+    }
+    public void setText(String text) {
+        this.text = text;
+    }
+    public String getColour() {
+        return colour;
+    }
+    public void setColour(String colour) {
+        this.colour = colour;
     }
     public String getGroup() {
         return group;

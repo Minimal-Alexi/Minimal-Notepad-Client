@@ -108,7 +108,7 @@
                               <Font name="Dubai Medium" size="30.0" />
                            </font>
                            <graphic>
-                              <Label alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="Tue, 07 June 2022" textFill="#00000099">
+                              <Label fx:id="localTime" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="Tue, 07 June 2022" textFill="#00000099">
                                  <font>
                                     <Font name="System Italic" size="14.0" />
                                  </font>
@@ -191,7 +191,7 @@
                         <TableView fx:id="table" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../CSS/table_view.css">
                           <columns>
                               <TableColumn fx:id="icon" prefWidth="49.066646575927734" />
-                              <TableColumn fx:id="name" prefWidth="170.933349609375" text="Name" />
+                              <TableColumn fx:id="title" prefWidth="170.933349609375" text="Title" />
                               <TableColumn fx:id="group" prefWidth="182.40000915527344" text="Group" />
                               <TableColumn fx:id="owner" prefWidth="174.39996337890625" text="Owner" />
                             <TableColumn fx:id="category" prefWidth="165.06671142578125" text="Category" />
