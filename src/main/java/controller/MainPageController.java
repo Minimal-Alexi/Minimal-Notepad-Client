@@ -17,6 +17,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import model.Note;
 import model.User;
+import model.selected.SelectedNote;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,19 +77,7 @@ public class MainPageController {
         updateTime(localTime);
     }
 
-    /*
-    Click the content in table
-     */
-    public void tableClicked(MouseEvent mouseEvent) {
-        int id = 1;
-        if (mouseEvent.getClickCount() == 1) {
-            id = table.getSelectionModel().getSelectedItem().getOwnerId();
-            System.out.println("id: " + id);
-            System.out.println(table.getSelectionModel().getSelectedItem());
-        }
 
-        Note note = findNoteById("http://localhost:8093/api/note/", id, user.getToken());
-    }
 
 
     /*
@@ -97,6 +86,27 @@ public class MainPageController {
     private Stage stage;
     private Scene scene;
     private Parent root;
+
+    /*
+    Click the content in table
+    */
+    public void tableClicked(MouseEvent event) throws IOException {
+        int id = 0;
+        if (event.getClickCount() == 1) {
+            id = table.getSelectionModel().getSelectedItem().getId();
+            System.out.println("id: " + id);
+            System.out.println(table.getSelectionModel().getSelectedItem());
+        }
+
+        SelectedNote selectedNote = SelectedNote.getInstance();
+        selectedNote.setId(id);
+
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/edit_note_page.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
     public void newNoteClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/create_note_page.fxml")));

@@ -15,7 +15,7 @@ public class NoteServices {
 
     public static void createNote(String url, Note note, String token) {
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("colour", note.getColour());
+        jsonBody.put("colour", note.getColor());
         jsonBody.put("text", note.getText());
         jsonBody.put("title", note.getTitle());
 
@@ -54,8 +54,17 @@ public class NoteServices {
 
             if (response.statusCode() == 200) {
                 JSONObject result = new JSONObject(response.body());
-                Note note = new Note(result.getString("title"), result.getString("text"), result.getString("colour"), "Product needs", 1, "Hobby", result.getString("createdAt") );
+                Note note = new Note(result.getInt("id"),
+                        result.getString("text") ,
+                        result.getString("title"),
+                        result.getString("colour"),
+                        ("createdAt"),
+                        ("updatedAt"),
+                        result.getJSONObject("user").getString("username"),
+                        " ",
+                        "null");
 
+                return note;
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);

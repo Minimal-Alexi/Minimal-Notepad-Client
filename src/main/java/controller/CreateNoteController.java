@@ -15,7 +15,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Note;
-import model.Token;
 import model.User;
 import utils.NoteServices;
 
@@ -60,7 +59,7 @@ public class CreateNoteController {
     }
 
     public void saveNoteClicked(ActionEvent event) {
-        Note note = new Note("Illustration packs", textArea1.getText(), "#FFD700", "Product needs", user.getId(), "Hobby", "Apr 10, 2022");
+        Note note = new Note(0, "TITLE", textArea1.getText(), "#FFD700", "N/A", "N/A", user.getUsername(), "N/A", "null");
         NoteServices.createNote("http://localhost:8093/api/note/", note, user.getToken());
     }
 

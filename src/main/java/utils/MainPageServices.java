@@ -42,7 +42,15 @@ public class MainPageServices {
                 JSONArray result = new JSONArray(response.body());
                 for (int i = 0; i < result.length(); i++) {
                     JSONObject noteJson = result.getJSONObject(i);
-                    Note note = new Note(noteJson.getString("title"), noteJson.getString("text"), noteJson.getString("colour"), "Product needs", 1, "Hobby", noteJson.getString("createdAt") );
+                    Note note = new Note(noteJson.getInt("id"),
+                            noteJson.getString("text") ,
+                            noteJson.getString("title"),
+                            noteJson.getString("colour"),
+                            ("createdAt"),
+                            ("updatedAt"),
+                            noteJson.getJSONObject("user").getString("username"),
+                            " ",
+                            "null");
                     notes.add(note);
                 }
                 return notes;

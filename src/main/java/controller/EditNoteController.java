@@ -15,12 +15,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Note;
-import model.Token;
 import model.User;
+import model.selected.SelectedNote;
 import utils.NoteServices;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import static utils.NoteServices.findNoteById;
 
 
 public class EditNoteController {
@@ -32,11 +34,18 @@ public class EditNoteController {
     private TextArea textArea1;
 
     User user = User.getInstance();
+    SelectedNote selectedNote = SelectedNote.getInstance();
 
 
     // Initialize
     public void initialize() {
-        textArea1.setText("");
+
+        System.out.println(selectedNote.getId());
+
+        Note note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), user.getToken());
+
+        assert note != null;
+        textArea1.setText(note.getText());
     }
 
     public void textAreaKeyPressed(KeyEvent keyEvent) {
@@ -66,7 +75,7 @@ public class EditNoteController {
     }
 
     public void saveNoteClicked(ActionEvent event) {
-        Note note = new Note("Illustration packs", textArea1.getText(), "#FFD700", "Product needs", user.getId(), "Hobby", "Apr 10, 2022");
+        Note note = new Note(0, "TITLE", textArea1.getText(), "#FFD700", "N/A", "N/A", user.getUsername(), "N/A", "null");
         NoteServices.createNote("http://localhost:8093/api/note/", note, user.getToken());
     }
 
