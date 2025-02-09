@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.HttpClientSingleton;
 
 public class HelloView extends Application {
     @Override
@@ -17,7 +18,12 @@ public class HelloView extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
+
+    @Override
+    public void stop() {
+        HttpClientSingleton.getInstance().closeHttpClient();
     }
+//    public static void main(String[] args) {
+//        launch(args);
+//    }}
 }
