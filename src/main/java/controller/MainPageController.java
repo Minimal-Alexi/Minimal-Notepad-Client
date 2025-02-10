@@ -86,7 +86,6 @@ public class MainPageController {
                     new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
             );
             {
-                // 调整图标大小
                 imageView.setFitWidth(20);
                 imageView.setFitHeight(20);
             }
