@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,9 +13,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.Note;
 import model.User;
 import model.selected.SelectedNote;
@@ -64,8 +68,11 @@ public class MainPageController {
 
         ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
 
-        assert noteArrayList != null;
-        notes.addAll(noteArrayList);
+        if (noteArrayList != null) {
+            notes.addAll(noteArrayList);
+        } else {
+            System.out.println("Connection failed");
+        }
 
         table.setItems(notes);
         title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
@@ -76,8 +83,6 @@ public class MainPageController {
 
         updateTime(localTime);
     }
-
-
 
 
     /*
@@ -123,7 +128,6 @@ public class MainPageController {
         stage.setScene(scene);
         stage.show();
     }
-
 
 
 }
