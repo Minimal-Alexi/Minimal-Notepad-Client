@@ -198,7 +198,7 @@
                                                 <Font size="20.0" />
                                              </font>
                                           </Label>
-                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="94.0" text="ICT24-SW" textFill="#666666">
+                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="128.0" text="ICT24-SW" textFill="#666666">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
