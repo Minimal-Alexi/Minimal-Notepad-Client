@@ -59,6 +59,9 @@ public class EditNoteController {
         NoteServices.createNote("http://localhost:8093/api/note/", note, user.getToken());
     }
 
+    public void deleteNoteClicked(ActionEvent event) {
+        NoteServices.deleteNoteById("http://localhost:8093/api/note/", selectedNote.getId(), user.getToken());
+    }
 
     /*
     Go to another page
@@ -103,4 +106,6 @@ public class EditNoteController {
             }
         }
     }
+
+
 }

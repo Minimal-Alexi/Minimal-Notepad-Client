@@ -140,7 +140,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label prefHeight="70.0" prefWidth="748.0" text="Editing Note">
+                              <Label prefHeight="70.0" prefWidth="581.0" text="Editing Note">
                                  <font>
                                     <Font name="Gadugi Bold" size="20.0" />
                                  </font>
@@ -148,7 +148,12 @@
                                     <Insets bottom="20.0" top="20.0" />
                                  </padding>
                               </Label>
-                              <Button mnemonicParsing="false" onAction="#saveNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/table_view.css" text="  Save Note">
+                              <Button mnemonicParsing="false" onAction="#saveNoteClicked" prefHeight="40.0" prefWidth="125.0" stylesheets="@../../CSS/table_view.css" text="  Save Note">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#deleteNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/table_view.css" text="Delete Note">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

@@ -80,7 +80,7 @@ public class NoteServices {
                 .uri(URI.create(url + id))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + token)
-                .GET()
+                .DELETE()
                 .build();
 
         try {

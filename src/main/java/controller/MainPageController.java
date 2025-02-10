@@ -63,7 +63,7 @@ public class MainPageController {
         /*
         The user info is hardcoded for now
          */
-        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTIyMzI0NSwiZXhwIjoxNzM5MzA5NjQ1fQ.7WnOZk-dS2sgr4ioF9-efy9FolA6bl5RRywA-BPFjsQ");
+        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTIyNzM1MywiZXhwIjoxNzM5MzEzNzUzfQ.NneKiDnTXTEZIpVV1w740aaPCbPnhPOHkdb4ZuxRGmM");
         user.setId(5);
 
         ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
