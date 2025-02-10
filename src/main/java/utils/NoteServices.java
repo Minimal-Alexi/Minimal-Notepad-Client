@@ -55,8 +55,8 @@ public class NoteServices {
             if (response.statusCode() == 200) {
                 JSONObject result = new JSONObject(response.body());
                 Note note = new Note(result.getInt("id"),
-                        result.getString("text") ,
-                        result.getString("title"),
+                        result.getString("title") ,
+                        result.getString("text"),
                         result.getString("colour"),
                         ("createdAt"),
                         ("updatedAt"),

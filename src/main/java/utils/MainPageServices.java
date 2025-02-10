@@ -34,8 +34,6 @@ public class MainPageServices {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Response Status Code: " + response.statusCode());
-            System.out.println("Response Body: " + response.body());
 
             if (response.statusCode() == 200) {
                 ArrayList<Note> notes = new ArrayList<>();
@@ -43,9 +41,9 @@ public class MainPageServices {
                 for (int i = 0; i < result.length(); i++) {
                     JSONObject noteJson = result.getJSONObject(i);
                     Note note = new Note(noteJson.getInt("id"),
-                            noteJson.getString("text") ,
-                            noteJson.getString("title"),
-                            noteJson.getString("colour"),
+                            noteJson.getString("title") ,
+                            noteJson.getString("text"),
+                            ("colour"),
                             ("createdAt"),
                             ("updatedAt"),
                             noteJson.getJSONObject("user").getString("username"),
@@ -53,6 +51,7 @@ public class MainPageServices {
                             "null");
                     notes.add(note);
                 }
+                System.out.println(notes);
                 return notes;
             }
         } catch (IOException | InterruptedException e) {
