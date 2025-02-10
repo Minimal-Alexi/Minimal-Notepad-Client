@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -41,7 +42,7 @@ public class MainPageController {
     @FXML
     private TableView<Note> table;
     @FXML
-    private TableColumn<Note, SVGPath> icon;
+    private TableColumn<Note, Void> icon;
     @FXML
     private TableColumn<Note, String> title;
     @FXML
@@ -53,7 +54,6 @@ public class MainPageController {
     @FXML
     private TableColumn<Note, String> createTime;
 
-    SVGPath svgPath = new SVGPath();
     User user = User.getInstance();
 
 
@@ -63,7 +63,7 @@ public class MainPageController {
         /*
         The user info is hardcoded for now
          */
-        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTEyODMwOCwiZXhwIjoxNzM5MjE0NzA4fQ.KzLRbNe1r8EkouVhMMawgEVhxZdPnHibM6X4Zrb6miw");
+        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTIyMzI0NSwiZXhwIjoxNzM5MzA5NjQ1fQ.7WnOZk-dS2sgr4ioF9-efy9FolA6bl5RRywA-BPFjsQ");
         user.setId(5);
 
         ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
@@ -80,6 +80,27 @@ public class MainPageController {
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
         category.setCellValueFactory(new PropertyValueFactory<Note, String>("category"));
         createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
+
+        icon.setCellFactory(param -> new TableCell<Note, Void>() {
+            private final ImageView imageView = new ImageView(
+                    new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
+            );
+            {
+                // 调整图标大小
+                imageView.setFitWidth(20);
+                imageView.setFitHeight(20);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(imageView);
+                }
+            }
+        });
 
         updateTime(localTime);
     }
