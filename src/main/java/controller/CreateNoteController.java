@@ -16,16 +16,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Note;
 import model.User;
-import model.selected.SelectedNote;
 import utils.NoteServices;
 
 import java.io.IOException;
 import java.util.Objects;
 
-import static utils.NoteServices.findNoteById;
 
-
-public class EditNoteController {
+public class CreateNoteController {
 
     @FXML
     private VBox textVBox;
@@ -34,19 +31,6 @@ public class EditNoteController {
     private TextArea textArea1;
 
     User user = User.getInstance();
-    SelectedNote selectedNote = SelectedNote.getInstance();
-
-
-    // Initialize
-    public void initialize() {
-
-        System.out.println(selectedNote.getId());
-
-        Note note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), user.getToken());
-
-        assert note != null;
-        textArea1.setText(note.getText());
-    }
 
     public void textAreaKeyPressed(KeyEvent keyEvent) {
         /*
