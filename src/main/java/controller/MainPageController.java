@@ -72,7 +72,7 @@ public class MainPageController {
         group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
         category.setCellValueFactory(new PropertyValueFactory<Note, String>("category"));
-        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createTime"));
+        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
 
         updateTime(localTime);
     }

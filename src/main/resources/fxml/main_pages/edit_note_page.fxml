@@ -166,14 +166,14 @@
                                     <Insets left="20.0" right="20.0" />
                                  </padding>
                                  <children>
-                                    <Label text="I Created a Developer Rap Video - Here's What I Learned">
-                                       <font>
-                                          <Font name="System Bold" size="25.0" />
-                                       </font>
+                                    <TextField fx:id="titleTextArea" prefHeight="38.0" prefWidth="790.0">
                                        <VBox.margin>
-                                          <Insets left="30.0" top="20.0" />
+                                          <Insets left="10.0" top="20.0" />
                                        </VBox.margin>
-                                    </Label>
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </TextField>
                                     <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" stylesheets="@../../CSS/category.css">
                                        <children>
                                           <Label text="  Categories: ">
