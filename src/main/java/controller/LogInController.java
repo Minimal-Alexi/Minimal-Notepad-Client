@@ -55,10 +55,23 @@ public class LogInController {
 //    private Text registerLabel;
 
     private Stage stage;
-    private ControllerUtils controllerUtil = new ControllerUtils();
+    private ControllerUtils controllerUtil ;
+    private TokenStorage storage;
 //    private TokenStorage tokenStorage;
 //    Client client;
 
+
+    public void initialize() {
+//        TokenStorage.getIntance(); // this step is important, to access to the token storage
+        controllerUtil = new ControllerUtils();
+        String username = TokenStorage.getInfo("username");
+        System.out.println("get name from storage " + username);
+        if (username != null) {
+            String password = TokenStorage.getInfo("password");
+            loginUserInput.setText(username);
+            loginPassInput.setText(password);
+        }
+    }
 
     @FXML
     private void backBtnClick() {
@@ -66,8 +79,6 @@ public class LogInController {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/hello_view.fxml"));
         this.stage = this.getStage();
         controllerUtil.updateStage(stage, fxmlLoader);
-
-
     }
 
     @FXML
@@ -139,10 +150,14 @@ public class LogInController {
 
     private void handleRememberBox(String username, String password) {
         if (isRememberBoxChecked()) {
+            System.out.println("save name from storage");
             TokenStorage.saveInfo(username, username);
             TokenStorage.saveInfo(password, password);
+        } else {
+            System.out.println("remove name from storage");
+            TokenStorage.clearData(username);
+            TokenStorage.clearData(password);
         }
-
     }
 
     private void handleInput(String username, String password) {
@@ -181,7 +196,7 @@ public class LogInController {
         this.errGeneral.setText("");
 
         HttpClientSingleton instance = HttpClientSingleton.getInstance();
-        CloseableHttpClient httpclient = instance.getHttpClient();
+        CloseableHttpClient httpClient = instance.getHttpClient();
 
         String URI = "http://localhost:8093/api/users-authentication/login";
         HttpPost httpPost = new HttpPost(URI);
@@ -195,13 +210,13 @@ public class LogInController {
         StringEntity entity = new StringEntity(json.toString());
         httpPost.setEntity(entity);
 
-        System.out.println("httpClient: " + httpclient);
+        System.out.println("httpClient: " + httpClient);
         System.out.println("httpPost: " + httpPost);
 
         new Thread(() -> {
 
             try {
-                CloseableHttpResponse response = httpclient.execute(httpPost);
+                CloseableHttpResponse response = httpClient.execute(httpPost);
                 HttpEntity responseEntity = response.getEntity();
                 String data = EntityUtils.toString(responseEntity);
                 JSONObject jsonResponse = new JSONObject(data);
@@ -215,19 +230,19 @@ public class LogInController {
 
                 System.out.println("is error " + statusLine.toString().contains("404"));
                 Platform.runLater(() -> {
-                    this.handleResponse(response, jsonResponse);
                     this.handleRememberBox(username, password);
                     if (this.isRememberBoxChecked()) {
                         System.out.println("username " + TokenStorage.getInfo(username));
                         System.out.println("password " + TokenStorage.getInfo(password));
 
                     }
+                    this.updateLoginResponse(response, jsonResponse);
                 });
 
 
             } catch (IOException e) {
                 Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText("Login: Unable to connect to server. Check your connection or try at a later time. To report this error please contact m@jhourlad.com.");
+                a.setContentText("Login: Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
                 a.show();
             }
 
@@ -238,7 +253,7 @@ public class LogInController {
     }
 
 
-    private void handleResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void updateLoginResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
         String statusCode = response.getStatusLine().toString();
         try {
             String token = (String) jsonResponse.get("token");
@@ -248,6 +263,8 @@ public class LogInController {
             TokenStorage.saveToken(username, token);
             String savedUsername = TokenStorage.getUser();
             String savedToken = TokenStorage.getToken();
+            goToMainPage();
+
 //            System.out.println("username: " + savedUsername + " : " + savedToken);
 
 
@@ -256,6 +273,13 @@ public class LogInController {
             displayErrGeneral(messsage);
         }
 
+    }
+
+    private void goToMainPage() {
+        System.out.println("go to main page " + this.backBtn);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
+        this.stage = this.getStage();
+        controllerUtil.updateStage(stage, fxmlLoader);
     }
 
 

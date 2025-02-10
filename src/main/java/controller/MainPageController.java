@@ -9,12 +9,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import model.Note;
+import model.TokenStorage;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -34,6 +36,8 @@ public class MainPageController {
     private TableColumn<Note, String> category;
     @FXML
     private TableColumn<Note, String> createTime;
+    @FXML
+    private Label nameLabel;
 
     SVGPath svgPath = new SVGPath();
 
@@ -45,14 +49,30 @@ public class MainPageController {
 
     );
 
-
     public void initialize() {
+//        TokenStorage.getIntance();
         table.setItems(notes);
         name.setCellValueFactory(new PropertyValueFactory<Note, String>("name"));
         group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
         category.setCellValueFactory(new PropertyValueFactory<Note, String>("category"));
         createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createTime"));
+        updateNameWhenLogIn();
+    }
+
+    private void updateNameWhenLogIn() {
+        try {
+            String username = TokenStorage.getUser();
+            String token = TokenStorage.getToken();
+            nameLabel.setText("Welcome " + username);
+            // if username exist , get the notes list
+
+            // get note list
+
+            System.out.println("welcome username " + username + ", token: "+token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*
