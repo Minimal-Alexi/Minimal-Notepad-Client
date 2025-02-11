@@ -20,7 +20,8 @@
                <font>
                   <Font size="40.0" />
                </font></Label>
-            <Label layoutX="615.0" layoutY="634.0" text="Do not have am account? Register here" />
+            <Label layoutX="615.0" layoutY="634.0" text="Do not have am account? " />
+            <Label fx:id="registerLabel" layoutX="754.0" layoutY="633.0" onMouseClicked="#registerLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" text="Register here" />
          </children>
       </AnchorPane>
    </children>

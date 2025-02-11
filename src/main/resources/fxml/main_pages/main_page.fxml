@@ -103,7 +103,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Welcome, Amanda">
+                        <Label fx:id="nameLabel" contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Welcome, Amanda">
                            <font>
                               <Font name="Dubai Medium" size="30.0" />
                            </font>

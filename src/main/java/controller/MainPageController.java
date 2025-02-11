@@ -10,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -23,6 +25,7 @@ import javafx.util.Callback;
 import model.Note;
 import model.User;
 import model.selected.SelectedNote;
+import model.TokenStorage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,11 +56,13 @@ public class MainPageController {
     private TableColumn<Note, String> category;
     @FXML
     private TableColumn<Note, String> createTime;
+    @FXML
+    private Label nameLabel;
 
     User user = User.getInstance();
 
-
     public void initialize() {
+//        TokenStorage.getIntance();
         ObservableList<Note> notes = FXCollections.observableArrayList();
 
         /*
@@ -65,6 +70,7 @@ public class MainPageController {
          */
         user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTIyNzM1MywiZXhwIjoxNzM5MzEzNzUzfQ.NneKiDnTXTEZIpVV1w740aaPCbPnhPOHkdb4ZuxRGmM");
         user.setId(5);
+        updateNameWhenLogIn();
 
         ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
 
@@ -74,11 +80,34 @@ public class MainPageController {
             System.out.println("Connection failed");
         }
 
+//        if (noteArrayList != null) {
+//            notes.addAll(noteArrayList);
+//        } else {
+//            System.out.println("No notes found or error retrieving notes.");
+//        }
+
         table.setItems(notes);
         title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
         group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
         category.setCellValueFactory(new PropertyValueFactory<Note, String>("category"));
+        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createTime"));
+    }
+
+
+    private void updateNameWhenLogIn() {
+        try {
+            String username = TokenStorage.getUser();
+            String token = TokenStorage.getToken();
+            nameLabel.setText("Welcome " + username);
+            // if username exist , get the notes list
+
+            // get note list
+
+            System.out.println("welcome username " + username + ", token: "+token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
 
         icon.setCellFactory(param -> new TableCell<Note, Void>() {
@@ -103,6 +132,8 @@ public class MainPageController {
 
         updateTime(localTime);
     }
+
+
 
 
     /*
@@ -148,6 +179,7 @@ public class MainPageController {
         stage.setScene(scene);
         stage.show();
     }
+
 
 
 }

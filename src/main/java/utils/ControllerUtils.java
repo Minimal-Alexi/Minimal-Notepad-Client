@@ -5,6 +5,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -37,12 +38,20 @@ public class ControllerUtils {
         txt.setCursor(defaultCursor);
     }
 
+    public void setDefaultCursor(Label label) {
+        label.setCursor(defaultCursor);
+    }
+
     public void setHandCursor(Button btn) {
         btn.setCursor(handCursor);
     }
 
     public void setHandCursor(Text txt) {
         txt.setCursor(handCursor);
+    }
+
+    public void setHandCursor(Label label) {
+        label.setCursor(handCursor);
     }
 
 }
