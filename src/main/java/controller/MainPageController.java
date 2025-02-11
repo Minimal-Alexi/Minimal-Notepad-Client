@@ -66,11 +66,18 @@ public class MainPageController {
          */
         user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTEyODMwOCwiZXhwIjoxNzM5MjE0NzA4fQ.KzLRbNe1r8EkouVhMMawgEVhxZdPnHibM6X4Zrb6miw");
         user.setId(5);
+        updateNameWhenLogIn();
 
         ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
 
         assert noteArrayList != null;
         notes.addAll(noteArrayList);
+
+//        if (noteArrayList != null) {
+//            notes.addAll(noteArrayList);
+//        } else {
+//            System.out.println("No notes found or error retrieving notes.");
+//        }
 
         table.setItems(notes);
         title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
@@ -78,7 +85,6 @@ public class MainPageController {
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
         category.setCellValueFactory(new PropertyValueFactory<Note, String>("category"));
         createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createTime"));
-        updateNameWhenLogIn();
     }
 
     private void updateNameWhenLogIn() {

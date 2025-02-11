@@ -16,7 +16,6 @@ import model.HttpClientSingleton;
 import model.TokenStorage;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -25,6 +24,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
+import utils.HttpResponseService;
+import utils.HttpResponseServiceImpl;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -64,7 +65,14 @@ public class RegisterController {
 
 
     private Stage stage;
-    private ControllerUtils controllerUtil = new ControllerUtils();
+    private ControllerUtils controllerUtil;
+    private HttpResponseService httpResponseService;
+
+    public void initialize() {
+        controllerUtil = new ControllerUtils();
+        httpResponseService = new HttpResponseServiceImpl();
+
+    }
 
     @FXML
     private void registerPagePress(KeyEvent ke) {
@@ -212,33 +220,15 @@ public class RegisterController {
 
         System.out.println("httpClient: " + httpClient);
         System.out.println("httpPost: " + httpPost);
-        handleRegisterResponse(httpPost, httpClient);
-    }
+//        handleRegisterResponse(httpPost, httpClient);
+//        HttpResponseServiceImpl httpResponseService  = new HttpResponseServiceImpl();
+        httpResponseService.handleReponse(httpPost,httpClient,this::handleRegisterResponse);
+}
 
-    private void handleRegisterResponse(HttpPost httpPost, CloseableHttpClient httpClient) {
-        new Thread(() -> {
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-                HttpEntity responseEntity = response.getEntity();
-                String data = EntityUtils.toString(responseEntity);
-                JSONObject jsonResponse = new JSONObject(data);
-                EntityUtils.consume(responseEntity);
-                // Do more processing here...
-                StatusLine statusLine = response.getStatusLine();
-                System.out.println("json " + jsonResponse);
-                System.out.println("response " + responseEntity);
-                System.out.println("status code " + statusLine);
-                Platform.runLater(() -> {
-                    this.updateRegisterResponse(response, jsonResponse);
-                });
-            } catch (IOException e) {
-                Alert a = new Alert((Alert.AlertType.ERROR));
-                a.setContentText("Login: Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-                a.show();
-            }
-        }).start();
-    }
 
-    private void updateRegisterResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+
+    // each controller must implemnt its own reponse as callback when work with httpResponse method
+    private void handleRegisterResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
         String statusCode = response.getStatusLine().toString();
         try {
             String token = (String) jsonResponse.get("token");

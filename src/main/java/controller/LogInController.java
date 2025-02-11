@@ -20,6 +20,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
+import utils.HttpResponseService;
+import utils.HttpResponseServiceImpl;
 
 
 import java.io.IOException;
@@ -57,6 +59,8 @@ public class LogInController {
     private Stage stage;
     private ControllerUtils controllerUtil ;
     private TokenStorage storage;
+    private HttpResponseService httpResponseService;
+
 //    private TokenStorage tokenStorage;
 //    Client client;
 
@@ -64,6 +68,8 @@ public class LogInController {
     public void initialize() {
 //        TokenStorage.getIntance(); // this step is important, to access to the token storage
         controllerUtil = new ControllerUtils();
+        httpResponseService = new HttpResponseServiceImpl();
+
         String username = TokenStorage.getInfo("username");
         System.out.println("get name from storage " + username);
         if (username != null) {
@@ -213,47 +219,14 @@ public class LogInController {
         System.out.println("httpClient: " + httpClient);
         System.out.println("httpPost: " + httpPost);
 
-        new Thread(() -> {
+//        HttpResponseServiceImpl httpResponseService  = new HttpResponseServiceImpl();
+        httpResponseService.handleReponse(httpPost,httpClient,this::handleLoginReponse);
 
-            try {
-                CloseableHttpResponse response = httpClient.execute(httpPost);
-                HttpEntity responseEntity = response.getEntity();
-                String data = EntityUtils.toString(responseEntity);
-                JSONObject jsonResponse = new JSONObject(data);
-                EntityUtils.consume(responseEntity);
-                response.close();
-                // Do more processing here...
-                StatusLine statusLine = response.getStatusLine();
-                System.out.println("json " + jsonResponse);
-                System.out.println("response " + responseEntity);
-                System.out.println("status code " + statusLine);
-
-                System.out.println("is error " + statusLine.toString().contains("404"));
-                Platform.runLater(() -> {
-                    this.handleRememberBox(username, password);
-                    if (this.isRememberBoxChecked()) {
-                        System.out.println("username " + TokenStorage.getInfo(username));
-                        System.out.println("password " + TokenStorage.getInfo(password));
-
-                    }
-                    this.updateLoginResponse(response, jsonResponse);
-                });
-
-
-            } catch (IOException e) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText("Login: Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-                a.show();
-            }
-
-        }
-
-        ).start();
 
     }
 
 
-    private void updateLoginResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleLoginReponse(CloseableHttpResponse response, JSONObject jsonResponse) {
         String statusCode = response.getStatusLine().toString();
         try {
             String token = (String) jsonResponse.get("token");
