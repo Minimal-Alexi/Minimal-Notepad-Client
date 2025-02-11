@@ -1,6 +1,6 @@
 package controller;
 
-import javafx.application.Platform;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -9,17 +9,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
 import model.TokenStorage;
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
+import utils.HttpResponseService;
+import utils.HttpResponseServiceImpl;
 
 
 import java.io.IOException;
@@ -31,8 +31,7 @@ public class LogInController {
     private Button loginBtn;
     @FXML
     private Button backBtn;
-    @FXML
-    private Button testBtn;
+
     @FXML
     private TextField loginUserInput;
     @FXML
@@ -51,31 +50,41 @@ public class LogInController {
     @FXML
     private CheckBox rememberBox;
 
-//    @FXML
-//    private Text registerLabel;
+
 
     private Stage stage;
-    private ControllerUtils controllerUtil = new ControllerUtils();
+    private ControllerUtils controllerUtil ;
+    private TokenStorage storage;
+    private HttpResponseService httpResponseService;
+
 //    private TokenStorage tokenStorage;
 //    Client client;
 
 
+    public void initialize() {
+//        TokenStorage.getIntance(); // this step is important, to access to the token storage
+        controllerUtil = new ControllerUtils();
+        httpResponseService = new HttpResponseServiceImpl();
+
+        String username = TokenStorage.getInfo("username");
+        if (username != null) {
+            String password = TokenStorage.getInfo("password");
+            loginUserInput.setText(username);
+            loginPassInput.setText(password);
+        }
+    }
+
     @FXML
     private void backBtnClick() {
-        System.out.println("back btn is called " + this.backBtn);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/hello_view.fxml"));
         this.stage = this.getStage();
         controllerUtil.updateStage(stage, fxmlLoader);
-
-
     }
 
     @FXML
     private void loginBtnClick() {
-        System.out.println("register button click");
         String username = loginUserInput.getText();
         String password = loginPassInput.getText();
-        System.out.println("Name: " + username + " - password: " + password);
         handleInput(username, password);
 
     }
@@ -84,22 +93,13 @@ public class LogInController {
     @FXML
     private void loginPageBtnPress(KeyEvent ke) {
         if (ke.getCode() == KeyCode.ENTER) {
-            System.out.println("page submite login info");
             String username = loginUserInput.getText();
             String password = loginPassInput.getText();
-            System.out.println("Name: " + username + " - password: " + password);
             handleInput(username, password);
         }
     }
 
 
-    @FXML
-    private void testBtnClick() {
-        System.out.println("test Btn click");
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
-        this.stage = this.getStage();
-        this.controllerUtil.updateStage(stage, fxmlLoader);
-    }
 
     @FXML
     private void mouseEnter() {
@@ -137,12 +137,15 @@ public class LogInController {
         return false;
     }
 
+    // working on it
     private void handleRememberBox(String username, String password) {
         if (isRememberBoxChecked()) {
             TokenStorage.saveInfo(username, username);
             TokenStorage.saveInfo(password, password);
+        } else {
+            TokenStorage.clearData(username);
+            TokenStorage.clearData(password);
         }
-
     }
 
     private void handleInput(String username, String password) {
@@ -181,7 +184,7 @@ public class LogInController {
         this.errGeneral.setText("");
 
         HttpClientSingleton instance = HttpClientSingleton.getInstance();
-        CloseableHttpClient httpclient = instance.getHttpClient();
+        CloseableHttpClient httpClient = instance.getHttpClient();
 
         String URI = "http://localhost:8093/api/users-authentication/login";
         HttpPost httpPost = new HttpPost(URI);
@@ -195,67 +198,34 @@ public class LogInController {
         StringEntity entity = new StringEntity(json.toString());
         httpPost.setEntity(entity);
 
-        System.out.println("httpClient: " + httpclient);
-        System.out.println("httpPost: " + httpPost);
+//        HttpResponseServiceImpl httpResponseService  = new HttpResponseServiceImpl();
+        httpResponseService.handleReponse(httpPost,httpClient,this::handleLoginReponse);
 
-        new Thread(() -> {
-
-            try {
-                CloseableHttpResponse response = httpclient.execute(httpPost);
-                HttpEntity responseEntity = response.getEntity();
-                String data = EntityUtils.toString(responseEntity);
-                JSONObject jsonResponse = new JSONObject(data);
-                EntityUtils.consume(responseEntity);
-                response.close();
-                // Do more processing here...
-                StatusLine statusLine = response.getStatusLine();
-                System.out.println("json " + jsonResponse);
-                System.out.println("response " + responseEntity);
-                System.out.println("status code " + statusLine);
-
-                System.out.println("is error " + statusLine.toString().contains("404"));
-                Platform.runLater(() -> {
-                    this.handleResponse(response, jsonResponse);
-                    this.handleRememberBox(username, password);
-                    if (this.isRememberBoxChecked()) {
-                        System.out.println("username " + TokenStorage.getInfo(username));
-                        System.out.println("password " + TokenStorage.getInfo(password));
-
-                    }
-                });
-
-
-            } catch (IOException e) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText("Login: Unable to connect to server. Check your connection or try at a later time. To report this error please contact m@jhourlad.com.");
-                a.show();
-            }
-
-        }
-
-        ).start();
 
     }
 
 
-    private void handleResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleLoginReponse(CloseableHttpResponse response, JSONObject jsonResponse) {
         String statusCode = response.getStatusLine().toString();
         try {
             String token = (String) jsonResponse.get("token");
             String username = (String) jsonResponse.get("username");
-//            System.out.println("token: " + token);
-//            System.out.println("username : " + username);
             TokenStorage.saveToken(username, token);
             String savedUsername = TokenStorage.getUser();
             String savedToken = TokenStorage.getToken();
-//            System.out.println("username: " + savedUsername + " : " + savedToken);
-
+            goToMainPage();
 
         } catch (JSONException e) {
             String messsage = (String) jsonResponse.get("message");
             displayErrGeneral(messsage);
         }
 
+    }
+
+    private void goToMainPage() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
+        this.stage = this.getStage();
+        controllerUtil.updateStage(stage, fxmlLoader);
     }
 
 
