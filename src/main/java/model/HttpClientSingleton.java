@@ -16,6 +16,7 @@ public class HttpClientSingleton {
 ////
 //    }
 
+    // create a singleton object with timeout incase request take too long
     private HttpClientSingleton() {
         this.requestConfig = RequestConfig.custom()
                 .setConnectTimeout(5000)

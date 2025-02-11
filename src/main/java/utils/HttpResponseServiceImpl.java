@@ -24,10 +24,11 @@ public class HttpResponseServiceImpl implements HttpResponseService {
                 EntityUtils.consume(responseEntity);
                 // Do more processing here...
                 StatusLine statusLine = response.getStatusLine();
-                System.out.println("json " + jsonResponse);
-                System.out.println("response " + responseEntity);
-                System.out.println("status code " + statusLine);
+//                System.out.println("json " + jsonResponse);
+//                System.out.println("response " + responseEntity);
+//                System.out.println("status code " + statusLine);
                 Platform.runLater(() -> {
+                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
                     callback.handleResponse(response, jsonResponse);
                 });
             } catch (IOException e) {

@@ -77,19 +77,16 @@ public class RegisterController {
     @FXML
     private void registerPagePress(KeyEvent ke) {
         if (ke.getCode() == KeyCode.ENTER) {
-            System.out.println("press enter");
             registerBtnClick();
         }
     }
 
     @FXML
     private void registerBtnClick() {
-        System.out.println("register button click");
         String email = emailInput.getText();
         String username = userInput.getText();
         String password = pwdInput.getText();
         String confirmPwd = confirmPwdInput.getText();
-        System.out.println("Name: " + username + " - password: " + password + "- email: " + email + " - confirmpwd: " + confirmPwd);
 
         handleInput(email, username, password, confirmPwd);
     }
@@ -185,7 +182,6 @@ public class RegisterController {
 
     @FXML
     private void backBtnClick() {
-        System.out.println("back btn is called " + this.backBtn);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/hello_view.fxml"));
         this.stage = this.getStage();
         controllerUtil.updateStage(stage, fxmlLoader);
@@ -218,10 +214,6 @@ public class RegisterController {
         StringEntity entity = new StringEntity(json.toString());
         httpPost.setEntity(entity);
 
-        System.out.println("httpClient: " + httpClient);
-        System.out.println("httpPost: " + httpPost);
-//        handleRegisterResponse(httpPost, httpClient);
-//        HttpResponseServiceImpl httpResponseService  = new HttpResponseServiceImpl();
         httpResponseService.handleReponse(httpPost,httpClient,this::handleRegisterResponse);
 }
 
@@ -242,7 +234,6 @@ public class RegisterController {
     }
 
     private void goToMainPage() {
-        System.out.println("go to main page " + this.backBtn);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
         this.stage = this.getStage();
         controllerUtil.updateStage(stage, fxmlLoader);

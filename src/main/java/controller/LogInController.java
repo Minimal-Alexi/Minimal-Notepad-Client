@@ -67,7 +67,6 @@ public class LogInController {
         httpResponseService = new HttpResponseServiceImpl();
 
         String username = TokenStorage.getInfo("username");
-        System.out.println("get name from storage " + username);
         if (username != null) {
             String password = TokenStorage.getInfo("password");
             loginUserInput.setText(username);
@@ -77,7 +76,6 @@ public class LogInController {
 
     @FXML
     private void backBtnClick() {
-        System.out.println("back btn is called " + this.backBtn);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/hello_view.fxml"));
         this.stage = this.getStage();
         controllerUtil.updateStage(stage, fxmlLoader);
@@ -85,7 +83,6 @@ public class LogInController {
 
     @FXML
     private void loginBtnClick() {
-        System.out.println("register button click");
         String username = loginUserInput.getText();
         String password = loginPassInput.getText();
         handleInput(username, password);
@@ -96,7 +93,6 @@ public class LogInController {
     @FXML
     private void loginPageBtnPress(KeyEvent ke) {
         if (ke.getCode() == KeyCode.ENTER) {
-            System.out.println("page submite login info");
             String username = loginUserInput.getText();
             String password = loginPassInput.getText();
             handleInput(username, password);
@@ -144,11 +140,9 @@ public class LogInController {
     // working on it
     private void handleRememberBox(String username, String password) {
         if (isRememberBoxChecked()) {
-            System.out.println("save name from storage");
             TokenStorage.saveInfo(username, username);
             TokenStorage.saveInfo(password, password);
         } else {
-            System.out.println("remove name from storage");
             TokenStorage.clearData(username);
             TokenStorage.clearData(password);
         }
@@ -216,15 +210,10 @@ public class LogInController {
         try {
             String token = (String) jsonResponse.get("token");
             String username = (String) jsonResponse.get("username");
-//            System.out.println("token: " + token);
-//            System.out.println("username : " + username);
             TokenStorage.saveToken(username, token);
             String savedUsername = TokenStorage.getUser();
             String savedToken = TokenStorage.getToken();
             goToMainPage();
-
-//            System.out.println("username: " + savedUsername + " : " + savedToken);
-
 
         } catch (JSONException e) {
             String messsage = (String) jsonResponse.get("message");
