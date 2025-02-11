@@ -32,9 +32,8 @@ import static utils.MainPageServices.*;
 
 public class MainPageController {
 
-    // Label of time
     @FXML private Label localTime;
-
+    @FXML private Label nameLabel;
     // Note table
     @FXML private TableView<Note> table;
     @FXML private TableColumn<Note, Void> icon;
@@ -70,24 +69,6 @@ public class MainPageController {
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
         category.setCellValueFactory(new PropertyValueFactory<Note, String>("category"));
         createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createTime"));
-    }
-
-
-    private void updateNameWhenLogIn() {
-        try {
-            String username = TokenStorage.getUser();
-            String token = TokenStorage.getToken();
-            nameLabel.setText("Welcome " + username);
-            // if username exist , get the notes list
-
-            // get note list
-
-            System.out.println("welcome username " + username + ", token: "+token);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
-
         icon.setCellFactory(param -> new TableCell<Note, Void>() {
             private final ImageView imageView = new ImageView(
                     new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
@@ -107,8 +88,19 @@ public class MainPageController {
                 }
             }
         });
-
         updateTime(localTime);
+    }
+
+    private void updateNameWhenLogIn() {
+        try {
+            String username = user.getUsername();
+            String token = user.getToken();
+            nameLabel.setText("Welcome " + username);
+            System.out.println("welcome username " + username + ", token: "+token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /*
