@@ -16,6 +16,13 @@ public class TokenStorage {
         return storage;
     }
 
+    /*
+     the value will be "username jwtToken"
+     later when extract, just call getUser and getToken
+     call getUser to check if the logged in user is the same as the user stored in storage
+     call getToken to get the token to be insert in the header
+
+     */
     public static void saveToken(String user, String token) {
         String codeStr = user + " " + token;
         storage.put(STORAGE_KEY, codeStr);

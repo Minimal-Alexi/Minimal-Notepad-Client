@@ -149,14 +149,6 @@
                                                       <Insets top="10.0" />
                                                    </StackPane.margin>
                                                 </PasswordField>
-                                                <ImageView fitHeight="101.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
-                                                   <image>
-                                                      <Image url="@../img/masked-eye.png" />
-                                                   </image>
-                                                   <StackPane.margin>
-                                                      <Insets right="20.0" />
-                                                   </StackPane.margin>
-                                                </ImageView>
                                              </children>
                                           </StackPane>
                                        </children>
@@ -193,14 +185,6 @@
                                                       <Insets top="10.0" />
                                                    </StackPane.margin>
                                                 </PasswordField>
-                                                <ImageView fitHeight="101.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
-                                                   <image>
-                                                      <Image url="@../img/masked-eye.png" />
-                                                   </image>
-                                                   <StackPane.margin>
-                                                      <Insets right="20.0" />
-                                                   </StackPane.margin>
-                                                </ImageView>
                                              </children>
                                           </StackPane>
                                        </children>

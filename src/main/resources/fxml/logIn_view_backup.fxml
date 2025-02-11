@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -113,6 +114,14 @@
                                                       <Insets />
                                                    </StackPane.margin>
                                                 </PasswordField>
+                                                <ImageView fitHeight="101.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
+                                                   <image>
+                                                      <Image url="@../img/masked-eye.png" />
+                                                   </image>
+                                                   <StackPane.margin>
+                                                      <Insets right="20.0" />
+                                                   </StackPane.margin>
+                                                </ImageView>
                                              </children>
                                           </StackPane>
                                        </children>
@@ -124,6 +133,20 @@
                                        <VBox.margin>
                                           <Insets bottom="38.0" top="23.0" />
                                        </VBox.margin>
+                                       <left>
+                                          <CheckBox fx:id="rememberBox" mnemonicParsing="false" text="Remember me" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </CheckBox>
+                                       </left>
+                                       <right>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Forgot Password?" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </right>
                                     </BorderPane>
                                     <StackPane prefHeight="57.0" prefWidth="423.0">
                                        <children>
