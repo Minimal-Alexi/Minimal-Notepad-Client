@@ -27,14 +27,14 @@
             </ImageView>
             <VBox alignment="TOP_CENTER" prefWidth="250.0">
                <children>
-                  <Label text="LOGO">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
+                  <ImageView fitHeight="70.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../img/logo/logo1.png" />
+                     </image>
                      <VBox.margin>
                         <Insets bottom="40.0" top="40.0" />
                      </VBox.margin>
-                  </Label>
+                  </ImageView>
                   <Button graphicTextGap="10.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/table_view.css" text="My files">
                      <font>
                         <Font size="16.0" />
