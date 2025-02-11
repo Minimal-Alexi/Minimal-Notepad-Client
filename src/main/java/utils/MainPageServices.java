@@ -17,6 +17,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -43,15 +45,14 @@ public class MainPageServices {
                     Note note = new Note(noteJson.getInt("id"),
                             noteJson.getString("title") ,
                             noteJson.getString("text"),
-                            ("colour"),
-                            ("createdAt"),
-                            ("updatedAt"),
+                            noteJson.getString("colour"),
+                            timestampToString(noteJson.getString("createdAt")),
+                            timestampToString(noteJson.getString("updatedAt")),
                             noteJson.getJSONObject("user").getString("username"),
                             " ",
                             "null");
                     notes.add(note);
                 }
-                System.out.println(notes);
                 return notes;
             }
         } catch (IOException | InterruptedException e) {
@@ -73,5 +74,13 @@ public class MainPageServices {
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(1000), eventHandler));
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.play();
+    }
+
+    /*
+    Change the timestamp into read-friendly form
+     */
+    public static String timestampToString(String timestamp) {
+        OffsetDateTime odt = OffsetDateTime.parse(timestamp);
+        return odt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 }

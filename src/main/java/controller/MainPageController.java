@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,12 +12,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.Note;
 import model.User;
 import model.selected.SelectedNote;
@@ -40,7 +45,7 @@ public class MainPageController {
     @FXML
     private TableView<Note> table;
     @FXML
-    private TableColumn<Note, SVGPath> icon;
+    private TableColumn<Note, Void> icon;
     @FXML
     private TableColumn<Note, String> title;
     @FXML
@@ -54,7 +59,6 @@ public class MainPageController {
     @FXML
     private Label nameLabel;
 
-    SVGPath svgPath = new SVGPath();
     User user = User.getInstance();
 
     public void initialize() {
@@ -64,14 +68,17 @@ public class MainPageController {
         /*
         The user info is hardcoded for now
          */
-        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTEyODMwOCwiZXhwIjoxNzM5MjE0NzA4fQ.KzLRbNe1r8EkouVhMMawgEVhxZdPnHibM6X4Zrb6miw");
+        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTIyNzM1MywiZXhwIjoxNzM5MzEzNzUzfQ.NneKiDnTXTEZIpVV1w740aaPCbPnhPOHkdb4ZuxRGmM");
         user.setId(5);
         updateNameWhenLogIn();
 
         ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
 
-        assert noteArrayList != null;
-        notes.addAll(noteArrayList);
+        if (noteArrayList != null) {
+            notes.addAll(noteArrayList);
+        } else {
+            System.out.println("Connection failed");
+        }
 
 //        if (noteArrayList != null) {
 //            notes.addAll(noteArrayList);
@@ -87,6 +94,7 @@ public class MainPageController {
         createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createTime"));
     }
 
+
     private void updateNameWhenLogIn() {
         try {
             String username = TokenStorage.getUser();
@@ -100,6 +108,27 @@ public class MainPageController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
+
+        icon.setCellFactory(param -> new TableCell<Note, Void>() {
+            private final ImageView imageView = new ImageView(
+                    new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
+            );
+            {
+                imageView.setFitWidth(20);
+                imageView.setFitHeight(20);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(imageView);
+                }
+            }
+        });
 
         updateTime(localTime);
     }
