@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,9 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import model.Note;
 import model.User;
 import model.selected.SelectedNote;
@@ -28,34 +25,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static utils.MainPageServices.findAllMyNotes;
-import static utils.MainPageServices.updateTime;
-import static utils.NoteServices.findNoteById;
+import static utils.MainPageServices.*;
 
 public class MainPageController {
 
     // Label of time
-    @FXML
-    private Label localTime;
+    @FXML private Label localTime;
 
     // Note table
-    @FXML
-    private TableView<Note> table;
-    @FXML
-    private TableColumn<Note, Void> icon;
-    @FXML
-    private TableColumn<Note, String> title;
-    @FXML
-    private TableColumn<Note, String> group;
-    @FXML
-    private TableColumn<Note, String> owner;
-    @FXML
-    private TableColumn<Note, String> category;
-    @FXML
-    private TableColumn<Note, String> createTime;
-
+    @FXML private TableView<Note> table;
+    @FXML private TableColumn<Note, Void> icon;
+    @FXML private TableColumn<Note, String> title;
+    @FXML private TableColumn<Note, String> group;
+    @FXML private TableColumn<Note, String> owner;
+    @FXML private TableColumn<Note, String> category;
+    @FXML private TableColumn<Note, String> createTime;
     User user = User.getInstance();
-
 
     public void initialize() {
         ObservableList<Note> notes = FXCollections.observableArrayList();
@@ -63,7 +48,7 @@ public class MainPageController {
         /*
         The user info is hardcoded for now
          */
-        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTIyNzM1MywiZXhwIjoxNzM5MzEzNzUzfQ.NneKiDnTXTEZIpVV1w740aaPCbPnhPOHkdb4ZuxRGmM");
+        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTI2NzI4OSwiZXhwIjoxNzM5MzUzNjg5fQ.DdX-qgDHSht6yfAx5_wNBn47L3bmYhFCS08eoRhtnGY");
         user.setId(5);
 
         ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
@@ -104,7 +89,6 @@ public class MainPageController {
         updateTime(localTime);
     }
 
-
     /*
     Go to another page
      */
@@ -126,27 +110,15 @@ public class MainPageController {
         SelectedNote selectedNote = SelectedNote.getInstance();
         selectedNote.setId(id);
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/edit_note_page.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
     }
 
     public void newNoteClicked(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/create_note_page.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        goToPage(stage, scene, event, "/fxml/main_pages/create_note_page.fxml");
     }
 
     public void groupsClicked(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/groups_page.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
     }
 
 

@@ -148,7 +148,7 @@
                                     <Insets bottom="20.0" top="20.0" />
                                  </padding>
                               </Label>
-                              <Button mnemonicParsing="false" onAction="#saveNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/table_view.css" text="  Save Note">
+                              <Button fx:id="saveNoteBtn" mnemonicParsing="false" onAction="#saveNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/table_view.css" text="  Save Note">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

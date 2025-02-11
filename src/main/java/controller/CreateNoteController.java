@@ -2,10 +2,9 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -20,27 +19,24 @@ import model.User;
 import utils.NoteServices;
 
 import java.io.IOException;
-import java.util.Objects;
+
+import static utils.MainPageServices.goToPage;
 
 
 public class CreateNoteController {
-
-    @FXML
-    private VBox textVBox;
-
-    @FXML
-    private TextField titleTextArea;
-
-    @FXML
-    private TextArea textArea1;
-
+    @FXML private VBox textVBox;
+    @FXML private TextField titleTextArea;
+    @FXML private TextArea textArea1;
+    @FXML private Button saveNoteBtn;
     User user = User.getInstance();
 
-    public void saveNoteClicked(ActionEvent event) {
+    public void saveNoteClicked(ActionEvent event) throws IOException {
+        //Disable the button
+        saveNoteBtn.setDisable(true);
         Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", user.getUsername(), "N/A", "null");
         NoteServices.createNote("http://localhost:8093/api/note/", note, user.getToken());
+        goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
-
 
     /*
     Go to another page
@@ -50,11 +46,7 @@ public class CreateNoteController {
     private Parent root;
 
     public void groupsClicked(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main_pages/groups_page.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
     }
 
     /*

@@ -3,8 +3,14 @@ package utils;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Note;
 import org.json.JSONArray;
@@ -21,9 +27,13 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class MainPageServices {
 
+    /*
+    Find the notes
+     */
     public static ArrayList<Note> findAllMyNotes(String url, String token) {
         HttpClient client = HttpClient.newHttpClient();
 
@@ -61,9 +71,9 @@ public class MainPageServices {
         return null;
     }
 
-
-
-    // Update the time Label
+    /*
+    Update the time Label
+     */
     public static void updateTime(Label timeLabel) {
         DateFormat currentTime = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 
@@ -82,5 +92,16 @@ public class MainPageServices {
     public static String timestampToString(String timestamp) {
         OffsetDateTime odt = OffsetDateTime.parse(timestamp);
         return odt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    /*
+
+     */
+    public static <T extends Event> void goToPage(Stage stage, Scene scene, T event, String url) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(MainPageServices.class.getResource(url)));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }
