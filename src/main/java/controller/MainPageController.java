@@ -42,20 +42,12 @@ public class MainPageController {
     @FXML private TableColumn<Note, String> owner;
     @FXML private TableColumn<Note, String> category;
     @FXML private TableColumn<Note, String> createTime;
-    User user = User.getInstance();
 
 
     public void initialize() {
         ObservableList<Note> notes = FXCollections.observableArrayList();
-
-        /*
-        The user info is hardcoded for now
-         */
-        user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTczOTIyNzM1MywiZXhwIjoxNzM5MzEzNzUzfQ.NneKiDnTXTEZIpVV1w740aaPCbPnhPOHkdb4ZuxRGmM");
-        user.setId(5);
         updateNameWhenLogIn();
-
-        ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", user.getToken());
+        ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
 
         if (noteArrayList != null) {
             notes.addAll(noteArrayList);
@@ -68,7 +60,7 @@ public class MainPageController {
         group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
         category.setCellValueFactory(new PropertyValueFactory<Note, String>("category"));
-        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createTime"));
+        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
         icon.setCellFactory(param -> new TableCell<Note, Void>() {
             private final ImageView imageView = new ImageView(
                     new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
@@ -93,8 +85,8 @@ public class MainPageController {
 
     private void updateNameWhenLogIn() {
         try {
-            String username = user.getUsername();
-            String token = user.getToken();
+            String username = TokenStorage.getUser();
+            String token = TokenStorage.getToken();
             nameLabel.setText("Welcome " + username);
             System.out.println("welcome username " + username + ", token: "+token);
         } catch (Exception e) {

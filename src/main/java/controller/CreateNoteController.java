@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Note;
+import model.TokenStorage;
 import model.User;
 import utils.NoteServices;
 
@@ -28,13 +29,12 @@ public class CreateNoteController {
     @FXML private TextField titleTextArea;
     @FXML private TextArea textArea1;
     @FXML private Button saveNoteBtn;
-    User user = User.getInstance();
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", user.getUsername(), "N/A", "null");
-        NoteServices.createNote("http://localhost:8093/api/note/", note, user.getToken());
+        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", TokenStorage.getUser(), "N/A", "null");
+        NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
 
