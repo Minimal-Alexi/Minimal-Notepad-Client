@@ -1,6 +1,6 @@
 package controller;
 
-import javafx.application.Platform;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -9,14 +9,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
 import model.TokenStorage;
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
@@ -33,8 +31,7 @@ public class LogInController {
     private Button loginBtn;
     @FXML
     private Button backBtn;
-    @FXML
-    private Button testBtn;
+
     @FXML
     private TextField loginUserInput;
     @FXML
@@ -53,8 +50,7 @@ public class LogInController {
     @FXML
     private CheckBox rememberBox;
 
-//    @FXML
-//    private Text registerLabel;
+
 
     private Stage stage;
     private ControllerUtils controllerUtil ;
@@ -92,7 +88,6 @@ public class LogInController {
         System.out.println("register button click");
         String username = loginUserInput.getText();
         String password = loginPassInput.getText();
-        System.out.println("Name: " + username + " - password: " + password);
         handleInput(username, password);
 
     }
@@ -104,19 +99,11 @@ public class LogInController {
             System.out.println("page submite login info");
             String username = loginUserInput.getText();
             String password = loginPassInput.getText();
-            System.out.println("Name: " + username + " - password: " + password);
             handleInput(username, password);
         }
     }
 
 
-    @FXML
-    private void testBtnClick() {
-        System.out.println("test Btn click");
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
-        this.stage = this.getStage();
-        this.controllerUtil.updateStage(stage, fxmlLoader);
-    }
 
     @FXML
     private void mouseEnter() {
@@ -154,6 +141,7 @@ public class LogInController {
         return false;
     }
 
+    // working on it
     private void handleRememberBox(String username, String password) {
         if (isRememberBoxChecked()) {
             System.out.println("save name from storage");
@@ -216,9 +204,6 @@ public class LogInController {
         StringEntity entity = new StringEntity(json.toString());
         httpPost.setEntity(entity);
 
-        System.out.println("httpClient: " + httpClient);
-        System.out.println("httpPost: " + httpPost);
-
 //        HttpResponseServiceImpl httpResponseService  = new HttpResponseServiceImpl();
         httpResponseService.handleReponse(httpPost,httpClient,this::handleLoginReponse);
 
@@ -249,7 +234,6 @@ public class LogInController {
     }
 
     private void goToMainPage() {
-        System.out.println("go to main page " + this.backBtn);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
         this.stage = this.getStage();
         controllerUtil.updateStage(stage, fxmlLoader);
