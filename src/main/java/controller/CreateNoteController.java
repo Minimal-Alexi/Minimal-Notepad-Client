@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -14,6 +16,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
@@ -36,6 +39,15 @@ public class CreateNoteController {
     public void initialize() {
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
+
+        /*
+        Add some new event handlers
+         */
+
+        textArea1.setPrefRowCount(1);
+
+        TextArea textArea = createTextArea();
+        textVBox.getChildren().add(textArea);
     }
 
 
@@ -59,8 +71,13 @@ public class CreateNoteController {
         goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
     }
 
+    // ******************************
+    // * new codes are below here *
+    // ******************************
+
+
     /*
-    Unfinished functions
+    ctrl+v insert picture
      */
     public void textAreaKeyPressed(KeyEvent keyEvent) {
         /*
@@ -86,5 +103,37 @@ public class CreateNoteController {
                 textVBox.getChildren().add(textArea);
             }
         }
+    }
+
+    /*
+    press ENTER to create a new textarea
+     */
+    private TextArea createTextArea() {
+        TextArea textArea = new TextArea();
+        textArea.setWrapText(true);
+
+        // press ENTER to create a new textArea
+        textArea.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode().toString().equals("ENTER")) {
+                event.consume(); // prevent the default enter warping behavior
+
+                TextArea newTextArea = createTextArea();
+                VBox parent = (VBox) textArea.getParent();
+                parent.getChildren().add(parent.getChildren().indexOf(textArea) + 1, newTextArea);
+
+                newTextArea.requestFocus(); // move the cursor to the next textArea
+            }
+        });
+
+        // Set the height of the textArea changing with the text lines
+        textArea.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Text text = (Text) textArea.lookup(".text");
+                textArea.setPrefHeight(text.boundsInParentProperty().get().getMaxY() + 20);
+            }
+        });
+
+        return textArea;
     }
 }
