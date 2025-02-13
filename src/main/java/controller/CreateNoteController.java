@@ -43,8 +43,19 @@ public class CreateNoteController {
         /*
         Add some new event handlers
          */
+        // press ENTER to create a new textArea
+        // This is a duplicated code and should be
+        textArea1.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode().toString().equals("ENTER")) {
+                event.consume(); // prevent the default enter warping behavior
 
-        textArea1.setPrefRowCount(1);
+                TextArea newTextArea = createTextArea();
+                VBox parent = (VBox) textArea1.getParent();
+                parent.getChildren().add(parent.getChildren().indexOf(textArea1) + 1, newTextArea);
+
+                newTextArea.requestFocus(); // move the cursor to the next textArea
+            }
+        });
 
         TextArea textArea = createTextArea();
         textVBox.getChildren().add(textArea);
@@ -123,6 +134,23 @@ public class CreateNoteController {
 
                 newTextArea.requestFocus(); // move the cursor to the next textArea
             }
+        });
+
+        // If the textArea is empty, press BACKSPACE to delete this textArea and put the cursor into the textArea above
+        textArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (textArea.getText().isEmpty()) {
+                if (event.getCode() == KeyCode.BACK_SPACE) {
+
+                    // Move the cursor to the previous textArea
+                    VBox parent = (VBox) textArea.getParent();
+                    TextArea previousTextArea = (TextArea) parent.getChildren().get(parent.getChildren().indexOf(textArea) - 1);
+                    previousTextArea.requestFocus();
+
+                    // Delete this textArea
+                    parent.getChildren().remove(textArea);
+                }
+            }
+
         });
 
         // Set the height of the textArea changing with the text lines
