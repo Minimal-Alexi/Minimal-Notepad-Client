@@ -91,15 +91,16 @@ public class MainPageController {
     public void tableClicked(MouseEvent event) throws IOException {
         int id = 0;
         if (event.getClickCount() == 1) {
-            id = table.getSelectionModel().getSelectedItem().getId();
-            System.out.println("id: " + id);
-            System.out.println(table.getSelectionModel().getSelectedItem());
+            if (table.getSelectionModel().getSelectedItem() != null) {
+                id = table.getSelectionModel().getSelectedItem().getId();
+                System.out.println("id: " + id);
+                System.out.println(table.getSelectionModel().getSelectedItem());
+
+                SelectedNote selectedNote = SelectedNote.getInstance();
+                selectedNote.setId(id);
+                goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
+            }
         }
-
-        SelectedNote selectedNote = SelectedNote.getInstance();
-        selectedNote.setId(id);
-
-        goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
     }
 
     public void newNoteClicked(ActionEvent event) throws IOException {
