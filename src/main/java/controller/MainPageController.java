@@ -4,12 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -20,7 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Note;
-import model.User;
 import model.selected.SelectedNote;
 import model.TokenStorage;
 
@@ -46,9 +41,7 @@ public class MainPageController {
 
     public void initialize() {
         ObservableList<Note> notes = FXCollections.observableArrayList();
-        updateNameWhenLogIn();
         ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
-
         if (noteArrayList != null) {
             notes.addAll(noteArrayList);
         } else {
@@ -80,19 +73,9 @@ public class MainPageController {
                 }
             }
         });
-        updateTime(localTime);
-    }
 
-    private void updateNameWhenLogIn() {
-        try {
-            String username = TokenStorage.getUser();
-            String token = TokenStorage.getToken();
-            nameLabel.setText("Welcome " + username);
-            System.out.println("welcome username " + username + ", token: "+token);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        updateLocalTime(localTime);
+        updateNameLabel(nameLabel, TokenStorage.getUser());
     }
 
     /*

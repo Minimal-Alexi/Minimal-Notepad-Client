@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -16,18 +17,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
-import model.User;
 import model.selected.SelectedNote;
 import utils.NoteServices;
 
 import java.io.IOException;
 
-import static utils.MainPageServices.goToPage;
+import static utils.MainPageServices.*;
 import static utils.NoteServices.findNoteById;
 
 
 public class EditNoteController {
 
+    @FXML private Label localTime;
+    @FXML private Label nameLabel;
     @FXML private VBox textVBox;
     @FXML private TextField titleTextArea;
     @FXML private TextArea textArea1;
@@ -46,6 +48,9 @@ public class EditNoteController {
         assert note != null;
         textArea1.setText(note.getText());
         titleTextArea.setText(note.getTitle());
+
+        updateLocalTime(localTime);
+        updateNameLabel(nameLabel, TokenStorage.getUser());
     }
 
 

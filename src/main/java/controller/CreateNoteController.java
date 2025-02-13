@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -16,19 +17,28 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
-import model.User;
 import utils.NoteServices;
 
 import java.io.IOException;
 
-import static utils.MainPageServices.goToPage;
+import static utils.MainPageServices.*;
 
 
 public class CreateNoteController {
+
+    @FXML private Label localTime;
+    @FXML private Label nameLabel;
     @FXML private VBox textVBox;
     @FXML private TextField titleTextArea;
     @FXML private TextArea textArea1;
     @FXML private Button saveNoteBtn;
+
+    public void initialize() {
+        updateLocalTime(localTime);
+        updateNameLabel(nameLabel, TokenStorage.getUser());
+    }
+
+
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button

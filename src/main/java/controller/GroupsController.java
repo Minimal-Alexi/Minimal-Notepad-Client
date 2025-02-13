@@ -1,16 +1,31 @@
 package controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import model.TokenStorage;
 
 import java.io.IOException;
 import java.util.Objects;
 
+import static utils.MainPageServices.updateLocalTime;
+import static utils.MainPageServices.updateNameLabel;
+
 public class GroupsController {
+
+    @FXML
+    private Label localTime;
+    @FXML private Label nameLabel;
+
+    public void initialize() {
+        updateLocalTime(localTime);
+        updateNameLabel(nameLabel, TokenStorage.getUser());
+    }
 
     public void createGroupClicked(ActionEvent event) {
 

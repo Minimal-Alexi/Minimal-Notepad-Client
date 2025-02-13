@@ -74,7 +74,7 @@ public class MainPageServices {
     /*
     Update the time Label
      */
-    public static void updateTime(Label timeLabel) {
+    public static void updateLocalTime(Label timeLabel) {
         DateFormat currentTime = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 
         EventHandler<ActionEvent> eventHandler = e -> {
@@ -95,7 +95,7 @@ public class MainPageServices {
     }
 
     /*
-
+    Update the stage
      */
     public static <T extends Event> void goToPage(Stage stage, Scene scene, T event, String url) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(MainPageServices.class.getResource(url)));
@@ -103,5 +103,12 @@ public class MainPageServices {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    /*
+    Update the name label after log in
+     */
+    public static void updateNameLabel(Label nameLabel, String username) {
+        nameLabel.setText("Welcome " + username);
     }
 }

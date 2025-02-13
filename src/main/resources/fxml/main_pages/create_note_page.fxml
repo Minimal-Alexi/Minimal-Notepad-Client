@@ -102,12 +102,12 @@
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Welcome, Amanda">
+                        <Label fx:id="nameLabel" contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Welcome, ">
                            <font>
                               <Font name="Dubai Medium" size="30.0" />
                            </font>
                            <graphic>
-                              <Label alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="Tue, 07 June 2022" textFill="#00000099">
+                              <Label fx:id="localTime" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="loading time ..." textFill="#00000099">
                                  <font>
                                     <Font name="System Italic" size="14.0" />
                                  </font>
