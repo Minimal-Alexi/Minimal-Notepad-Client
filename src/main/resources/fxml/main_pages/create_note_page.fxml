@@ -174,16 +174,24 @@
                                           <Font size="20.0" />
                                        </font>
                                     </TextField>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" stylesheets="@../../CSS/category.css">
+                                    <HBox fx:id="categoryHBox" alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" styleClass="category-HBox" stylesheets="@../../CSS/category.css">
                                        <children>
                                           <Label text="  Categories: ">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
                                           </Label>
-                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="94.0" styleClass="category" text="Category1">
+                                          <Label alignment="CENTER" contentDisplay="RIGHT" prefHeight="42.0" prefWidth="118.0" styleClass="category" text="Category1">
                                              <font>
                                                 <Font size="20.0" />
+                                             </font>
+                                             <graphic>
+                                                <Label text="x" textFill="#00000080" />
+                                             </graphic>
+                                          </Label>
+                                          <Label fx:id="addCategory" onMouseClicked="#addCategoryClicked" styleClass="add-category" text=" + ">
+                                             <font>
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>

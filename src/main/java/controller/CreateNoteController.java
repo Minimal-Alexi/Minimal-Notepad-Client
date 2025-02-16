@@ -15,6 +15,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -35,6 +37,8 @@ public class CreateNoteController {
     @FXML private TextField titleTextArea;
     @FXML private TextArea textArea1;
     @FXML private Button saveNoteBtn;
+    @FXML private HBox categoryHBox;
+    @FXML private Label addCategory;
 
     public void initialize() {
         updateLocalTime(localTime);
@@ -85,6 +89,39 @@ public class CreateNoteController {
     // ******************************
     // * new codes are below here *
     // ******************************
+
+    /*
+    Click to add a Category
+     */
+    public void addCategoryClicked(MouseEvent mouseEvent) {
+        addCategory.setDisable(true);
+
+        TextField textField = new TextField();
+        Label label = new Label("Press ENTER to add");
+        categoryHBox.getChildren().add(categoryHBox.getChildren().size()-1, label);
+        categoryHBox.getChildren().add(categoryHBox.getChildren().size()-2, textField);
+        textField.requestFocus();
+
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().toString().equals("ENTER")) {
+                categoryHBox.getChildren().remove(label);
+                Label category = new Label(textField.getText());
+                categoryHBox.getChildren().remove(textField);
+                category.getStyleClass().add("category");
+
+                Label removeCategory = new Label("x");
+                removeCategory.getStyleClass().add("remove-category");
+                removeCategory.setOnMouseClicked(mouseEvent1 -> {
+                    categoryHBox.getChildren().remove(category);
+                });
+
+                category.setGraphic(removeCategory);
+                categoryHBox.getChildren().add(categoryHBox.getChildren().size()-1, category);
+                addCategory.setDisable(false);
+            }
+        });
+    }
+
 
 
     /*
@@ -164,4 +201,6 @@ public class CreateNoteController {
 
         return textArea;
     }
+
+
 }

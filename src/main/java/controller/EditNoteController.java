@@ -53,8 +53,6 @@ public class EditNoteController {
         updateNameLabel(nameLabel, TokenStorage.getUser());
     }
 
-
-
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
