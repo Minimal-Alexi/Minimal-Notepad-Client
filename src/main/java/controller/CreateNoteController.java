@@ -108,25 +108,25 @@ public class CreateNoteController {
         HashMap<Integer, String> categories = getAllCategories("http://localhost:8093/api/categories", TokenStorage.getToken());
         ContextMenu contextMenu = new ContextMenu();
 
-        for (int i = 0; i < Objects.requireNonNull(categories).size(); i++) {
-            int finalI = i + 1;
-            MenuItem item = new MenuItem(categories.get(finalI));
+        assert categories != null;
+        categories.forEach((k, v) -> {
+            MenuItem item = new MenuItem(v);
             item.setOnAction(event -> {
                 // add category label
-                String category = categories.get(finalI);
-                categoryList.put(finalI, category);
+                categoryList.put(k, v);
+                System.out.println(k + v);
                 System.out.println(categoryList);
 
-                // update the ui
-                // remove every element in the category HBox instead of the first one(the Category: label)
-                // and the last one(the "+")
-                if (categoryHBox.getChildren().size() > 1) {
+                /*
+                update the ui
+                */
+                // remove every element in the category HBox instead of the first one(the Category: label) and the last one(the "+")
+                if (categoryHBox.getChildren().size() > 2) {
                     categoryHBox.getChildren().remove(1, categoryHBox.getChildren().size() - 1);
                 }
                 // query the categoryList to add categories to the ui
-                for (int j = 0; j < categoryList.size(); j++) {
-                    int finalJ = j + 1;
-                    Label label = new Label(categoryList.get(finalJ));
+                categoryList.forEach((key, value) -> {
+                    Label label = new Label(value);
                     label.getStyleClass().add("category");
                     categoryHBox.getChildren().add(categoryHBox.getChildren().size() - 1, label);
                     // add the " - " to the Label
@@ -134,13 +134,15 @@ public class CreateNoteController {
                     removeCategory.getStyleClass().add("remove-category");
                     removeCategory.setOnMouseClicked(event1 -> {
                         categoryHBox.getChildren().remove(label);
-                        categoryList.remove(finalJ);
+                        categoryList.remove(key);
                     });
                     label.setGraphic(removeCategory);
-                }
+                });
             });
             contextMenu.getItems().add(item);
-        }
+
+
+        });
 
         if (!contextMenu.isShowing()) {
             contextMenu.show(addCategory, mouseEvent.getScreenX(), mouseEvent.getScreenY());
@@ -151,7 +153,6 @@ public class CreateNoteController {
         // The adding behavior is over, enable the add button
         addCategory.setDisable(false);
     }
-
 
     /*
     ctrl+v insert picture

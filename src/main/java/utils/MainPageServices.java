@@ -56,7 +56,7 @@ public class MainPageServices {
                 for (int i = 0; i < result.length(); i++) {
                     JSONObject noteJson = result.getJSONObject(i);
                     Note note = new Note(noteJson.getInt("id"),
-                            noteJson.getString("title") ,
+                            noteJson.getString("title"),
                             noteJson.getString("text"),
                             noteJson.getString("colour"),
                             timestampToString(noteJson.getString("createdAt")),
@@ -134,11 +134,11 @@ public class MainPageServices {
         for (int j = 0; j < i; j++) {
             AnchorPane pane = getAnchorPane();
             Label title = new Label();
-            title.setText(noteArrayList.get(i-1).getTitle());
+            title.setText(noteArrayList.get(j).getTitle());
             title.getStyleClass().add("title");
             pane.getChildren().add(title);
             Label editAt = new Label();
-            editAt.setText("Edited at " + noteArrayList.get(i-1).getUpdatedAt());
+            editAt.setText("Edited at " + noteArrayList.get(j).getUpdatedAt());
             editAt.getStyleClass().add("edit-at");
             pane.getChildren().add(editAt);
 

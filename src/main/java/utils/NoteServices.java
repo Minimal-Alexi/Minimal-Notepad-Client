@@ -13,8 +13,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static utils.MainPageServices.jsonArrayToHashMap;
-import static utils.MainPageServices.timestampToString;
+import static utils.MainPageServices.*;
 
 
 public class NoteServices {
@@ -24,8 +23,11 @@ public class NoteServices {
         jsonBody.put("colour", note.getColor());
         jsonBody.put("text", note.getText());
         jsonBody.put("title", note.getTitle());
+        jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
 
         HttpClient client = HttpClient.newHttpClient();
+
+        System.out.println(jsonBody);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))

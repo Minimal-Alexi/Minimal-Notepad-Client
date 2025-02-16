@@ -154,7 +154,7 @@
                               </Button>
                            </children>
                         </HBox>
-                        <HBox fx:id="recentlyEditedHBox" prefHeight="202.0" prefWidth="894.0" />
+                        <HBox fx:id="recentlyEditedHBox" prefHeight="202.0" prefWidth="894.0" stylesheets="@../../CSS/recently_edited.css" />
                      </children>
                   </VBox>
                   <VBox prefHeight="424.0" prefWidth="872.0">
