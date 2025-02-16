@@ -1,6 +1,7 @@
 package utils;
 
 import model.Note;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -9,7 +10,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import static utils.MainPageServices.jsonArrayToHashMap;
 import static utils.MainPageServices.timestampToString;
 
 
@@ -65,7 +69,7 @@ public class NoteServices {
                         timestampToString(result.getString("updatedAt")),
                         result.getJSONObject("user").getString("username"),
                         " ",
-                        "null");
+                        jsonArrayToHashMap(result.getJSONArray("categoriesList")));
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -91,5 +95,33 @@ public class NoteServices {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static HashMap<Integer, String> getAllCategories(String url, String token) {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .GET()
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                JSONArray result = new JSONArray(response.body());
+                HashMap<Integer, String> categories = new HashMap<>();
+                // change the json array to the hashmap
+                for (int i = 0; i < result.length(); i++) {
+                    categories.put(result.getJSONObject(i).getInt("id"), result.getJSONObject(i).getString("name"));
+                }
+                return categories;
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }

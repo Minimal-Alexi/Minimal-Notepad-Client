@@ -9,11 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
@@ -65,7 +63,8 @@ public class MainPageServices {
                             timestampToString(noteJson.getString("updatedAt")),
                             noteJson.getJSONObject("user").getString("username"),
                             " ",
-                            "null");
+                            jsonArrayToHashMap(noteJson.getJSONArray("categoriesList"))
+                    );
                     notes.add(note);
                 }
                 return notes;
@@ -130,12 +129,7 @@ public class MainPageServices {
             }
         });
 
-        int i = 0;
-        if (noteArrayList.size() <= 4) {
-            i = noteArrayList.size();
-        } else {
-            i = 4;
-        }
+        int i = Math.min(noteArrayList.size(), 4);
 
         for (int j = 0; j < i; j++) {
             AnchorPane pane = getAnchorPane();
@@ -182,4 +176,32 @@ public class MainPageServices {
         anchorPane.getChildren().add(rec4);
         return anchorPane;
     }
+
+
+    /*
+    JsonArray and hashMap mutual transformation
+     */
+    public static HashMap<Integer, String> jsonArrayToHashMap(JSONArray jsonArray) {
+        HashMap<Integer, String> hashMap = new HashMap<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            int id = jsonObject.getInt("id");
+            String name = jsonObject.getString("name");
+            hashMap.put(id, name);
+        }
+        return hashMap;
+    }
+
+    public static JSONArray hashMapToJSONArray(HashMap<Integer, String> hashMap) {
+        JSONArray jsonArray = new JSONArray();
+        for (Map.Entry<Integer, String> entry : hashMap.entrySet()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", entry.getKey());
+            jsonObject.put("name", entry.getValue());
+            jsonArray.put(jsonObject);
+        }
+        return jsonArray;
+    }
+
 }

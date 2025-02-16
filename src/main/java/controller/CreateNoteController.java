@@ -6,10 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -25,20 +22,33 @@ import model.TokenStorage;
 import utils.NoteServices;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
 
 import static utils.MainPageServices.*;
+import static utils.NoteServices.getAllCategories;
 
 
 public class CreateNoteController {
 
-    @FXML private Label localTime;
-    @FXML private Label nameLabel;
-    @FXML private VBox textVBox;
-    @FXML private TextField titleTextArea;
-    @FXML private TextArea textArea1;
-    @FXML private Button saveNoteBtn;
-    @FXML private HBox categoryHBox;
-    @FXML private Label addCategory;
+    @FXML
+    private Label localTime;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private VBox textVBox;
+    @FXML
+    private TextField titleTextArea;
+    @FXML
+    private TextArea textArea1;
+    @FXML
+    private Button saveNoteBtn;
+    @FXML
+    private HBox categoryHBox;
+    @FXML
+    private Label addCategory;
+
+    private final HashMap<Integer, String> categoryList = new HashMap<>();
 
     public void initialize() {
         updateLocalTime(localTime);
@@ -65,12 +75,10 @@ public class CreateNoteController {
         textVBox.getChildren().add(textArea);
     }
 
-
-
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", TokenStorage.getUser(), "N/A", "null");
+        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
         NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
@@ -96,32 +104,35 @@ public class CreateNoteController {
     public void addCategoryClicked(MouseEvent mouseEvent) {
         addCategory.setDisable(true);
 
-        TextField textField = new TextField();
-        Label label = new Label("Press ENTER to add");
-        categoryHBox.getChildren().add(categoryHBox.getChildren().size()-1, label);
-        categoryHBox.getChildren().add(categoryHBox.getChildren().size()-2, textField);
-        textField.requestFocus();
+        // Create a context menu of categories for the user to choose
+        HashMap<Integer, String> categories = getAllCategories("http://localhost:8093/api/categories", TokenStorage.getToken());
+        ContextMenu contextMenu = new ContextMenu();
 
-        textField.setOnKeyPressed(event -> {
-            if (event.getCode().toString().equals("ENTER")) {
-                categoryHBox.getChildren().remove(label);
-                Label category = new Label(textField.getText());
-                categoryHBox.getChildren().remove(textField);
-                category.getStyleClass().add("category");
+        for (int i = 0; i < Objects.requireNonNull(categories).size(); i++) {
+            int finalI = i + 1;
+            MenuItem item = new MenuItem(categories.get(finalI));
+            item.setOnAction(event -> {
+                // add category label
+                String category = categories.get(finalI);
+                System.out.println(category);
+                Label label = new Label(category);
+                label.getStyleClass().add("category");
+                categoryHBox.getChildren().add(categoryHBox.getChildren().size() - 1, label);
 
-                Label removeCategory = new Label("x");
-                removeCategory.getStyleClass().add("remove-category");
-                removeCategory.setOnMouseClicked(mouseEvent1 -> {
-                    categoryHBox.getChildren().remove(category);
-                });
+                categoryList.put(finalI, category);
+            });
+            contextMenu.getItems().add(item);
+        }
 
-                category.setGraphic(removeCategory);
-                categoryHBox.getChildren().add(categoryHBox.getChildren().size()-1, category);
-                addCategory.setDisable(false);
-            }
-        });
+        if (!contextMenu.isShowing()) {
+            contextMenu.show(addCategory, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        } else {
+            contextMenu.hide();
+        }
+
+        // The adding behavior is over, enable the add button
+        addCategory.setDisable(false);
     }
-
 
 
     /*
@@ -201,6 +212,10 @@ public class CreateNoteController {
 
         return textArea;
     }
+
+    /*
+    Event to add category labels
+     */
 
 
 }

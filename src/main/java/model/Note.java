@@ -1,5 +1,7 @@
 package model;
 
+import java.util.HashMap;
+
 public class Note {
     private int id;
     private String title;
@@ -9,10 +11,10 @@ public class Note {
     private String updatedAt;
     private String owner;
     private String group;
-    private String category;
+    private HashMap<Integer, String> category;
 
 
-    public Note(int id, String title, String text, String color, String createdAt, String updatedAt, String owner, String group, String category) {
+    public Note(int id, String title, String text, String color, String createdAt, String updatedAt, String owner, String group, HashMap<Integer, String> category) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -88,11 +90,11 @@ public class Note {
         this.group = group;
     }
 
-    public String getCategory() {
+    public HashMap<Integer, String> getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(HashMap<Integer, String> category) {
         this.category = category;
     }
 }
