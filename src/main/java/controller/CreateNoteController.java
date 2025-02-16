@@ -114,12 +114,30 @@ public class CreateNoteController {
             item.setOnAction(event -> {
                 // add category label
                 String category = categories.get(finalI);
-                System.out.println(category);
-                Label label = new Label(category);
-                label.getStyleClass().add("category");
-                categoryHBox.getChildren().add(categoryHBox.getChildren().size() - 1, label);
-
                 categoryList.put(finalI, category);
+                System.out.println(categoryList);
+
+                // update the ui
+                // remove every element in the category HBox instead of the first one(the Category: label)
+                // and the last one(the "+")
+                if (categoryHBox.getChildren().size() > 1) {
+                    categoryHBox.getChildren().remove(1, categoryHBox.getChildren().size() - 1);
+                }
+                // query the categoryList to add categories to the ui
+                for (int j = 0; j < categoryList.size(); j++) {
+                    int finalJ = j + 1;
+                    Label label = new Label(categoryList.get(finalJ));
+                    label.getStyleClass().add("category");
+                    categoryHBox.getChildren().add(categoryHBox.getChildren().size() - 1, label);
+                    // add the " - " to the Label
+                    Label removeCategory = new Label("x");
+                    removeCategory.getStyleClass().add("remove-category");
+                    removeCategory.setOnMouseClicked(event1 -> {
+                        categoryHBox.getChildren().remove(label);
+                        categoryList.remove(finalJ);
+                    });
+                    label.setGraphic(removeCategory);
+                }
             });
             contextMenu.getItems().add(item);
         }
@@ -214,7 +232,7 @@ public class CreateNoteController {
     }
 
     /*
-    Event to add category labels
+    update category HBox
      */
 
 
