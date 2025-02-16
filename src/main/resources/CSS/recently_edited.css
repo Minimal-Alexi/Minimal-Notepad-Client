@@ -1,0 +1,60 @@
+.rectangle1 {
+    -fx-fill: #f6f6f8;
+    -fx-arc-height: 20;
+    -fx-arc-width: 20;
+}
+
+.svg {
+    -fx-fill: white;
+    -fx-translate-x: 14.0;
+    -fx-translate-y: 14.0;
+}
+
+.circle {
+    -fx-fill: #a75923;
+    -fx-translate-x: 47.0;
+    -fx-translate-y: 44.0;
+    -fx-stroke: black;
+}
+
+.rectangle2 {
+    -fx-fill: #f4f6f6;
+    -fx-arc-height: 10;
+    -fx-arc-width: 10;
+    -fx-stroke: #f4f6f6;
+
+    -fx-translate-x: 27.0;
+    -fx-translate-y: 72.0;
+}
+
+.rectangle3 {
+    -fx-fill: #f4f6f6;
+    -fx-arc-height: 10;
+    -fx-arc-width: 10;
+    -fx-stroke: #f4f6f6;
+
+    -fx-translate-x: 27.0;
+    -fx-translate-y: 95.0;
+}
+
+.rectangle4 {
+    -fx-fill: #f4f6f6;
+    -fx-arc-height: 10;
+    -fx-arc-width: 10;
+    -fx-stroke: #f4f6f6;
+
+    -fx-translate-x: 27.0;
+    -fx-translate-y: 117.0;
+}
+
+.title {
+    -fx-font-size: 18;
+    -fx-translate-x: 7.0;
+    -fx-translate-y: 153.0;
+}
+
+.edit-at {
+    -fx-text-fill: #0000009a;
+    -fx-translate-x: 7.0;
+    -fx-translate-y: 180.0;
+}

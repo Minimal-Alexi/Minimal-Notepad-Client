@@ -156,9 +156,9 @@
                               </Button>
                            </children>
                         </HBox>
-                        <HBox prefHeight="202.0" prefWidth="893.0">
+                        <HBox fx:id="recentlyEditedHBox" prefHeight="202.0" prefWidth="893.0">
                            <children>
-                              <AnchorPane prefHeight="56.0" prefWidth="914.0">
+                              <AnchorPane fx:id="REIcon" prefHeight="198.0" prefWidth="200.0">
                                  <children>
                                     <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f6f6f8" height="146.0" stroke="#f6f6f8" strokeType="INSIDE" width="201.0" />
                                     <SVGPath content="M0 8C0 3.58172 3.58172 0 8 0H166C170.418 0 174 3.58172 174 8V131H0V8Z" fill="WHITE" layoutX="14.0" layoutY="14.0" />

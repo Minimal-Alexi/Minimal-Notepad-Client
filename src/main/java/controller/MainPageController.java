@@ -6,14 +6,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Note;
 import model.selected.SelectedNote;
@@ -37,6 +37,8 @@ public class MainPageController {
     @FXML private TableColumn<Note, String> owner;
     @FXML private TableColumn<Note, String> category;
     @FXML private TableColumn<Note, String> createTime;
+    // Recently edited
+    @FXML private HBox recentlyEditedHBox;
 
 
     public void initialize() {
@@ -74,6 +76,8 @@ public class MainPageController {
             }
         });
 
+        assert noteArrayList != null;
+        updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
     }

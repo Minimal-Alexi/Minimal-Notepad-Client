@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class MainPageView extends Application {
 
     @Override
@@ -13,7 +15,9 @@ public class MainPageView extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
         Parent root = fxmlLoader.load();
 
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/recently_edited.css")).toExternalForm());
+        stage.setScene(scene);
         stage.show();
     }
 
