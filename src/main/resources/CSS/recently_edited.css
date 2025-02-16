@@ -58,3 +58,7 @@
     -fx-translate-x: 7.0;
     -fx-translate-y: 180.0;
 }
+
+.anchor-pane {
+    -fx-padding: 10 10 10 10;
+}

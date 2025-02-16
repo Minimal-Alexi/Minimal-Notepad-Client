@@ -154,6 +154,7 @@ public class MainPageServices {
 
     private static AnchorPane getAnchorPane() {
         AnchorPane anchorPane = new AnchorPane();
+        anchorPane.getStyleClass().add("anchor-pane");
 
         Rectangle rec1 = new Rectangle(200, 146);
         rec1.getStyleClass().add("rectangle1");
