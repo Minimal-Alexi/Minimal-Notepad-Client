@@ -109,7 +109,7 @@ public class RegisterController {
 
     private void checkEmailAndPassword(String email, String pwd, String confirmPwd) {
         resetAllErrMesg();
-        if (!validEmail(email)) {
+        if (!controllerUtil.validEmail(email)) {
             errEmail.setText("");
             errGeneral.setText("Input email must have format abc@mail.com");
         } else if (!samePassword(pwd, confirmPwd)) {
@@ -142,7 +142,7 @@ public class RegisterController {
         }
     }
 
-    private boolean validEmail(String email) {
+    public boolean validEmail(String email) {
         String regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);

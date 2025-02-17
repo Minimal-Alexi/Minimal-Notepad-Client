@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 //import java.awt.*;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ControllerUtils {
 
@@ -29,6 +31,20 @@ public class ControllerUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public Stage getStage(Button btn, Stage stage) {
+        if (stage == null) {
+            stage = (Stage) btn.getScene().getWindow();
+        }
+        return stage;
+    }
+
+    public void gotoPage(Stage stage, Button btn, String fxmlPage) {
+        stage = getStage(btn, stage);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPage));
+        updateStage(stage, fxmlLoader);
+    }
+
 
     public void setDefaultCursor(Button btn) {
         btn.setCursor(defaultCursor);
@@ -53,5 +69,13 @@ public class ControllerUtils {
     public void setHandCursor(Label label) {
         label.setCursor(handCursor);
     }
+
+    public boolean validEmail(String email) {
+        String regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
 
 }
