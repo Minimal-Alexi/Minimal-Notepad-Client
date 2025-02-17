@@ -10,12 +10,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
 import model.TokenStorage;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.*;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -179,7 +181,6 @@ public class AccountInfoPageController {
         } else {
             try {
                 saveUserInfo(email, username);
-
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -187,6 +188,7 @@ public class AccountInfoPageController {
     }
 
     private void resetAllErrMessages() {
+        generalErrLabel.setTextFill(Color.RED);
         userErrLabel.setText("");
         emailErrLabel.setText("");
         generalErrLabel.setText("");
@@ -214,7 +216,62 @@ public class AccountInfoPageController {
     public void saveUserInfo(String email, String username) throws IOException {
         resetAllErrMessages();
 //        String URI = ""
+
+        String token = TokenStorage.getToken();
         HttpPut httpPut = new HttpPut(URI);
+        httpPut.addHeader("Accept", "application/json");
+        httpPut.addHeader("Content-Type", "application/json");
+        httpPut.addHeader("Authorization", "Bearer " + token);
+
+        JSONObject json = new JSONObject();
+        json.put("username", username);
+        json.put("email", email);
+
+        StringEntity entity = new StringEntity(json.toString());
+        httpPut.setEntity(entity);
+        new Thread(() -> {
+            try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
+                HttpEntity responseEntity = response.getEntity();
+                String data = EntityUtils.toString(responseEntity);
+                JSONObject jsonResponse = new JSONObject(data);
+                EntityUtils.consume(responseEntity);
+                // Do more processing here...
+                String statusLine = response.getStatusLine().toString();
+                System.out.println("json " + jsonResponse);
+                System.out.println("response " + responseEntity);
+                System.out.println("status code " + statusLine);
+                Platform.runLater(() -> {
+                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
+                    handleSaveUserinfoResponse(jsonResponse, statusLine);
+                });
+            } catch (IOException e) {
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
+                a.show();
+            } catch (JSONException e) {
+//                e.setStackTrace();
+                generalErrLabel.setText(e.getMessage());
+            }
+        }).start();
+    }
+
+    public void handleSaveUserinfoResponse(JSONObject jsonResponse, String statusLine) {
+        try {
+//            StatusLine statusCode = jsonResponse.getStatusLine();
+//            String message = (String) jsonResponse.get("message");
+            if (statusLine.contains("200")) {
+                generalErrLabel.setTextFill(Color.GREEN);
+                generalErrLabel.setText("User Information updates successfully");
+//                generalErrLabel.setTextFill(Color.RED);
+            } else {
+                // get message from generic response
+                String message = (String) jsonResponse.get("message");
+                generalErrLabel.setText(message);
+            }
+        } catch (JSONException e) {
+            generalErrLabel.setText("Unable to save information");
+        }
+//        String
     }
 
 
@@ -241,12 +298,12 @@ public class AccountInfoPageController {
     public void deleteBtnClick() {
         System.out.println("Deleting user");
         String token = TokenStorage.getToken();
-        HttpDelete httpDelete = new HttpDelete(URI);
-        httpDelete.addHeader("Accept", "application/json");
-        httpDelete.addHeader("Content-Type", "application/json");
-        httpDelete.addHeader("Authorization", "Bearer " + token);
+        HttpPut httpPut = new HttpPut(URI);
+        httpPut.addHeader("Accept", "application/json");
+        httpPut.addHeader("Content-Type", "application/json");
+        httpPut.addHeader("Authorization", "Bearer " + token);
         new Thread(() -> {
-            try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
+            try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
                 HttpEntity responseEntity = response.getEntity();
                 String data = EntityUtils.toString(responseEntity);
                 System.out.println("data " + data);
@@ -274,15 +331,15 @@ public class AccountInfoPageController {
     }
 
     private void handleDeleteResponse(JSONObject jsonResponse) {
-        String message = (String) jsonResponse.get("message");
         try {
+            String message = (String) jsonResponse.get("message");
             System.out.println("message: " + message);
             String helloPage = "/fxml/hello_view.fxml";
             TokenStorage.clearToken();
             controllerUtils.gotoPage(stage, deleteBtn, helloPage);
         } catch (JSONException e) {
 //            String errMessage = (String) jsonResponse.get("message");
-            displayGeneralErrMessages(message);
+            displayGeneralErrMessages(e.getMessage());
         }
     }
 
