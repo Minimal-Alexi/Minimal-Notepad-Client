@@ -242,7 +242,7 @@ public class AccountInfoPageController {
                 System.out.println("status code " + statusLine);
                 Platform.runLater(() -> {
                     // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-                    handleSaveUserinfoResponse(jsonResponse, statusLine);
+                    handleSaveUserInfoResponse(jsonResponse, statusLine);
                 });
             } catch (IOException e) {
                 Alert a = new Alert(Alert.AlertType.ERROR);
@@ -255,7 +255,7 @@ public class AccountInfoPageController {
         }).start();
     }
 
-    public void handleSaveUserinfoResponse(JSONObject jsonResponse, String statusLine) {
+    public void handleSaveUserInfoResponse(JSONObject jsonResponse, String statusLine) {
         try {
 //            StatusLine statusCode = jsonResponse.getStatusLine();
 //            String message = (String) jsonResponse.get("message");
@@ -284,26 +284,27 @@ public class AccountInfoPageController {
     @FXML
     public void changePwdClick() {
         this.stage = controllerUtils.getStage(saveBtn, this.stage);
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/changePwd.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/account_user_password_page.fxml"));
         this.controllerUtils.updateStage(this.stage, fxmlLoader);
     }
 
     // sidebar
     @FXML
     public void accountBtnClick() {
-
+        String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
+        this.controllerUtils.gotoPage(stage, accountBtn, pageLink);
     }
 
     @FXML
     public void deleteBtnClick() {
         System.out.println("Deleting user");
         String token = TokenStorage.getToken();
-        HttpPut httpPut = new HttpPut(URI);
-        httpPut.addHeader("Accept", "application/json");
-        httpPut.addHeader("Content-Type", "application/json");
-        httpPut.addHeader("Authorization", "Bearer " + token);
+        HttpDelete httpDelete = new HttpDelete(URI);
+        httpDelete.addHeader("Accept", "application/json");
+        httpDelete.addHeader("Content-Type", "application/json");
+        httpDelete.addHeader("Authorization", "Bearer " + token);
         new Thread(() -> {
-            try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
+            try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
                 HttpEntity responseEntity = response.getEntity();
                 String data = EntityUtils.toString(responseEntity);
                 System.out.println("data " + data);
