@@ -26,27 +26,20 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import static utils.MainPageServices.*;
+import static utils.NoteServices.addCategory;
 import static utils.NoteServices.getAllCategories;
 
 
 public class CreateNoteController {
 
-    @FXML
-    private Label localTime;
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private VBox textVBox;
-    @FXML
-    private TextField titleTextArea;
-    @FXML
-    private TextArea textArea1;
-    @FXML
-    private Button saveNoteBtn;
-    @FXML
-    private HBox categoryHBox;
-    @FXML
-    private Label addCategory;
+    @FXML private Label localTime;
+    @FXML private Label nameLabel;
+    @FXML private VBox textVBox;
+    @FXML private TextField titleTextArea;
+    @FXML private TextArea textArea1;
+    @FXML private Button saveNoteBtn;
+    @FXML private HBox categoryHBox;
+    @FXML private Label addCategory;
 
     private final HashMap<Integer, String> categoryList = new HashMap<>();
 
@@ -109,40 +102,7 @@ public class CreateNoteController {
         ContextMenu contextMenu = new ContextMenu();
 
         assert categories != null;
-        categories.forEach((k, v) -> {
-            MenuItem item = new MenuItem(v);
-            item.setOnAction(event -> {
-                // add category label
-                categoryList.put(k, v);
-                System.out.println(k + v);
-                System.out.println(categoryList);
-
-                /*
-                update the ui
-                */
-                // remove every element in the category HBox instead of the first one(the Category: label) and the last one(the "+")
-                if (categoryHBox.getChildren().size() > 2) {
-                    categoryHBox.getChildren().remove(1, categoryHBox.getChildren().size() - 1);
-                }
-                // query the categoryList to add categories to the ui
-                categoryList.forEach((key, value) -> {
-                    Label label = new Label(value);
-                    label.getStyleClass().add("category");
-                    categoryHBox.getChildren().add(categoryHBox.getChildren().size() - 1, label);
-                    // add the " - " to the Label
-                    Label removeCategory = new Label("x");
-                    removeCategory.getStyleClass().add("remove-category");
-                    removeCategory.setOnMouseClicked(event1 -> {
-                        categoryHBox.getChildren().remove(label);
-                        categoryList.remove(key);
-                    });
-                    label.setGraphic(removeCategory);
-                });
-            });
-            contextMenu.getItems().add(item);
-
-
-        });
+        addCategory(categories, categoryList, categoryHBox, contextMenu);
 
         if (!contextMenu.isShowing()) {
             contextMenu.show(addCategory, mouseEvent.getScreenX(), mouseEvent.getScreenY());

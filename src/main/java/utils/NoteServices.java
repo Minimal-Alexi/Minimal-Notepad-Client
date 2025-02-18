@@ -1,5 +1,9 @@
 package utils;
 
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.HBox;
 import model.Note;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -125,5 +129,45 @@ public class NoteServices {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public static void addCategory(HashMap<Integer, String> categories, HashMap<Integer, String> categoryList, HBox categoryHBox, ContextMenu contextMenu) {
+        categories.forEach((k, v) -> {
+            MenuItem item = new MenuItem(v);
+            item.setOnAction(event -> {
+                // add category label
+                categoryList.put(k, v);
+                System.out.println(k + v);
+                System.out.println(categoryList);
+
+                /*
+                update the ui
+                */
+                // remove every element in the category HBox instead of the first one(the Category: label) and the last one(the "+")
+                if (categoryHBox.getChildren().size() > 2) {
+                    categoryHBox.getChildren().remove(1, categoryHBox.getChildren().size() - 1);
+                }
+
+                // query the categoryList to add categories to the ui
+                updateCategory(categoryList, categoryHBox);
+            });
+            contextMenu.getItems().add(item);
+        });
+    }
+
+    public static void updateCategory(HashMap<Integer, String> categoryList, HBox categoryHBox) {
+        categoryList.forEach((key, value) -> {
+            Label label = new Label(value);
+            label.getStyleClass().add("category");
+            categoryHBox.getChildren().add(categoryHBox.getChildren().size() - 1, label);
+            // add the " - " to the Label
+            Label removeCategory = new Label("x");
+            removeCategory.getStyleClass().add("remove-category");
+            removeCategory.setOnMouseClicked(event1 -> {
+                categoryHBox.getChildren().remove(label);
+                categoryList.remove(key);
+            });
+            label.setGraphic(removeCategory);
+        });
     }
 }

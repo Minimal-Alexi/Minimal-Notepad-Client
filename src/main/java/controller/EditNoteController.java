@@ -4,15 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Note;
@@ -24,7 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
-import static utils.NoteServices.findNoteById;
+import static utils.NoteServices.*;
 
 
 public class EditNoteController {
@@ -36,9 +35,11 @@ public class EditNoteController {
     @FXML private TextArea textArea1;
     @FXML private Button saveNoteBtn;
     @FXML private Button deleteNoteBtn;
+    @FXML private HBox categoryHBox;
+    @FXML private Label addCategory;
 
     SelectedNote selectedNote = SelectedNote.getInstance();
-    private final HashMap<Integer, String> categoryList = new HashMap<>();
+    private HashMap<Integer, String> categoryList = new HashMap<>();
 
     // Initialize
     public void initialize() {
@@ -50,6 +51,10 @@ public class EditNoteController {
         assert note != null;
         textArea1.setText(note.getText());
         titleTextArea.setText(note.getTitle());
+        categoryList = note.getCategory();
+
+        // query the categoryList to add categories to the ui
+        updateCategory(categoryList, categoryHBox);
 
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
@@ -69,6 +74,27 @@ public class EditNoteController {
         deleteNoteBtn.setDisable(true);
         NoteServices.deleteNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
+    }
+
+    public void addCategoryClicked(MouseEvent mouseEvent) {
+        addCategory.setDisable(true);
+
+        // Create a context menu of categories for the user to choose
+        HashMap<Integer, String> categories = getAllCategories("http://localhost:8093/api/categories", TokenStorage.getToken());
+        ContextMenu contextMenu = new ContextMenu();
+
+        assert categories != null;
+        addCategory(categories, categoryList, categoryHBox, contextMenu);
+
+        if (!contextMenu.isShowing()) {
+            contextMenu.show(addCategory, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        } else {
+            contextMenu.hide();
+        }
+
+        // The adding behavior is over, enable the add button
+        addCategory.setDisable(false);
+
     }
 
     /*
@@ -110,6 +136,7 @@ public class EditNoteController {
             }
         }
     }
+
 
 
 }
