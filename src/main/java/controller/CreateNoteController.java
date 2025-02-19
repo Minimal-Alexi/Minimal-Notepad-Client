@@ -6,15 +6,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -23,8 +22,12 @@ import model.TokenStorage;
 import utils.NoteServices;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
 
 import static utils.MainPageServices.*;
+import static utils.NoteServices.addCategory;
+import static utils.NoteServices.getAllCategories;
 
 
 public class CreateNoteController {
@@ -35,6 +38,10 @@ public class CreateNoteController {
     @FXML private TextField titleTextArea;
     @FXML private TextArea textArea1;
     @FXML private Button saveNoteBtn;
+    @FXML private HBox categoryHBox;
+    @FXML private Label addCategory;
+
+    private final HashMap<Integer, String> categoryList = new HashMap<>();
 
     public void initialize() {
         updateLocalTime(localTime);
@@ -43,19 +50,28 @@ public class CreateNoteController {
         /*
         Add some new event handlers
          */
+        // press ENTER to create a new textArea
+        // This is a duplicated code and should be
+        textArea1.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode().toString().equals("ENTER")) {
+                event.consume(); // prevent the default enter warping behavior
 
-        textArea1.setPrefRowCount(1);
+                TextArea newTextArea = createTextArea();
+                VBox parent = (VBox) textArea1.getParent();
+                parent.getChildren().add(parent.getChildren().indexOf(textArea1) + 1, newTextArea);
+
+                newTextArea.requestFocus(); // move the cursor to the next textArea
+            }
+        });
 
         TextArea textArea = createTextArea();
         textVBox.getChildren().add(textArea);
     }
 
-
-
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", TokenStorage.getUser(), "N/A", "null");
+        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
         NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
@@ -75,6 +91,28 @@ public class CreateNoteController {
     // * new codes are below here *
     // ******************************
 
+    /*
+    Click to add a Category
+     */
+    public void addCategoryClicked(MouseEvent mouseEvent) {
+        addCategory.setDisable(true);
+
+        // Create a context menu of categories for the user to choose
+        HashMap<Integer, String> categories = getAllCategories("http://localhost:8093/api/categories", TokenStorage.getToken());
+        ContextMenu contextMenu = new ContextMenu();
+
+        assert categories != null;
+        addCategory(categories, categoryList, categoryHBox, contextMenu);
+
+        if (!contextMenu.isShowing()) {
+            contextMenu.show(addCategory, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        } else {
+            contextMenu.hide();
+        }
+
+        // The adding behavior is over, enable the add button
+        addCategory.setDisable(false);
+    }
 
     /*
     ctrl+v insert picture
@@ -125,6 +163,23 @@ public class CreateNoteController {
             }
         });
 
+        // If the textArea is empty, press BACKSPACE to delete this textArea and put the cursor into the textArea above
+        textArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (textArea.getText().isEmpty()) {
+                if (event.getCode() == KeyCode.BACK_SPACE) {
+
+                    // Move the cursor to the previous textArea
+                    VBox parent = (VBox) textArea.getParent();
+                    TextArea previousTextArea = (TextArea) parent.getChildren().get(parent.getChildren().indexOf(textArea) - 1);
+                    previousTextArea.requestFocus();
+
+                    // Delete this textArea
+                    parent.getChildren().remove(textArea);
+                }
+            }
+
+        });
+
         // Set the height of the textArea changing with the text lines
         textArea.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -136,4 +191,10 @@ public class CreateNoteController {
 
         return textArea;
     }
+
+    /*
+    update category HBox
+     */
+
+
 }

@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.Note;
 import model.selected.SelectedNote;
@@ -31,6 +32,15 @@ public class MainPageController {
     @FXML
     private Label nameLabel;
     // Note table
+    @FXML private TableView<Note> table;
+    @FXML private TableColumn<Note, Void> icon;
+    @FXML private TableColumn<Note, String> title;
+    @FXML private TableColumn<Note, String> group;
+    @FXML private TableColumn<Note, String> owner;
+    @FXML private TableColumn<Note, String> category;
+    @FXML private TableColumn<Note, String> createTime;
+    // Recently edited
+    @FXML private HBox recentlyEditedHBox;
     @FXML
     private TableView<Note> table;
     @FXML
@@ -105,6 +115,8 @@ public class MainPageController {
             }
         });
 
+        assert noteArrayList != null;
+        updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
     }

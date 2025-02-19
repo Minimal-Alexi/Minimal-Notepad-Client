@@ -12,8 +12,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
@@ -218,7 +216,7 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </HBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="260.0" prefWidth="894.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
@@ -237,26 +235,7 @@
                               </Button>
                            </children>
                         </HBox>
-                        <HBox prefHeight="202.0" prefWidth="893.0">
-                           <children>
-                              <AnchorPane prefHeight="56.0" prefWidth="914.0">
-                                 <children>
-                                    <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f6f6f8" height="146.0" stroke="#f6f6f8" strokeType="INSIDE" width="201.0" />
-                                    <SVGPath content="M0 8C0 3.58172 3.58172 0 8 0H166C170.418 0 174 3.58172 174 8V131H0V8Z" fill="WHITE" layoutX="14.0" layoutY="14.0" />
-                                    <Circle fill="#a75923" layoutX="47.0" layoutY="44.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-                                    <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#f4f6f6" height="15.0" layoutX="27.0" layoutY="72.0" stroke="#f4f6f6" strokeType="INSIDE" width="148.0" />
-                                    <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#f4f6f6" height="15.0" layoutX="27.0" layoutY="95.0" stroke="#f4f6f6" strokeType="INSIDE" width="148.0" />
-                                    <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#f4f6f6" height="15.0" layoutX="27.0" layoutY="117.0" stroke="#f4f6f6" strokeType="INSIDE" width="148.0" />
-                                    <Label alignment="BOTTOM_LEFT" contentDisplay="BOTTOM" layoutX="7.0" layoutY="153.0" prefHeight="25.0" prefWidth="187.0" text="NoteName">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label alignment="BOTTOM_LEFT" layoutX="7.0" layoutY="180.0" prefHeight="15.0" prefWidth="182.0" text="Edited 8m ago" textFill="#0000009a" />
-                                 </children>
-                              </AnchorPane>
-                           </children>
-                        </HBox>
+                        <HBox fx:id="recentlyEditedHBox" prefHeight="202.0" prefWidth="894.0" stylesheets="@../../CSS/recently_edited.css" />
                      </children>
                   </VBox>
                   <VBox prefHeight="424.0" prefWidth="872.0">
