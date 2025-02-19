@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.TokenStorage;
 
 //import java.awt.*;
 import java.io.IOException;
@@ -77,5 +78,10 @@ public class ControllerUtils {
         return matcher.matches();
     }
 
+    public void goToHelloPage(Stage stage, Button btn) {
+        String helloPage = "/fxml/hello_view.fxml";
+        TokenStorage.clearToken();
+        gotoPage(stage, btn, helloPage);
+    }
 
 }

@@ -61,6 +61,8 @@ public class MainPageController {
     private Button settingBtn;
     @FXML
     private Button accountBtn;
+    @FXML
+    private Button logOutBtn;
 
     private ControllerUtils controllerUtils;
 
@@ -149,5 +151,20 @@ public class MainPageController {
         this.stage = controllerUtils.getStage(myFileBtn, this.stage);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/account_user_info_page.fxml"));
         this.controllerUtils.updateStage(this.stage, fxmlLoader);
+    }
+
+    @FXML
+    public void logOutBtnClick() {
+        this.controllerUtils.goToHelloPage(stage, logOutBtn);
+    }
+
+    @FXML
+    void mouseEnter(MouseEvent event) {
+        this.controllerUtils.setHandCursor(logOutBtn);
+    }
+
+    @FXML
+    void mouseExit(MouseEvent event) {
+        this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 }

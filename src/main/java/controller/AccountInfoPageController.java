@@ -54,6 +54,8 @@ public class AccountInfoPageController {
     private Button changePwdBtn;
     @FXML
     private Button deleteBtn;
+    @FXML
+    private Button logOutBtn;
 
     @FXML
     private Label localTime;
@@ -107,6 +109,7 @@ public class AccountInfoPageController {
         this.controllerUtils.setHandCursor(saveBtn);
         this.controllerUtils.setHandCursor(changePwdBtn);
         this.controllerUtils.setHandCursor(deleteBtn);
+        this.controllerUtils.setHandCursor(logOutBtn);
     }
 
     @FXML
@@ -114,6 +117,7 @@ public class AccountInfoPageController {
         this.controllerUtils.setDefaultCursor(saveBtn);
         this.controllerUtils.setDefaultCursor(changePwdBtn);
         this.controllerUtils.setDefaultCursor(deleteBtn);
+        this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
     @FXML
@@ -260,6 +264,17 @@ public class AccountInfoPageController {
 //            StatusLine statusCode = jsonResponse.getStatusLine();
 //            String message = (String) jsonResponse.get("message");
             if (statusLine.contains("200")) {
+                String newUsername = (String) jsonResponse.get("username");
+                String curUsername = TokenStorage.getUser();
+                // check if username is the same
+                // 1. if the same, email change, no token in the response body
+                if (!newUsername.equals(curUsername)) {
+                    String newToken = (String) jsonResponse.get("token");
+                    System.out.println("New: username: " + newUsername + ", token: " + newToken);
+                    TokenStorage.saveToken(newUsername, newToken);
+                }
+
+                // 2. if username is not the same, token in response body
                 generalErrLabel.setTextFill(Color.GREEN);
                 generalErrLabel.setText("User Information updates successfully");
 //                generalErrLabel.setTextFill(Color.RED);
@@ -331,17 +346,26 @@ public class AccountInfoPageController {
         }).start();
     }
 
+
+    @FXML
+    public void logOutBtnClick() {
+        this.controllerUtils.goToHelloPage(stage, logOutBtn);
+    }
+
     private void handleDeleteResponse(JSONObject jsonResponse) {
         try {
             String message = (String) jsonResponse.get("message");
             System.out.println("message: " + message);
-            String helloPage = "/fxml/hello_view.fxml";
-            TokenStorage.clearToken();
-            controllerUtils.gotoPage(stage, deleteBtn, helloPage);
+//            String helloPage = "/fxml/hello_view.fxml";
+//            TokenStorage.clearToken();
+//            controllerUtils.gotoPage(stage, deleteBtn, helloPage);
+            this.controllerUtils.goToHelloPage(stage, deleteBtn);
         } catch (JSONException e) {
-//            String errMessage = (String) jsonResponse.get("message");
+
             displayGeneralErrMessages(e.getMessage());
         }
     }
+
+
 
 }

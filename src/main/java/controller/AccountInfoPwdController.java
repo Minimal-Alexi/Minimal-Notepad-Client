@@ -35,13 +35,7 @@ import static utils.MainPageServices.updateLocalTime;
 public class AccountInfoPwdController {
 
     @FXML
-    private Button accountBtn;
-
-    @FXML
     private PasswordField curPwdInput;
-
-    @FXML
-    private Button deleteBtn;
 
     @FXML
     private Label errCurPwd;
@@ -59,22 +53,28 @@ public class AccountInfoPwdController {
     private Label generalErrLabel;
 
     @FXML
-    private Button groupsBtn;
-
-    @FXML
     private Label localTime;
-
-    @FXML
-    private Button myFileBtn;
 
     @FXML
     private PasswordField newPwdInput;
 
     @FXML
-    private Button recycleBinBtn;
+    private PasswordField repeatPwdInput;
 
     @FXML
-    private PasswordField repeatPwdInput;
+    private Button myFileBtn;
+
+    @FXML
+    private Button groupsBtn;
+
+    @FXML
+    private Button deleteBtn;
+
+    @FXML
+    private Button accountBtn;
+
+    @FXML
+    private Button recycleBinBtn;
 
     @FXML
     private Button saveBtn;
@@ -84,6 +84,10 @@ public class AccountInfoPwdController {
 
     @FXML
     private Button shareNoteBtn;
+
+    @FXML
+    private Button logOutBtn;
+
 
     // properties
     private Stage stage;
@@ -190,6 +194,11 @@ public class AccountInfoPwdController {
     void mouseExit(MouseEvent event) {
         this.controllerUtils.setDefaultCursor(saveBtn);
         this.controllerUtils.setDefaultCursor(deleteBtn);
+    }
+
+    @FXML
+    void logOutBtnClick() {
+        this.controllerUtils.goToHelloPage(stage, logOutBtn);
     }
 
     @FXML
