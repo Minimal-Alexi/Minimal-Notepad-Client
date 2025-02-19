@@ -15,8 +15,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.ColorEnum;
 import model.Note;
 import model.TokenStorage;
 import utils.NoteServices;
@@ -34,6 +37,8 @@ public class CreateNoteController {
 
     @FXML private Label localTime;
     @FXML private Label nameLabel;
+    @FXML private Rectangle noteBackground;
+    @FXML private ChoiceBox<ColorEnum> colorChoiceBox;
     @FXML private VBox textVBox;
     @FXML private TextField titleTextArea;
     @FXML private TextArea textArea1;
@@ -63,6 +68,7 @@ public class CreateNoteController {
                 newTextArea.requestFocus(); // move the cursor to the next textArea
             }
         });
+        colorSetUp();
 
         TextArea textArea = createTextArea();
         textVBox.getChildren().add(textArea);
@@ -190,6 +196,19 @@ public class CreateNoteController {
         });
 
         return textArea;
+    }
+    /*
+
+    */
+    private void colorSetUp(){
+        colorChoiceBox.getItems().addAll(ColorEnum.values());
+        colorChoiceBox.setValue(ColorEnum.WHITE);
+        colorChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldColor, newColor) -> {
+            if (newColor != null) {
+                System.out.println(newColor.getHexCode());
+                noteBackground.setFill(Color.web(newColor.getHexCode()));
+            }
+        });
     }
 
     /*
