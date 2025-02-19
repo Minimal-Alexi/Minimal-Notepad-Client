@@ -4,6 +4,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
+import model.ColorEnum;
 import model.Note;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -70,7 +71,7 @@ public class NoteServices {
                 return new Note(result.getInt("id"),
                         result.getString("title") ,
                         result.getString("text"),
-                        result.getString("colour"),
+                        result.getEnum(ColorEnum.class,"colour"),
                         timestampToString(result.getString("createdAt")),
                         timestampToString(result.getString("updatedAt")),
                         result.getJSONObject("user").getString("username"),

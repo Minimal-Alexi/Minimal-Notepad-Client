@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.ColorEnum;
 import model.Note;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,7 +59,7 @@ public class MainPageServices {
                     Note note = new Note(noteJson.getInt("id"),
                             noteJson.getString("title"),
                             noteJson.getString("text"),
-                            noteJson.getString("colour"),
+                            noteJson.getEnum(ColorEnum.class,"colour"),
                             timestampToString(noteJson.getString("createdAt")),
                             timestampToString(noteJson.getString("updatedAt")),
                             noteJson.getJSONObject("user").getString("username"),
