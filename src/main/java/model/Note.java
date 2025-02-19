@@ -6,7 +6,7 @@ public class Note {
     private int id;
     private String title;
     private String text;
-    private String color;
+    private ColorEnum color;
     private String createdAt;
     private String updatedAt;
     private String owner;
@@ -14,7 +14,7 @@ public class Note {
     private HashMap<Integer, String> category;
 
 
-    public Note(int id, String title, String text, String color, String createdAt, String updatedAt, String owner, String group, HashMap<Integer, String> category) {
+    public Note(int id, String title, String text, ColorEnum color, String createdAt, String updatedAt, String owner, String group, HashMap<Integer, String> category) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -50,11 +50,11 @@ public class Note {
         this.text = text;
     }
 
-    public String getColor() {
+    public ColorEnum getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(ColorEnum color) {
         this.color = color;
     }
 
