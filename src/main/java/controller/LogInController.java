@@ -1,10 +1,15 @@
 package controller;
 
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
@@ -50,12 +55,24 @@ public class LogInController {
     @FXML
     private CheckBox rememberBox;
 
+    @FXML
+    private SVGPath maskedIcon;
+    @FXML
+    private SVGPath unmaskedIcon;
 
 
     private Stage stage;
-    private ControllerUtils controllerUtil ;
+    private ControllerUtils controllerUtil;
     private TokenStorage storage;
     private HttpResponseService httpResponseService;
+
+    @FXML
+    private StackPane maskedStackPane;
+    @FXML
+    private StackPane unmaskedStackPane;
+    @FXML
+    private StackPane pwdStackPane;
+
 
 //    private TokenStorage tokenStorage;
 //    Client client;
@@ -100,12 +117,13 @@ public class LogInController {
     }
 
 
-
     @FXML
     private void mouseEnter() {
         this.controllerUtil.setHandCursor(this.backBtn);
         this.controllerUtil.setHandCursor(this.loginBtn);
         this.controllerUtil.setHandCursor(this.registerLabel);
+        this.controllerUtil.setHandCursor(this.maskedIcon);
+        this.controllerUtil.setHandCursor(this.unmaskedIcon);
     }
 
     @FXML
@@ -113,6 +131,8 @@ public class LogInController {
         this.controllerUtil.setDefaultCursor(this.backBtn);
         this.controllerUtil.setDefaultCursor(this.loginBtn);
         this.controllerUtil.setDefaultCursor(this.registerLabel);
+        this.controllerUtil.setDefaultCursor(this.maskedIcon);
+        this.controllerUtil.setDefaultCursor(this.unmaskedIcon);
     }
 
 
@@ -199,7 +219,7 @@ public class LogInController {
         httpPost.setEntity(entity);
 
 //        HttpResponseServiceImpl httpResponseService  = new HttpResponseServiceImpl();
-        httpResponseService.handleReponse(httpPost,httpClient,this::handleLoginReponse);
+        httpResponseService.handleReponse(httpPost, httpClient, this::handleLoginReponse);
 
 
     }
@@ -229,4 +249,81 @@ public class LogInController {
     }
 
 
+    @FXML
+    private void maskedIconClick() {
+        System.out.println("click masked icon");
+        System.out.println(pwdStackPane.getChildren());
+        int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
+        int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+
+        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
+
+        if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
+            // Temporarily remove the panes
+//            pwdStackPane.getChildren().remove(unmaskedStackPane);
+
+            // Add them back in the switched order
+//            pwdStackPane.getChildren().add(maskedPaneIndex, unmaskedStackPane);
+//            pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
+//            pwdStackPane.getChildren().add(unmaskedStackPane);
+
+            // Set MouseTransparent properties
+//            maskedStackPane.setMouseTransparent(true);
+//            unmaskedStackPane.setMouseTransparent(false);
+
+//            maskedStackPane.toBack();
+            Platform.runLater(() -> {
+//
+                pwdStackPane.getChildren().remove(maskedStackPane);
+                pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
+//            });
+            });
+
+//        // Get the indexes of the two nodes
+//        int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
+//        int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+//
+//// Swap the nodes by using the set method
+//        pwdStackPane.getChildren().set(maskedPaneIndex, unmaskedStackPane); // Put unmaskedStackPane where maskedStackPane was
+//        pwdStackPane.getChildren().set(unmaskedPaneIndex, maskedStackPane); // Put maskedStackPane where unmaskedStackPane was
+        }
+    }
+
+    @FXML
+    private void unmaskedIconClick() {
+        System.out.println("click unmasked icon");
+        System.out.println(pwdStackPane.getChildren());
+        int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
+        int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+
+        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
+
+        if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
+            // Temporarily remove the panes
+//            pwdStackPane.getChildren().remove(maskedStackPane);
+
+            // Add them back in the switched order
+//            pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
+//            pwdStackPane.getChildren().add(maskedPaneIndex, unmaskedStackPane);
+
+//            pwdStackPane.getChildren().add(maskedStackPane);
+
+            // Set MouseTransparent properties
+//            unmaskedStackPane.setMouseTransparent(true);
+//            maskedStackPane.setMouseTransparent(false);
+
+            // Temporarily remove the panes
+            Platform.runLater(() -> {
+                pwdStackPane.getChildren().remove(unmaskedStackPane);
+                pwdStackPane.getChildren().add(maskedPaneIndex, unmaskedStackPane);
+//
+//
+////                maskedStackPane.toFront();
+////                unmaskedStackPane.toBack();
+//            });
+            });
+        }
+
+
+    }
 }

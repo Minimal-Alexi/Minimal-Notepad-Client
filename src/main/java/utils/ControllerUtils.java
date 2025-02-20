@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.TokenStorage;
@@ -59,6 +60,11 @@ public class ControllerUtils {
         label.setCursor(defaultCursor);
     }
 
+    public void setDefaultCursor(SVGPath svgPath) {
+        svgPath.setCursor(defaultCursor);
+    }
+
+
     public void setHandCursor(Button btn) {
         btn.setCursor(handCursor);
     }
@@ -69,6 +75,10 @@ public class ControllerUtils {
 
     public void setHandCursor(Label label) {
         label.setCursor(handCursor);
+    }
+
+    public void setHandCursor(SVGPath svgPath) {
+        svgPath.setCursor(handCursor);
     }
 
     public boolean validEmail(String email) {

@@ -41,20 +41,7 @@ public class MainPageController {
     @FXML private TableColumn<Note, String> createTime;
     // Recently edited
     @FXML private HBox recentlyEditedHBox;
-    @FXML
-    private TableView<Note> table;
-    @FXML
-    private TableColumn<Note, Void> icon;
-    @FXML
-    private TableColumn<Note, String> title;
-    @FXML
-    private TableColumn<Note, String> group;
-    @FXML
-    private TableColumn<Note, String> owner;
-    @FXML
-    private TableColumn<Note, String> category;
-    @FXML
-    private TableColumn<Note, String> createTime;
+
 
     //side bar
     @FXML
