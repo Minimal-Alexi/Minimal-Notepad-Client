@@ -58,11 +58,6 @@ public class LogInController {
     @FXML
     private CheckBox rememberBox;
 
-    @FXML
-    private SVGPath maskedIcon;
-    @FXML
-    private SVGPath unmaskedIcon;
-
 
     private Stage stage;
     private ControllerUtils controllerUtil;
@@ -121,7 +116,7 @@ public class LogInController {
     private void loginPageBtnPress(KeyEvent ke) {
         if (ke.getCode() == KeyCode.ENTER) {
             String username = loginUserInput.getText();
-            String password = loginPassInput.getText();
+            String password = getPassword();
             handleInput(username, password);
         }
     }
@@ -132,8 +127,6 @@ public class LogInController {
         this.controllerUtil.setHandCursor(this.backBtn);
         this.controllerUtil.setHandCursor(this.loginBtn);
         this.controllerUtil.setHandCursor(this.registerLabel);
-        this.controllerUtil.setHandCursor(this.maskedIcon);
-        this.controllerUtil.setHandCursor(this.unmaskedIcon);
         this.controllerUtil.setHandCursor(this.maskedPane);
         this.controllerUtil.setHandCursor(this.unmaskedPane);
     }
@@ -143,8 +136,6 @@ public class LogInController {
         this.controllerUtil.setDefaultCursor(this.backBtn);
         this.controllerUtil.setDefaultCursor(this.loginBtn);
         this.controllerUtil.setDefaultCursor(this.registerLabel);
-        this.controllerUtil.setDefaultCursor(this.maskedIcon);
-        this.controllerUtil.setDefaultCursor(this.unmaskedIcon);
         this.controllerUtil.setDefaultCursor(this.maskedPane);
         this.controllerUtil.setDefaultCursor(this.unmaskedPane);
     }

@@ -9,7 +9,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
@@ -56,7 +59,11 @@ public class RegisterController {
     @FXML
     private PasswordField pwdInput;
     @FXML
+    private TextField unmaskedPwdInput;
+    @FXML
     private PasswordField confirmPwdInput;
+    @FXML
+    private TextField unmaskedConfirmPwdInput;
 
     @FXML
     private Button registerBtn;
@@ -64,14 +71,41 @@ public class RegisterController {
     private Button backBtn;
 
 
+    @FXML
+    private StackPane maskedStackPane;
+    @FXML
+    private StackPane unmaskedStackPane;
+    @FXML
+    private StackPane pwdStackPane;
+    @FXML
+    private AnchorPane maskedPane;
+    @FXML
+    private AnchorPane unmaskedPane;
+
+    @FXML
+    private StackPane confirmPwdStackPane;
+    @FXML
+    private StackPane confirmMaskedStackPane;
+    @FXML
+    private StackPane confirmUnmaskedStackPane;
+    @FXML
+    private AnchorPane unmaskedConfirmPane;
+    @FXML
+    private AnchorPane maskedConfirmPane;
+
+
     private Stage stage;
     private ControllerUtils controllerUtil;
     private HttpResponseService httpResponseService;
 
+    private boolean pwdIsHidden;
+    private boolean confirmPwdIsHidden;
+
     public void initialize() {
         controllerUtil = new ControllerUtils();
         httpResponseService = new HttpResponseServiceImpl();
-
+        pwdIsHidden = true;
+        confirmPwdIsHidden = true;
     }
 
     @FXML
@@ -85,8 +119,8 @@ public class RegisterController {
     private void registerBtnClick() {
         String email = emailInput.getText();
         String username = userInput.getText();
-        String password = pwdInput.getText();
-        String confirmPwd = confirmPwdInput.getText();
+        String password = getPassword();
+        String confirmPwd = getConfirmPassword();
 
         handleInput(email, username, password, confirmPwd);
     }
@@ -162,6 +196,10 @@ public class RegisterController {
         this.controllerUtil.setHandCursor(this.backBtn);
         this.controllerUtil.setHandCursor(this.registerBtn);
         this.controllerUtil.setHandCursor(this.loginLabel);
+        this.controllerUtil.setHandCursor(this.maskedPane);
+        this.controllerUtil.setHandCursor(this.unmaskedPane);
+        this.controllerUtil.setHandCursor(this.maskedConfirmPane);
+        this.controllerUtil.setHandCursor(this.unmaskedConfirmPane);
 
     }
 
@@ -170,6 +208,10 @@ public class RegisterController {
         this.controllerUtil.setDefaultCursor(this.backBtn);
         this.controllerUtil.setDefaultCursor(this.registerBtn);
         this.controllerUtil.setDefaultCursor(this.loginLabel);
+        this.controllerUtil.setDefaultCursor(this.maskedPane);
+        this.controllerUtil.setDefaultCursor(this.unmaskedPane);
+        this.controllerUtil.setDefaultCursor(this.maskedConfirmPane);
+        this.controllerUtil.setDefaultCursor(this.unmaskedConfirmPane);
     }
 
     @FXML
@@ -214,9 +256,8 @@ public class RegisterController {
         StringEntity entity = new StringEntity(json.toString());
         httpPost.setEntity(entity);
 
-        httpResponseService.handleReponse(httpPost,httpClient,this::handleRegisterResponse);
-}
-
+        httpResponseService.handleReponse(httpPost, httpClient, this::handleRegisterResponse);
+    }
 
 
     // each controller must implemnt its own reponse as callback when work with httpResponse method
@@ -250,5 +291,140 @@ public class RegisterController {
         this.errGeneral.setText(errMess);
         this.errUser.setText("");
         this.errPwd.setText("");
+    }
+
+
+    @FXML
+    private void maskedIconClick() {
+        System.out.println("click masked icon");
+        System.out.println(pwdStackPane.getChildren());
+        int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
+        int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+        String maskedPwd = pwdInput.getText();
+        System.out.println("masked pwd input: " + maskedPwd);
+
+        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
+
+        if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
+
+            Platform.runLater(() -> {
+//
+                pwdStackPane.getChildren().remove(maskedStackPane);
+                pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
+                showPassword(maskedPwd);
+
+            });
+
+        }
+    }
+
+    @FXML
+    private void unmaskedIconClick() {
+        System.out.println("click unmasked icon");
+        System.out.println(pwdStackPane.getChildren());
+        int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
+        int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+        String unmaskedPwd = unmaskedPwdInput.getText();
+
+        System.out.println("unmasked pwd input: " + unmaskedPwd);
+        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
+
+        if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
+
+            Platform.runLater(() -> {
+                pwdStackPane.getChildren().remove(unmaskedStackPane);
+                pwdStackPane.getChildren().add(maskedPaneIndex, unmaskedStackPane);
+                hidePassword(unmaskedPwd);
+            });
+        }
+    }
+
+    @FXML
+    private void maskedConfirmIconClick() {
+        System.out.println("click masked icon");
+        System.out.println(confirmPwdStackPane.getChildren());
+        int maskedPaneIndex = confirmPwdStackPane.getChildren().indexOf(confirmMaskedStackPane);
+        int unmaskedPaneIndex = confirmPwdStackPane.getChildren().indexOf(confirmUnmaskedStackPane);
+        String maskedConfirmPwd = confirmPwdInput.getText();
+        System.out.println("masked pwd input: " + maskedConfirmPwd);
+
+        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
+
+        if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
+
+            Platform.runLater(() -> {
+//
+                confirmPwdStackPane.getChildren().remove(confirmMaskedStackPane);
+                confirmPwdStackPane.getChildren().add(unmaskedPaneIndex, confirmMaskedStackPane);
+                showConfirmPassword(maskedConfirmPwd);
+
+            });
+
+        }
+    }
+
+    @FXML
+    private void unmaskedConfirmIconClick() {
+        System.out.println("click unmasked icon");
+        System.out.println(confirmPwdStackPane.getChildren());
+        int maskedPaneIndex = confirmPwdStackPane.getChildren().indexOf(confirmMaskedStackPane);
+        int unmaskedPaneIndex = confirmPwdStackPane.getChildren().indexOf(confirmUnmaskedStackPane);
+        String unmaskedConfirmPwd = unmaskedConfirmPwdInput.getText();
+
+        System.out.println("unmasked pwd input: " + unmaskedConfirmPwd);
+        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
+
+        if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
+
+            Platform.runLater(() -> {
+                confirmPwdStackPane.getChildren().remove(confirmUnmaskedStackPane);
+                confirmPwdStackPane.getChildren().add(maskedPaneIndex, confirmUnmaskedStackPane);
+                hideConfirmPassword(unmaskedConfirmPwd);
+            });
+        }
+    }
+
+    public void showPassword(String password) {
+        StringBuilder unmaskedPwdBuilder = new StringBuilder(password);
+        unmaskedPwdInput.setText(unmaskedPwdBuilder.toString());
+        pwdIsHidden = false;
+    }
+
+    public void hidePassword(String unmaskedPassword) {
+        StringBuilder maskedPwdBuilder = new StringBuilder(unmaskedPassword);
+        pwdInput.setText(maskedPwdBuilder.toString());
+        pwdIsHidden = true;
+    }
+
+    public void showConfirmPassword(String password) {
+        StringBuilder unmaskedPwdBuilder = new StringBuilder(password);
+        unmaskedConfirmPwdInput.setText(unmaskedPwdBuilder.toString());
+        confirmPwdIsHidden = false;
+    }
+
+    public void hideConfirmPassword(String unmaskedPassword) {
+        StringBuilder maskedPwdBuilder = new StringBuilder(unmaskedPassword);
+        confirmPwdInput.setText(maskedPwdBuilder.toString());
+        confirmPwdIsHidden = true;
+    }
+
+    public String getPassword() {
+        String password = "";
+        if (pwdIsHidden) {
+            password = pwdInput.getText();
+        } else {
+            password = unmaskedPwdInput.getText();
+        }
+        return password;
+    }
+
+    public String getConfirmPassword() {
+        String password = "";
+        if (confirmPwdIsHidden) {
+            password = confirmPwdInput.getText();
+        } else {
+            password = unmaskedConfirmPwdInput.getText();
+        }
+        return password;
     }
 }
