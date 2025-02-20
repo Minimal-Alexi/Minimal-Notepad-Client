@@ -88,6 +88,7 @@ public class LogInController {
         httpResponseService = new HttpResponseServiceImpl();
         pwdIsHidden = true;
 
+        System.out.println(TokenStorage.getIntance());
         String username = TokenStorage.getInfo("username");
         if (username != null) {
             String password = TokenStorage.getInfo("password");
@@ -108,6 +109,8 @@ public class LogInController {
         String username = loginUserInput.getText();
         String password = getPassword();
         handleInput(username, password);
+        handleRememberBox(username, password);
+        System.out.println("username: " + TokenStorage.getInfo("username") + ", password: " + TokenStorage.getInfo("password"));
 
     }
 
@@ -155,6 +158,13 @@ public class LogInController {
         return this.stage;
     }
 
+//    @FXML
+//    private void rememberBoxClick() {
+//        String username = loginUserInput.getText();
+//        String password = getPassword();
+//        handleRememberBox(username, password);
+//    }
+
     private boolean isRememberBoxChecked() {
         if (this.rememberBox.isSelected()) {
             return true;
@@ -164,12 +174,15 @@ public class LogInController {
 
     // working on it
     private void handleRememberBox(String username, String password) {
+        System.out.println("remember box is check: " + isRememberBoxChecked());
+        String usernameKey = "username";
+        String passwordKey = "password";
         if (isRememberBoxChecked()) {
-            TokenStorage.saveInfo(username, username);
-            TokenStorage.saveInfo(password, password);
+            TokenStorage.saveInfo(usernameKey, username);
+            TokenStorage.saveInfo(passwordKey, password);
         } else {
-            TokenStorage.clearData(username);
-            TokenStorage.clearData(password);
+            TokenStorage.clearData(usernameKey);
+            TokenStorage.clearData(passwordKey);
         }
     }
 
