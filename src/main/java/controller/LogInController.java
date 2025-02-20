@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.SVGPath;
@@ -41,6 +42,8 @@ public class LogInController {
     private TextField loginUserInput;
     @FXML
     private PasswordField loginPassInput;
+    @FXML
+    private TextField loginPassTxtInput;
 
     @FXML
     private Text errGeneral;
@@ -72,6 +75,12 @@ public class LogInController {
     private StackPane unmaskedStackPane;
     @FXML
     private StackPane pwdStackPane;
+    @FXML
+    private AnchorPane maskedPane;
+    @FXML
+    private AnchorPane unmaskedPane;
+
+    private boolean pwdIsHidden;
 
 
 //    private TokenStorage tokenStorage;
@@ -82,6 +91,7 @@ public class LogInController {
 //        TokenStorage.getIntance(); // this step is important, to access to the token storage
         controllerUtil = new ControllerUtils();
         httpResponseService = new HttpResponseServiceImpl();
+        pwdIsHidden = true;
 
         String username = TokenStorage.getInfo("username");
         if (username != null) {
@@ -101,7 +111,7 @@ public class LogInController {
     @FXML
     private void loginBtnClick() {
         String username = loginUserInput.getText();
-        String password = loginPassInput.getText();
+        String password = getPassword();
         handleInput(username, password);
 
     }
@@ -124,6 +134,8 @@ public class LogInController {
         this.controllerUtil.setHandCursor(this.registerLabel);
         this.controllerUtil.setHandCursor(this.maskedIcon);
         this.controllerUtil.setHandCursor(this.unmaskedIcon);
+        this.controllerUtil.setHandCursor(this.maskedPane);
+        this.controllerUtil.setHandCursor(this.unmaskedPane);
     }
 
     @FXML
@@ -133,6 +145,8 @@ public class LogInController {
         this.controllerUtil.setDefaultCursor(this.registerLabel);
         this.controllerUtil.setDefaultCursor(this.maskedIcon);
         this.controllerUtil.setDefaultCursor(this.unmaskedIcon);
+        this.controllerUtil.setDefaultCursor(this.maskedPane);
+        this.controllerUtil.setDefaultCursor(this.unmaskedPane);
     }
 
 
@@ -255,37 +269,21 @@ public class LogInController {
         System.out.println(pwdStackPane.getChildren());
         int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
         int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+        String maskedPwd = loginPassInput.getText();
+        System.out.println("masked pwd input: " + maskedPwd);
 
         System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
 
         if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
-            // Temporarily remove the panes
-//            pwdStackPane.getChildren().remove(unmaskedStackPane);
 
-            // Add them back in the switched order
-//            pwdStackPane.getChildren().add(maskedPaneIndex, unmaskedStackPane);
-//            pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
-//            pwdStackPane.getChildren().add(unmaskedStackPane);
-
-            // Set MouseTransparent properties
-//            maskedStackPane.setMouseTransparent(true);
-//            unmaskedStackPane.setMouseTransparent(false);
-
-//            maskedStackPane.toBack();
             Platform.runLater(() -> {
 //
                 pwdStackPane.getChildren().remove(maskedStackPane);
                 pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
-//            });
+                showPassword(maskedPwd);
+
             });
 
-//        // Get the indexes of the two nodes
-//        int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
-//        int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
-//
-//// Swap the nodes by using the set method
-//        pwdStackPane.getChildren().set(maskedPaneIndex, unmaskedStackPane); // Put unmaskedStackPane where maskedStackPane was
-//        pwdStackPane.getChildren().set(unmaskedPaneIndex, maskedStackPane); // Put maskedStackPane where unmaskedStackPane was
         }
     }
 
@@ -295,35 +293,40 @@ public class LogInController {
         System.out.println(pwdStackPane.getChildren());
         int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
         int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+        String unmaskedPwd = loginPassTxtInput.getText();
 
+        System.out.println("unmasked pwd input: " + unmaskedPwd);
         System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
 
         if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
-            // Temporarily remove the panes
-//            pwdStackPane.getChildren().remove(maskedStackPane);
 
-            // Add them back in the switched order
-//            pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
-//            pwdStackPane.getChildren().add(maskedPaneIndex, unmaskedStackPane);
-
-//            pwdStackPane.getChildren().add(maskedStackPane);
-
-            // Set MouseTransparent properties
-//            unmaskedStackPane.setMouseTransparent(true);
-//            maskedStackPane.setMouseTransparent(false);
-
-            // Temporarily remove the panes
             Platform.runLater(() -> {
                 pwdStackPane.getChildren().remove(unmaskedStackPane);
                 pwdStackPane.getChildren().add(maskedPaneIndex, unmaskedStackPane);
-//
-//
-////                maskedStackPane.toFront();
-////                unmaskedStackPane.toBack();
-//            });
+                hidePassword(unmaskedPwd);
             });
         }
+    }
 
+    public void showPassword(String password) {
+        StringBuilder unmaskedPwdBuilder = new StringBuilder(password);
+        loginPassTxtInput.setText(unmaskedPwdBuilder.toString());
+        pwdIsHidden = false;
+    }
 
+    public void hidePassword(String unmaskedPassword) {
+        StringBuilder maskedPwdBuilder = new StringBuilder(unmaskedPassword);
+        loginPassInput.setText(maskedPwdBuilder.toString());
+        pwdIsHidden = true;
+    }
+
+    public String getPassword() {
+        String password = "";
+        if (pwdIsHidden) {
+            password = loginPassInput.getText();
+        } else {
+            password = loginPassTxtInput.getText();
+        }
+        return password;
     }
 }
