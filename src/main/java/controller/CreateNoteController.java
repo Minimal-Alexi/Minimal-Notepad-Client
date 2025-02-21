@@ -15,6 +15,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Note;
@@ -23,7 +25,6 @@ import utils.NoteServices;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
 
 import static utils.MainPageServices.*;
 import static utils.NoteServices.addCategory;
@@ -34,6 +35,8 @@ public class CreateNoteController {
 
     @FXML private Label localTime;
     @FXML private Label nameLabel;
+    @FXML private Rectangle noteBackground;
+    @FXML private ColorPicker colorPicker;
     @FXML private VBox textVBox;
     @FXML private TextField titleTextArea;
     @FXML private TextArea textArea1;
@@ -63,6 +66,7 @@ public class CreateNoteController {
                 newTextArea.requestFocus(); // move the cursor to the next textArea
             }
         });
+        colorSetUp();
 
         TextArea textArea = createTextArea();
         textVBox.getChildren().add(textArea);
@@ -71,7 +75,7 @@ public class CreateNoteController {
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
+        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
         NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
@@ -190,6 +194,15 @@ public class CreateNoteController {
         });
 
         return textArea;
+    }
+    /*
+
+    */
+    private void colorSetUp(){
+        noteBackground.setFill(Color.WHITE);
+        colorPicker.setOnAction(event -> {
+            noteBackground.setFill(colorPicker.getValue());
+        });
     }
 
     /*
