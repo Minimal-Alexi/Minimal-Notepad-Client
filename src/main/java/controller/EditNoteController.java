@@ -144,6 +144,7 @@ public class EditNoteController {
     }
     private void colorSetUp(String initialColor){
         noteBackground.setFill(Color.web(initialColor));
+        colorPicker.setValue(Color.web(initialColor));
         colorPicker.setOnAction(event -> {
             noteBackground.setFill(colorPicker.getValue());
         });
