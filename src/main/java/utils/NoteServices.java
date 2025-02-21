@@ -170,4 +170,6 @@ public class NoteServices {
             label.setGraphic(removeCategory);
         });
     }
+
+
 }
