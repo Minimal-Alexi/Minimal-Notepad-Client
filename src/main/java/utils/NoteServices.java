@@ -4,7 +4,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
-import model.ColorEnum;
 import model.Note;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,7 +14,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
@@ -71,7 +69,7 @@ public class NoteServices {
                 return new Note(result.getInt("id"),
                         result.getString("title") ,
                         result.getString("text"),
-                        result.getEnum(ColorEnum.class,"colour"),
+                        result.getString("colour"),
                         timestampToString(result.getString("createdAt")),
                         timestampToString(result.getString("updatedAt")),
                         result.getJSONObject("user").getString("username"),
