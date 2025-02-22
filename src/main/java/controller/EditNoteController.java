@@ -13,6 +13,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
@@ -37,6 +39,8 @@ public class EditNoteController {
     @FXML private Button deleteNoteBtn;
     @FXML private HBox categoryHBox;
     @FXML private Label addCategory;
+    @FXML private ColorPicker colorPicker;
+    @FXML private Rectangle noteBackground;
 
     SelectedNote selectedNote = SelectedNote.getInstance();
     private HashMap<Integer, String> categoryList = new HashMap<>();
@@ -53,6 +57,8 @@ public class EditNoteController {
         titleTextArea.setText(note.getTitle());
         categoryList = note.getCategory();
 
+        colorSetUp(note.getColor());
+
         // query the categoryList to add categories to the ui
         updateCategory(categoryList, categoryHBox);
 
@@ -63,7 +69,7 @@ public class EditNoteController {
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "#FFD700", "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
+        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
         NoteServices.deleteNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
         NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
@@ -135,6 +141,13 @@ public class EditNoteController {
                 textVBox.getChildren().add(textArea);
             }
         }
+    }
+    private void colorSetUp(String initialColor){
+        noteBackground.setFill(Color.web(initialColor));
+        colorPicker.setValue(Color.web(initialColor));
+        colorPicker.setOnAction(event -> {
+            noteBackground.setFill(colorPicker.getValue());
+        });
     }
 
 
