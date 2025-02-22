@@ -6,11 +6,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
 import model.TokenStorage;
@@ -28,6 +28,7 @@ import utils.HttpResponseServiceImpl;
 import utils.MainPageServices;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static utils.MainPageServices.goToPage;
 import static utils.MainPageServices.updateLocalTime;
@@ -312,38 +313,45 @@ public class AccountInfoPageController {
 
     @FXML
     public void deleteBtnClick() {
-        System.out.println("Deleting user");
-        String token = TokenStorage.getToken();
-        HttpDelete httpDelete = new HttpDelete(URI);
-        httpDelete.addHeader("Accept", "application/json");
-        httpDelete.addHeader("Content-Type", "application/json");
-        httpDelete.addHeader("Authorization", "Bearer " + token);
-        new Thread(() -> {
-            try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
-                HttpEntity responseEntity = response.getEntity();
-                String data = EntityUtils.toString(responseEntity);
-                System.out.println("data " + data);
-                JSONObject jsonResponse = new JSONObject(data);
-                EntityUtils.consume(responseEntity);
-                // Do more processing here...
-                StatusLine statusLine = response.getStatusLine();
+
+        String yesTxt = "Yes";
+
+        Optional<ButtonType> result = displayDeleteWarningDialog();
+        System.out.println("result of dialog " + result.get().getText());
+        if (result.get().getText().equals(yesTxt)) {
+            System.out.println("Deleting user");
+            String token = TokenStorage.getToken();
+            HttpDelete httpDelete = new HttpDelete(URI);
+            httpDelete.addHeader("Accept", "application/json");
+            httpDelete.addHeader("Content-Type", "application/json");
+            httpDelete.addHeader("Authorization", "Bearer " + token);
+            new Thread(() -> {
+                try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
+                    HttpEntity responseEntity = response.getEntity();
+                    String data = EntityUtils.toString(responseEntity);
+                    System.out.println("data " + data);
+                    JSONObject jsonResponse = new JSONObject(data);
+                    EntityUtils.consume(responseEntity);
+                    // Do more processing here...
+                    StatusLine statusLine = response.getStatusLine();
 //                System.out.println("json " + jsonResponse);
 
-                System.out.println("response " + responseEntity);
-                System.out.println("status code " + statusLine);
-                Platform.runLater(() -> {
-                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-                    handleDeleteResponse(jsonResponse);
-                });
-            } catch (IOException e) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-                a.show();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                System.out.println(e.getMessage());
-            }
-        }).start();
+                    System.out.println("response " + responseEntity);
+                    System.out.println("status code " + statusLine);
+                    Platform.runLater(() -> {
+                        // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
+                        handleDeleteResponse(jsonResponse);
+                    });
+                } catch (IOException e) {
+                    Alert a = new Alert(Alert.AlertType.ERROR);
+                    a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
+                    a.show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                }
+            }).start();
+        }
     }
 
 
@@ -367,5 +375,19 @@ public class AccountInfoPageController {
     }
 
 
-
+    private Optional<ButtonType> displayDeleteWarningDialog() {
+        // add alert dialog
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        String yesTxt = "Yes";
+        String noTxt = "No";
+        ButtonType yesBtn = new ButtonType(yesTxt);
+        ButtonType noBtn = new ButtonType(noTxt);
+        alert.setTitle("Warning");
+        alert.setContentText("Are you sure you want to delete your account?");
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(yesBtn, noBtn);
+//        alert.getButtonTypes().add()
+        Optional<ButtonType> result = alert.showAndWait();
+        return result;
+    }
 }
