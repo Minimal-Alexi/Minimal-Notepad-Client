@@ -16,6 +16,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 
 import static utils.MainPageServices.*;
 
@@ -169,5 +171,64 @@ public class NoteServices {
             });
             label.setGraphic(removeCategory);
         });
+    }
+
+    public static List<Note> filterNotes(String url, List<Note> notes, String categoryFilter, String token) {
+        JSONObject jsonBody = new JSONObject();
+
+        // Convert notes list to JSONArray
+        JSONArray notesArray = new JSONArray();
+        for (Note note : notes) {
+            JSONObject noteJson = new JSONObject();
+            noteJson.put("id", note.getId());
+            noteJson.put("title", note.getTitle());
+            noteJson.put("text", note.getText());
+            noteJson.put("colour", note.getColor());
+            notesArray.put(noteJson);
+        }
+
+        jsonBody.put("notes", notesArray);
+        jsonBody.put("category", categoryFilter);
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url + "filter"))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Response Status Code: " + response.statusCode());
+            System.out.println("Response Body: " + response.body());
+
+            if (response.statusCode() == 200) {
+                JSONArray resultArray = new JSONArray(response.body());
+                List<Note> filteredNotes = new ArrayList<>();
+
+                for (int i = 0; i < resultArray.length(); i++) {
+                    JSONObject noteObj = resultArray.getJSONObject(i);
+
+                    Note note = new Note(
+                            noteObj.getInt("id"),
+                            noteObj.getString("title"),
+                            noteObj.getString("text"),
+                            noteObj.getString("colour"),
+                            timestampToString(noteObj.getString("createdAt")),
+                            timestampToString(noteObj.getString("updatedAt")),
+                            noteObj.getJSONObject("user").getString("username"),
+                            " ",  // Empty string for group as in findNoteById
+                            jsonArrayToHashMap(noteObj.getJSONArray("categoriesList"))  // Using the same conversion method
+                    );
+                    filteredNotes.add(note);
+                }
+                return filteredNotes;
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return new ArrayList<>();
     }
 }

@@ -91,6 +91,12 @@ public class Note {
     }
 
     public HashMap<Integer, String> getCategory() {
+        if (category == null || category.isEmpty()) {
+            HashMap<Integer, String> defaultCategory = new HashMap<>();
+            defaultCategory.put(0, "Unknown"); // Default entry
+            return defaultCategory;
+        }
+
         return category;
     }
 

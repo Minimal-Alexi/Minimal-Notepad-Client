@@ -16,10 +16,15 @@ import javafx.stage.Stage;
 import model.Note;
 import model.selected.SelectedNote;
 import model.TokenStorage;
+import utils.NoteServices;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 import static utils.MainPageServices.*;
 
@@ -113,5 +118,45 @@ public class MainPageController {
         goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
     }
 
+    @FXML private ComboBox<String> categoryFilter;
+
+    private void initializeCategoryFilter() {
+        Set<String> categories = table.getItems().stream()
+                .map(Note::getCategory) // Returns HashMap<Integer, String>
+                .filter(Objects::nonNull) // Ensure it's not null
+                .flatMap(map -> map.values().stream()) // Extract String values from HashMap
+                .filter(category -> !category.isEmpty()) // Remove empty values
+                .collect(Collectors.toSet()); // Collect as Set<String>
+
+
+        ObservableList<String> categoryList = FXCollections.observableArrayList(categories);
+        categoryFilter.setItems(categoryList);
+
+        categoryFilter.getItems().add(0, "All");
+        categoryFilter.setValue("All");
+    }
+
+    private void handleCategoryFilter() {
+        String selectedCategory = categoryFilter.getValue();
+
+        if (selectedCategory == null || selectedCategory.equals("All")) {
+            // Reset to show all notes
+            ArrayList<Note> allNotes = findAllMyNotes("http://localhost:8093/api/note/",
+                    TokenStorage.getToken());
+            table.setItems(FXCollections.observableArrayList(allNotes));
+            return;
+        }
+
+        // Get current notes and filter
+        List<Note> filteredNotes = NoteServices.filterNotes(
+                "http://localhost:8093/api/note/",
+                new ArrayList<>(table.getItems()),
+                selectedCategory,
+                TokenStorage.getToken()
+        );
+
+        // Update table with filtered notes
+        table.setItems(FXCollections.observableArrayList(filteredNotes));
+    }
 
 }
