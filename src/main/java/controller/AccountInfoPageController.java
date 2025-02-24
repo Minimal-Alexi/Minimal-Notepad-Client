@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
+import model.HttpRequestBuilder;
 import model.TokenStorage;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
@@ -132,39 +133,48 @@ public class AccountInfoPageController {
         String username = TokenStorage.getUser();
         String token = TokenStorage.getToken();
 //        String URI = "http://localhost:8093/api/user/";
-        HttpGet httpGet = new HttpGet(URI);
-        httpGet.addHeader("Accept", "application/json");
-        httpGet.addHeader("Content-Type", "application/json");
-        httpGet.addHeader("Authorization", "Bearer " + token);
+//        HttpGet httpGet = new HttpGet(URI);
+//        httpGet.addHeader("Accept", "application/json");
+//        httpGet.addHeader("Content-Type", "application/json");
+//        httpGet.addHeader("Authorization", "Bearer " + token);
+
+        HttpRequestBuilder httpRequest = new HttpRequestBuilder("GET", URI, true);
+
+        // call this method only if you have body in your request
+//            httpRequest.setRequestBody();
+//        HttpGet httpGet = (HttpGet) httpRequest.getHttpRequest();
+        HttpRequestBase httpGet = httpRequest.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
 //        JSONObject json = new JSONObject();
 //        json.put("username",)
 //        httpResponseService.handleReponse(httpGet);
-        new Thread(() -> {
-            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                HttpEntity responseEntity = response.getEntity();
-                String data = EntityUtils.toString(responseEntity);
-                JSONObject jsonResponse = new JSONObject(data);
-                EntityUtils.consume(responseEntity);
-                // Do more processing here...
-                StatusLine statusLine = response.getStatusLine();
-                System.out.println("json " + jsonResponse);
-                System.out.println("response " + responseEntity);
-                System.out.println("status code " + statusLine);
-                Platform.runLater(() -> {
-                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-//                    callback.handleResponse(response, jsonResponse);
-                    handleGetUserInfoResponse(jsonResponse);
-                });
-            } catch (IOException e) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-                a.show();
-            }
-        }).start();
+//        new Thread(() -> {
+//            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+//                HttpEntity responseEntity = response.getEntity();
+//                String data = EntityUtils.toString(responseEntity);
+//                JSONObject jsonResponse = new JSONObject(data);
+//                EntityUtils.consume(responseEntity);
+//                // Do more processing here...
+//                StatusLine statusLine = response.getStatusLine();
+//                System.out.println("json " + jsonResponse);
+//                System.out.println("response " + responseEntity);
+//                System.out.println("status code " + statusLine);
+//                Platform.runLater(() -> {
+//                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
+////                    callback.handleResponse(response, jsonResponse);
+//                    handleGetUserInfoResponse(response, jsonResponse);
+//                });
+//            } catch (IOException e) {
+//                Alert a = new Alert(Alert.AlertType.ERROR);
+//                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
+//                a.show();
+//            }
+//        }).start();
+        httpResponseService.handleReponse(httpGet,httpClient,this::handleGetUserInfoResponse);
     }
 
-    private void handleGetUserInfoResponse(JSONObject jsonResponse) {
+    private void handleGetUserInfoResponse(CloseableHttpResponse response,JSONObject jsonResponse) {
 //        JSONObject jsonObject = new JSONObject(response);
         try {
             String email = (String) jsonResponse.get("email");
@@ -222,48 +232,63 @@ public class AccountInfoPageController {
         resetAllErrMessages();
 //        String URI = ""
 
-        String token = TokenStorage.getToken();
-        HttpPut httpPut = new HttpPut(URI);
-        httpPut.addHeader("Accept", "application/json");
-        httpPut.addHeader("Content-Type", "application/json");
-        httpPut.addHeader("Authorization", "Bearer " + token);
+//        String token = TokenStorage.getToken();
+//        HttpPut httpPut = new HttpPut(URI);
+//        httpPut.addHeader("Accept", "application/json");
+//        httpPut.addHeader("Content-Type", "application/json");
+//        httpPut.addHeader("Authorization", "Bearer " + token);
+//
+//        JSONObject json = new JSONObject();
+//        json.put("username", username);
+//        json.put("email", email);
+//
+//        StringEntity entity = new StringEntity(json.toString());
+//        httpPut.setEntity(entity);
 
-        JSONObject json = new JSONObject();
-        json.put("username", username);
-        json.put("email", email);
+        HttpRequestBuilder httpRequest = new HttpRequestBuilder("PUT", URI, true);
 
-        StringEntity entity = new StringEntity(json.toString());
-        httpPut.setEntity(entity);
-        new Thread(() -> {
-            try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
-                HttpEntity responseEntity = response.getEntity();
-                String data = EntityUtils.toString(responseEntity);
-                JSONObject jsonResponse = new JSONObject(data);
-                EntityUtils.consume(responseEntity);
-                // Do more processing here...
-                String statusLine = response.getStatusLine().toString();
-                System.out.println("json " + jsonResponse);
-                System.out.println("response " + responseEntity);
-                System.out.println("status code " + statusLine);
-                Platform.runLater(() -> {
-                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-                    handleSaveUserInfoResponse(jsonResponse, statusLine);
-                });
-            } catch (IOException e) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-                a.show();
-            } catch (JSONException e) {
-//                e.setStackTrace();
-                generalErrLabel.setText(e.getMessage());
-            }
-        }).start();
+        // set JSON
+        httpRequest.updateJsonRequest("username", username);
+        httpRequest.updateJsonRequest("email", email);
+
+        // call this method only if you have body in your request
+        httpRequest.setRequestBody();
+//            HttpDelete httpDelete = (HttpDelete) httpRequest.getHttpRequest();
+        HttpRequestBase httpPut = httpRequest.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequest.getHttpClient();
+
+//        new Thread(() -> {
+//            try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
+//                HttpEntity responseEntity = response.getEntity();
+//                String data = EntityUtils.toString(responseEntity);
+//                JSONObject jsonResponse = new JSONObject(data);
+//                EntityUtils.consume(responseEntity);
+//                // Do more processing here...
+//                String statusLine = response.getStatusLine().toString();
+//                System.out.println("json " + jsonResponse);
+//                System.out.println("response " + responseEntity);
+//                System.out.println("status code " + statusLine);
+//                Platform.runLater(() -> {
+//                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
+//                    handleSaveUserInfoResponse(response,jsonResponse);
+//                });
+//            } catch (IOException e) {
+//                Alert a = new Alert(Alert.AlertType.ERROR);
+//                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
+//                a.show();
+//            } catch (JSONException e) {
+////                e.setStackTrace();
+//                generalErrLabel.setText(e.getMessage());
+//            }
+//        }).start();
+        httpResponseService.handleReponse(httpPut,httpClient,this::handleSaveUserInfoResponse);
     }
 
-    public void handleSaveUserInfoResponse(JSONObject jsonResponse, String statusLine) {
+    public void handleSaveUserInfoResponse(CloseableHttpResponse response,JSONObject jsonResponse) {
         try {
 //            StatusLine statusCode = jsonResponse.getStatusLine();
 //            String message = (String) jsonResponse.get("message");
+            String statusLine = response.getStatusLine().toString();
             if (statusLine.contains("200")) {
                 String newUsername = (String) jsonResponse.get("username");
                 String curUsername = TokenStorage.getUser();
@@ -273,6 +298,7 @@ public class AccountInfoPageController {
                     String newToken = (String) jsonResponse.get("token");
                     System.out.println("New: username: " + newUsername + ", token: " + newToken);
                     TokenStorage.saveToken(newUsername, newToken);
+                    TokenStorage.saveInfo("username",newUsername);
                 }
 
                 // 2. if username is not the same, token in response body
@@ -293,7 +319,7 @@ public class AccountInfoPageController {
 
     @FXML
     public void groupsClicked(ActionEvent event) throws IOException {
-        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
     }
 
 
@@ -320,37 +346,47 @@ public class AccountInfoPageController {
         System.out.println("result of dialog " + result.get().getText());
         if (result.get().getText().equals(yesTxt)) {
             System.out.println("Deleting user");
-            String token = TokenStorage.getToken();
-            HttpDelete httpDelete = new HttpDelete(URI);
-            httpDelete.addHeader("Accept", "application/json");
-            httpDelete.addHeader("Content-Type", "application/json");
-            httpDelete.addHeader("Authorization", "Bearer " + token);
-            new Thread(() -> {
-                try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
-                    HttpEntity responseEntity = response.getEntity();
-                    String data = EntityUtils.toString(responseEntity);
-                    System.out.println("data " + data);
-                    JSONObject jsonResponse = new JSONObject(data);
-                    EntityUtils.consume(responseEntity);
-                    // Do more processing here...
-                    StatusLine statusLine = response.getStatusLine();
-//                System.out.println("json " + jsonResponse);
+//            String token = TokenStorage.getToken();
+//            HttpDelete httpDelete = new HttpDelete(URI);
+//            httpDelete.addHeader("Accept", "application/json");
+//            httpDelete.addHeader("Content-Type", "application/json");
+//            httpDelete.addHeader("Authorization", "Bearer " + token);
 
-                    System.out.println("response " + responseEntity);
-                    System.out.println("status code " + statusLine);
-                    Platform.runLater(() -> {
-                        // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-                        handleDeleteResponse(jsonResponse);
-                    });
-                } catch (IOException e) {
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-                    a.show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    System.out.println(e.getMessage());
-                }
-            }).start();
+            HttpRequestBuilder httpRequest = new HttpRequestBuilder("DELETE", URI, true);
+
+            // call this method only if you have body in your request
+//            httpRequest.setRequestBody();
+//            HttpDelete httpDelete = (HttpDelete) httpRequest.getHttpRequest();
+            HttpRequestBase httpDelete = httpRequest.getHttpRequest();
+            CloseableHttpClient httpClient = httpRequest.getHttpClient();
+//            new Thread(() -> {
+//                try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
+//                    HttpEntity responseEntity = response.getEntity();
+//                    String data = EntityUtils.toString(responseEntity);
+//                    System.out.println("data " + data);
+//                    JSONObject jsonResponse = new JSONObject(data);
+//                    EntityUtils.consume(responseEntity);
+//                    // Do more processing here...
+//                    StatusLine statusLine = response.getStatusLine();
+////                System.out.println("json " + jsonResponse);
+//
+//                    System.out.println("response " + responseEntity);
+//                    System.out.println("status code " + statusLine);
+//                    Platform.runLater(() -> {
+//                        // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
+//                        handleDeleteResponse(response, jsonResponse);
+//                    });
+//                } catch (IOException e) {
+//                    Alert a = new Alert(Alert.AlertType.ERROR);
+//                    a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
+//                    a.show();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    System.out.println(e.getMessage());
+//                }
+//            }).start();
+            this.httpResponseService.handleReponse(httpDelete,httpClient,this::handleDeleteResponse);
+
         }
     }
 
@@ -360,7 +396,7 @@ public class AccountInfoPageController {
         this.controllerUtils.goToHelloPage(stage, logOutBtn);
     }
 
-    private void handleDeleteResponse(JSONObject jsonResponse) {
+    private void handleDeleteResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
         try {
             String message = (String) jsonResponse.get("message");
             System.out.println("message: " + message);
