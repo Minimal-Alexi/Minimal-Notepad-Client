@@ -18,17 +18,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
+import utils.GoogleDriveUploader;
 import utils.NoteServices;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
-import static utils.NoteServices.addCategory;
-import static utils.NoteServices.getAllCategories;
+import static utils.NoteServices.*;
 
 
 public class CreateNoteController {
@@ -43,8 +46,11 @@ public class CreateNoteController {
     @FXML private Button saveNoteBtn;
     @FXML private HBox categoryHBox;
     @FXML private Label addCategory;
+    @FXML private Button uploadPicBtn;
 
     private final HashMap<Integer, String> categoryList = new HashMap<>();
+    private final ArrayList<String> figureList = new ArrayList<>();
+
 
     public void initialize() {
         updateLocalTime(localTime);
@@ -78,6 +84,10 @@ public class CreateNoteController {
         Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
         NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
+    }
+
+    public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
+        uploadPicture(uploadPicBtn, figureList,textVBox);
     }
 
     /*
@@ -208,6 +218,5 @@ public class CreateNoteController {
     /*
     update category HBox
      */
-
 
 }

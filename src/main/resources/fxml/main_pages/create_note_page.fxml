@@ -220,6 +220,7 @@
                                           <Insets left="30.0" top="10.0" />
                                        </padding>
                                     </HBox>
+                                    <Button fx:id="uploadPicBtn" mnemonicParsing="false" onMouseClicked="#uploadPicClicked" text="Upload picture" />
                                     <ScrollPane prefHeight="411.0" prefWidth="800.0">
                                        <content>
                                           <VBox fx:id="textVBox" prefHeight="406.0" prefWidth="800.0">

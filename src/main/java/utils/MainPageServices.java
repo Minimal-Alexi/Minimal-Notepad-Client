@@ -64,7 +64,8 @@ public class MainPageServices {
                             timestampToString(noteJson.getString("updatedAt")),
                             noteJson.getJSONObject("user").getString("username"),
                             " ",
-                            jsonArrayToHashMap(noteJson.getJSONArray("categoriesList"))
+                            jsonArrayToHashMap(noteJson.getJSONArray("categoriesList")),
+                            jsonArrayToFigureList(noteJson.getJSONArray("figures"))
                     );
                     notes.add(note);
                 }
@@ -206,4 +207,20 @@ public class MainPageServices {
         return jsonArray;
     }
 
+    public static ArrayList<String> jsonArrayToFigureList(JSONArray jsonArray) {
+        ArrayList<String> figureList = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            String figure = jsonArray.get(i).toString();
+            figureList.add(figure);
+        }
+        return figureList;
+    }
+
+    public static JSONArray figureListToJSONArray(ArrayList<String> figureList) {
+        JSONArray jsonArray = new JSONArray();
+        for (String s : figureList) {
+            jsonArray.put(s);
+        }
+        return jsonArray;
+    }
 }

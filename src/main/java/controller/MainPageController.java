@@ -112,8 +112,9 @@ public class MainPageController {
             }
         });
 
-        assert noteArrayList != null;
-        updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
+        if (noteArrayList != null) {
+            updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
+        }
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
     }

@@ -13,15 +13,19 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
+import utils.GoogleDriveUploader;
 import utils.NoteServices;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
@@ -39,11 +43,13 @@ public class EditNoteController {
     @FXML private Button deleteNoteBtn;
     @FXML private HBox categoryHBox;
     @FXML private Label addCategory;
+    @FXML private Button uploadPicBtn;
     @FXML private ColorPicker colorPicker;
     @FXML private Rectangle noteBackground;
 
     SelectedNote selectedNote = SelectedNote.getInstance();
     private HashMap<Integer, String> categoryList = new HashMap<>();
+    private ArrayList<String> figureList = new ArrayList<>();
 
     // Initialize
     public void initialize() {
@@ -56,6 +62,7 @@ public class EditNoteController {
         textArea1.setText(note.getText());
         titleTextArea.setText(note.getTitle());
         categoryList = note.getCategory();
+        figureList = note.getFigure();
 
         colorSetUp(note.getColor());
 
@@ -64,6 +71,23 @@ public class EditNoteController {
 
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
+
+        // add pictures to the ui
+        figureList.forEach(figure -> {
+            GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
+            ImageView imageView = new ImageView();
+            try {
+                Image image = googleDriveUploader.download(figure);
+                imageView.setImage(image);
+                imageView.setFitHeight(200);
+                imageView.setFitWidth(200);
+                imageView.setPreserveRatio(true);
+                textVBox.getChildren().add(imageView);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
@@ -100,6 +124,10 @@ public class EditNoteController {
         // The adding behavior is over, enable the add button
         addCategory.setDisable(false);
 
+    }
+
+    public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
+        uploadPicture(uploadPicBtn, figureList,textVBox);
     }
 
     /*
