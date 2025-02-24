@@ -13,13 +13,17 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
+import utils.GoogleDriveUploader;
 import utils.NoteServices;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
@@ -37,9 +41,11 @@ public class EditNoteController {
     @FXML private Button deleteNoteBtn;
     @FXML private HBox categoryHBox;
     @FXML private Label addCategory;
+    @FXML private Button uploadPicBtn;
 
     SelectedNote selectedNote = SelectedNote.getInstance();
     private HashMap<Integer, String> categoryList = new HashMap<>();
+    private ArrayList<String> figureList = new ArrayList<>();
 
     // Initialize
     public void initialize() {
@@ -52,18 +58,36 @@ public class EditNoteController {
         textArea1.setText(note.getText());
         titleTextArea.setText(note.getTitle());
         categoryList = note.getCategory();
+        figureList = note.getFigure();
 
         // query the categoryList to add categories to the ui
         updateCategory(categoryList, categoryHBox);
 
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
+
+        // add pictures to the ui
+        figureList.forEach(figure -> {
+            GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
+            ImageView imageView = new ImageView();
+            try {
+                Image image = googleDriveUploader.download(figure);
+                imageView.setImage(image);
+                imageView.setFitHeight(200);
+                imageView.setFitWidth(200);
+                imageView.setPreserveRatio(true);
+                textVBox.getChildren().add(imageView);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "RED", "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
+        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "RED", "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList, figureList);
         NoteServices.deleteNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
         NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
@@ -95,6 +119,10 @@ public class EditNoteController {
         // The adding behavior is over, enable the add button
         addCategory.setDisable(false);
 
+    }
+
+    public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
+        uploadPicture(uploadPicBtn, figureList,textVBox);
     }
 
     /*

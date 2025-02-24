@@ -30,8 +30,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import static utils.MainPageServices.*;
-import static utils.NoteServices.addCategory;
-import static utils.NoteServices.getAllCategories;
+import static utils.NoteServices.*;
 
 
 public class CreateNoteController {
@@ -47,6 +46,7 @@ public class CreateNoteController {
     @FXML private Button uploadPicBtn;
 
     private final HashMap<Integer, String> categoryList = new HashMap<>();
+    private final ArrayList<String> figureList = new ArrayList<>();
 
 
     public void initialize() {
@@ -77,38 +77,13 @@ public class CreateNoteController {
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "RED", "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
+        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), "RED", "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList, figureList);
         NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
 
     public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
-        uploadPicBtn.setDisable(true);
-        uploadPicBtn.setText("Uploading... ");
-
-        Stage stage = new Stage();
-
-        FileChooser  fileChooser = new FileChooser();
-        fileChooser.setTitle("Upload picture");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg","*.png","*.jpeg"));
-        fileChooser.setInitialDirectory(new File("C:"));
-
-        String filePath =  fileChooser.showOpenDialog(stage).getAbsolutePath();
-        GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
-        String googlePath =  googleDriveUploader.upload(filePath);
-        System.out.println(googlePath);
-
-        // Get the picture from Google Drive
-        ImageView imageView = new ImageView();
-        Image image = googleDriveUploader.download(googlePath);
-        imageView.setImage(image);
-        imageView.setFitHeight(200);
-        imageView.setFitWidth(200);
-        imageView.setPreserveRatio(true);
-        textVBox.getChildren().add(imageView);
-
-        uploadPicBtn.setDisable(false);
-        uploadPicBtn.setText("Upload picture");
+        uploadPicture(uploadPicBtn, figureList,textVBox);
     }
 
     /*
