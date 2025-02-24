@@ -69,9 +69,8 @@ public class EditNoteController {
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
-        NoteServices.deleteNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
-        NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
+        Note note = new Note(selectedNote.getId(), titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
+        NoteServices.updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), note);
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
 
