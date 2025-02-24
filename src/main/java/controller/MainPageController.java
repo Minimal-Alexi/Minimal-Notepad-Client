@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -63,15 +64,19 @@ public class MainPageController {
     private Button accountBtn;
     @FXML
     private Button logOutBtn;
+    @FXML
+    private TextField searchBar;
 
     private ControllerUtils controllerUtils;
+    ObservableList<Note> notes;
+    private ArrayList<Note> noteArrayList;
 
 
     public void initialize() {
         this.controllerUtils = new ControllerUtils();
 
-        ObservableList<Note> notes = FXCollections.observableArrayList();
-        ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
+        notes = FXCollections.observableArrayList();
+        noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
         if (noteArrayList != null) {
             notes.addAll(noteArrayList);
         } else {
@@ -111,7 +116,7 @@ public class MainPageController {
                 }
             }
         });
-
+        searchBarSetup();
         assert noteArrayList != null;
         updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
         updateLocalTime(localTime);
@@ -175,5 +180,14 @@ public class MainPageController {
     @FXML
     void mouseExit(MouseEvent event) {
         this.controllerUtils.setDefaultCursor(logOutBtn);
+    }
+
+    public void searchBarSetup() {
+        searchBar.setOnKeyPressed(event -> {
+            if (searchBar.isFocused() && event.getCode() == KeyCode.ENTER) {
+                String inputText = searchBar.getText();
+
+            }
+        });
     }
 }

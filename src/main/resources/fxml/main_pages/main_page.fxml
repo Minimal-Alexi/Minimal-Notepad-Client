@@ -196,7 +196,7 @@
                         </Label>
                         <AnchorPane prefHeight="62.0" prefWidth="210.0" stylesheets="@../../CSS/search_bar.css">
                            <children>
-                              <TextField cache="true" layoutX="5.0" layoutY="28.0" styleClass="search-box" stylesheets="@../../CSS/table_view.css" text="Search">
+                              <TextField fx:id="searchBar" cache="true" layoutX="5.0" layoutY="28.0" promptText="Search notes" styleClass="search-box" stylesheets="@../../CSS/table_view.css">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
