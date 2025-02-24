@@ -77,15 +77,6 @@ public class HelloController {
     public void initialize() {
         TokenStorage.getIntance();
         this.controllerUtil = new ControllerUtils();
-
-        /*
-        Set window size UI adaptation
-         */
-        Platform.runLater(() -> {
-            imageView.getScene().getWindow().widthProperty().addListener((observable, oldValueWidth, newValueWidth) -> {
-                imageView.setFitWidth((Double) newValueWidth);
-            });
-        });
     }
 
     private Stage getStage() {
@@ -102,6 +93,7 @@ public class HelloController {
 
             var stage = getStage();
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
