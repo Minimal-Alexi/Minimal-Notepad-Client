@@ -21,7 +21,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
@@ -178,7 +177,6 @@ public class NoteServices {
             label.setGraphic(removeCategory);
         });
     }
-
     public static void uploadPicture(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) throws IOException {
         uploadPicBtn.setDisable(true);
         uploadPicBtn.setText("Uploading... ");
@@ -211,6 +209,29 @@ public class NoteServices {
         } else {
             System.out.println("no file selected");
             uploadPicBtn.setDisable(false);
+    public static void updateNote(String url, int id, String token, Note note){
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("colour", note.getColor());
+        jsonBody.put("text", note.getText());
+        jsonBody.put("title", note.getTitle());
+        jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        System.out.println(jsonBody);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url + id))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Response Status Code: " + response.statusCode());
+            System.out.println("Response Body: " + response.body());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }

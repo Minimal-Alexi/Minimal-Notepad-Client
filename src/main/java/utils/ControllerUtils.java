@@ -6,11 +6,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.TokenStorage;
 
 //import java.awt.*;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ControllerUtils {
 
@@ -30,6 +35,20 @@ public class ControllerUtils {
         }
     }
 
+    public Stage getStage(Button btn, Stage stage) {
+        if (stage == null) {
+            stage = (Stage) btn.getScene().getWindow();
+        }
+        return stage;
+    }
+
+    public void gotoPage(Stage stage, Button btn, String fxmlPage) {
+        stage = getStage(btn, stage);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPage));
+        updateStage(stage, fxmlLoader);
+    }
+
+
     public void setDefaultCursor(Button btn) {
         btn.setCursor(defaultCursor);
     }
@@ -42,6 +61,15 @@ public class ControllerUtils {
         label.setCursor(defaultCursor);
     }
 
+    public void setDefaultCursor(SVGPath svgPath) {
+        svgPath.setCursor(defaultCursor);
+    }
+
+    public void setDefaultCursor(Pane pane) {
+        pane.setCursor(defaultCursor);
+    }
+
+
     public void setHandCursor(Button btn) {
         btn.setCursor(handCursor);
     }
@@ -52,6 +80,27 @@ public class ControllerUtils {
 
     public void setHandCursor(Label label) {
         label.setCursor(handCursor);
+    }
+
+    public void setHandCursor(SVGPath svgPath) {
+        svgPath.setCursor(handCursor);
+    }
+
+    public void setHandCursor(Pane pane) {
+        pane.setCursor(handCursor);
+    }
+
+    public boolean validEmail(String email) {
+        String regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public void goToHelloPage(Stage stage, Button btn) {
+        String helloPage = "/fxml/hello_view.fxml";
+        TokenStorage.clearToken();
+        gotoPage(stage, btn, helloPage);
     }
 
 }

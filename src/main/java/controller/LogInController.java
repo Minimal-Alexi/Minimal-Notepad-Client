@@ -1,18 +1,20 @@
 package controller;
 
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.HttpClientSingleton;
 import model.TokenStorage;
 
+import model.HttpRequestBuilder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import org.json.JSONException;
@@ -36,6 +38,8 @@ public class LogInController {
     private TextField loginUserInput;
     @FXML
     private PasswordField loginPassInput;
+    @FXML
+    private TextField loginPassTxtInput;
 
     @FXML
     private Text errGeneral;
@@ -51,11 +55,24 @@ public class LogInController {
     private CheckBox rememberBox;
 
 
-
     private Stage stage;
-    private ControllerUtils controllerUtil ;
+    private ControllerUtils controllerUtil;
     private TokenStorage storage;
     private HttpResponseService httpResponseService;
+
+    @FXML
+    private StackPane maskedStackPane;
+    @FXML
+    private StackPane unmaskedStackPane;
+    @FXML
+    private StackPane pwdStackPane;
+    @FXML
+    private AnchorPane maskedPane;
+    @FXML
+    private AnchorPane unmaskedPane;
+
+    private boolean pwdIsHidden;
+
 
 //    private TokenStorage tokenStorage;
 //    Client client;
@@ -65,12 +82,15 @@ public class LogInController {
 //        TokenStorage.getIntance(); // this step is important, to access to the token storage
         controllerUtil = new ControllerUtils();
         httpResponseService = new HttpResponseServiceImpl();
+        pwdIsHidden = true;
 
+        System.out.println(TokenStorage.getIntance());
         String username = TokenStorage.getInfo("username");
         if (username != null) {
             String password = TokenStorage.getInfo("password");
             loginUserInput.setText(username);
             loginPassInput.setText(password);
+            this.rememberBox.setSelected(true);
         }
     }
 
@@ -84,8 +104,10 @@ public class LogInController {
     @FXML
     private void loginBtnClick() {
         String username = loginUserInput.getText();
-        String password = loginPassInput.getText();
+        String password = getPassword();
         handleInput(username, password);
+        handleRememberBox(username, password);
+        System.out.println("username: " + TokenStorage.getInfo("username") + ", password: " + TokenStorage.getInfo("password"));
 
     }
 
@@ -94,11 +116,10 @@ public class LogInController {
     private void loginPageBtnPress(KeyEvent ke) {
         if (ke.getCode() == KeyCode.ENTER) {
             String username = loginUserInput.getText();
-            String password = loginPassInput.getText();
+            String password = getPassword();
             handleInput(username, password);
         }
     }
-
 
 
     @FXML
@@ -106,6 +127,8 @@ public class LogInController {
         this.controllerUtil.setHandCursor(this.backBtn);
         this.controllerUtil.setHandCursor(this.loginBtn);
         this.controllerUtil.setHandCursor(this.registerLabel);
+        this.controllerUtil.setHandCursor(this.maskedPane);
+        this.controllerUtil.setHandCursor(this.unmaskedPane);
     }
 
     @FXML
@@ -113,6 +136,8 @@ public class LogInController {
         this.controllerUtil.setDefaultCursor(this.backBtn);
         this.controllerUtil.setDefaultCursor(this.loginBtn);
         this.controllerUtil.setDefaultCursor(this.registerLabel);
+        this.controllerUtil.setDefaultCursor(this.maskedPane);
+        this.controllerUtil.setDefaultCursor(this.unmaskedPane);
     }
 
 
@@ -130,6 +155,13 @@ public class LogInController {
         return this.stage;
     }
 
+//    @FXML
+//    private void rememberBoxClick() {
+//        String username = loginUserInput.getText();
+//        String password = getPassword();
+//        handleRememberBox(username, password);
+//    }
+
     private boolean isRememberBoxChecked() {
         if (this.rememberBox.isSelected()) {
             return true;
@@ -139,12 +171,18 @@ public class LogInController {
 
     // working on it
     private void handleRememberBox(String username, String password) {
+        System.out.println("remember box is check: " + isRememberBoxChecked());
+        String usernameKey = "username";
+        String passwordKey = "password";
+        String isRemembered = "isRemember";
         if (isRememberBoxChecked()) {
-            TokenStorage.saveInfo(username, username);
-            TokenStorage.saveInfo(password, password);
+            TokenStorage.saveInfo(usernameKey, username);
+            TokenStorage.saveInfo(passwordKey, password);
+            TokenStorage.saveToken(isRemembered, "true");
         } else {
-            TokenStorage.clearData(username);
-            TokenStorage.clearData(password);
+            TokenStorage.clearData(usernameKey);
+            TokenStorage.clearData(passwordKey);
+            TokenStorage.clearData(isRemembered);
         }
     }
 
@@ -183,23 +221,31 @@ public class LogInController {
         this.errPwd.setText("");
         this.errGeneral.setText("");
 
-        HttpClientSingleton instance = HttpClientSingleton.getInstance();
-        CloseableHttpClient httpClient = instance.getHttpClient();
+//        HttpClientSingleton instance = HttpClientSingleton.getInstance();
+//        CloseableHttpClient httpClient = instance.getHttpClient();
 
         String URI = "http://localhost:8093/api/users-authentication/login";
-        HttpPost httpPost = new HttpPost(URI);
-        httpPost.addHeader("accept", "application/json");
-        httpPost.addHeader("Content-Type", "application/json");
+//        HttpPost httpPost = new HttpPost(URI);
+//        httpPost.addHeader("accept", "application/json");
+//        httpPost.addHeader("Content-Type", "application/json");
+//
+//        JSONObject json = new JSONObject();
+//        json.put("username", username);
+//        json.put("password", password);
+//
+//        StringEntity entity = new StringEntity(json.toString());
+//        httpPost.setEntity(entity);
 
-        JSONObject json = new JSONObject();
-        json.put("username", username);
-        json.put("password", password);
+        HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI);
+        httpRequest.updateJsonRequest("username", username);
+        httpRequest.updateJsonRequest("password", password);
+        httpRequest.setRequestBody();
+        HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-        StringEntity entity = new StringEntity(json.toString());
-        httpPost.setEntity(entity);
 
-//        HttpResponseServiceImpl httpResponseService  = new HttpResponseServiceImpl();
-        httpResponseService.handleReponse(httpPost,httpClient,this::handleLoginReponse);
+
+        httpResponseService.handleReponse(httpPost, httpClient, this::handleLoginReponse);
 
 
     }
@@ -229,4 +275,70 @@ public class LogInController {
     }
 
 
+    @FXML
+    private void maskedIconClick() {
+        System.out.println("click masked icon");
+        System.out.println(pwdStackPane.getChildren());
+        int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
+        int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+        String maskedPwd = loginPassInput.getText();
+        System.out.println("masked pwd input: " + maskedPwd);
+
+        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
+
+        if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
+
+            Platform.runLater(() -> {
+//
+                pwdStackPane.getChildren().remove(maskedStackPane);
+                pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
+                showPassword(maskedPwd);
+
+            });
+
+        }
+    }
+
+    @FXML
+    private void unmaskedIconClick() {
+        System.out.println("click unmasked icon");
+        System.out.println(pwdStackPane.getChildren());
+        int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
+        int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
+        String unmaskedPwd = loginPassTxtInput.getText();
+
+        System.out.println("unmasked pwd input: " + unmaskedPwd);
+        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
+
+        if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
+
+            Platform.runLater(() -> {
+                pwdStackPane.getChildren().remove(unmaskedStackPane);
+                pwdStackPane.getChildren().add(maskedPaneIndex, unmaskedStackPane);
+                hidePassword(unmaskedPwd);
+            });
+        }
+    }
+
+    public void showPassword(String password) {
+        StringBuilder unmaskedPwdBuilder = new StringBuilder(password);
+        loginPassTxtInput.setText(unmaskedPwdBuilder.toString());
+        pwdIsHidden = false;
+    }
+
+    public void hidePassword(String unmaskedPassword) {
+        StringBuilder maskedPwdBuilder = new StringBuilder(unmaskedPassword);
+        loginPassInput.setText(maskedPwdBuilder.toString());
+        pwdIsHidden = true;
+    }
+
+    public String getPassword() {
+        String password = "";
+        if (pwdIsHidden) {
+            password = loginPassInput.getText();
+        } else {
+            password = loginPassTxtInput.getText();
+        }
+        return password;
+    }
 }

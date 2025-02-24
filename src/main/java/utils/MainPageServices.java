@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
@@ -133,7 +134,7 @@ public class MainPageServices {
         int i = Math.min(noteArrayList.size(), 4);
 
         for (int j = 0; j < i; j++) {
-            AnchorPane pane = getAnchorPane();
+            AnchorPane pane = getAnchorPane(noteArrayList.get(j).getColor());
             Label title = new Label();
             title.setText(noteArrayList.get(j).getTitle());
             title.getStyleClass().add("title");
@@ -147,7 +148,7 @@ public class MainPageServices {
         }
     }
 
-    private static AnchorPane getAnchorPane() {
+    private static AnchorPane getAnchorPane(String circleColor) {
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.getStyleClass().add("anchor-pane");
 
@@ -161,6 +162,7 @@ public class MainPageServices {
 
         Circle circle = new Circle(14.0);
         circle.getStyleClass().add("circle");
+        circle.setFill(Color.web(circleColor));
 
         Rectangle rec2 = new Rectangle(148, 15);
         rec2.getStyleClass().add("rectangle2");
