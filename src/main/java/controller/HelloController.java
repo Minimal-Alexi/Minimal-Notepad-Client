@@ -84,14 +84,6 @@ public class HelloController {
         Platform.runLater(() -> {
             imageView.getScene().getWindow().widthProperty().addListener((observable, oldValueWidth, newValueWidth) -> {
                 imageView.setFitWidth((Double) newValueWidth);
-
-                if ((Double) newValueWidth > 700.0) {
-                    AnchorPane.setBottomAnchor(loginVBox, 0.0);
-                    AnchorPane.setRightAnchor(loginVBox, 0.0);
-                } else {
-                    AnchorPane.setBottomAnchor(loginVBox, -80.0);
-                    AnchorPane.setLeftAnchor(loginVBox, 0.0);
-                }
             });
         });
     }
