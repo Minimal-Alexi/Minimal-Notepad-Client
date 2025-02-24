@@ -4,7 +4,9 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="745.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HelloController">
@@ -16,12 +18,21 @@
                   <Image url="@../img/helloPage.png" />
                </image>
             </ImageView>
-            <Label fx:id="logIn" layoutX="475.0" layoutY="471.0" onMouseClicked="#loginClicked" onMouseEntered="#loginMouseEnter" onMouseExited="#loginMouseExit" prefHeight="64.0" prefWidth="268.0" text="Log In Now...">
-               <font>
-                  <Font size="40.0" />
-               </font></Label>
-            <Label layoutX="475.0" layoutY="536.0" text="Do not have am account? " />
-            <Label fx:id="registerLabel" layoutX="613.0" layoutY="536.0" onMouseClicked="#registerLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" text="Register here" />
+            <VBox fx:id="loginVBox" layoutX="458.0" layoutY="518.0" prefHeight="80.0" prefWidth="260.0">
+               <children>
+                  <Label fx:id="logIn" onMouseClicked="#loginClicked" onMouseEntered="#loginMouseEnter" onMouseExited="#loginMouseExit" prefHeight="64.0" prefWidth="268.0" text="Log In Now...">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="101.0" prefWidth="111.0">
+                     <children>
+                        <Label text="Do not have am account? " />
+                        <Label fx:id="registerLabel" onMouseClicked="#registerLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" text="Register here" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
    </children>
