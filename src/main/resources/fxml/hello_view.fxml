@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="745.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HelloController">
    <children>
       <AnchorPane>
          <children>
@@ -18,7 +18,7 @@
                   <Image url="@../img/helloPage.png" />
                </image>
             </ImageView>
-            <VBox fx:id="loginVBox" layoutX="458.0" layoutY="518.0" prefHeight="80.0" prefWidth="260.0">
+            <VBox fx:id="loginVBox" layoutX="465.0" layoutY="482.0" prefHeight="80.0" prefWidth="260.0">
                <children>
                   <Label fx:id="logIn" onMouseClicked="#loginClicked" onMouseEntered="#loginMouseEnter" onMouseExited="#loginMouseExit" prefHeight="64.0" prefWidth="268.0" text="Log In Now...">
                      <font>

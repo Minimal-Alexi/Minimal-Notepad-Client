@@ -15,6 +15,7 @@ public class HelloView extends Application {
 
         stage.setScene(new Scene(root));
         stage.setTitle("Notebook");
+        stage.setResizable(false);
         stage.show();
     }
 
