@@ -169,4 +169,29 @@ public class NoteServices {
             label.setGraphic(removeCategory);
         });
     }
+    public static void updateNote(String url, int id, String token, Note note){
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("colour", note.getColor());
+        jsonBody.put("text", note.getText());
+        jsonBody.put("title", note.getTitle());
+        jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        System.out.println(jsonBody);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url + id))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Response Status Code: " + response.statusCode());
+            System.out.println("Response Body: " + response.body());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
