@@ -35,6 +35,7 @@ public class NoteServices {
         jsonBody.put("text", note.getText());
         jsonBody.put("title", note.getTitle());
         jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+        jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
 
         HttpClient client = HttpClient.newHttpClient();
 
@@ -190,8 +191,10 @@ public class NoteServices {
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg", "*.png", "*.jpeg"));
         fileChooser.setInitialDirectory(new File("C:"));
 
-        if (fileChooser.showOpenDialog(stage) != null) {
-            String filePath = fileChooser.showOpenDialog(stage).getAbsolutePath();
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            String filePath = file.getAbsolutePath();
             GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
             String googlePath = googleDriveUploader.upload(filePath);
             figureList.add(googlePath);
@@ -220,6 +223,7 @@ public class NoteServices {
         jsonBody.put("text", note.getText());
         jsonBody.put("title", note.getTitle());
         jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+        jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
 
         HttpClient client = HttpClient.newHttpClient();
 
