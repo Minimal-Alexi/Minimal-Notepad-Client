@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +20,9 @@ import model.TokenStorage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static utils.MainPageServices.*;
 
@@ -52,7 +55,14 @@ public class MainPageController {
         title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
         group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
-        category.setCellValueFactory(new PropertyValueFactory<Note, String>("category"));
+        category.setCellValueFactory(cellData -> {
+            HashMap<Integer,String> catMap = cellData.getValue().getCategory();
+            String categoriesListString = "";
+            if (catMap != null && !catMap.isEmpty()) {
+                categoriesListString = catMap.values().stream().collect(Collectors.joining(", "));
+            }
+            return new ReadOnlyStringWrapper(categoriesListString);
+        });
         createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
         icon.setCellFactory(param -> new TableCell<Note, Void>() {
             private final ImageView imageView = new ImageView(
