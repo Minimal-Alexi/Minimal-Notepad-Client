@@ -21,6 +21,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
@@ -177,6 +178,7 @@ public class NoteServices {
             label.setGraphic(removeCategory);
         });
     }
+
     public static void uploadPicture(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) throws IOException {
         uploadPicBtn.setDisable(true);
         uploadPicBtn.setText("Uploading... ");
@@ -185,13 +187,13 @@ public class NoteServices {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Upload picture");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg","*.png","*.jpeg"));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg", "*.png", "*.jpeg"));
         fileChooser.setInitialDirectory(new File("C:"));
 
         if (fileChooser.showOpenDialog(stage) != null) {
-            String filePath =  fileChooser.showOpenDialog(stage).getAbsolutePath();
+            String filePath = fileChooser.showOpenDialog(stage).getAbsolutePath();
             GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
-            String googlePath =  googleDriveUploader.upload(filePath);
+            String googlePath = googleDriveUploader.upload(filePath);
             figureList.add(googlePath);
             System.out.println(googlePath);
 
@@ -209,6 +211,9 @@ public class NoteServices {
         } else {
             System.out.println("no file selected");
             uploadPicBtn.setDisable(false);
+        }
+    }
+
     public static void updateNote(String url, int id, String token, Note note){
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("colour", note.getColor());
