@@ -5,20 +5,16 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.HttpClientSingleton;
 import model.TokenStorage;
 
+import model.HttpRequestBuilder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import org.json.JSONException;
@@ -94,6 +90,7 @@ public class LogInController {
             String password = TokenStorage.getInfo("password");
             loginUserInput.setText(username);
             loginPassInput.setText(password);
+            this.rememberBox.setSelected(true);
         }
     }
 
@@ -177,12 +174,15 @@ public class LogInController {
         System.out.println("remember box is check: " + isRememberBoxChecked());
         String usernameKey = "username";
         String passwordKey = "password";
+        String isRemembered = "isRemember";
         if (isRememberBoxChecked()) {
             TokenStorage.saveInfo(usernameKey, username);
             TokenStorage.saveInfo(passwordKey, password);
+            TokenStorage.saveToken(isRemembered, "true");
         } else {
             TokenStorage.clearData(usernameKey);
             TokenStorage.clearData(passwordKey);
+            TokenStorage.clearData(isRemembered);
         }
     }
 
@@ -221,22 +221,30 @@ public class LogInController {
         this.errPwd.setText("");
         this.errGeneral.setText("");
 
-        HttpClientSingleton instance = HttpClientSingleton.getInstance();
-        CloseableHttpClient httpClient = instance.getHttpClient();
+//        HttpClientSingleton instance = HttpClientSingleton.getInstance();
+//        CloseableHttpClient httpClient = instance.getHttpClient();
 
         String URI = "http://localhost:8093/api/users-authentication/login";
-        HttpPost httpPost = new HttpPost(URI);
-        httpPost.addHeader("accept", "application/json");
-        httpPost.addHeader("Content-Type", "application/json");
+//        HttpPost httpPost = new HttpPost(URI);
+//        httpPost.addHeader("accept", "application/json");
+//        httpPost.addHeader("Content-Type", "application/json");
+//
+//        JSONObject json = new JSONObject();
+//        json.put("username", username);
+//        json.put("password", password);
+//
+//        StringEntity entity = new StringEntity(json.toString());
+//        httpPost.setEntity(entity);
 
-        JSONObject json = new JSONObject();
-        json.put("username", username);
-        json.put("password", password);
+        HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI);
+        httpRequest.updateJsonRequest("username", username);
+        httpRequest.updateJsonRequest("password", password);
+        httpRequest.setRequestBody();
+        HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-        StringEntity entity = new StringEntity(json.toString());
-        httpPost.setEntity(entity);
 
-//        HttpResponseServiceImpl httpResponseService  = new HttpResponseServiceImpl();
+
         httpResponseService.handleReponse(httpPost, httpClient, this::handleLoginReponse);
 
 

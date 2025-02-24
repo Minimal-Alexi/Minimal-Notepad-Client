@@ -16,11 +16,13 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
+import model.HttpRequestBuilder;
 import model.TokenStorage;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -240,21 +242,32 @@ public class RegisterController {
     private void register(String username, String password, String email) throws IOException {
         resetAllErrMesg();
 
-        HttpClientSingleton instance = HttpClientSingleton.getInstance();
-        CloseableHttpClient httpClient = instance.getHttpClient();
+//        HttpClientSingleton instance = HttpClientSingleton.getInstance();
+//        CloseableHttpClient httpClient = instance.getHttpClient();
 
         String URI = "http://localhost:8093/api/users-authentication/register";
-        HttpPost httpPost = new HttpPost(URI);
-        httpPost.addHeader("accept", "application/json");
-        httpPost.addHeader("Content-Type", "application/json");
+//        HttpPost httpPost = new HttpPost(URI);
+//        httpPost.addHeader("accept", "application/json");
+//        httpPost.addHeader("Content-Type", "application/json");
+//
+//        JSONObject json = new JSONObject();
+//        json.put("username", username);
+//        json.put("email", email);
+//        json.put("password", password);
+//
+//        StringEntity entity = new StringEntity(json.toString());
+//        httpPost.setEntity(entity);
 
-        JSONObject json = new JSONObject();
-        json.put("username", username);
-        json.put("email", email);
-        json.put("password", password);
+        HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI);
+        httpRequest.updateJsonRequest("username", username);
+        httpRequest.updateJsonRequest("email", email);
+        httpRequest.updateJsonRequest("password", password);
+        httpRequest.setRequestBody();
+        HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
+        // implement later, need to work with handleReponse method
+//        HttpRequestBase httpPost =  httpRequest.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-        StringEntity entity = new StringEntity(json.toString());
-        httpPost.setEntity(entity);
 
         httpResponseService.handleReponse(httpPost, httpClient, this::handleRegisterResponse);
     }

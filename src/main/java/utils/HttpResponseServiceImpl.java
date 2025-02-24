@@ -7,8 +7,10 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -16,9 +18,10 @@ import java.io.IOException;
 
 public class HttpResponseServiceImpl implements HttpResponseService {
     @Override
-    public void handleReponse(HttpPost httpPost, CloseableHttpClient httpClient, HandleResponseCallback callback) {
+//    public void handleReponse(HttpPost httpPost, CloseableHttpClient httpClient, HandleResponseCallback callback) {
+    public void handleReponse(HttpRequestBase request, CloseableHttpClient httpClient, HandleResponseCallback callback) {
         new Thread(() -> {
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
                 HttpEntity responseEntity = response.getEntity();
                 String data = EntityUtils.toString(responseEntity);
                 JSONObject jsonResponse = new JSONObject(data);
@@ -36,9 +39,14 @@ public class HttpResponseServiceImpl implements HttpResponseService {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
                 a.show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }).start();
     }
+
+
 
 //    @Override
 //    public void handleGetResponse(HttpGet httpGet, CloseableHttpClient httpClient, HandleResponseCallback callback) {
