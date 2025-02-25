@@ -206,6 +206,15 @@ public class MainPageController {
                     JSONObject noteJson = new JSONObject();
                     noteJson.put("id", note.getId());
                     noteJson.put("title", note.getTitle());
+                    noteJson.put("text",note.getText());
+                    noteJson.put("colour",note.getColor());
+                    JSONObject userObject = new JSONObject();
+                    userObject.put("username",note.getOwner());
+                    noteJson.put("user", userObject);
+                    noteJson.put("createdAt", note.getCreatedAt());
+                    noteJson.put("updatedAt", note.getUpdatedAt());
+                    noteJson.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+
                     noteArray.put(noteJson);
                 }
                 searchRequest.put("query", inputText);
@@ -224,13 +233,44 @@ public class MainPageController {
         });
     }
 
-    private void handleGetSearchResults(CloseableHttpResponse closeableHttpResponse, Object jsonArray) {
-        try
+    private void handleGetSearchResults(CloseableHttpResponse closeableHttpResponse, Object responseObject) {
+        System.out.println(closeableHttpResponse.getStatusLine().getStatusCode());
+        if(closeableHttpResponse.getStatusLine().getStatusCode() == 200) {
+            JSONArray jsonResponse = (JSONArray) responseObject;
+            try
+            {
+                System.out.println(closeableHttpResponse.getStatusLine().getStatusCode() +"\n" + jsonResponse);
+                notes.clear();
+                for(int i=0; i<jsonResponse.length(); i++)
+                {
+                    JSONObject result = (JSONObject) jsonResponse.get(i);
+                    Note note = new Note(result.getInt("id"),
+                            result.getString("title") ,
+                            result.getString("text"),
+                            result.getString("colour"),
+                            timestampToString(result.getString("createdAt")),
+                            timestampToString(result.getString("updatedAt")),
+                            result.getJSONObject("user").getString("username"),
+                            " ",
+                            jsonArrayToHashMap(result.getJSONArray("categoriesList")));
+                    notes.add(note);
+                }
+                System.out.println(notes);
+            }catch (JSONException e) {
+                System.out.println(e);
+            }
+        }
+        else
         {
-            System.out.println(closeableHttpResponse.getStatusLine().getStatusCode());
-            System.out.println(jsonArray);
-        }catch (JSONException e) {
-        //String errMessage = (String) jsonObject.get("message");
-    }
+            JSONObject jsonResponse = (JSONObject) responseObject;
+            if(closeableHttpResponse.getStatusLine().getStatusCode() == 404)
+            {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText(jsonResponse.getString("message"));
+                alert.showAndWait();
+            }
+        }
     }
 }
