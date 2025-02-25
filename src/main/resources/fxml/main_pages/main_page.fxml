@@ -18,7 +18,7 @@
 
 <BorderPane id="parent" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainPageController">
    <left>
-      <VBox alignment="TOP_CENTER" focusTraversable="true" BorderPane.alignment="TOP_CENTER">
+      <VBox alignment="TOP_CENTER" focusTraversable="true" styleClass="side-bar" stylesheets="@../../CSS/side_bar.css" BorderPane.alignment="TOP_CENTER">
          <children>
             <ImageView fitHeight="70.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                <image>
@@ -167,16 +167,19 @@
             </Button>
          </children>
          <padding>
-            <Insets left="20.0" />
+            <Insets left="20.0" right="10.0" />
          </padding>
+         <BorderPane.margin>
+            <Insets right="10.0" />
+         </BorderPane.margin>
       </VBox>
    </left>
    <center>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                <children>
-                  <Label fx:id="nameLabel" contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Welcome, ">
+                  <Label fx:id="nameLabel" contentDisplay="BOTTOM" text="Welcome, ">
                      <font>
                         <Font name="Dubai Medium" size="30.0" />
                      </font>
@@ -188,7 +191,8 @@
                         </Label>
                      </graphic>
                   </Label>
-                  <AnchorPane prefHeight="62.0" prefWidth="210.0" stylesheets="@../../CSS/search_bar.css">
+                  <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                  <AnchorPane stylesheets="@../../CSS/search_bar.css">
                      <children>
                         <TextField cache="true" layoutX="5.0" layoutY="28.0" styleClass="search-box" stylesheets="@../../CSS/table_view.css" text="Search">
                            <opaqueInsets>
@@ -212,25 +216,26 @@
             </HBox>
             <VBox>
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label prefHeight="70.0" prefWidth="748.0" text="Recently edited">
+                        <Label text="Recently edited">
                            <font>
                               <Font name="Gadugi Bold" size="20.0" />
                            </font>
-                           <padding>
-                              <Insets bottom="20.0" top="20.0" />
-                           </padding>
                         </Label>
-                        <Button mnemonicParsing="false" onAction="#newNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/button.css" text="+ New Note">
+                        <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#newNoteClicked" stylesheets="@../../CSS/button.css" text="+ New Note">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Button>
                      </children>
                   </HBox>
-                  <HBox fx:id="recentlyEditedHBox" prefHeight="202.0" prefWidth="894.0" stylesheets="@../../CSS/recently_edited.css" />
+                  <HBox fx:id="recentlyEditedHBox" minHeight="200.0" minWidth="500.0" stylesheets="@../../CSS/recently_edited.css" />
                </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
             </VBox>
             <VBox>
                <children>
