@@ -248,12 +248,15 @@ public class GroupInfoCreate {
         httpResponseService.handleReponse(request,httpClient,this::handleCreateGroup);
     }
 
-    private void handleCreateGroup(CloseableHttpResponse response, JSONObject jsonResponse) {
+//    private void handleCreateGroup(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleCreateGroup(CloseableHttpResponse response, Object jsonResponse) {
+
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         String statusCode = response.getStatusLine().toString();
         try {
             System.out.println("response " + response);
         } catch (JSONException e) {
-            String message = (String) jsonResponse.get("message");
+            String message = (String) object.get("message");
         }
 
     }

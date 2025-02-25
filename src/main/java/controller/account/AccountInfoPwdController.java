@@ -177,9 +177,11 @@ public class AccountInfoPwdController {
         }
     }
 
-    private void handleDeleteResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONObject object = controllerUtils.toJSonObject(response);
+
         try {
-            String message = (String) jsonResponse.get("message");
+            String message = (String) object.get("message");
             System.out.println("message: " + message);
             String helloPage = "/fxml/hello_view.fxml";
             TokenStorage.clearToken();
@@ -321,7 +323,9 @@ public class AccountInfoPwdController {
 //        TokenStorage.saveInfo("password", newPwd);
     }
 
-    private void handleSaveUserinfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleSaveUserinfoResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
+
         try {
             String statusLine = response.getStatusLine().toString();
 
@@ -329,11 +333,10 @@ public class AccountInfoPwdController {
                 generalErrLabel.setTextFill(Color.GREEN);
                 generalErrLabel.setText("User Password changes successfully");
                 TokenStorage.saveInfo("password",this.newPassword);
-//            String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
-//            this.controllerUtils.goPage(stage, accountBtn, pageLink);
+
 
             } else {
-                String message = (String) jsonResponse.get("message");
+                String message = (String) object.get("message");
                 generalErrLabel.setText(message);
             }
         } catch (JSONException e) {

@@ -175,15 +175,21 @@ public class AccountInfoPageController {
         httpResponseService.handleReponse(httpGet, httpClient, this::handleGetUserInfoResponse);
     }
 
-    private void handleGetUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+//    private void handleGetUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleGetUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
 //        JSONObject jsonObject = new JSONObject(response);
+//        JSONObject object = null;
+//        if (jsonResponse instanceof JSONObject){
+//            object = (JSONObject) jsonResponse;
+//        }
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
-            String email = (String) jsonResponse.get("email");
-            String username = (String) jsonResponse.get("username");
+            String email = (String) object.get("email");
+            String username = (String) object.get("username");
             emailInput.setText(email);
             usernameInput.setText(username);
         } catch (JSONException e) {
-            String errMessage = (String) jsonResponse.get("message");
+            String errMessage = (String) object.get("message");
             displayGeneralErrMessages(errMessage);
         }
     }
@@ -285,18 +291,19 @@ public class AccountInfoPageController {
         httpResponseService.handleReponse(httpPut, httpClient, this::handleSaveUserInfoResponse);
     }
 
-    public void handleSaveUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    public void handleSaveUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
+
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
-//            StatusLine statusCode = jsonResponse.getStatusLine();
-//            String message = (String) jsonResponse.get("message");
+
             String statusLine = response.getStatusLine().toString();
             if (statusLine.contains("200")) {
-                String newUsername = (String) jsonResponse.get("username");
+                String newUsername = (String) object.get("username");
                 String curUsername = TokenStorage.getUser();
                 // check if username is the same
                 // 1. if the same, email change, no token in the response body
                 if (!newUsername.equals(curUsername)) {
-                    String newToken = (String) jsonResponse.get("token");
+                    String newToken = (String) object.get("token");
                     System.out.println("New: username: " + newUsername + ", token: " + newToken);
                     TokenStorage.saveToken(newUsername, newToken);
                     TokenStorage.saveInfo("username", newUsername);
@@ -308,7 +315,7 @@ public class AccountInfoPageController {
 //                generalErrLabel.setTextFill(Color.RED);
             } else {
                 // get message from generic response
-                String message = (String) jsonResponse.get("message");
+                String message = (String) object.get("message");
                 generalErrLabel.setText(message);
             }
         } catch (JSONException e) {
@@ -397,9 +404,11 @@ public class AccountInfoPageController {
         this.controllerUtils.goToHelloPage(stage, logOutBtn);
     }
 
-    private void handleDeleteResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
+
         try {
-            String message = (String) jsonResponse.get("message");
+            String message = (String) object.get("message");
             System.out.println("message: " + message);
 //            String helloPage = "/fxml/hello_view.fxml";
 //            TokenStorage.clearToken();

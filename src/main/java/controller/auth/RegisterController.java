@@ -266,15 +266,17 @@ public class RegisterController {
 
 
     // each controller must implemnt its own reponse as callback when work with httpResponse method
-    private void handleRegisterResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleRegisterResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONObject object = controllerUtil.toJSonObject(jsonResponse);
+
         String statusCode = response.getStatusLine().toString();
         try {
-            String token = (String) jsonResponse.get("token");
-            String username = (String) jsonResponse.get("username");
+            String token = (String) object.get("token");
+            String username = (String) object.get("username");
             TokenStorage.saveToken(username, token);
             goToMainPage();
         } catch (JSONException e) {
-            String errMessage = (String) jsonResponse.get("message");
+            String errMessage = (String) object.get("message");
             displayErrGeneral(errMessage);
         }
     }
