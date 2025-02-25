@@ -76,8 +76,12 @@ public class HttpRequestBuilder {
         this.jsonRequest.put(key, value);
     }
 
+    public void setJsonRequest(JSONObject jsonObject) {
+        this.jsonRequest = jsonObject;
+    }
+
     public void setRequestBody() throws UnsupportedEncodingException {
-        if (!this.methodName.equals("GET") || !this.methodName.equals("DELETE")) {
+        if (!this.methodName.equals("GET") && !this.methodName.equals("DELETE")) {
             this.stringEntity = new StringEntity(this.jsonRequest.toString());
 
             // set entity only work with HttpEntityEnclosingRequestBase, which is POST,PUT,

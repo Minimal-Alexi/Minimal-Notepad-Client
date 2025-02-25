@@ -16,12 +16,22 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import model.HttpRequestBuilder;
 import model.Note;
 import model.selected.SelectedNote;
 import model.TokenStorage;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import utils.ControllerUtils;
+import utils.HttpResponseService;
+import utils.HttpResponseServiceImpl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -67,13 +77,15 @@ public class MainPageController {
     @FXML
     private TextField searchBar;
 
+    private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
-    ObservableList<Note> notes;
+    private ObservableList<Note> notes;
     private ArrayList<Note> noteArrayList;
 
 
     public void initialize() {
         this.controllerUtils = new ControllerUtils();
+        this.responseService = new HttpResponseServiceImpl();
 
         notes = FXCollections.observableArrayList();
         noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
@@ -186,8 +198,39 @@ public class MainPageController {
         searchBar.setOnKeyPressed(event -> {
             if (searchBar.isFocused() && event.getCode() == KeyCode.ENTER) {
                 String inputText = searchBar.getText();
-
+                HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/search",true);
+                JSONObject searchRequest= new JSONObject();
+                JSONArray noteArray = new JSONArray();
+                for(Note note : notes)
+                {
+                    JSONObject noteJson = new JSONObject();
+                    noteJson.put("id", note.getId());
+                    noteJson.put("title", note.getTitle());
+                    noteArray.put(noteJson);
+                }
+                searchRequest.put("query", inputText);
+                searchRequest.put("notes", noteArray);
+                httpRequestBuilder.setJsonRequest(searchRequest);
+                HttpRequestBase searchRequestHttp = httpRequestBuilder.getHttpRequest();
+                CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
+                try
+                {
+                    httpRequestBuilder.setRequestBody();
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+                responseService.handleReponse(searchRequestHttp,httpClient,this::handleGetSearchResults);
             }
         });
+    }
+
+    private void handleGetSearchResults(CloseableHttpResponse closeableHttpResponse, JSONObject jsonObject) {
+        try
+        {
+            System.out.println(closeableHttpResponse.getStatusLine().getStatusCode());
+            System.out.println(jsonObject);
+        }catch (JSONException e) {
+        //String errMessage = (String) jsonObject.get("message");
+    }
     }
 }
