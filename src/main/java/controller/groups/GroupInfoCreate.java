@@ -11,14 +11,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
+import model.HttpRequestBuilder;
 import model.TokenStorage;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 import utils.ControllerUtils;
 import utils.HttpResponseService;
 import utils.HttpResponseServiceImpl;
 import utils.MainPageServices;
 
-import static utils.MainPageServices.updateLocalTime;
+import java.io.IOException;
 
 
 public class GroupInfoCreate {
@@ -87,17 +92,21 @@ public class GroupInfoCreate {
 
     private ControllerUtils controllerUtils;
     private HttpResponseService httpResponseService;
-    private HttpClientSingleton httpInstance;
-    private CloseableHttpClient httpClient;
+//    private HttpClientSingleton httpInstance;
+
+
+    private static final String URI = "http://localhost:8093/api/groups";
+
 
     //URI API
-    private static final String URI = "http://localhost:8093/api/user/";
+
     private static final String FXMLSource = "/fxml";
+    private static final String CSSSOURCE = "/CSS";
 
     public void initialize() {
         System.out.println("start Create Group  Page");
 
-        System.out.println(scene);
+        System.out.println("scene " + scene);
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
 
@@ -108,19 +117,19 @@ public class GroupInfoCreate {
 
         nameLabel.setText("Wellcome " + username);
         MainPageServices.updateLocalTime(localTime);
-        httpInstance = HttpClientSingleton.getInstance();
-        httpClient = httpInstance.getHttpClient();
+//        httpInstance = HttpClientSingleton.getInstance();
 
-//        myNotesBtn.getStylesheets().add(getClass().getResource("/CSS/button.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource("/CSS/button.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource("/CSS/search_bar.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource("/CSS/table_view.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource("/CSS/text_input.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource("/CSS/groups.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource("/CSS/button.css").toExternalForm());
-        searchPane.getStylesheets().add(getClass().getResource("/CSS/search_bar.css").toExternalForm());
-        searchTextField.getStylesheets().add(getClass().getResource("/CSS/text_input.css").toExternalForm());
-        createBtn.getStylesheets().add(getClass().getResource("/CSS/groups.css").toExternalForm());
+
+//        myNotesBtn.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
+//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/search_bar.css").toExternalForm());
+//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/table_view.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
+//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/groups.css").toExternalForm());
+//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
+        searchPane.getStylesheets().add(getClass().getResource(CSSSOURCE + "/search_bar.css").toExternalForm());
+        searchTextField.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
+        createBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
 
 
     }
@@ -147,8 +156,6 @@ public class GroupInfoCreate {
     }
 
 
-
-
     @FXML
     public void mouseEnter() {
         controllerUtils.setHandCursor(myNotesBtn);
@@ -164,7 +171,6 @@ public class GroupInfoCreate {
         controllerUtils.setHandCursor(accountBtn);
         controllerUtils.setHandCursor(settingBtn);
         controllerUtils.setHandCursor(createBtn);
-
 
 
     }
@@ -187,7 +193,6 @@ public class GroupInfoCreate {
     }
 
 
-
     @FXML
     public void myGroupsBtnClick() {
         // go to my groups page
@@ -204,20 +209,54 @@ public class GroupInfoCreate {
     }
 
     @FXML
-    public void groupsClick(){
+    public void groupsClick() {
 
     }
 
     @FXML
-    public void groupInfoBtnClick(){
+    public void groupInfoBtnClick() {
 
     }
 
     @FXML
-    public void createBtnClick(){
+    public void createBtnClick() {
+        try {
+
+            String groupName = groupNameInput.getText();
+            String groupDesc = groupDescInput.getText();
+            if (validInputs(groupName, groupDesc)) {
+                createGroup(groupName, groupDesc);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
+    public boolean validInputs(String groupName, String groupDesc) {
+        return (!controllerUtils.isInputEmpty(groupName)) && (!controllerUtils.isInputEmpty(groupDesc));
+    }
+
+    private void createGroup(String groupName, String groupDesc) throws IOException {
+
+        HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI, true);
+        httpRequest.updateJsonRequest("name", groupName);
+        httpRequest.updateJsonRequest("description", groupDesc);
+        httpRequest.setRequestBody();
+        HttpRequestBase request = httpRequest.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequest.getHttpClient();
+        httpResponseService.handleReponse(request,httpClient,this::handleCreateGroup);
+    }
+
+    private void handleCreateGroup(CloseableHttpResponse response, JSONObject jsonResponse) {
+        String statusCode = response.getStatusLine().toString();
+        try {
+            System.out.println("response " + response);
+        } catch (JSONException e) {
+            String message = (String) jsonResponse.get("message");
+        }
+
+    }
 
 
 }
