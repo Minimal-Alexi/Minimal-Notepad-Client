@@ -64,6 +64,7 @@ public class MainPageController {
     @FXML
     private Button logOutBtn;
 
+
     private ControllerUtils controllerUtils;
 
 
@@ -148,9 +149,11 @@ public class MainPageController {
     }
 
     public void groupsClicked(ActionEvent event) throws IOException {
-        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
+        String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
+        this.controllerUtils.goPage(stage,groupsBtn, pageLink);
     }
-
 
     @FXML
     public void accountBtnClick() {
