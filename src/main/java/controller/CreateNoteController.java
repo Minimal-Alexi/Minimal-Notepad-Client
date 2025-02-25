@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -25,17 +26,28 @@ import static utils.NoteServices.*;
 
 public class CreateNoteController {
 
-    @FXML private Label localTime;
-    @FXML private Label nameLabel;
-    @FXML private Rectangle noteBackground;
-    @FXML private ColorPicker colorPicker;
-    @FXML private VBox textVBox;
-    @FXML private TextField titleTextArea;
-    @FXML private TextArea textArea1;
-    @FXML private Button saveNoteBtn;
-    @FXML private HBox categoryHBox;
-    @FXML private Label addCategory;
-    @FXML private Button uploadPicBtn;
+    @FXML
+    private Label localTime;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private VBox noteBackground;
+    @FXML
+    private ColorPicker colorPicker;
+    @FXML
+    private VBox textVBox;
+    @FXML
+    private TextField titleTextArea;
+    @FXML
+    private TextArea textArea1;
+    @FXML
+    private Button saveNoteBtn;
+    @FXML
+    private HBox categoryHBox;
+    @FXML
+    private Label addCategory;
+    @FXML
+    private Button uploadPicBtn;
 
     private final HashMap<Integer, String> categoryList = new HashMap<>();
     private final ArrayList<String> figureList = new ArrayList<>();
@@ -56,7 +68,7 @@ public class CreateNoteController {
     }
 
     public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
-        uploadPicture(uploadPicBtn, figureList,textVBox);
+        uploadPicture(uploadPicBtn, figureList, textVBox);
     }
 
     /*
@@ -99,16 +111,20 @@ public class CreateNoteController {
 
     /*
 
-    */
-    private void colorSetUp(){
-        noteBackground.setFill(Color.WHITE);
+     */
+    private void colorSetUp() {
+        noteBackground.setStyle("-fx-background-color:" + Color.WHITE + ";");
+
         colorPicker.setOnAction(event -> {
-            noteBackground.setFill(colorPicker.getValue());
+            Color selectedColor = colorPicker.getValue();
+            // Transform color into rgba code
+            String hexColor = String.format("#%02X%02X%02X",
+                    (int) (selectedColor.getRed() * 255),
+                    (int) (selectedColor.getGreen() * 255),
+                    (int) (selectedColor.getBlue() * 255));
+
+            // Implement new css to make the radius work
+            noteBackground.setStyle("-fx-background-color: " + hexColor + ";");
         });
     }
-
-    /*
-    update category HBox
-     */
-
 }
