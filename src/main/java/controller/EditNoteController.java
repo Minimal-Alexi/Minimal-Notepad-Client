@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -72,21 +73,22 @@ public class EditNoteController {
         updateNameLabel(nameLabel, TokenStorage.getUser());
 
         // add pictures to the ui
-        figureList.forEach(figure -> {
-            GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
-            ImageView imageView = new ImageView();
-            try {
-                Image image = googleDriveUploader.download(figure);
-                imageView.setImage(image);
-                imageView.setFitHeight(200);
-                imageView.setFitWidth(200);
-                imageView.setPreserveRatio(true);
-                textVBox.getChildren().add(imageView);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        Platform.runLater(() -> {
+            figureList.forEach(figure -> {
+                GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
+                ImageView imageView = new ImageView();
+                try {
+                    Image image = googleDriveUploader.download(figure);
+                    imageView.setImage(image);
+                    imageView.setFitHeight(200);
+                    imageView.setFitWidth(200);
+                    imageView.setPreserveRatio(true);
+                    textVBox.getChildren().add(imageView);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         });
-
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
@@ -126,7 +128,7 @@ public class EditNoteController {
     }
 
     public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
-        uploadPicture(uploadPicBtn, figureList,textVBox);
+        uploadPicture(uploadPicBtn, figureList, textVBox);
     }
 
     /*
@@ -168,14 +170,14 @@ public class EditNoteController {
             }
         }
     }
-    private void colorSetUp(String initialColor){
+
+    private void colorSetUp(String initialColor) {
         noteBackground.setFill(Color.web(initialColor));
         colorPicker.setValue(Color.web(initialColor));
         colorPicker.setOnAction(event -> {
             noteBackground.setFill(colorPicker.getValue());
         });
     }
-
 
 
 }

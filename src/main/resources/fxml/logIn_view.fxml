@@ -19,7 +19,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <FlowPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LogInController">
    <children>
       <Pane prefHeight="551.0" prefWidth="282.0" style="-fx-border-color: black;">
@@ -155,11 +154,11 @@
                               </CheckBox>
                            </left>
                         </BorderPane>
-                        <StackPane prefHeight="57.0" prefWidth="423.0">
+                        <StackPane prefHeight="50.0" prefWidth="244.0">
                            <children>
-                              <Button fx:id="loginBtn" mnemonicParsing="false" onMouseClicked="#loginBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="83.0" prefWidth="185.0" style="-fx-background-color: #a276ff;" text="Sign In" textFill="WHITE">
+                              <Button fx:id="loginBtn" mnemonicParsing="false" onMouseClicked="#loginBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="67.0" prefWidth="166.0" style="-fx-background-color: #a276ff;" text="Sign In" textFill="WHITE">
                                  <font>
-                                    <Font size="31.0" />
+                                    <Font size="20.0" />
                                  </font>
                               </Button>
                            </children>
@@ -195,18 +194,18 @@
       </Pane>
       <VBox alignment="TOP_RIGHT" prefHeight="453.0" prefWidth="306.0">
          <children>
-            <Button fx:id="backBtn" mnemonicParsing="false" onMouseClicked="#backBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="30.0" prefWidth="162.0" style="-fx-background-color: #a276ff;" text="Back" textFill="WHITE">
+            <Button fx:id="backBtn" mnemonicParsing="false" onMouseClicked="#backBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="41.0" prefWidth="162.0" style="-fx-background-color: #a276ff;" text="Back" textFill="WHITE">
                <VBox.margin>
-                  <Insets left="100.0" />
+                  <Insets />
                </VBox.margin>
                <font>
-                  <Font size="31.0" />
+                  <Font size="20.0" />
                </font>
                <rotationAxis>
                   <Point3D />
                </rotationAxis>
             </Button>
-            <ImageView fitHeight="398.0" fitWidth="475.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="500.0" fitWidth="475.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/small-team-discussing-ideas-2194220-0.png" />
                </image>

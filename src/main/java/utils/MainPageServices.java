@@ -259,9 +259,11 @@ public class MainPageServices {
 
     public static ArrayList<String> jsonArrayToFigureList(JSONArray jsonArray) {
         ArrayList<String> figureList = new ArrayList<>();
+
         for (int i = 0; i < jsonArray.length(); i++) {
-            String figure = jsonArray.get(i).toString();
-            figureList.add(figure);
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String link = jsonObject.getString("link");
+            figureList.add(link);
         }
         return figureList;
     }
@@ -269,7 +271,9 @@ public class MainPageServices {
     public static JSONArray figureListToJSONArray(ArrayList<String> figureList) {
         JSONArray jsonArray = new JSONArray();
         for (String s : figureList) {
-            jsonArray.put(s);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("link", s);
+            jsonArray.put(jsonObject);
         }
         return jsonArray;
     }
