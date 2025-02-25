@@ -11,6 +11,8 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.TokenStorage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 //import java.awt.*;
 import java.io.IOException;
@@ -42,7 +44,7 @@ public class ControllerUtils {
         return stage;
     }
 
-    public void gotoPage(Stage stage, Button btn, String fxmlPage) {
+    public void goPage(Stage stage, Button btn, String fxmlPage) {
         stage = getStage(btn, stage);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPage));
         updateStage(stage, fxmlLoader);
@@ -100,7 +102,24 @@ public class ControllerUtils {
     public void goToHelloPage(Stage stage, Button btn) {
         String helloPage = "/fxml/hello_view.fxml";
         TokenStorage.clearToken();
-        gotoPage(stage, btn, helloPage);
+        goPage(stage, btn, helloPage);
     }
 
+    public boolean isInputEmpty(String input){
+        return input.trim().equals("");
+    }
+
+    public JSONObject toJSonObject(Object response){
+        if (response instanceof JSONObject){
+            return (JSONObject) response;
+        }
+        return null;
+    }
+
+    public JSONArray toJSONArray(Object response){
+        if(response instanceof JSONArray){
+            return (JSONArray) response;
+        }
+        return null;
+    }
 }

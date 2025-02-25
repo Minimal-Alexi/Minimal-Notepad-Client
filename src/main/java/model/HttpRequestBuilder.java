@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import utils.ControllerUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 public class HttpRequestBuilder {
     private boolean isAuthenthicated;
@@ -74,6 +75,9 @@ public class HttpRequestBuilder {
 
     public void updateJsonRequest(String key, String value) {
         this.jsonRequest.put(key, value);
+    }
+    public void updateJsonRequest(String key, List<String> values){
+        this.jsonRequest.put(key,values);
     }
 
     public void setRequestBody() throws UnsupportedEncodingException {

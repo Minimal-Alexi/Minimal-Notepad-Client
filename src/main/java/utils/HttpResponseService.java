@@ -7,7 +7,5 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 //@FunctionalInterface
 public interface HttpResponseService {
-//    public void handleReponse(HttpPost httpPost, CloseableHttpClient httpClient,HandleResponseCallback callback);
     public void handleReponse(HttpRequestBase request, CloseableHttpClient httpClient, HandleResponseCallback callback);
-//    public void handleGetResponse(HttpGet httpGet, CloseableHttpClient httpClient, HandleResponseCallback callback);
 }

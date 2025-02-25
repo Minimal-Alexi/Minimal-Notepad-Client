@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AccountInfoPageController">
+<BorderPane id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.account.AccountInfoPageController">
    <left>
       <AnchorPane id="sidebar" prefHeight="853.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <children>
@@ -109,7 +109,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="groupsBtn" graphicTextGap="10.0" mnemonicParsing="false" onAction="#groupsClicked" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../CSS/button.css" text="Groups">
+                  <Button fx:id="groupsBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#groupsBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../CSS/button.css" text="Groups">
                      <font>
                         <Font size="16.0" />
                      </font>
