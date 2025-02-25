@@ -224,11 +224,11 @@ public class MainPageController {
         });
     }
 
-    private void handleGetSearchResults(CloseableHttpResponse closeableHttpResponse, JSONObject jsonObject) {
+    private void handleGetSearchResults(CloseableHttpResponse closeableHttpResponse, Object jsonArray) {
         try
         {
             System.out.println(closeableHttpResponse.getStatusLine().getStatusCode());
-            System.out.println(jsonObject);
+            System.out.println(jsonArray);
         }catch (JSONException e) {
         //String errMessage = (String) jsonObject.get("message");
     }

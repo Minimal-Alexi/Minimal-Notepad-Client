@@ -174,8 +174,8 @@ public class AccountInfoPageController {
         httpResponseService.handleReponse(httpGet,httpClient,this::handleGetUserInfoResponse);
     }
 
-    private void handleGetUserInfoResponse(CloseableHttpResponse response,JSONObject jsonResponse) {
-//        JSONObject jsonObject = new JSONObject(response);
+    private void handleGetUserInfoResponse(CloseableHttpResponse response,Object responseObject) {
+        JSONObject jsonResponse = (JSONObject) responseObject;
         try {
             String email = (String) jsonResponse.get("email");
             String username = (String) jsonResponse.get("username");
@@ -284,10 +284,9 @@ public class AccountInfoPageController {
         httpResponseService.handleReponse(httpPut,httpClient,this::handleSaveUserInfoResponse);
     }
 
-    public void handleSaveUserInfoResponse(CloseableHttpResponse response,JSONObject jsonResponse) {
+    public void handleSaveUserInfoResponse(CloseableHttpResponse response,Object responseObject) {
+        JSONObject jsonResponse = (JSONObject) responseObject;
         try {
-//            StatusLine statusCode = jsonResponse.getStatusLine();
-//            String message = (String) jsonResponse.get("message");
             String statusLine = response.getStatusLine().toString();
             if (statusLine.contains("200")) {
                 String newUsername = (String) jsonResponse.get("username");
@@ -396,7 +395,8 @@ public class AccountInfoPageController {
         this.controllerUtils.goToHelloPage(stage, logOutBtn);
     }
 
-    private void handleDeleteResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleDeleteResponse(CloseableHttpResponse response, Object responseObject) {
+        JSONObject jsonResponse = (JSONObject) responseObject;
         try {
             String message = (String) jsonResponse.get("message");
             System.out.println("message: " + message);

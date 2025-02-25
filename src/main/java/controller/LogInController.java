@@ -251,7 +251,8 @@ public class LogInController {
     }
 
 
-    private void handleLoginReponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleLoginReponse(CloseableHttpResponse response, Object responseObject) {
+        JSONObject jsonResponse = (JSONObject) responseObject;
         String statusCode = response.getStatusLine().toString();
         try {
             String token = (String) jsonResponse.get("token");

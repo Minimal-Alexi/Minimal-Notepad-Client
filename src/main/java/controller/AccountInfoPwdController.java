@@ -182,7 +182,8 @@ public class AccountInfoPwdController {
         }
     }
 
-    private void handleDeleteResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleDeleteResponse(CloseableHttpResponse response, Object responseObject) {
+        JSONObject jsonResponse = (JSONObject) responseObject;
         try {
             String message = (String) jsonResponse.get("message");
             System.out.println("message: " + message);
@@ -316,7 +317,8 @@ public class AccountInfoPwdController {
 //        TokenStorage.saveInfo("password", newPwd);
     }
 
-    private void handleSaveUserinfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleSaveUserinfoResponse(CloseableHttpResponse response, Object responseObject) {
+        JSONObject jsonResponse = (JSONObject) responseObject;
         try {
             String statusLine = response.getStatusLine().toString();
 

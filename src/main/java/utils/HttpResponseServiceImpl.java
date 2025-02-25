@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,19 +19,20 @@ import java.io.IOException;
 
 public class HttpResponseServiceImpl implements HttpResponseService {
     @Override
-//    public void handleReponse(HttpPost httpPost, CloseableHttpClient httpClient, HandleResponseCallback callback) {
     public void handleReponse(HttpRequestBase request, CloseableHttpClient httpClient, HandleResponseCallback callback) {
         new Thread(() -> {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 HttpEntity responseEntity = response.getEntity();
                 String data = EntityUtils.toString(responseEntity);
-                JSONObject jsonResponse = new JSONObject(data);
+                Object jsonResponse;
+                if(data.trim().startsWith("{")) {
+                    jsonResponse = new JSONObject(data);
+                }else
+                {
+                    jsonResponse = new JSONArray(data);
+                }
                 EntityUtils.consume(responseEntity);
-                // Do more processing here...
                 StatusLine statusLine = response.getStatusLine();
-//                System.out.println("json " + jsonResponse);
-//                System.out.println("response " + responseEntity);
-//                System.out.println("status code " + statusLine);
                 Platform.runLater(() -> {
                     // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
                     callback.handleResponse(response, jsonResponse);

@@ -274,7 +274,8 @@ public class RegisterController {
 
 
     // each controller must implemnt its own reponse as callback when work with httpResponse method
-    private void handleRegisterResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleRegisterResponse(CloseableHttpResponse response, Object responseObject) {
+        JSONObject jsonResponse = (JSONObject) responseObject;
         String statusCode = response.getStatusLine().toString();
         try {
             String token = (String) jsonResponse.get("token");
