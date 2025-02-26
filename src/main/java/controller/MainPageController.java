@@ -201,7 +201,7 @@ public class MainPageController {
                 HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/search",true);
                 JSONObject searchRequest= new JSONObject();
                 JSONArray noteArray = new JSONArray();
-                for(Note note : notes)
+                for(Note note : noteArrayList)
                 {
                     JSONObject noteJson = new JSONObject();
                     noteJson.put("id", note.getId());
