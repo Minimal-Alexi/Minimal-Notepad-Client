@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -194,20 +195,6 @@
                               </Label>
                            </graphic>
                         </Label>
-                        <AnchorPane prefHeight="62.0" prefWidth="210.0" stylesheets="@../../CSS/search_bar.css">
-                           <children>
-                              <TextField fx:id="searchBar" cache="true" layoutX="5.0" layoutY="28.0" promptText="Search notes" styleClass="search-box" stylesheets="@../../CSS/table_view.css">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
-                              <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="16.0" layoutY="37.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                              <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="15.0" layoutY="38.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                           </children>
-                        </AnchorPane>
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -216,7 +203,7 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </HBox>
-                  <VBox prefHeight="260.0" prefWidth="894.0">
+                  <VBox prefHeight="290.0" prefWidth="894.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
@@ -235,10 +222,32 @@
                               </Button>
                            </children>
                         </HBox>
-                        <HBox fx:id="recentlyEditedHBox" prefHeight="202.0" prefWidth="894.0" stylesheets="@../../CSS/recently_edited.css" />
+                        <HBox fx:id="recentlyEditedHBox" prefHeight="260.0" prefWidth="894.0" stylesheets="@../../CSS/recently_edited.css" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="424.0" prefWidth="872.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="48.0" prefWidth="894.0" spacing="20.0">
+                     <children>
+                        <ChoiceBox fx:id="filterChoice" prefHeight="25.0" prefWidth="196.0" />
+                        <AnchorPane prefHeight="62.0" prefWidth="210.0" stylesheets="@../../CSS/search_bar.css">
+                           <children>
+                              <TextField fx:id="searchBar" alignment="TOP_LEFT" cache="true" layoutX="1.0" layoutY="4.0" promptText="Search notes" styleClass="search-box" stylesheets="@../../CSS/table_view.css">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="12.0" layoutY="13.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
+                              <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="11.0" layoutY="14.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <VBox prefHeight="388.0" prefWidth="894.0">
                      <children>
                         <Label prefHeight="35.0" prefWidth="211.0" text="Your notes">
                            <font>

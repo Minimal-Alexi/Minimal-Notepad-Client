@@ -57,6 +57,12 @@ public class MainPageController {
     @FXML private HBox recentlyEditedHBox;
 
 
+    // search bar
+    @FXML
+    private TextField searchBar;
+    @FXML
+    private ChoiceBox<String> filterChoice;
+
     //side bar
     @FXML
     private Button myFileBtn;
@@ -74,8 +80,6 @@ public class MainPageController {
     private Button accountBtn;
     @FXML
     private Button logOutBtn;
-    @FXML
-    private TextField searchBar;
 
     private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
@@ -128,6 +132,7 @@ public class MainPageController {
                 }
             }
         });
+        filterChoiceSetup();
         searchBarSetup();
         assert noteArrayList != null;
         updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
@@ -194,7 +199,7 @@ public class MainPageController {
         this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
-    public void searchBarSetup() {
+    private void searchBarSetup() {
         searchBar.setOnKeyPressed(event -> {
             if (searchBar.isFocused() && event.getCode() == KeyCode.ENTER) {
                 String inputText = searchBar.getText();
@@ -255,7 +260,7 @@ public class MainPageController {
                             jsonArrayToHashMap(result.getJSONArray("categoriesList")));
                     notes.add(note);
                 }
-                System.out.println(notes);
+                // System.out.println(notes);
             }catch (JSONException e) {
                 System.out.println(e);
             }
@@ -272,5 +277,30 @@ public class MainPageController {
                 alert.showAndWait();
             }
         }
+    }
+    private void filterChoiceSetup() {
+        HashMap<Integer,String> categoryList = new HashMap<>();
+        for (Note note : noteArrayList)
+        {
+            categoryList.putAll(note.getCategory());
+        }
+        categoryList.put(null,"No Category");
+        filterChoice.getItems().addAll(categoryList.values());
+        filterChoice.getSelectionModel().select("Any");
+        filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null)
+            {
+                if(newValue.equals("Any") && !searchBar.getText().isEmpty())
+                {
+                    notes.addAll(noteArrayList);
+                }
+                else
+                {
+                    HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/filter",true);
+                    JSONObject filterRequest = new JSONObject();
+                    filterRequest.put("filterCategory", searchBar.getText());
+                }
+            }
+        });
     }
 }
