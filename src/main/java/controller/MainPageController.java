@@ -32,9 +32,7 @@ import utils.HttpResponseServiceImpl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static utils.MainPageServices.*;
@@ -85,6 +83,7 @@ public class MainPageController {
     private ControllerUtils controllerUtils;
     private ObservableList<Note> notes;
     private ArrayList<Note> noteArrayList;
+    private HashMap<Integer,String> categoryList;
 
 
     public void initialize() {
@@ -202,38 +201,7 @@ public class MainPageController {
     private void searchBarSetup() {
         searchBar.setOnKeyPressed(event -> {
             if (searchBar.isFocused() && event.getCode() == KeyCode.ENTER) {
-                String inputText = searchBar.getText();
-                HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/search",true);
-                JSONObject searchRequest= new JSONObject();
-                JSONArray noteArray = new JSONArray();
-                for(Note note : noteArrayList)
-                {
-                    JSONObject noteJson = new JSONObject();
-                    noteJson.put("id", note.getId());
-                    noteJson.put("title", note.getTitle());
-                    noteJson.put("text",note.getText());
-                    noteJson.put("colour",note.getColor());
-                    JSONObject userObject = new JSONObject();
-                    userObject.put("username",note.getOwner());
-                    noteJson.put("user", userObject);
-                    noteJson.put("createdAt", note.getCreatedAt());
-                    noteJson.put("updatedAt", note.getUpdatedAt());
-                    noteJson.put("categoriesList", hashMapToJSONArray(note.getCategory()));
-
-                    noteArray.put(noteJson);
-                }
-                searchRequest.put("query", inputText);
-                searchRequest.put("notes", noteArray);
-                httpRequestBuilder.setJsonRequest(searchRequest);
-                HttpRequestBase searchRequestHttp = httpRequestBuilder.getHttpRequest();
-                CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
-                try
-                {
-                    httpRequestBuilder.setRequestBody();
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
-                responseService.handleReponse(searchRequestHttp,httpClient,this::handleGetSearchResults);
+                performSearchOrFilter();
             }
         });
     }
@@ -279,28 +247,99 @@ public class MainPageController {
         }
     }
     private void filterChoiceSetup() {
-        HashMap<Integer,String> categoryList = new HashMap<>();
+        categoryList = new HashMap<>();
         for (Note note : noteArrayList)
         {
             categoryList.putAll(note.getCategory());
         }
-        categoryList.put(null,"No Category");
+        categoryList.put(-1,"No Category");
         filterChoice.getItems().addAll(categoryList.values());
+        filterChoice.getItems().add("Any");
         filterChoice.getSelectionModel().select("Any");
         filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue != null)
+            if(newValue != null && !newValue.equals(oldValue))
             {
-                if(newValue.equals("Any") && !searchBar.getText().isEmpty())
-                {
-                    notes.addAll(noteArrayList);
-                }
-                else
-                {
-                    HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/filter",true);
-                    JSONObject filterRequest = new JSONObject();
-                    filterRequest.put("filterCategory", searchBar.getText());
-                }
+                performSearchOrFilter();
             }
         });
+    }
+    private void performSearchOrFilter(){
+        String inputText = searchBar.getText();
+        if(!inputText.isEmpty())
+        {
+            HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/search",true);
+            JSONObject searchRequest= new JSONObject();
+            JSONArray noteArray = arrayInitializer(noteArrayList);
+            searchRequest.put("query", inputText);
+            searchRequest.put("notes", noteArray);
+            requestBuilder(httpRequestBuilder, searchRequest);
+        }
+        else {
+            notes.clear();
+            notes.addAll(noteArrayList);
+        }
+        if(!filterChoice.getSelectionModel().getSelectedItem().equals("Any"))
+        {
+            HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/filter",true);
+            JSONObject filterRequest = new JSONObject();
+            JSONArray noteArray = arrayInitializer(notes);
+            JSONObject filterCategory = new JSONObject();
+            int category = getCategoryViaFilter();
+            if(category != -1)
+            {
+                filterCategory.put("id",getCategoryViaFilter());
+                filterRequest.put("category",filterCategory);
+            }
+            else
+            {
+                filterRequest.put("category", JSONObject.NULL);
+            }
+            filterRequest.put("notes", noteArray);
+            requestBuilder(httpRequestBuilder, filterRequest);
+        }
+    }
+    private JSONArray arrayInitializer(List<Note> usedList) {
+        JSONArray noteArray = new JSONArray();
+        for(Note note : usedList)
+        {
+            JSONObject noteJson = new JSONObject();
+            noteJson.put("id", note.getId());
+            noteJson.put("title", note.getTitle());
+            noteJson.put("text",note.getText());
+            noteJson.put("colour",note.getColor());
+            JSONObject userObject = new JSONObject();
+            userObject.put("username",note.getOwner());
+            noteJson.put("user", userObject);
+            noteJson.put("createdAt", note.getCreatedAt());
+            noteJson.put("updatedAt", note.getUpdatedAt());
+            noteJson.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+
+            noteArray.put(noteJson);
+        }
+        return noteArray;
+    }
+
+    private void requestBuilder(HttpRequestBuilder httpRequestBuilder, JSONObject request) {
+        httpRequestBuilder.setJsonRequest(request);
+        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
+        try
+        {
+            httpRequestBuilder.setRequestBody();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetSearchResults);
+    }
+
+    private int getCategoryViaFilter(){
+        for(Map.Entry<Integer,String> entry : categoryList.entrySet())
+        {
+            if(entry.getValue().equals(filterChoice.getSelectionModel().getSelectedItem()))
+            {
+                return entry.getKey();
+            }
+        }
+        return -1;
     }
 }
