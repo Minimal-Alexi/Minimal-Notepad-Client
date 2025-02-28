@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -7,21 +8,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
+import utils.GoogleDriveUploader;
 import utils.NoteServices;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
@@ -39,11 +40,13 @@ public class EditNoteController {
     @FXML private Button deleteNoteBtn;
     @FXML private HBox categoryHBox;
     @FXML private Label addCategory;
+    @FXML private Button uploadPicBtn;
     @FXML private ColorPicker colorPicker;
     @FXML private Rectangle noteBackground;
 
     SelectedNote selectedNote = SelectedNote.getInstance();
     private HashMap<Integer, String> categoryList = new HashMap<>();
+    private ArrayList<String> figureList = new ArrayList<>();
 
     // Initialize
     public void initialize() {
@@ -56,6 +59,7 @@ public class EditNoteController {
         textArea1.setText(note.getText());
         titleTextArea.setText(note.getTitle());
         categoryList = note.getCategory();
+        figureList = note.getFigure();
 
         colorSetUp(note.getColor());
 
@@ -64,12 +68,30 @@ public class EditNoteController {
 
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
+
+        // add pictures to the ui
+        Platform.runLater(() -> {
+            figureList.forEach(figure -> {
+                GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
+                ImageView imageView = new ImageView();
+                try {
+                    Image image = googleDriveUploader.download(figure);
+                    imageView.setImage(image);
+                    imageView.setFitHeight(200);
+                    imageView.setFitWidth(200);
+                    imageView.setPreserveRatio(true);
+                    textVBox.getChildren().add(imageView);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(selectedNote.getId(), titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList);
+        Note note = new Note(selectedNote.getId(), titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList, figureList);
         NoteServices.updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), note);
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
@@ -102,6 +124,10 @@ public class EditNoteController {
 
     }
 
+    public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
+        uploadPicture(uploadPicBtn, figureList, textVBox);
+    }
+
     /*
     Go to another page
      */
@@ -113,42 +139,13 @@ public class EditNoteController {
         goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
     }
 
-    /*
-    Unfinished functions
-     */
-    public void textAreaKeyPressed(KeyEvent keyEvent) {
-        /*
-            When the user press control + v, the app creates a imageView and insert a picture into it.
-            Then create a new text area.
-        */
-        if (keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.V) {
-            // Get the content of the clipboard
-            Clipboard clipboard = Clipboard.getSystemClipboard();
-
-            if (clipboard.hasImage()) {
-                // Add an image and imageView to the Vbox
-                Image image = clipboard.getImage();
-                ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(500);
-                imageView.setPreserveRatio(true);
-
-                textVBox.getChildren().add(imageView);
-
-                // Add a new textArea
-                TextArea textArea = new TextArea();
-                textArea.addEventHandler(KeyEvent.KEY_PRESSED, this::textAreaKeyPressed);
-                textVBox.getChildren().add(textArea);
-            }
-        }
-    }
-    private void colorSetUp(String initialColor){
+    private void colorSetUp(String initialColor) {
         noteBackground.setFill(Color.web(initialColor));
         colorPicker.setValue(Color.web(initialColor));
         colorPicker.setOnAction(event -> {
             noteBackground.setFill(colorPicker.getValue());
         });
     }
-
 
 
 }

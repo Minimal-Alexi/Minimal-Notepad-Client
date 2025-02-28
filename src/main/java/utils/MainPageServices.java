@@ -2,6 +2,9 @@ package utils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -10,6 +13,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -19,6 +28,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Note;
+import model.TokenStorage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,8 +42,48 @@ import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainPageServices {
+
+    /*
+    Update the note table
+     */
+    public static void updateNoteTable(ObservableList<Note> notes, TableView<Note> table, TableColumn<Note, String> title, TableColumn<Note, String> group, TableColumn<Note, String> owner, TableColumn<Note, String> category, TableColumn<Note, String> createTime, TableColumn<Note, Void> icon) {
+        table.setItems(notes);
+        title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
+        group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
+        owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
+        category.setCellValueFactory(cellData -> {
+            HashMap<Integer, String> catMap = cellData.getValue().getCategory();
+            String categoriesListString = "";
+            if (catMap != null && !catMap.isEmpty()) {
+                categoriesListString = String.join(", ", catMap.values());
+            }
+            return new ReadOnlyStringWrapper(categoriesListString);
+        });
+        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
+        icon.setCellFactory(param -> new TableCell<Note, Void>() {
+            private final ImageView imageView = new ImageView(
+                    new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
+            );
+
+            {
+                imageView.setFitWidth(20);
+                imageView.setFitHeight(20);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(imageView);
+                }
+            }
+        });
+    }
 
     /*
     Find the notes
@@ -64,7 +114,8 @@ public class MainPageServices {
                             timestampToString(noteJson.getString("updatedAt")),
                             noteJson.getJSONObject("user").getString("username"),
                             " ",
-                            jsonArrayToHashMap(noteJson.getJSONArray("categoriesList"))
+                            jsonArrayToHashMap(noteJson.getJSONArray("categoriesList")),
+                            jsonArrayToFigureList(noteJson.getJSONArray("figures"))
                     );
                     notes.add(note);
                 }
@@ -206,4 +257,24 @@ public class MainPageServices {
         return jsonArray;
     }
 
+    public static ArrayList<String> jsonArrayToFigureList(JSONArray jsonArray) {
+        ArrayList<String> figureList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String link = jsonObject.getString("link");
+            figureList.add(link);
+        }
+        return figureList;
+    }
+
+    public static JSONArray figureListToJSONArray(ArrayList<String> figureList) {
+        JSONArray jsonArray = new JSONArray();
+        for (String s : figureList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("link", s);
+            jsonArray.put(jsonObject);
+        }
+        return jsonArray;
+    }
 }
