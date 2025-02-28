@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,13 +19,19 @@ import java.io.IOException;
 
 public class HttpResponseServiceImpl implements HttpResponseService {
     @Override
-//    public void handleReponse(HttpPost httpPost, CloseableHttpClient httpClient, HandleResponseCallback callback) {
     public void handleReponse(HttpRequestBase request, CloseableHttpClient httpClient, HandleResponseCallback callback) {
         new Thread(() -> {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 HttpEntity responseEntity = response.getEntity();
                 String data = EntityUtils.toString(responseEntity);
-                JSONObject jsonResponse = new JSONObject(data);
+                Object jsonResponse;
+
+                if (data.trim().startsWith("[")){
+                    jsonResponse = new JSONArray(data);
+                } else {
+                    jsonResponse = new JSONObject(data);
+                }
+
                 EntityUtils.consume(responseEntity);
                 // Do more processing here...
                 StatusLine statusLine = response.getStatusLine();
@@ -33,6 +40,8 @@ public class HttpResponseServiceImpl implements HttpResponseService {
 //                System.out.println("status code " + statusLine);
                 Platform.runLater(() -> {
                     // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
+                    // the signature of the callback of the handleResponse in the controller need to follow the handleReponse in the HandleResponseCallback
+                    //     void handleResponse(CloseableHttpResponse response, Object jsonResponse);
                     callback.handleResponse(response, jsonResponse);
                 });
             } catch (IOException e) {
