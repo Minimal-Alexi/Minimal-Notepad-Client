@@ -40,7 +40,7 @@ public class HelloController {
 
     @FXML
     protected void loginClicked() {
-        System.out.println("addButtonClicked() called");
+        System.out.println("login button click");
         updateStage();
     }
 

@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.HttpClientSingleton;
 import model.HttpRequestBuilder;
 import model.TokenStorage;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -26,49 +25,27 @@ import utils.MainPageServices;
 import java.io.IOException;
 
 
-public class GroupInfoCreate {
+public class GroupInfoCreateController {
 
     @FXML
     private BorderPane root;
 
     @FXML
-    private AnchorPane searchPane;
-    @FXML
-    private TextField searchTextField;
-
-    @FXML
     private Button myNotesBtn;
-
     @FXML
-    private Button shareNoteBtn;
-
-    @FXML
-    private Button favoritiesBtn;
-
-    @FXML
-    private Button recycleBinBtn;
+    private Button mySharedGroupNotesBtn;
     @FXML
     private Button groupsBtn;
     @FXML
-    private Button groupInfoBtn;
-    @FXML
-    private Button createGroupBtn;
-    @FXML
-    private Button editGroupBtn;
-
-    @FXML
     private Button myGroupsBtn;
-
     @FXML
     private Button allGroupsBtn;
-
     @FXML
     private Button accountBtn;
     @FXML
-    private Button settingBtn;
-
+    private Button createGroupBtn;
     @FXML
-    private Button createBtn;
+    private Button logOutBtn;
 
 
     @FXML
@@ -127,9 +104,8 @@ public class GroupInfoCreate {
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
 //        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/groups.css").toExternalForm());
 //        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
-        searchPane.getStylesheets().add(getClass().getResource(CSSSOURCE + "/search_bar.css").toExternalForm());
-        searchTextField.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
-        createBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
+
+        createGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
 
 
     }
@@ -142,54 +118,38 @@ public class GroupInfoCreate {
     @FXML
     public void allGroupsBtnClick() {
         // go to allgroup page
+        controllerUtils.goPage(stage, allGroupsBtn, FXMLSource + "/main_pages/groups/all_groups.fxml");
     }
 
     @FXML
-    public void createGroupBtnClick() {
+    public void groupsBtnClick() {
         // go to create group page
         controllerUtils.goPage(stage, createGroupBtn, FXMLSource + "/main_pages/groups/group_info_create_group.fxml");
     }
 
     @FXML
-    public void editGroupBtnClick() {
-        // go to edit group page
-    }
-
-
-    @FXML
     public void mouseEnter() {
         controllerUtils.setHandCursor(myNotesBtn);
-        controllerUtils.setHandCursor(shareNoteBtn);
-        controllerUtils.setHandCursor(favoritiesBtn);
-        controllerUtils.setHandCursor(recycleBinBtn);
+        controllerUtils.setHandCursor(mySharedGroupNotesBtn);
         controllerUtils.setHandCursor(groupsBtn);
-        controllerUtils.setHandCursor(groupInfoBtn);
-        controllerUtils.setHandCursor(createGroupBtn);
-        controllerUtils.setHandCursor(editGroupBtn);
         controllerUtils.setHandCursor(myGroupsBtn);
         controllerUtils.setHandCursor(allGroupsBtn);
         controllerUtils.setHandCursor(accountBtn);
-        controllerUtils.setHandCursor(settingBtn);
-        controllerUtils.setHandCursor(createBtn);
+        controllerUtils.setHandCursor(logOutBtn);
 
-
+        controllerUtils.setHandCursor(createGroupBtn);
     }
 
     @FXML
     public void mouseExit() {
         controllerUtils.setDefaultCursor(myNotesBtn);
-        controllerUtils.setDefaultCursor(shareNoteBtn);
-        controllerUtils.setDefaultCursor(favoritiesBtn);
-        controllerUtils.setDefaultCursor(recycleBinBtn);
+        controllerUtils.setDefaultCursor(mySharedGroupNotesBtn);
         controllerUtils.setDefaultCursor(groupsBtn);
-        controllerUtils.setDefaultCursor(groupInfoBtn);
-        controllerUtils.setDefaultCursor(createGroupBtn);
-        controllerUtils.setDefaultCursor(editGroupBtn);
         controllerUtils.setDefaultCursor(myGroupsBtn);
         controllerUtils.setDefaultCursor(allGroupsBtn);
         controllerUtils.setDefaultCursor(accountBtn);
-        controllerUtils.setDefaultCursor(settingBtn);
-        controllerUtils.setDefaultCursor(createBtn);
+        controllerUtils.setDefaultCursor(logOutBtn);
+        controllerUtils.setDefaultCursor(createGroupBtn);
     }
 
 
@@ -209,19 +169,21 @@ public class GroupInfoCreate {
     }
 
     @FXML
-    public void groupsClick() {
+    public void mySharedGroupNotesBtnClick() {
 
     }
 
     @FXML
-    public void groupInfoBtnClick() {
-
+    public void logOutBtnClick() {
+        {
+            this.controllerUtils.goToHelloPage(stage, logOutBtn);
+        }
     }
 
+
     @FXML
-    public void createBtnClick() {
+    public void createGroupBtnClick() {
         try {
-
             String groupName = groupNameInput.getText();
             String groupDesc = groupDescInput.getText();
             if (validInputs(groupName, groupDesc)) {
@@ -245,10 +207,10 @@ public class GroupInfoCreate {
         httpRequest.setRequestBody();
         HttpRequestBase request = httpRequest.getHttpRequest();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
-        httpResponseService.handleReponse(request,httpClient,this::handleCreateGroup);
+        httpResponseService.handleReponse(request, httpClient, this::handleCreateGroup);
     }
 
-//    private void handleCreateGroup(CloseableHttpResponse response, JSONObject jsonResponse) {
+    //    private void handleCreateGroup(CloseableHttpResponse response, JSONObject jsonResponse) {
     private void handleCreateGroup(CloseableHttpResponse response, Object jsonResponse) {
 
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
@@ -258,8 +220,5 @@ public class GroupInfoCreate {
         } catch (JSONException e) {
             String message = (String) object.get("message");
         }
-
     }
-
-
 }

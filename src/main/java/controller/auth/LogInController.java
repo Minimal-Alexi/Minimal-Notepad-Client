@@ -271,14 +271,14 @@ public class LogInController {
 
 
 
-
-
     }
 
     private void goToMainPage() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
-        this.stage = this.getStage();
-        controllerUtil.updateStage(stage, fxmlLoader);
+        String mainPageLink = "/fxml/main_pages/main_page.fxml";
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
+//        this.stage = this.getStage();
+//        controllerUtil.updateStage(stage, fxmlLoader);
+        controllerUtil.goPage(stage,loginBtn,mainPageLink);
     }
 
 

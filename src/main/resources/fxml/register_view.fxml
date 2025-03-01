@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="registerPage" onKeyPressed="#registerPagePress" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
+<BorderPane fx:id="registerPage" onKeyPressed="#registerPagePress" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.auth.RegisterController">
    <center>
       <FlowPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER_RIGHT">
          <BorderPane.margin>
