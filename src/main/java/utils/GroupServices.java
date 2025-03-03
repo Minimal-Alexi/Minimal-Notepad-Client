@@ -41,19 +41,8 @@ public class GroupServices {
                     String name = (String) ((JSONObject) groupObject).get("name");
                     String description = (String) ((JSONObject) groupObject).get("description");
                     int numberOfMembers = (int) ((JSONObject) groupObject).get("numberOfMembers");
-
-                    System.out.println("ssssssssssssssssssssssssssssssssssssssssssssss");
-                    System.out.println(groupObject);
-                    System.out.println(groupOwner);
-                    System.out.println(id);
-                    System.out.println(name);
-                    System.out.println(description);
-                    System.out.println(numberOfMembers);
-                    System.out.println("ssssssssssssssssssssssssssssssssssssssssssssss");
-
                     Group newGroup = new Group(id, name, description, groupOwner, numberOfMembers);
                     System.out.println(newGroup);
-                    System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                     groups.add(newGroup);
                 }
             }

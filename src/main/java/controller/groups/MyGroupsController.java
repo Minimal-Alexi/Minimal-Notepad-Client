@@ -67,6 +67,15 @@ public class MyGroupsController {
             });
         }).start();
 
+        new Thread(() -> {
+            gs.fetchGroups("http://localhost:8093/api/groups/available", TokenStorage.getToken(), canJoinGroups);
+
+            Platform.runLater(() -> {
+               gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1);
+            });
+
+        }).start();
+
 
     }
 

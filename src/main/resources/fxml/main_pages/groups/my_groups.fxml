@@ -68,12 +68,16 @@
             </TableView>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Label text="Suggested groups">
+                  <Label text="Suggested groups" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="Gadugi Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label text="see all" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Label text="see all" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
                </children>
             </HBox>
             <TableView fx:id="canJoinGroupTable" layoutX="10.0" layoutY="256.0" onMouseClicked="#tableClicked" stylesheets="@../../../CSS/table_view.css">
