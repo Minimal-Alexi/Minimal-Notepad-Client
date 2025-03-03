@@ -53,7 +53,7 @@
                   <Insets bottom="10.0" top="20.0" />
                </padding>
             </Label>
-            <TableView fx:id="groupTable" onMouseClicked="#tableClicked" stylesheets="@../../../CSS/table_view.css">
+            <TableView fx:id="joinedGroupTable" onMouseClicked="#tableClicked" stylesheets="@../../../CSS/table_view.css">
                <columns>
                   <TableColumn fx:id="idCol" prefWidth="49.066646575927734" />
                   <TableColumn fx:id="groupNameCol" prefWidth="170.933349609375" text="Group Name" />
@@ -76,7 +76,7 @@
                   <Label text="see all" />
                </children>
             </HBox>
-            <TableView fx:id="groupTable2" layoutX="10.0" layoutY="256.0" onMouseClicked="#tableClicked" stylesheets="@../../../CSS/table_view.css">
+            <TableView fx:id="canJoinGroupTable" layoutX="10.0" layoutY="256.0" onMouseClicked="#tableClicked" stylesheets="@../../../CSS/table_view.css">
                <columns>
                   <TableColumn fx:id="idCol1" prefWidth="49.066646575927734" />
                   <TableColumn fx:id="groupNameCol1" prefWidth="170.933349609375" text="Group Name" />
