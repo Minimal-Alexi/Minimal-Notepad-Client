@@ -52,6 +52,11 @@ public class GroupServices {
     }
 
     /*
+    fetch note from certain groups
+     */
+
+
+    /*
     update table ui
      */
     public void updateGroupsUI(List<Group> groups,
