@@ -37,6 +37,9 @@ public class Group {
 
     public int getNumberOfUsers() {
         // return number of user participating in the group + 1 (owner)
+        if (this.userList.size() == 0){
+            return this.numberOfMembers.get();
+        }
         return userList.size() + 1;
     }
 
