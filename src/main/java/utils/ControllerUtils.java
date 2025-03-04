@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
@@ -121,5 +122,10 @@ public class ControllerUtils {
             return (JSONArray) response;
         }
         return null;
+    }
+
+    public void setDefaultAndHandCursorBehaviour(Button button) {
+        button.addEventHandler(MouseEvent.MOUSE_ENTERED, (e -> setHandCursor((Button) e.getSource())));
+        button.addEventHandler(MouseEvent.MOUSE_EXITED, (e -> setDefaultCursor((Button) e.getSource())));
     }
 }

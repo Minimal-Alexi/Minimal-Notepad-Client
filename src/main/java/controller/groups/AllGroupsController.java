@@ -115,18 +115,16 @@ public class AllGroupsController implements Initializable {
         MainPageServices.updateLocalTime(localTime);
 
 
-//        myNotesBtn.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/search_bar.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/table_view.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/groups.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
+
+        // manually add actionBtnCollumn
+        // cannot change the btn at this stage because group info has not been fetched from db
 
         actionOneCol = addGroupColumn("Action One");
         actionTwoCol = addGroupColumn("Action Two");
 
-
+        // update the action collumn based on the groups info
         updateTableView();
 
     }
@@ -228,17 +226,12 @@ public class AllGroupsController implements Initializable {
 //                System.out.println(groupObject);
                 JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
                 GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"));
-//                System.out.println(groupOwner);
                 int id = (int) ((JSONObject) groupObject).get("id");
                 String name = (String) ((JSONObject) groupObject).get("name");
                 String description = (String) ((JSONObject) groupObject).get("description");
-//                System.out.println(.getClass());
                 JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).get("userGroupParticipationsList");
-//                System.out.println(userListObj);
                 List<AppUser> userList = createUserList(userListObj);
-//                int numberOfMembers = (int) ((JSONObject) groupObject).get("numberOfMembers");
                 Group newGroup = new Group(id, name, description, groupOwner, userList);
-//                System.out.println(newGroup);
                 updatedAllGroups.add(newGroup);
             }
             this.allgroups = updatedAllGroups;
@@ -284,7 +277,6 @@ public class AllGroupsController implements Initializable {
         return column;
     }
 
-    //    private void updateColumnOne(TableColumn<Group, Group> actionOneCol) {
     private void updateColumnOne() {
         String owner = TokenStorage.getUser();
 //        String fName = "Jacob";
@@ -315,14 +307,13 @@ public class AllGroupsController implements Initializable {
                 System.out.println("is button " + source);
                 edit(updatedCell.getItem(), (source));
             });
-            setDefaultAndHandCursorBehaviour(editButton);
+            this.controllerUtils.setDefaultAndHandCursorBehaviour(editButton);
             return updatedCell;
 
         });
     }
 
 
-    //    private void updateColumnTwo(TableColumn<Group, Group> actionTwoCol) {
     private void updateColumnTwo() {
         String owner = TokenStorage.getUser();
 //        String fName = "Jacob";
@@ -366,7 +357,6 @@ public class AllGroupsController implements Initializable {
                 leave(group);
             });
 
-//            joinButton.setOnAction(e -> join(updatedCell.getItem()));
             joinButton.setOnAction(e -> {
                 Group group = updatedCell.getItem();
                 System.out.println("join button click: group " + group);
@@ -374,9 +364,9 @@ public class AllGroupsController implements Initializable {
 
             });
 
-            setDefaultAndHandCursorBehaviour(deleteButton);
-            setDefaultAndHandCursorBehaviour(leaveButton);
-            setDefaultAndHandCursorBehaviour(joinButton);
+            this.controllerUtils.setDefaultAndHandCursorBehaviour(deleteButton);
+            this.controllerUtils.setDefaultAndHandCursorBehaviour(leaveButton);
+            this.controllerUtils.setDefaultAndHandCursorBehaviour(joinButton);
 
             return updatedCell;
 
@@ -388,19 +378,6 @@ public class AllGroupsController implements Initializable {
         updateColumnOne();
         updateColumnTwo();
     }
-
-//    public void getAllgroups() {
-//        String ALL_GROUP_URI = URI + "/all";
-//        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", ALL_GROUP_URI, true);
-//        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
-//        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
-//        httpResponseService.handleReponse(request, httpClient, this::handleGetAllGroups);
-////        return null;
-//    }
-//
-//    public void handleGetAllGroups(CloseableHttpResponse response, Object jsonResponse) {
-//        List<Group> updatedAllGroups = new ArrayList<>();
-//        JSONArray array = controllerUtils.toJSONArray(jsonResponse);
 
 
     public void join(Group group) {
