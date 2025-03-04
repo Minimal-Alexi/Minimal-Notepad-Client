@@ -3,7 +3,7 @@
     -fx-background-insets: 1,1,1;
     -fx-background-radius: 10,10,10;
     -fx-padding: 3 3 3 3;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #000000;
     -fx-alignment: center;
     -fx-pref-width: 80;
     /*-fx-pref-height: 50;*/
@@ -12,10 +12,10 @@
 
 .button:hover {
     -fx-background-color: #FFD95F;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #000000;
 }
 
 .button:hover .icon {
-    -fx-fill: #FFFFFF;
+    -fx-fill: #000000;
     -fx-stroke: derive(#FFD95F, 30%);
 }
