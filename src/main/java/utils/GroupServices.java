@@ -91,7 +91,7 @@ public class GroupServices {
 
                     System.out.println(g.getId() + " " + g.getName());
 
-                    String pageLink = "/fxml/main_pages/main_page.fxml";
+                    String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
                     ControllerUtils c = new ControllerUtils();
                     Stage stage = (Stage) editButton.getScene().getWindow();
                     c.goPage(stage ,editButton, pageLink);
@@ -114,7 +114,7 @@ public class GroupServices {
 
             {
                 editButton.setOnAction(event -> {
-                    System.out.println("Delete ddddddddddddddd");
+                    System.out.println("Delete group");
                 });
             }
 
@@ -150,7 +150,7 @@ public class GroupServices {
 
             {
                 editButton.setOnAction(event -> {
-                    System.out.println("Join ddddddddddddddd");
+                    System.out.println("Join group");
                 });
             }
 
