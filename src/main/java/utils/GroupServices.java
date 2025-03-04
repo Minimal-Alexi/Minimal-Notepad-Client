@@ -7,8 +7,10 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.Group;
 import model.GroupOwner;
+import model.selected.SelectedGroup;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -82,7 +84,17 @@ public class GroupServices {
 
             {
                 editButton.setOnAction(event -> {
-                    System.out.println("Edit ddddddddddddddd");
+                    // Go to edit groups page
+                    Group g = getTableView().getItems().get(getIndex());
+                    SelectedGroup selectedGroup = SelectedGroup.getInstance();
+                    selectedGroup.setId(g.getId());
+
+                    System.out.println(g.getId() + " " + g.getName());
+
+                    String pageLink = "/fxml/main_pages/main_page.fxml";
+                    ControllerUtils c = new ControllerUtils();
+                    Stage stage = (Stage) editButton.getScene().getWindow();
+                    c.goPage(stage ,editButton, pageLink);
                 });
             }
 
@@ -153,5 +165,9 @@ public class GroupServices {
             }
         });
     }
+
+    /*
+
+     */
 
 }
