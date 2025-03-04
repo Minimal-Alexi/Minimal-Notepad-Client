@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.HttpRequestBuilder;
 import model.TokenStorage;
+import model.selected.SelectedGroup;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -83,29 +84,40 @@ public class GroupInfoCreateController {
     public void initialize() {
         System.out.println("start Create Group  Page");
 
-        System.out.println("scene " + scene);
-        this.controllerUtils = new ControllerUtils();
-        this.httpResponseService = new HttpResponseServiceImpl();
+        // try to get id from selected group
+        try {
+            SelectedGroup selectedGroup = SelectedGroup.getInstance();
 
-        TokenStorage.getIntance();//
-        String username = TokenStorage.getUser();
-        String password = TokenStorage.getToken();
-        System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
+            System.out.println("selected group id: " + selectedGroup.getId());
 
-        nameLabel.setText("Wellcome " + username);
-        MainPageServices.updateLocalTime(localTime);
+        } catch (NullPointerException e) {
+            System.out.println("there is no selected group id");
+        } finally {
+
+            System.out.println("scene " + scene);
+            this.controllerUtils = new ControllerUtils();
+            this.httpResponseService = new HttpResponseServiceImpl();
+
+            TokenStorage.getIntance();//
+            String username = TokenStorage.getUser();
+            String password = TokenStorage.getToken();
+            System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
+
+            nameLabel.setText("Wellcome " + username);
+            MainPageServices.updateLocalTime(localTime);
 //        httpInstance = HttpClientSingleton.getInstance();
 
 
 //        myNotesBtn.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
+            root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
 //        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/search_bar.css").toExternalForm());
 //        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/table_view.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
+            root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
 //        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/groups.css").toExternalForm());
 //        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
 
-        createGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
+            createGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
+        }
 
 
     }

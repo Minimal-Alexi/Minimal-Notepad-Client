@@ -186,7 +186,7 @@
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label prefHeight="60.0" prefWidth="747.0" text="Your notes">
+                              <Label prefHeight="60.0" prefWidth="747.0" text="All Groups">
                                  <font>
                                     <Font name="Gadugi Bold" size="20.0" />
                                  </font>
@@ -216,8 +216,6 @@
                               <TableColumn fx:id="groupNameCol" prefWidth="170.933349609375" text="Group Name" />
                               <TableColumn fx:id="ownerCol" prefWidth="174.39996337890625" text="Owner" />
                               <TableColumn fx:id="numOfMembersCol" prefWidth="165.06671142578125" text="Number of members" />
-                              <TableColumn fx:id="editCol" prefWidth="204.2667236328125" text="Edit" />
-                              <TableColumn fx:id="actionCol" prefWidth="204.2667236328125" text="Action" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

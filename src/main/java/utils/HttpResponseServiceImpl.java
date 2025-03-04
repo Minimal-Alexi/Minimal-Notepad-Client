@@ -23,20 +23,27 @@ public class HttpResponseServiceImpl implements HttpResponseService {
         new Thread(() -> {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 HttpEntity responseEntity = response.getEntity();
-                String data = EntityUtils.toString(responseEntity);
+                System.out.println("response entity " + responseEntity);
                 Object jsonResponse;
+                if (responseEntity != null) {
 
-                if (data.trim().startsWith("[")){
-                    jsonResponse = new JSONArray(data);
+                    String data = EntityUtils.toString(responseEntity);
+
+                    if (data.trim().startsWith("[")) {
+                        jsonResponse = new JSONArray(data);
+                    } else {
+                        jsonResponse = new JSONObject(data);
+                    }
+
+                    EntityUtils.consume(responseEntity);
+                    // Do more processing here...
+                    StatusLine statusLine = response.getStatusLine();
                 } else {
-                    jsonResponse = new JSONObject(data);
+                    // return an empty JSONObject on delete method as the response body is empty
+                    jsonResponse = new JSONObject();
                 }
-
-                EntityUtils.consume(responseEntity);
-                // Do more processing here...
-                StatusLine statusLine = response.getStatusLine();
-//                System.out.println("json " + jsonResponse);
-//                System.out.println("response " + responseEntity);
+                System.out.println("json " + jsonResponse);
+                System.out.println("response " + response);
 //                System.out.println("status code " + statusLine);
                 Platform.runLater(() -> {
                     // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
@@ -54,7 +61,6 @@ public class HttpResponseServiceImpl implements HttpResponseService {
             }
         }).start();
     }
-
 
 
 //    @Override
