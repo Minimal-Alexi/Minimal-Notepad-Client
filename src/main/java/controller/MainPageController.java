@@ -191,6 +191,7 @@ public class MainPageController {
                 for(int i=0; i<jsonResponse.length(); i++)
                 {
                     JSONObject result = (JSONObject) jsonResponse.get(i);
+                    System.out.println(result);
                     Note note = new Note(result.getInt("id"),
                             result.getString("title") ,
                             result.getString("text"),
@@ -199,7 +200,8 @@ public class MainPageController {
                             timestampToString(result.getString("updatedAt")),
                             result.getJSONObject("user").getString("username"),
                             " ",
-                            jsonArrayToHashMap(result.getJSONArray("categoriesList")));
+                            jsonArrayToHashMap(result.getJSONArray("categoriesList")),
+                            null);
                     notes.add(note);
                 }
                 // System.out.println(notes);
