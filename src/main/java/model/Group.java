@@ -21,26 +21,37 @@ public class Group {
         this.description = new SimpleStringProperty(description);
         this.userList = userList;
         this.groupOwner = groupOwner;
-        this.numberOfMembers = new SimpleIntegerProperty(getNumberOfUsers());
+        this.numberOfMembers = new SimpleIntegerProperty(getNumberOfUsers() + 1);
         this.groupOwnerName = new SimpleStringProperty(this.groupOwner.getUsername());
     }
 
-    public Group(int id, String name, String description, GroupOwner groupOwner, int numberOfMembers){
+
+    public Group(int id, String name, String description, GroupOwner groupOwner, int numberOfMembers) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
-        this.userList = new ArrayList<>();
+        this.numberOfMembers = new SimpleIntegerProperty(numberOfMembers + 1); // + owner
+//        this.userList = new ArrayList<>();
         this.groupOwner = groupOwner;
-        this.numberOfMembers = new SimpleIntegerProperty(numberOfMembers);
         this.groupOwnerName = new SimpleStringProperty(this.groupOwner.getUsername());
     }
 
     public int getNumberOfUsers() {
         // return number of user participating in the group + 1 (owner)
-        if (this.userList.size() == 0){
-            return this.numberOfMembers.get();
+//        if (numberOfMembers.get() != 0) {
+//            return numberOfMembers.get() + 1;
+//        } else {
+//            return userList.size() + 1;
+//
+//        }
+        // in case Group has no userList
+        // in api/groups/my-groups/
+        if (userList == null) {
+            return numberOfMembers.get();
+
+        } else { // in case there is userList, in api/groups/all
+            return userList.size();
         }
-        return userList.size() + 1;
     }
 
     public List<AppUser> getUserList() {
