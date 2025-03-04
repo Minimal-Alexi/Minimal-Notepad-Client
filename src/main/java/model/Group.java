@@ -3,6 +3,7 @@ package model;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Group {
@@ -21,6 +22,16 @@ public class Group {
         this.userList = userList;
         this.groupOwner = groupOwner;
         this.numberOfMembers = new SimpleIntegerProperty(getNumberOfUsers());
+        this.groupOwnerName = new SimpleStringProperty(this.groupOwner.getUsername());
+    }
+
+    public Group(int id, String name, String description, GroupOwner groupOwner, int numberOfMembers){
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.description = new SimpleStringProperty(description);
+        this.userList = new ArrayList<>();
+        this.groupOwner = groupOwner;
+        this.numberOfMembers = new SimpleIntegerProperty(numberOfMembers);
         this.groupOwnerName = new SimpleStringProperty(this.groupOwner.getUsername());
     }
 
