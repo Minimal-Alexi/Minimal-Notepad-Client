@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,15 +8,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.HttpRequestBuilder;
-import javafx.stage.WindowEvent;
 import model.Note;
 import model.selected.SelectedNote;
 import model.TokenStorage;
@@ -34,7 +29,6 @@ import utils.HttpResponseServiceImpl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static utils.MainPageServices.*;
 
@@ -82,7 +76,7 @@ public class MainPageController {
 
     private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
-    private ObservableList<Note> notes;
+    private ObservableList<Note> noteObservableList;
     private ArrayList<Note> noteArrayList;
     private HashMap<Integer,String> categoryList;
 
@@ -91,15 +85,15 @@ public class MainPageController {
         this.controllerUtils = new ControllerUtils();
         this.responseService = new HttpResponseServiceImpl();
 
-        notes = FXCollections.observableArrayList();
+        noteObservableList = FXCollections.observableArrayList();
         noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
         if (noteArrayList != null) {
-            notes.addAll(noteArrayList);
+            noteObservableList.addAll(noteArrayList);
         } else {
             System.out.println("Connection failed");
         }
 
-        updateNoteTable(notes, table, title, group, owner, category, createTime, icon);
+        updateNoteTable(noteObservableList, table, title, group, owner, category, createTime, icon);
 
         if(noteArrayList != null) {
             updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
@@ -187,7 +181,7 @@ public class MainPageController {
             try
             {
                 System.out.println(closeableHttpResponse.getStatusLine().getStatusCode() +"\n" + jsonResponse);
-                notes.clear();
+                noteObservableList.clear();
                 for(int i=0; i<jsonResponse.length(); i++)
                 {
                     JSONObject result = (JSONObject) jsonResponse.get(i);
@@ -202,9 +196,9 @@ public class MainPageController {
                             " ",
                             jsonArrayToHashMap(result.getJSONArray("categoriesList")),
                             null);
-                    notes.add(note);
+                    noteObservableList.add(note);
                 }
-                // System.out.println(notes);
+                // System.out.println(noteObservableList);
             }catch (JSONException e) {
                 System.out.println(e);
             }
@@ -243,22 +237,25 @@ public class MainPageController {
         String inputText = searchBar.getText();
         if(!inputText.isEmpty())
         {
+            System.out.println("search start");
             HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/search",true);
             JSONObject searchRequest= new JSONObject();
             JSONArray noteArray = arrayInitializer(noteArrayList);
             searchRequest.put("query", inputText);
             searchRequest.put("notes", noteArray);
             requestBuilder(httpRequestBuilder, searchRequest);
+            System.out.println("search finish");
         }
         else {
-            notes.clear();
-            notes.addAll(noteArrayList);
+            noteObservableList.clear();
+            noteObservableList.addAll(noteArrayList);
         }
         if(!filterChoice.getSelectionModel().getSelectedItem().equals("Any"))
         {
+            System.out.println("filter start");
             HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/filter",true);
             JSONObject filterRequest = new JSONObject();
-            JSONArray noteArray = arrayInitializer(notes);
+            JSONArray noteArray = arrayInitializer(noteObservableList);
             JSONObject filterCategory = new JSONObject();
             int category = getCategoryViaFilter();
             if(category != -1)
@@ -272,6 +269,7 @@ public class MainPageController {
             }
             filterRequest.put("notes", noteArray);
             requestBuilder(httpRequestBuilder, filterRequest);
+            System.out.println("filter finish");
         }
     }
     private JSONArray arrayInitializer(List<Note> usedList) {
