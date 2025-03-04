@@ -174,20 +174,19 @@ public class MainPageController {
         });
     }
 
-    private void handleGetSearchResults(CloseableHttpResponse closeableHttpResponse, Object responseObject) {
-        System.out.println(closeableHttpResponse.getStatusLine().getStatusCode());
-        if(closeableHttpResponse.getStatusLine().getStatusCode() == 200) {
+    private void handleGetSearchResults(CloseableHttpResponse response, Object responseObject) {
+        System.out.println(response.getStatusLine().getStatusCode());
+        if (response.getStatusLine().getStatusCode() == 200) {
             JSONArray jsonResponse = (JSONArray) responseObject;
-            try
-            {
-                System.out.println(closeableHttpResponse.getStatusLine().getStatusCode() +"\n" + jsonResponse);
+            try {
+                System.out.println(response.getStatusLine().getStatusCode() + "\n" + jsonResponse);
                 noteObservableList.clear();
-                for(int i=0; i<jsonResponse.length(); i++)
-                {
+                for (int i = 0; i < jsonResponse.length(); i++) {
                     JSONObject result = (JSONObject) jsonResponse.get(i);
-                    System.out.println(result);
-                    Note note = new Note(result.getInt("id"),
-                            result.getString("title") ,
+                    // Process and add each note
+                    Note note = new Note(
+                            result.getInt("id"),
+                            result.getString("title"),
                             result.getString("text"),
                             result.getString("colour"),
                             timestampToString(result.getString("createdAt")),
@@ -198,16 +197,15 @@ public class MainPageController {
                             null);
                     noteObservableList.add(note);
                 }
-                // System.out.println(noteObservableList);
-            }catch (JSONException e) {
+                if (!filterChoice.getSelectionModel().getSelectedItem().equals("Any")) {
+                    performFilter();
+                }
+            } catch (JSONException e) {
                 System.out.println(e);
             }
-        }
-        else
-        {
+        } else {
             JSONObject jsonResponse = (JSONObject) responseObject;
-            if(closeableHttpResponse.getStatusLine().getStatusCode() == 404)
-            {
+            if (response.getStatusLine().getStatusCode() == 404) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -233,43 +231,23 @@ public class MainPageController {
             }
         });
     }
-    private void performSearchOrFilter(){
+    private void performSearchOrFilter() {
         String inputText = searchBar.getText();
-        if(!inputText.isEmpty())
-        {
+        if (!inputText.isEmpty()) {
             System.out.println("search start");
-            HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/search",true);
-            JSONObject searchRequest= new JSONObject();
+            HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/search", true);
+            JSONObject searchRequest = new JSONObject();
             JSONArray noteArray = arrayInitializer(noteArrayList);
             searchRequest.put("query", inputText);
             searchRequest.put("notes", noteArray);
             requestBuilder(httpRequestBuilder, searchRequest);
             System.out.println("search finish");
-        }
-        else {
+        } else {
             noteObservableList.clear();
             noteObservableList.addAll(noteArrayList);
-        }
-        if(!filterChoice.getSelectionModel().getSelectedItem().equals("Any"))
-        {
-            System.out.println("filter start");
-            HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/filter",true);
-            JSONObject filterRequest = new JSONObject();
-            JSONArray noteArray = arrayInitializer(noteObservableList);
-            JSONObject filterCategory = new JSONObject();
-            int category = getCategoryViaFilter();
-            if(category != -1)
-            {
-                filterCategory.put("id",getCategoryViaFilter());
-                filterRequest.put("category",filterCategory);
+            if (!filterChoice.getSelectionModel().getSelectedItem().equals("Any")) {
+                performFilter();
             }
-            else
-            {
-                filterRequest.put("category", JSONObject.NULL);
-            }
-            filterRequest.put("notes", noteArray);
-            requestBuilder(httpRequestBuilder, filterRequest);
-            System.out.println("filter finish");
         }
     }
     private JSONArray arrayInitializer(List<Note> usedList) {
@@ -305,6 +283,25 @@ public class MainPageController {
         }
         responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetSearchResults);
     }
+    private void performFilter() {
+        System.out.println("filter start");
+        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/filter", true);
+        JSONObject filterRequest = new JSONObject();
+        JSONArray noteArray = arrayInitializer(noteObservableList);
+        JSONObject filterCategory = new JSONObject();
+
+        int category = getCategoryViaFilter();
+        if (category != -1) {
+            filterCategory.put("id", category);
+            filterRequest.put("category", filterCategory);
+        } else {
+            filterRequest.put("category", JSONObject.NULL);
+        }
+        filterRequest.put("notes", noteArray);
+        requestBuilder(httpRequestBuilder, filterRequest);
+        System.out.println("filter finish");
+    }
+
 
     private int getCategoryViaFilter(){
         for(Map.Entry<Integer,String> entry : categoryList.entrySet())
