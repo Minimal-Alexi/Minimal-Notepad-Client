@@ -12,19 +12,28 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import model.HttpRequestBuilder;
 import javafx.stage.WindowEvent;
 import model.Note;
 import model.selected.SelectedNote;
 import model.TokenStorage;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import utils.ControllerUtils;
+import utils.HttpResponseService;
+import utils.HttpResponseServiceImpl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static utils.MainPageServices.*;
@@ -47,6 +56,12 @@ public class MainPageController {
     @FXML private HBox recentlyEditedHBox;
 
 
+    // search bar
+    @FXML
+    private TextField searchBar;
+    @FXML
+    private ChoiceBox<String> filterChoice;
+
     //side bar
     @FXML
     private Button myFileBtn;
@@ -65,15 +80,19 @@ public class MainPageController {
     @FXML
     private Button logOutBtn;
 
-
+    private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
+    private ObservableList<Note> notes;
+    private ArrayList<Note> noteArrayList;
+    private HashMap<Integer,String> categoryList;
 
 
     public void initialize() {
         this.controllerUtils = new ControllerUtils();
+        this.responseService = new HttpResponseServiceImpl();
 
-        ObservableList<Note> notes = FXCollections.observableArrayList();
-        ArrayList<Note> noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
+        notes = FXCollections.observableArrayList();
+        noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
         if (noteArrayList != null) {
             notes.addAll(noteArrayList);
         } else {
@@ -82,9 +101,11 @@ public class MainPageController {
 
         updateNoteTable(notes, table, title, group, owner, category, createTime, icon);
 
-        if (noteArrayList != null) {
+        if(noteArrayList != null) {
             updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
         }
+        filterChoiceSetup();
+        searchBarSetup();
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
     }
@@ -125,6 +146,7 @@ public class MainPageController {
         this.controllerUtils.goPage(stage,groupsBtn, pageLink);
     }
 
+
     @FXML
     public void accountBtnClick() {
 
@@ -148,5 +170,152 @@ public class MainPageController {
     @FXML
     void mouseExit(MouseEvent event) {
         this.controllerUtils.setDefaultCursor(logOutBtn);
+    }
+
+    private void searchBarSetup() {
+        searchBar.setOnKeyPressed(event -> {
+            if (searchBar.isFocused() && event.getCode() == KeyCode.ENTER) {
+                performSearchOrFilter();
+            }
+        });
+    }
+
+    private void handleGetSearchResults(CloseableHttpResponse closeableHttpResponse, Object responseObject) {
+        System.out.println(closeableHttpResponse.getStatusLine().getStatusCode());
+        if(closeableHttpResponse.getStatusLine().getStatusCode() == 200) {
+            JSONArray jsonResponse = (JSONArray) responseObject;
+            try
+            {
+                System.out.println(closeableHttpResponse.getStatusLine().getStatusCode() +"\n" + jsonResponse);
+                notes.clear();
+                for(int i=0; i<jsonResponse.length(); i++)
+                {
+                    JSONObject result = (JSONObject) jsonResponse.get(i);
+                    System.out.println(result);
+                    Note note = new Note(result.getInt("id"),
+                            result.getString("title") ,
+                            result.getString("text"),
+                            result.getString("colour"),
+                            timestampToString(result.getString("createdAt")),
+                            timestampToString(result.getString("updatedAt")),
+                            result.getJSONObject("user").getString("username"),
+                            " ",
+                            jsonArrayToHashMap(result.getJSONArray("categoriesList")),
+                            null);
+                    notes.add(note);
+                }
+                // System.out.println(notes);
+            }catch (JSONException e) {
+                System.out.println(e);
+            }
+        }
+        else
+        {
+            JSONObject jsonResponse = (JSONObject) responseObject;
+            if(closeableHttpResponse.getStatusLine().getStatusCode() == 404)
+            {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText(jsonResponse.getString("message"));
+                alert.showAndWait();
+            }
+        }
+    }
+    private void filterChoiceSetup() {
+        categoryList = new HashMap<>();
+        for (Note note : noteArrayList)
+        {
+            categoryList.putAll(note.getCategory());
+        }
+        categoryList.put(-1,"No Category");
+        filterChoice.getItems().addAll(categoryList.values());
+        filterChoice.getItems().add("Any");
+        filterChoice.getSelectionModel().select("Any");
+        filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null && !newValue.equals(oldValue))
+            {
+                performSearchOrFilter();
+            }
+        });
+    }
+    private void performSearchOrFilter(){
+        String inputText = searchBar.getText();
+        if(!inputText.isEmpty())
+        {
+            HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/search",true);
+            JSONObject searchRequest= new JSONObject();
+            JSONArray noteArray = arrayInitializer(noteArrayList);
+            searchRequest.put("query", inputText);
+            searchRequest.put("notes", noteArray);
+            requestBuilder(httpRequestBuilder, searchRequest);
+        }
+        else {
+            notes.clear();
+            notes.addAll(noteArrayList);
+        }
+        if(!filterChoice.getSelectionModel().getSelectedItem().equals("Any"))
+        {
+            HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST","http://localhost:8093/api/note/filter",true);
+            JSONObject filterRequest = new JSONObject();
+            JSONArray noteArray = arrayInitializer(notes);
+            JSONObject filterCategory = new JSONObject();
+            int category = getCategoryViaFilter();
+            if(category != -1)
+            {
+                filterCategory.put("id",getCategoryViaFilter());
+                filterRequest.put("category",filterCategory);
+            }
+            else
+            {
+                filterRequest.put("category", JSONObject.NULL);
+            }
+            filterRequest.put("notes", noteArray);
+            requestBuilder(httpRequestBuilder, filterRequest);
+        }
+    }
+    private JSONArray arrayInitializer(List<Note> usedList) {
+        JSONArray noteArray = new JSONArray();
+        for(Note note : usedList)
+        {
+            JSONObject noteJson = new JSONObject();
+            noteJson.put("id", note.getId());
+            noteJson.put("title", note.getTitle());
+            noteJson.put("text",note.getText());
+            noteJson.put("colour",note.getColor());
+            JSONObject userObject = new JSONObject();
+            userObject.put("username",note.getOwner());
+            noteJson.put("user", userObject);
+            noteJson.put("createdAt", note.getCreatedAt());
+            noteJson.put("updatedAt", note.getUpdatedAt());
+            noteJson.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+
+            noteArray.put(noteJson);
+        }
+        return noteArray;
+    }
+
+    private void requestBuilder(HttpRequestBuilder httpRequestBuilder, JSONObject request) {
+        httpRequestBuilder.setJsonRequest(request);
+        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
+        try
+        {
+            httpRequestBuilder.setRequestBody();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetSearchResults);
+    }
+
+    private int getCategoryViaFilter(){
+        for(Map.Entry<Integer,String> entry : categoryList.entrySet())
+        {
+            if(entry.getValue().equals(filterChoice.getSelectionModel().getSelectedItem()))
+            {
+                return entry.getKey();
+            }
+        }
+        return -1;
     }
 }

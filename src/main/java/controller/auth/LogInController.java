@@ -245,13 +245,12 @@ public class LogInController {
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
 
+
         httpResponseService.handleReponse(httpPost, httpClient, this::handleLoginReponse);
 
 
     }
 
-
-    //    private void handleLoginReponse(CloseableHttpResponse response, JSONObject jsonResponse) {
     private void handleLoginReponse(CloseableHttpResponse response, Object jsonResponse) {
         String statusCode = response.getStatusLine().toString();
 
@@ -268,8 +267,6 @@ public class LogInController {
                 String messsage = (String) object.get("message");
                 displayErrGeneral(messsage);
             }
-
-
 
     }
 
