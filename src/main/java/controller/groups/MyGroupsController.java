@@ -23,9 +23,9 @@ public class MyGroupsController {
     @FXML
     private TableColumn<Group, Integer> idCol;
     @FXML
-    private TableColumn<?, ?> actionCol;
+    private TableColumn<Group, Void> editCol;
     @FXML
-    private TableColumn<?, ?> editCol;
+    private TableColumn<Group, Void> deleteCol;
     @FXML
     private TableColumn<Group, String> groupNameCol;
     @FXML
@@ -38,9 +38,7 @@ public class MyGroupsController {
     @FXML
     private TableColumn<Group, Integer> idCol1;
     @FXML
-    private TableColumn<?, ?> actionCol1;
-    @FXML
-    private TableColumn<?, ?> editCol1;
+    private TableColumn<Group, Void> joinCol1;
     @FXML
     private TableColumn<Group, String> groupNameCol1;
     @FXML
@@ -63,7 +61,7 @@ public class MyGroupsController {
             gs.fetchGroups("http://localhost:8093/api/groups/my-groups", TokenStorage.getToken(), joinedGroups);
 
             Platform.runLater(() -> {
-                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol);
+                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, deleteCol);
             });
         }).start();
 
@@ -71,7 +69,7 @@ public class MyGroupsController {
             gs.fetchGroups("http://localhost:8093/api/groups/available", TokenStorage.getToken(), canJoinGroups);
 
             Platform.runLater(() -> {
-               gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1);
+               gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1);
             });
 
         }).start();

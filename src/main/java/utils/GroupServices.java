@@ -2,6 +2,8 @@ package utils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -64,7 +66,9 @@ public class GroupServices {
                                TableColumn<Group, Integer> idCol,
                                TableColumn<Group, String> groupNameCol,
                                TableColumn<Group, String> ownerCol,
-                               TableColumn<Group, Integer> numOfMembersCol) {
+                               TableColumn<Group, Integer> numOfMembersCol,
+                               TableColumn<Group, Void> editCol,
+                               TableColumn<Group, Void> deleteCol) {
         idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         groupNameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
         ownerCol.setCellValueFactory(new PropertyValueFactory<>("GroupOwnerName"));
@@ -72,6 +76,82 @@ public class GroupServices {
 
         ObservableList<Group> observableList = FXCollections.observableArrayList(groups);
         groupsTable.setItems(observableList);
+
+        editCol.setCellFactory(param -> new TableCell<Group, Void>() {
+            private final Button editButton = new Button("Edit");
+
+            {
+                editButton.setOnAction(event -> {
+                    System.out.println("Edit ddddddddddddddd");
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(editButton);
+                }
+            }
+        });
+
+        deleteCol.setCellFactory(param -> new TableCell<Group, Void>() {
+            private final Button editButton = new Button("Delete");
+
+            {
+                editButton.setOnAction(event -> {
+                    System.out.println("Delete ddddddddddddddd");
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(editButton);
+                }
+            }
+        });
+    }
+
+    public void updateGroupsUI(List<Group> groups,
+                               TableView<Group> groupsTable,
+                               TableColumn<Group, Integer> idCol,
+                               TableColumn<Group, String> groupNameCol,
+                               TableColumn<Group, String> ownerCol,
+                               TableColumn<Group, Integer> numOfMembersCol,
+                               TableColumn<Group, Void> joinCol) {
+        idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        groupNameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        ownerCol.setCellValueFactory(new PropertyValueFactory<>("GroupOwnerName"));
+        numOfMembersCol.setCellValueFactory(new PropertyValueFactory<>("NumberOfMembers"));
+
+        ObservableList<Group> observableList = FXCollections.observableArrayList(groups);
+        groupsTable.setItems(observableList);
+
+        joinCol.setCellFactory(param -> new TableCell<Group, Void>() {
+            private final Button editButton = new Button("Join");
+
+            {
+                editButton.setOnAction(event -> {
+                    System.out.println("Join ddddddddddddddd");
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(editButton);
+                }
+            }
+        });
     }
 
 }
