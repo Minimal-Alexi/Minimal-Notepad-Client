@@ -6,6 +6,5 @@ import org.json.JSONObject;
 @FunctionalInterface
 public interface HandleResponseCallback {
     void handleResponse(CloseableHttpResponse response, Object jsonResponse);
-//    void handleResponse(CloseableHttpResponse response, JSONObject jsonResponse,String helperTxt);
 
 }

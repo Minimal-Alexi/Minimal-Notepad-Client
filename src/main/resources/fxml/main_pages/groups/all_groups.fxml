@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane id="parent" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.groups.AllGroupsController">
+   <left>
+      <AnchorPane id="sidebar" prefHeight="853.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="853.0" fitWidth="100.0" layoutX="250.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/sideBar.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="TOP_CENTER" prefWidth="250.0">
+               <children>
+                  <ImageView fitHeight="70.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../img/logo/logo1.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets bottom="40.0" top="40.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <Button fx:id="myNotesBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../../CSS/button.css" text="My Notes">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <graphic>
+                        <AnchorPane prefHeight="24.0" prefWidth="24.0">
+                           <children>
+                              <SVGPath content="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
+                              <SVGPath content="M13.5 8C10.47 8 8 10.48 8 13.5C8 14.87 9.12 16 10.5 16C13.52 16 16 13.52 16 10.5C16 9.13 14.87 8 13.5 8Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
+                           </children>
+                        </AnchorPane>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="mySharedGroupNotesBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#mySharedGroupNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../../CSS/button.css" text="My Groups' Notes">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <graphic>
+                        <AnchorPane prefHeight="24.0" prefWidth="21.0">
+                           <children>
+                              <SVGPath content="M16.4982 14.9984C15.1578 14.9984 13.9579 15.5843 13.133 16.5123L8.65689 13.7142C9.10684 12.6174 9.11153 11.38 8.65689 10.2833L13.133 7.48514C13.9579 8.41316 15.1578 8.99904 16.4982 8.99904C18.9823 8.99904 20.9978 6.98363 20.9978 4.49952C20.9978 2.01541 18.9823 0 16.4982 0C14.0141 0 11.9987 2.01541 11.9987 4.49952C11.9987 5.10883 12.1206 5.68533 12.3362 6.21496L7.8601 9.0131C7.03987 8.08508 5.84 7.4992 4.49952 7.4992C2.01541 7.4992 0 9.51461 0 11.9987C0 14.4828 2.01541 16.4982 4.49952 16.4982C5.84 16.4982 7.03987 15.9124 7.86479 14.9843L12.3409 17.7825C12.1206 18.3121 12.0034 18.8886 12.0034 19.4979C12.0034 21.982 14.0188 23.9974 16.5029 23.9974C18.987 23.9974 21.0024 21.982 21.0024 19.4979C20.9978 17.0138 18.9823 14.9984 16.4982 14.9984ZM16.4982 1.49984C18.1528 1.49984 19.4979 2.84501 19.4979 4.49952C19.4979 6.15403 18.1528 7.4992 16.4982 7.4992C14.8437 7.4992 13.4986 6.15403 13.4986 4.49952C13.4986 2.84501 14.8437 1.49984 16.4982 1.49984ZM4.49952 14.9984C2.84501 14.9984 1.49984 13.6532 1.49984 11.9987C1.49984 10.3442 2.84501 8.99904 4.49952 8.99904C6.15403 8.99904 7.4992 10.3442 7.4992 11.9987C7.4992 13.6532 6.15403 14.9984 4.49952 14.9984ZM16.4982 22.4976C14.8437 22.4976 13.4986 21.1524 13.4986 19.4979C13.4986 17.8434 14.8437 16.4982 16.4982 16.4982C18.1528 16.4982 19.4979 17.8434 19.4979 19.4979C19.4979 21.1524 18.1528 22.4976 16.4982 22.4976Z" fill="#898989" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
+                           </children>
+                        </AnchorPane>
+                     </graphic>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="groupsBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#groupsBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: A276FF; -fx-text-fill: ffffff;" stylesheets="@../../../CSS/button.css" text="Groups" textFill="#a276ff">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <graphic>
+                        <AnchorPane prefHeight="24.0" prefWidth="21.0">
+                           <children>
+                              <SVGPath content="M12 2C9.38 2 7.25 4.13 7.25 6.75C7.25 9.32 9.26 11.4 11.88 11.49C11.96 11.48 12.04 11.48 12.1 11.49C12.12 11.49 12.13 11.49 12.15 11.49C12.16 11.49 12.16 11.49 12.17 11.49C14.73 11.4 16.74 9.32 16.75 6.75C16.75 4.13 14.62 2 12 2Z" fill="WHITE" stroke="WHITE" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" />
+                              <SVGPath content="M17.08 14.15C14.29 12.29 9.74002 12.29 6.93002 14.15C5.66002 15 4.96002 16.15 4.96002 17.38C4.96002 18.61 5.66002 19.75 6.92002 20.59C8.32002 21.53 10.16 22 12 22C13.84 22 15.68 21.53 17.08 20.59C18.34 19.74 19.04 18.6 19.04 17.36C19.03 16.13 18.34 14.99 17.08 14.15Z" fill="WHITE" stroke="WHITE" styleClass="icon" />
+                           </children>
+                        </AnchorPane>
+                     </graphic>
+                  </Button>
+                  <VBox prefHeight="55.0" prefWidth="250.0">
+                     <children>
+                        <AnchorPane prefHeight="40.0" prefWidth="190.0">
+                           <children>
+                              <Button fx:id="myGroupsBtn" graphicTextGap="10.0" layoutX="40.0" mnemonicParsing="false" onMouseClicked="#myGroupsBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="40.0" prefWidth="190.0" stylesheets="@../../../CSS/button.css" text="My Groups">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <graphic>
+                                    <AnchorPane prefHeight="20.0" prefWidth="20.0">
+                                       <children>
+                                          <SVGPath content="M 15.28,16.67           C 15.88,16.54 16.45,16.30 16.92,15.94             18.22,14.97 18.22,13.36 16.92,12.38             16.46,12.03 15.90,11.80 15.31,11.67M 3.47,12.13           C 1.45,13.48 1.45,15.68 3.47,17.02             5.76,18.56 9.52,18.56 11.81,17.02             13.83,15.68 13.83,13.48 11.81,12.13             9.53,10.61 5.77,10.61 3.47,12.13 Z           M 13.68,3.33           C 15.29,3.33 16.59,4.64 16.59,6.25             16.59,7.83 15.34,9.11 13.78,9.17             13.72,9.16 13.64,9.16 13.57,9.17M 7.63,9.06           C 7.55,9.05 7.45,9.05 7.36,9.06             5.38,8.99 3.80,7.37 3.80,5.37             3.80,3.32 5.45,1.67 7.50,1.67             9.54,1.67 11.20,3.32 11.20,5.37             11.19,7.37 9.62,8.99 7.63,9.06 Z" fill="#898989" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
+                                       </children>
+                                    </AnchorPane>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="40.0" prefWidth="190.0">
+                           <children>
+                              <Button fx:id="allGroupsBtn" graphicTextGap="10.0" layoutX="40.0" mnemonicParsing="false" onMouseClicked="#allGroupsBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="40.0" prefWidth="186.0" style="-fx-background-color: A276FF; -fx-text-fill: ffffff;" stylesheets="@../../../CSS/button.css" text="All Groups">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <graphic>
+                                    <AnchorPane prefHeight="20.0" prefWidth="20.0">
+                                       <children>
+                                          <SVGPath content="M 7.57,14.82           C 6.40,15.60 6.40,16.88 7.57,17.67             8.91,18.56 11.09,18.56 12.43,17.67             13.60,16.88 13.60,15.60 12.43,14.82             11.10,13.93 8.91,13.93 7.57,14.82 Z           M 10.00,12.19           C 9.95,12.18 9.89,12.18 9.84,12.19             8.69,12.15 7.77,11.21 7.77,10.04             7.77,8.85 8.73,7.89 9.92,7.89             11.12,7.89 12.07,8.86 12.07,10.04             12.07,11.21 11.15,12.16 10.00,12.19 Z           M 5.83,12.03           C 4.69,12.22 3.43,12.03 2.55,11.43             1.37,10.65 1.37,9.37 2.55,8.58             3.44,7.99 4.72,7.79 5.86,7.99M 4.97,5.97           C 5.02,5.96 5.08,5.96 5.13,5.97             6.28,5.92 7.20,4.98 7.20,3.82             7.20,2.62 6.24,1.67 5.05,1.67             3.86,1.67 2.90,2.63 2.90,3.82             2.91,4.98 3.82,5.92 4.97,5.97 Z           M 14.14,12.03           C 15.28,12.22 16.54,12.03 17.42,11.43             18.60,10.65 18.60,9.37 17.42,8.58             16.53,7.99 15.26,7.79 14.12,7.99M 15.00,5.97           C 14.95,5.96 14.89,5.96 14.84,5.97             13.69,5.92 12.78,4.98 12.78,3.82             12.78,2.62 13.73,1.67 14.93,1.67             16.12,1.67 17.07,2.63 17.07,3.82             17.07,4.98 16.15,5.92 15.00,5.97 Z" fill="WHITE" stroke="WHITE" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
+                                       </children>
+                                    </AnchorPane>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+                  <Button fx:id="accountBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#accountBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../../CSS/button.css" text="Account">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <graphic>
+                        <AnchorPane prefHeight="24.0" prefWidth="21.0">
+                           <children>
+                              <SVGPath content="M 12.00,8.00           C 10.02,8.00 8.42,9.60 8.42,11.58             8.42,13.56 10.02,15.17 12.00,15.17             13.98,15.17 15.58,13.56 15.58,11.58             15.58,9.60 13.98,8.00 12.00,8.00 Z           M 16.19,2.00           C 16.19,2.00 7.81,2.00 7.81,2.00             4.17,2.00 2.00,4.17 2.00,7.81             2.00,7.81 2.00,16.19 2.00,16.19             2.00,19.00 3.29,20.93 5.56,21.66             6.22,21.89 6.98,22.00 7.81,22.00             7.81,22.00 16.19,22.00 16.19,22.00             17.02,22.00 17.78,21.89 18.44,21.66             20.71,20.93 22.00,19.00 22.00,16.19             22.00,16.19 22.00,7.81 22.00,7.81             22.00,4.17 19.83,2.00 16.19,2.00 Z           M 20.50,16.19           C 20.50,18.33 19.66,19.68 17.97,20.24             17.00,18.33 14.70,16.97 12.00,16.97             9.30,16.97 7.01,18.32 6.03,20.24             6.03,20.24 6.02,20.24 6.02,20.24             4.35,19.70 3.50,18.34 3.50,16.20             3.50,16.20 3.50,7.81 3.50,7.81             3.50,4.99 4.99,3.50 7.81,3.50             7.81,3.50 16.19,3.50 16.19,3.50             19.01,3.50 20.50,4.99 20.50,7.81             20.50,7.81 20.50,16.19 20.50,16.19 Z" fill="#898989" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
+                           </children>
+                        </AnchorPane>
+                     </graphic>
+                  </Button>
+               </children>
+            </VBox>
+            <AnchorPane layoutX="10.0" layoutY="784.0" prefHeight="79.0" prefWidth="252.0">
+               <children>
+                  <Button id="logoutBtn" fx:id="logOutBtn" layoutX="16.0" layoutY="-8.0" mnemonicParsing="false" onMouseClicked="#logOutBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="47.0" prefWidth="226.0" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff;" text="Log out" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="-8.0">
+                     <font>
+                        <Font size="31.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </left>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox id="parent" layoutX="32.0" prefHeight="853.0" prefWidth="914.0" AnchorPane.leftAnchor="0.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label fx:id="nameLabel" contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Welcome, ">
+                           <font>
+                              <Font name="Dubai Medium" size="30.0" />
+                           </font>
+                           <graphic>
+                              <Label fx:id="localTime" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="loading time ..." textFill="#00000099">
+                                 <font>
+                                    <Font name="System Italic" size="14.0" />
+                                 </font>
+                              </Label>
+                           </graphic>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <VBox>
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label prefHeight="60.0" prefWidth="747.0" text="All Groups">
+                                 <font>
+                                    <Font name="Gadugi Bold" size="20.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="10.0" top="20.0" />
+                                 </padding>
+                              </Label>
+                              <AnchorPane fx:id="searchPane" prefHeight="100.0" prefWidth="221.0" stylesheets="@../../../CSS/search_bar.css">
+                                 <children>
+                                    <TextField fx:id="searchTextField" cache="true" layoutX="-2.0" layoutY="28.0" prefHeight="42.0" prefWidth="227.0" styleClass="search-box" stylesheets="@../../../CSS/table_view.css" text="Search">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="16.0" layoutY="37.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
+                                    <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="15.0" layoutY="38.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </HBox>
+                        <TableView fx:id="groupTable" onMouseClicked="#tableClicked" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../../CSS/table_view.css">
+                           <columns>
+                              <TableColumn fx:id="idCol" prefWidth="49.066646575927734" />
+                              <TableColumn fx:id="groupNameCol" prefWidth="170.933349609375" text="Group Name" />
+                              <TableColumn fx:id="ownerCol" prefWidth="174.39996337890625" text="Owner" />
+                              <TableColumn fx:id="numOfMembersCol" prefWidth="165.06671142578125" text="Number of members" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets right="20.0" />
+               </padding>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </AnchorPane>
+   </center>
+</BorderPane>

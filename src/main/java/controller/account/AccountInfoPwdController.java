@@ -1,6 +1,5 @@
-package controller;
+package controller.account;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -12,12 +11,8 @@ import javafx.stage.Stage;
 import model.HttpClientSingleton;
 import model.HttpRequestBuilder;
 import model.TokenStorage;
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
 import org.apache.http.client.methods.*;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
@@ -127,7 +122,7 @@ public class AccountInfoPwdController {
     @FXML
     void accountBtnClick() {
         String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
-        this.controllerUtils.gotoPage(stage, accountBtn, pageLink);
+        this.controllerUtils.goPage(stage, accountBtn, pageLink);
     }
 
     @FXML
@@ -182,29 +177,33 @@ public class AccountInfoPwdController {
         }
     }
 
-    private void handleDeleteResponse(CloseableHttpResponse response, Object responseObject) {
-        JSONObject jsonResponse = (JSONObject) responseObject;
+    private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONObject object = controllerUtils.toJSonObject(response);
+
         try {
-            String message = (String) jsonResponse.get("message");
+            String message = (String) object.get("message");
             System.out.println("message: " + message);
             String helloPage = "/fxml/hello_view.fxml";
             TokenStorage.clearToken();
-            controllerUtils.gotoPage(stage, deleteBtn, helloPage);
+            controllerUtils.goPage(stage, deleteBtn, helloPage);
         } catch (JSONException e) {
 //            String errMessage = (String) jsonResponse.get("message");
             displayGeneralErrMessages(e.getMessage());
         }
     }
 
-    @FXML
-    public void groupsClicked(ActionEvent event) throws IOException {
-        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
-    }
+//    @FXML
+//    public void groupsClicked(ActionEvent event) throws IOException {
+////        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
+//
+//    }
 
     @FXML
     void mouseEnter(MouseEvent event) {
         this.controllerUtils.setHandCursor(saveBtn);
         this.controllerUtils.setHandCursor(deleteBtn);
+        this.controllerUtils.setHandCursor(groupsBtn);
 
     }
 
@@ -212,11 +211,18 @@ public class AccountInfoPwdController {
     void mouseExit(MouseEvent event) {
         this.controllerUtils.setDefaultCursor(saveBtn);
         this.controllerUtils.setDefaultCursor(deleteBtn);
+        this.controllerUtils.setDefaultCursor(groupsBtn);
     }
 
     @FXML
     void logOutBtnClick() {
         this.controllerUtils.goToHelloPage(stage, logOutBtn);
+    }
+
+    @FXML
+    void groupsBtnClick(){
+        controllerUtils.goPage(stage,groupsBtn,"/fxml/main_pages/groups/group_info_create_group.fxml/");
+
     }
 
     @FXML
@@ -317,8 +323,9 @@ public class AccountInfoPwdController {
 //        TokenStorage.saveInfo("password", newPwd);
     }
 
-    private void handleSaveUserinfoResponse(CloseableHttpResponse response, Object responseObject) {
-        JSONObject jsonResponse = (JSONObject) responseObject;
+    private void handleSaveUserinfoResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
+
         try {
             String statusLine = response.getStatusLine().toString();
 
@@ -326,11 +333,10 @@ public class AccountInfoPwdController {
                 generalErrLabel.setTextFill(Color.GREEN);
                 generalErrLabel.setText("User Password changes successfully");
                 TokenStorage.saveInfo("password",this.newPassword);
-//            String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
-//            this.controllerUtils.gotoPage(stage, accountBtn, pageLink);
+
 
             } else {
-                String message = (String) jsonResponse.get("message");
+                String message = (String) object.get("message");
                 generalErrLabel.setText(message);
             }
         } catch (JSONException e) {

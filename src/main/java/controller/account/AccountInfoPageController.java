@@ -1,26 +1,18 @@
-package controller;
+package controller.account;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
 import model.HttpRequestBuilder;
 import model.TokenStorage;
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
 import org.apache.http.client.methods.*;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
@@ -112,6 +104,7 @@ public class AccountInfoPageController {
         this.controllerUtils.setHandCursor(changePwdBtn);
         this.controllerUtils.setHandCursor(deleteBtn);
         this.controllerUtils.setHandCursor(logOutBtn);
+        this.controllerUtils.setHandCursor(groupsBtn);
     }
 
     @FXML
@@ -120,6 +113,13 @@ public class AccountInfoPageController {
         this.controllerUtils.setDefaultCursor(changePwdBtn);
         this.controllerUtils.setDefaultCursor(deleteBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
+        this.controllerUtils.setDefaultCursor(groupsBtn);
+    }
+
+    @FXML
+    void groupsBtnClick() {
+        controllerUtils.goPage(stage, groupsBtn, "/fxml/main_pages/groups/group_info_create_group.fxml/");
+
     }
 
     @FXML
@@ -128,6 +128,7 @@ public class AccountInfoPageController {
         String username = usernameInput.getText();
         handleInput(email, username);
     }
+
 
     private void getUserInfo() {
         String username = TokenStorage.getUser();
@@ -171,18 +172,24 @@ public class AccountInfoPageController {
 //                a.show();
 //            }
 //        }).start();
-        httpResponseService.handleReponse(httpGet,httpClient,this::handleGetUserInfoResponse);
+        httpResponseService.handleReponse(httpGet, httpClient, this::handleGetUserInfoResponse);
     }
 
-    private void handleGetUserInfoResponse(CloseableHttpResponse response,Object responseObject) {
-        JSONObject jsonResponse = (JSONObject) responseObject;
+//    private void handleGetUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    private void handleGetUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
+//        JSONObject jsonObject = new JSONObject(response);
+//        JSONObject object = null;
+//        if (jsonResponse instanceof JSONObject){
+//            object = (JSONObject) jsonResponse;
+//        }
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
-            String email = (String) jsonResponse.get("email");
-            String username = (String) jsonResponse.get("username");
+            String email = (String) object.get("email");
+            String username = (String) object.get("username");
             emailInput.setText(email);
             usernameInput.setText(username);
         } catch (JSONException e) {
-            String errMessage = (String) jsonResponse.get("message");
+            String errMessage = (String) object.get("message");
             displayGeneralErrMessages(errMessage);
         }
     }
@@ -281,23 +288,25 @@ public class AccountInfoPageController {
 //                generalErrLabel.setText(e.getMessage());
 //            }
 //        }).start();
-        httpResponseService.handleReponse(httpPut,httpClient,this::handleSaveUserInfoResponse);
+        httpResponseService.handleReponse(httpPut, httpClient, this::handleSaveUserInfoResponse);
     }
 
-    public void handleSaveUserInfoResponse(CloseableHttpResponse response,Object responseObject) {
-        JSONObject jsonResponse = (JSONObject) responseObject;
+    public void handleSaveUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
+
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
+
             String statusLine = response.getStatusLine().toString();
             if (statusLine.contains("200")) {
-                String newUsername = (String) jsonResponse.get("username");
+                String newUsername = (String) object.get("username");
                 String curUsername = TokenStorage.getUser();
                 // check if username is the same
                 // 1. if the same, email change, no token in the response body
                 if (!newUsername.equals(curUsername)) {
-                    String newToken = (String) jsonResponse.get("token");
+                    String newToken = (String) object.get("token");
                     System.out.println("New: username: " + newUsername + ", token: " + newToken);
                     TokenStorage.saveToken(newUsername, newToken);
-                    TokenStorage.saveInfo("username",newUsername);
+                    TokenStorage.saveInfo("username", newUsername);
                 }
 
                 // 2. if username is not the same, token in response body
@@ -306,7 +315,7 @@ public class AccountInfoPageController {
 //                generalErrLabel.setTextFill(Color.RED);
             } else {
                 // get message from generic response
-                String message = (String) jsonResponse.get("message");
+                String message = (String) object.get("message");
                 generalErrLabel.setText(message);
             }
         } catch (JSONException e) {
@@ -316,10 +325,10 @@ public class AccountInfoPageController {
     }
 
 
-    @FXML
-    public void groupsClicked(ActionEvent event) throws IOException {
-        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
-    }
+//    @FXML
+//    public void groupsClicked(ActionEvent event) throws IOException {
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
+//    }
 
 
     @FXML
@@ -333,7 +342,7 @@ public class AccountInfoPageController {
     @FXML
     public void accountBtnClick() {
         String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
-        this.controllerUtils.gotoPage(stage, accountBtn, pageLink);
+        this.controllerUtils.goPage(stage, accountBtn, pageLink);
     }
 
     @FXML
@@ -384,7 +393,7 @@ public class AccountInfoPageController {
 //                    System.out.println(e.getMessage());
 //                }
 //            }).start();
-            this.httpResponseService.handleReponse(httpDelete,httpClient,this::handleDeleteResponse);
+            this.httpResponseService.handleReponse(httpDelete, httpClient, this::handleDeleteResponse);
 
         }
     }
@@ -395,14 +404,15 @@ public class AccountInfoPageController {
         this.controllerUtils.goToHelloPage(stage, logOutBtn);
     }
 
-    private void handleDeleteResponse(CloseableHttpResponse response, Object responseObject) {
-        JSONObject jsonResponse = (JSONObject) responseObject;
+    private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
+
         try {
-            String message = (String) jsonResponse.get("message");
+            String message = (String) object.get("message");
             System.out.println("message: " + message);
 //            String helloPage = "/fxml/hello_view.fxml";
 //            TokenStorage.clearToken();
-//            controllerUtils.gotoPage(stage, deleteBtn, helloPage);
+//            controllerUtils.goPage(stage, deleteBtn, helloPage);
             this.controllerUtils.goToHelloPage(stage, deleteBtn);
         } catch (JSONException e) {
 

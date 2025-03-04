@@ -1,4 +1,4 @@
-package controller;
+package controller.auth;
 
 
 import javafx.application.Platform;
@@ -17,6 +17,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
@@ -250,29 +251,31 @@ public class LogInController {
 
     }
 
-
-    private void handleLoginReponse(CloseableHttpResponse response, Object responseObject) {
-        JSONObject jsonResponse = (JSONObject) responseObject;
+    private void handleLoginReponse(CloseableHttpResponse response, Object jsonResponse) {
         String statusCode = response.getStatusLine().toString();
-        try {
-            String token = (String) jsonResponse.get("token");
-            String username = (String) jsonResponse.get("username");
-            TokenStorage.saveToken(username, token);
-            String savedUsername = TokenStorage.getUser();
-            String savedToken = TokenStorage.getToken();
-            goToMainPage();
 
-        } catch (JSONException e) {
-            String messsage = (String) jsonResponse.get("message");
-            displayErrGeneral(messsage);
-        }
+        JSONObject object = controllerUtil.toJSonObject(jsonResponse);
+            try {
+                String token = (String) object.get("token");
+                String username = (String) object.get("username");
+                TokenStorage.saveToken(username, token);
+                String savedUsername = TokenStorage.getUser();
+                String savedToken = TokenStorage.getToken();
+                goToMainPage();
+
+            } catch (JSONException e) {
+                String messsage = (String) object.get("message");
+                displayErrGeneral(messsage);
+            }
 
     }
 
     private void goToMainPage() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
-        this.stage = this.getStage();
-        controllerUtil.updateStage(stage, fxmlLoader);
+        String mainPageLink = "/fxml/main_pages/main_page.fxml";
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
+//        this.stage = this.getStage();
+//        controllerUtil.updateStage(stage, fxmlLoader);
+        controllerUtil.goPage(stage,loginBtn,mainPageLink);
     }
 
 

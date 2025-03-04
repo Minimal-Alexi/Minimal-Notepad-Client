@@ -1,0 +1,62 @@
+#groupMenu {
+    -fx-background-color: #FFFFFF;
+    -fx-background-insets: 1, 1, 1;
+    -fx-background-radius: 10, 10, 10;
+    -fx-padding: 3 3 3 0;
+    /*-fx-text-fill: #898989; !* Default text color *!*/
+    /*-fx-alignment: center-left;*/
+    -fx-graphic-text-gap: 10;
+}
+
+/*#groupMenu:hover {*/
+/*    -fx-background-color: #A276FF;*/
+/*    !*-fx-text-fill: #FFFFFF; !* Ensure text color turns white when hovering *!*!*/
+/*}*/
+
+#groupMenu:focused {
+    -fx-background-color: #A276FF;
+    -fx-text-fill: #FFFFFF; /* Ensure white text when focused */
+}
+
+.menu-item {
+    -fx-padding: 15 0 15 10;
+
+    -fx-pref-height: 50;
+    -fx-pref-width: 200;
+    /*-fx-text-fill: #898989; !* Default text color for MenuItems *!*/
+}
+
+.menu-item:hover {
+    -fx-background-color: #A276FF; /* Background color for hover */
+    -fx-text-fill: #FFFFFF; /* Text color white when hovered */
+}
+
+.menu-item:focused{
+    -fx-background-color: #A276FF;
+    -fx-text-fill: #FFFFFF; /* Text color white when focused */
+}
+
+/*.menu-item .graphic {*/
+/*    -fx-alignment: CENTER_LEFT; !* Aligns the icon to the left *!*/
+/*    -fx-padding: 0 15 0 0;*/
+/*}*/
+
+/*.menu-item:focused {*/
+/*    -fx-background-color: #A276FF;*/
+/*    -fx-text-fill: #FFFFFF; !* Text color white when focused *!*/
+/*}*/
+
+#createBtn{    /* Create group button */
+    -fx-background-color: #A276FF;
+    -fx-text-fill: #FFFFFF;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-padding: 15 0 15 10;
+    -fx-pref-height: 50;
+    -fx-pref-width: 250;
+}
+#createBtn:hover{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #FFFFFF;
+
+}

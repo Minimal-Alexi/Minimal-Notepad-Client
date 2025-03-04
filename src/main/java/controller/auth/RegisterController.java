@@ -1,9 +1,8 @@
-package controller;
+package controller.auth;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -12,20 +11,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.HttpClientSingleton;
 import model.HttpRequestBuilder;
 import model.TokenStorage;
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
@@ -274,16 +266,17 @@ public class RegisterController {
 
 
     // each controller must implemnt its own reponse as callback when work with httpResponse method
-    private void handleRegisterResponse(CloseableHttpResponse response, Object responseObject) {
-        JSONObject jsonResponse = (JSONObject) responseObject;
+    private void handleRegisterResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONObject object = controllerUtil.toJSonObject(jsonResponse);
+
         String statusCode = response.getStatusLine().toString();
         try {
-            String token = (String) jsonResponse.get("token");
-            String username = (String) jsonResponse.get("username");
+            String token = (String) object.get("token");
+            String username = (String) object.get("username");
             TokenStorage.saveToken(username, token);
             goToMainPage();
         } catch (JSONException e) {
-            String errMessage = (String) jsonResponse.get("message");
+            String errMessage = (String) object.get("message");
             displayErrGeneral(errMessage);
         }
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
@@ -12,241 +13,238 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateNoteController">
+<BorderPane id="parent" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.groups.GroupInfoCreateController">
    <left>
-      <AnchorPane id="sidebar" prefHeight="853.0" prefWidth="250.0" stylesheets="@../../CSS/button.css" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" styleClass="side-bar" BorderPane.alignment="TOP_CENTER">
          <children>
-            <ImageView fitHeight="853.0" fitWidth="100.0" layoutX="250.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="70.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                <image>
-                  <Image url="@../../img/sideBar.png" />
+                  <Image url="@../../img/logo/logo1.png" />
                </image>
+               <VBox.margin>
+                  <Insets bottom="40.0" top="40.0" />
+               </VBox.margin>
             </ImageView>
-            <VBox alignment="TOP_CENTER" prefWidth="250.0">
-               <children>
-                  <ImageView fitHeight="70.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../img/logo/logo1.png" />
-                     </image>
-                     <VBox.margin>
-                        <Insets bottom="40.0" top="40.0" />
-                     </VBox.margin>
-                  </ImageView>
-                  <Button graphicTextGap="10.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/table_view.css" text="My files">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <graphic>
-                        <AnchorPane prefHeight="24.0" prefWidth="24.0">
-                           <children>
-                              <SVGPath content="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
-                              <SVGPath content="M13.5 8C10.47 8 8 10.48 8 13.5C8 14.87 9.12 16 10.5 16C13.52 16 16 13.52 16 10.5C16 9.13 14.87 8 13.5 8Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
-                           </children>
-                        </AnchorPane>
-                     </graphic>
-                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button graphicTextGap="10.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/table_view.css" text="Share Notes">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <graphic>
-                        <AnchorPane prefHeight="24.0" prefWidth="21.0">
-                           <children>
-                              <SVGPath content="M16.4982 14.9984C15.1578 14.9984 13.9579 15.5843 13.133 16.5123L8.65689 13.7142C9.10684 12.6174 9.11153 11.38 8.65689 10.2833L13.133 7.48514C13.9579 8.41316 15.1578 8.99904 16.4982 8.99904C18.9823 8.99904 20.9978 6.98363 20.9978 4.49952C20.9978 2.01541 18.9823 0 16.4982 0C14.0141 0 11.9987 2.01541 11.9987 4.49952C11.9987 5.10883 12.1206 5.68533 12.3362 6.21496L7.8601 9.0131C7.03987 8.08508 5.84 7.4992 4.49952 7.4992C2.01541 7.4992 0 9.51461 0 11.9987C0 14.4828 2.01541 16.4982 4.49952 16.4982C5.84 16.4982 7.03987 15.9124 7.86479 14.9843L12.3409 17.7825C12.1206 18.3121 12.0034 18.8886 12.0034 19.4979C12.0034 21.982 14.0188 23.9974 16.5029 23.9974C18.987 23.9974 21.0024 21.982 21.0024 19.4979C20.9978 17.0138 18.9823 14.9984 16.4982 14.9984ZM16.4982 1.49984C18.1528 1.49984 19.4979 2.84501 19.4979 4.49952C19.4979 6.15403 18.1528 7.4992 16.4982 7.4992C14.8437 7.4992 13.4986 6.15403 13.4986 4.49952C13.4986 2.84501 14.8437 1.49984 16.4982 1.49984ZM4.49952 14.9984C2.84501 14.9984 1.49984 13.6532 1.49984 11.9987C1.49984 10.3442 2.84501 8.99904 4.49952 8.99904C6.15403 8.99904 7.4992 10.3442 7.4992 11.9987C7.4992 13.6532 6.15403 14.9984 4.49952 14.9984ZM16.4982 22.4976C14.8437 22.4976 13.4986 21.1524 13.4986 19.4979C13.4986 17.8434 14.8437 16.4982 16.4982 16.4982C18.1528 16.4982 19.4979 17.8434 19.4979 19.4979C19.4979 21.1524 18.1528 22.4976 16.4982 22.4976Z" fill="#898989" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
-                           </children>
-                        </AnchorPane>
-                     </graphic>
-                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button graphicTextGap="10.0" mnemonicParsing="false" onAction="#groupsClicked" prefHeight="40.0" prefWidth="164.0" stylesheets="@../../CSS/button.css" text="Groups">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <graphic>
-                        <AnchorPane prefHeight="24.0" prefWidth="21.0">
-                           <children>
-                              <SVGPath content="M12 2C9.38 2 7.25 4.13 7.25 6.75C7.25 9.32 9.26 11.4 11.88 11.49C11.96 11.48 12.04 11.48 12.1 11.49C12.12 11.49 12.13 11.49 12.15 11.49C12.16 11.49 12.16 11.49 12.17 11.49C14.73 11.4 16.74 9.32 16.75 6.75C16.75 4.13 14.62 2 12 2Z" fill="#898989" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
-                              <SVGPath content="M17.08 14.15C14.29 12.29 9.74002 12.29 6.93002 14.15C5.66002 15 4.96002 16.15 4.96002 17.38C4.96002 18.61 5.66002 19.75 6.92002 20.59C8.32002 21.53 10.16 22 12 22C13.84 22 15.68 21.53 17.08 20.59C18.34 19.74 19.04 18.6 19.04 17.36C19.03 16.13 18.34 14.99 17.08 14.15Z" fill="#898989" stroke="#898989" styleClass="icon" />
-                           </children>
-                        </AnchorPane>
-                     </graphic>
-                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-         </children></AnchorPane>
+            <Button graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" stylesheets="@../../CSS/table_view.css" text="My files" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <graphic>
+                  <AnchorPane prefHeight="24.0" prefWidth="24.0">
+                     <children>
+                        <SVGPath content="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
+                        <SVGPath content="M13.5 8C10.47 8 8 10.48 8 13.5C8 14.87 9.12 16 10.5 16C13.52 16 16 13.52 16 10.5C16 9.13 14.87 8 13.5 8Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
+                     </children>
+                  </AnchorPane>
+               </graphic>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" stylesheets="@../../CSS/table_view.css" text="Share Notes" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <graphic>
+                  <AnchorPane prefHeight="24.0" prefWidth="21.0">
+                     <children>
+                        <SVGPath content="M16.4982 14.9984C15.1578 14.9984 13.9579 15.5843 13.133 16.5123L8.65689 13.7142C9.10684 12.6174 9.11153 11.38 8.65689 10.2833L13.133 7.48514C13.9579 8.41316 15.1578 8.99904 16.4982 8.99904C18.9823 8.99904 20.9978 6.98363 20.9978 4.49952C20.9978 2.01541 18.9823 0 16.4982 0C14.0141 0 11.9987 2.01541 11.9987 4.49952C11.9987 5.10883 12.1206 5.68533 12.3362 6.21496L7.8601 9.0131C7.03987 8.08508 5.84 7.4992 4.49952 7.4992C2.01541 7.4992 0 9.51461 0 11.9987C0 14.4828 2.01541 16.4982 4.49952 16.4982C5.84 16.4982 7.03987 15.9124 7.86479 14.9843L12.3409 17.7825C12.1206 18.3121 12.0034 18.8886 12.0034 19.4979C12.0034 21.982 14.0188 23.9974 16.5029 23.9974C18.987 23.9974 21.0024 21.982 21.0024 19.4979C20.9978 17.0138 18.9823 14.9984 16.4982 14.9984ZM16.4982 1.49984C18.1528 1.49984 19.4979 2.84501 19.4979 4.49952C19.4979 6.15403 18.1528 7.4992 16.4982 7.4992C14.8437 7.4992 13.4986 6.15403 13.4986 4.49952C13.4986 2.84501 14.8437 1.49984 16.4982 1.49984ZM4.49952 14.9984C2.84501 14.9984 1.49984 13.6532 1.49984 11.9987C1.49984 10.3442 2.84501 8.99904 4.49952 8.99904C6.15403 8.99904 7.4992 10.3442 7.4992 11.9987C7.4992 13.6532 6.15403 14.9984 4.49952 14.9984ZM16.4982 22.4976C14.8437 22.4976 13.4986 21.1524 13.4986 19.4979C13.4986 17.8434 14.8437 16.4982 16.4982 16.4982C18.1528 16.4982 19.4979 17.8434 19.4979 19.4979C19.4979 21.1524 18.1528 22.4976 16.4982 22.4976Z" fill="#898989" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
+                     </children>
+                  </AnchorPane>
+               </graphic>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#groupsClicked" stylesheets="@../../CSS/button.css" text="Groups" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <graphic>
+                  <AnchorPane prefHeight="24.0" prefWidth="21.0">
+                     <children>
+                        <SVGPath content="M12 2C9.38 2 7.25 4.13 7.25 6.75C7.25 9.32 9.26 11.4 11.88 11.49C11.96 11.48 12.04 11.48 12.1 11.49C12.12 11.49 12.13 11.49 12.15 11.49C12.16 11.49 12.16 11.49 12.17 11.49C14.73 11.4 16.74 9.32 16.75 6.75C16.75 4.13 14.62 2 12 2Z" fill="#898989" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
+                        <SVGPath content="M17.08 14.15C14.29 12.29 9.74002 12.29 6.93002 14.15C5.66002 15 4.96002 16.15 4.96002 17.38C4.96002 18.61 5.66002 19.75 6.92002 20.59C8.32002 21.53 10.16 22 12 22C13.84 22 15.68 21.53 17.08 20.59C18.34 19.74 19.04 18.6 19.04 17.36C19.03 16.13 18.34 14.99 17.08 14.15Z" fill="#898989" stroke="#898989" styleClass="icon" />
+                     </children>
+                  </AnchorPane>
+               </graphic>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <padding>
+            <Insets left="20.0" right="10.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets right="10.0" />
+         </BorderPane.margin>
+         <stylesheets>
+            <URL value="@../../CSS/button.css" />
+            <URL value="@../../CSS/side_bar.css" />
+         </stylesheets>
+      </VBox>
    </left>
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" stylesheets="@../../CSS/button.css" BorderPane.alignment="CENTER">
+      <VBox stylesheets="@../../CSS/button.css" BorderPane.alignment="CENTER">
          <children>
-            <VBox layoutX="32.0" prefHeight="853.0" prefWidth="914.0">
+            <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER_LEFT">
-                     <children>
-                        <Label fx:id="nameLabel" contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Welcome, ">
+                  <Label fx:id="nameLabel" contentDisplay="BOTTOM" text="Welcome, ">
+                     <font>
+                        <Font name="Dubai Medium" size="30.0" />
+                     </font>
+                     <graphic>
+                        <Label fx:id="localTime" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="loading time ..." textFill="#00000099">
                            <font>
-                              <Font name="Dubai Medium" size="30.0" />
+                              <Font name="System Italic" size="14.0" />
                            </font>
-                           <graphic>
-                              <Label fx:id="localTime" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="loading time ..." textFill="#00000099">
-                                 <font>
-                                    <Font name="System Italic" size="14.0" />
-                                 </font>
-                              </Label>
-                           </graphic>
                         </Label>
-                        <AnchorPane prefHeight="62.0" prefWidth="210.0">
-                           <children>
-                              <TextField cache="true" layoutX="5.0" layoutY="28.0" styleClass="search-box" stylesheets="@../../CSS/search_bar.css" text="Search">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
-                              <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="16.0" layoutY="37.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                              <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="15.0" layoutY="38.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                           </children>
-                        </AnchorPane>
+                     </graphic>
+                  </Label>
+                  <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                  <AnchorPane prefHeight="62.0" prefWidth="210.0">
+                     <children>
+                        <TextField cache="true" layoutX="5.0" layoutY="28.0" styleClass="search-box" stylesheets="@../../CSS/search_bar.css" text="Search">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="16.0" layoutY="37.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
+                        <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="15.0" layoutY="38.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
                      </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
+                  </AnchorPane>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </HBox>
+            <VBox VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label text="Creating Note" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="Gadugi Bold" size="20.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="20.0" top="20.0" />
+                           </padding>
+                        </Label>
+                        <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="saveNoteBtn" mnemonicParsing="false" onAction="#saveNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/table_view.css" text="  Save Note" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
                      <VBox.margin>
-                        <Insets top="30.0" />
+                        <Insets />
                      </VBox.margin>
                   </HBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox fx:id="noteBackground" styleClass="note-area" stylesheets="@../../CSS/note_area.css" VBox.vgrow="ALWAYS">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                        <TextField fx:id="titleTextArea" promptText="Please enter the title" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets left="10.0" top="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </TextField>
+                        <HBox VBox.vgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="70.0" prefWidth="748.0" text="Creating Note">
+                              <ColorPicker fx:id="colorPicker" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="uploadPicBtn" mnemonicParsing="false" onMouseClicked="#uploadPicClicked" text=" + Upload picture" HBox.hgrow="ALWAYS">
                                  <font>
-                                    <Font name="Gadugi Bold" size="20.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets bottom="20.0" top="20.0" />
-                                 </padding>
-                              </Label>
-                              <Button fx:id="saveNoteBtn" mnemonicParsing="false" onAction="#saveNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/table_view.css" text="  Save Note">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Button>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Button>
                            </children>
                            <VBox.margin>
-                              <Insets />
+                              <Insets left="10.0" top="20.0" />
                            </VBox.margin>
                         </HBox>
-                        <AnchorPane prefHeight="702.0" prefWidth="894.0">
+                        <HBox fx:id="categoryHBox" alignment="CENTER_LEFT" styleClass="category-HBox" stylesheets="@../../CSS/category.css" VBox.vgrow="ALWAYS">
                            <children>
-                              <Rectangle fx:id="noteBackground" arcHeight="25.0" arcWidth="25.0" fill="WHITE" height="623.0" stroke="BLACK" strokeType="INSIDE" width="840.0" />
-                              <VBox prefHeight="617.0" prefWidth="840.0">
-                                 <padding>
-                                    <Insets left="20.0" right="20.0" />
-                                 </padding>
-                                 <children>
-                                    <TextField fx:id="titleTextArea" prefHeight="40.0" prefWidth="770.0" promptText="Please enter the title">
-                                       <VBox.margin>
-                                          <Insets left="10.0" top="20.0" />
-                                       </VBox.margin>
-                                       <font>
-                                          <Font size="20.0" />
-                                       </font>
-                                    </TextField>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="800.0" spacing="20.0">
-                                       <VBox.margin>
-                                          <Insets left="10.0" right="10.0" />
-                                       </VBox.margin>
-                                       <padding>
-                                          <Insets left="10.0" right="10.0" />
-                                       </padding>
-                                       <children>
-                                          <ColorPicker fx:id="colorPicker" />
-                                       </children>
-                                    </HBox>
-                                    <HBox fx:id="categoryHBox" alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" styleClass="category-HBox" stylesheets="@../../CSS/category.css">
-                                       <children>
-                                          <Label text="  Categories: ">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </Label>
-                                          <Label fx:id="addCategory" onMouseClicked="#addCategoryClicked" styleClass="add-category" text=" + ">
-                                             <font>
-                                                <Font name="System Bold" size="25.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets left="30.0" top="10.0" />
-                                       </VBox.margin>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" stylesheets="@../../CSS/category.css">
-                                       <children>
-                                          <Label text="  Groups: ">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </Label>
-                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="148.0" text="ICT24-SW" textFill="#666666">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                       <padding>
-                                          <Insets left="30.0" top="10.0" />
-                                       </padding>
-                                    </HBox>
-                                    <ScrollPane prefHeight="411.0" prefWidth="800.0">
-                                       <content>
-                                          <VBox fx:id="textVBox" prefHeight="406.0" prefWidth="800.0">
-                                             <children>
-                                                <TextArea fx:id="textArea1" onKeyPressed="#textAreaKeyPressed" prefHeight="75.0" prefWidth="800.0" />
-                                             </children>
-                                          </VBox>
-                                       </content>
-                                    </ScrollPane>
-                                 </children>
-                              </VBox>
+                              <Label text="  Categories: " HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="addCategory" onMouseClicked="#addCategoryClicked" styleClass="add-category" text=" + " HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
                            </children>
                            <VBox.margin>
-                              <Insets />
+                              <Insets left="30.0" top="10.0" />
                            </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" stylesheets="@../../CSS/category.css" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label text="  Groups: " HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="148.0" text="ICT24-SW" textFill="#666666" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
                            <padding>
-                              <Insets left="20.0" right="20.0" />
+                              <Insets left="30.0" top="10.0" />
                            </padding>
-                        </AnchorPane>
+                        </HBox>
+                        <ScrollPane VBox.vgrow="ALWAYS">
+                           <content>
+                              <VBox fx:id="textVBox">
+                                 <children>
+                                    <TextArea fx:id="textArea1" promptText="Note content ..." wrapText="true" VBox.vgrow="ALWAYS">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </TextArea>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                     </padding>
                   </VBox>
                </children>
-               <padding>
-                  <Insets right="20.0" />
-               </padding>
             </VBox>
          </children>
-      </AnchorPane>
+         <padding>
+            <Insets right="20.0" />
+         </padding>
+      </VBox>
    </center>
 </BorderPane>

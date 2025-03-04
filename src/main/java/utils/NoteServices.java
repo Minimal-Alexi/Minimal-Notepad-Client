@@ -1,19 +1,27 @@
 package utils;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import model.Note;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
@@ -27,6 +35,7 @@ public class NoteServices {
         jsonBody.put("text", note.getText());
         jsonBody.put("title", note.getTitle());
         jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+        jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
 
         HttpClient client = HttpClient.newHttpClient();
 
@@ -74,7 +83,8 @@ public class NoteServices {
                         timestampToString(result.getString("updatedAt")),
                         result.getJSONObject("user").getString("username"),
                         " ",
-                        jsonArrayToHashMap(result.getJSONArray("categoriesList")));
+                        jsonArrayToHashMap(result.getJSONArray("categoriesList")),
+                        jsonArrayToFigureList(result.getJSONArray("figures")));
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -169,12 +179,51 @@ public class NoteServices {
             label.setGraphic(removeCategory);
         });
     }
+
+    public static void uploadPicture(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) throws IOException {
+        uploadPicBtn.setDisable(true);
+        uploadPicBtn.setText("Uploading... ");
+
+        Stage stage = new Stage();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Upload picture");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg", "*.png", "*.jpeg"));
+        fileChooser.setInitialDirectory(new File("C:"));
+
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            String filePath = file.getAbsolutePath();
+            GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
+            String googlePath = googleDriveUploader.upload(filePath);
+            figureList.add(googlePath);
+            System.out.println(googlePath);
+
+            // Get the picture from Google Drive
+            ImageView imageView = new ImageView();
+            Image image = googleDriveUploader.download(googlePath);
+            imageView.setImage(image);
+            imageView.setFitHeight(200);
+            imageView.setFitWidth(200);
+            imageView.setPreserveRatio(true);
+            textVBox.getChildren().add(imageView);
+
+            uploadPicBtn.setDisable(false);
+            uploadPicBtn.setText("Upload picture");
+        } else {
+            System.out.println("no file selected");
+            uploadPicBtn.setDisable(false);
+        }
+    }
+
     public static void updateNote(String url, int id, String token, Note note){
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("colour", note.getColor());
         jsonBody.put("text", note.getText());
         jsonBody.put("title", note.getTitle());
         jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
+        jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
 
         HttpClient client = HttpClient.newHttpClient();
 

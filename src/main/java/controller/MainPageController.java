@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.HttpRequestBuilder;
+import javafx.stage.WindowEvent;
 import model.Note;
 import model.selected.SelectedNote;
 import model.TokenStorage;
@@ -98,43 +99,13 @@ public class MainPageController {
             System.out.println("Connection failed");
         }
 
-        table.setItems(notes);
-        title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
-        group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
-        owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
-        category.setCellValueFactory(cellData -> {
-            HashMap<Integer,String> catMap = cellData.getValue().getCategory();
-            String categoriesListString = "";
-            if (catMap != null && !catMap.isEmpty()) {
-                categoriesListString = catMap.values().stream().collect(Collectors.joining(", "));
-            }
-            return new ReadOnlyStringWrapper(categoriesListString);
-        });
-        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
-        icon.setCellFactory(param -> new TableCell<Note, Void>() {
-            private final ImageView imageView = new ImageView(
-                    new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
-            );
+        updateNoteTable(notes, table, title, group, owner, category, createTime, icon);
 
-            {
-                imageView.setFitWidth(20);
-                imageView.setFitHeight(20);
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(imageView);
-                }
-            }
-        });
+        if(noteArrayList != null) {
+            updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
+        }
         filterChoiceSetup();
         searchBarSetup();
-        assert noteArrayList != null;
-        updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
     }
@@ -169,7 +140,10 @@ public class MainPageController {
     }
 
     public void groupsClicked(ActionEvent event) throws IOException {
-        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
+        String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
+        this.controllerUtils.goPage(stage,groupsBtn, pageLink);
     }
 
 

@@ -1,25 +1,38 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.TokenStorage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import utils.ControllerUtils;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class HelloController {
+    private static final Log log = LogFactory.getLog(HelloController.class);
     @FXML
     private Label logIn;
 
     @FXML
     private Label registerLabel;
+
+    @FXML
+    private ImageView imageView;
+
+    @FXML
+    private VBox loginVBox;
 
     private Stage stage;
     private ControllerUtils controllerUtil;
@@ -27,7 +40,7 @@ public class HelloController {
 
     @FXML
     protected void loginClicked() {
-        System.out.println("addButtonClicked() called");
+        System.out.println("login button click");
         updateStage();
     }
 
@@ -80,6 +93,7 @@ public class HelloController {
 
             var stage = getStage();
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
