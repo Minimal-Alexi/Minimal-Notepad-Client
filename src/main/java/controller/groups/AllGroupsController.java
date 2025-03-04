@@ -189,7 +189,7 @@ public class AllGroupsController implements Initializable {
 
     @FXML
     void myGroupsBtnClick() {
-        controllerUtils.goPage(stage, myGroupsBtn, FXMLSource + "/main_pages/groups/group_info_create_group.fxml");
+        controllerUtils.goPage(stage, myGroupsBtn, FXMLSource + "/main_pages/groups/my_groups.fxml");
     }
 
     @FXML

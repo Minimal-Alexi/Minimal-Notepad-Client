@@ -47,8 +47,6 @@ public class HttpResponseServiceImpl implements HttpResponseService {
 //                System.out.println("status code " + statusLine);
                 Platform.runLater(() -> {
                     // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-                    // the signature of the callback of the handleResponse in the controller need to follow the handleReponse in the HandleResponseCallback
-                    //     void handleResponse(CloseableHttpResponse response, Object jsonResponse);
                     callback.handleResponse(response, jsonResponse);
                 });
             } catch (IOException e) {
@@ -61,6 +59,7 @@ public class HttpResponseServiceImpl implements HttpResponseService {
             }
         }).start();
     }
+
 
 
 //    @Override
