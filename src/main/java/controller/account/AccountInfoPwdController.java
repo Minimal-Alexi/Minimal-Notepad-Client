@@ -41,9 +41,6 @@ public class AccountInfoPwdController {
     private Label errRepeatPwd;
 
     @FXML
-    private Button favoritiesBtn;
-
-    @FXML
     private Label generalErrLabel;
 
     @FXML
@@ -56,28 +53,23 @@ public class AccountInfoPwdController {
     private PasswordField repeatPwdInput;
 
     @FXML
-    private Button myFileBtn;
+    private Button myNotesBtn;
+    @FXML
+    private Button shareNotesBtn;
 
     @FXML
     private Button groupsBtn;
 
-    @FXML
-    private Button deleteBtn;
 
     @FXML
     private Button accountBtn;
 
     @FXML
-    private Button recycleBinBtn;
+    private Button deleteBtn;
+
 
     @FXML
     private Button saveBtn;
-
-    @FXML
-    private Button settingBtn;
-
-    @FXML
-    private Button shareNoteBtn;
 
     @FXML
     private Button logOutBtn;
@@ -120,6 +112,21 @@ public class AccountInfoPwdController {
     }
 
     @FXML
+    void myNotesBtnClick() {
+        controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+    }
+
+    @FXML
+    void shareNotesBtnClick() {
+        System.out.println("go to share notes page");
+    }
+
+    @FXML
+    void groupsBtnClick() {
+        controllerUtils.goPage(stage, groupsBtn, "/fxml/main_pages/groups/group_info_create_group.fxml/");
+    }
+
+    @FXML
     void accountBtnClick() {
         String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
         this.controllerUtils.goPage(stage, accountBtn, pageLink);
@@ -127,58 +134,27 @@ public class AccountInfoPwdController {
 
     @FXML
     public void deleteBtnClick() throws IOException {
-
         String yesTxt = "Yes";
-
         Optional<ButtonType> result = displayDeleteWarningDialog();
         System.out.println("result of dialog " + result.get().getText());
         if (result.get().getText().equals(yesTxt)) {
             System.out.println("Deleting user");
-//            String token = TokenStorage.getToken();
-//            HttpDelete httpDelete = new HttpDelete(URI);
-//            httpDelete.addHeader("Accept", "application/json");
-//            httpDelete.addHeader("Content-Type", "application/json");
-//            httpDelete.addHeader("Authorization", "Bearer " + token);
+
 
             HttpRequestBuilder httpRequest = new HttpRequestBuilder("DELETE", URI, true);
 
             // call this method only if you have body in your request
-//            httpRequest.setRequestBody();
+
             HttpRequestBase httpDelete = httpRequest.getHttpRequest();
             CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-//            new Thread(() -> {
-//                try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
-//                    HttpEntity responseEntity = response.getEntity();
-//                    String data = EntityUtils.toString(responseEntity);
-//                    System.out.println("data " + data);
-//                    JSONObject jsonResponse = new JSONObject(data);
-//                    EntityUtils.consume(responseEntity);
-//                    // Do more processing here...
-//                    StatusLine statusLine = response.getStatusLine();
-////                System.out.println("json " + jsonResponse);
-//
-//                    System.out.println("response " + responseEntity);
-//                    System.out.println("status code " + statusLine);
-//                    Platform.runLater(() -> {
-//                        // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-//                        handleDeleteResponse(response, jsonResponse);
-//                    });
-//                } catch (IOException e) {
-//                    Alert a = new Alert(Alert.AlertType.ERROR);
-//                    a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-//                    a.show();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    System.out.println(e.getMessage());
-//                }
-//            }).start();
             httpResponseService.handleReponse(httpDelete, httpClient, this::handleDeleteResponse);
         }
     }
 
     private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {
-        JSONObject object = controllerUtils.toJSonObject(response);
+
+        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
 
         try {
             String message = (String) object.get("message");
@@ -200,11 +176,19 @@ public class AccountInfoPwdController {
 //    }
 
     @FXML
+    public void groupsClicked(){
+
+    }
+
+    @FXML
     void mouseEnter(MouseEvent event) {
         this.controllerUtils.setHandCursor(saveBtn);
         this.controllerUtils.setHandCursor(deleteBtn);
         this.controllerUtils.setHandCursor(groupsBtn);
-
+        this.controllerUtils.setHandCursor(myNotesBtn);
+        this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(accountBtn);
+        this.controllerUtils.setHandCursor(logOutBtn);
     }
 
     @FXML
@@ -212,6 +196,10 @@ public class AccountInfoPwdController {
         this.controllerUtils.setDefaultCursor(saveBtn);
         this.controllerUtils.setDefaultCursor(deleteBtn);
         this.controllerUtils.setDefaultCursor(groupsBtn);
+        this.controllerUtils.setDefaultCursor(myNotesBtn);
+        this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(accountBtn);
+        this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
     @FXML
@@ -219,11 +207,6 @@ public class AccountInfoPwdController {
         this.controllerUtils.goToHelloPage(stage, logOutBtn);
     }
 
-    @FXML
-    void groupsBtnClick(){
-        controllerUtils.goPage(stage,groupsBtn,"/fxml/main_pages/groups/group_info_create_group.fxml/");
-
-    }
 
     @FXML
     void saveBtnClick(MouseEvent event) {
@@ -332,7 +315,7 @@ public class AccountInfoPwdController {
             if (statusLine.contains("200")) {
                 generalErrLabel.setTextFill(Color.GREEN);
                 generalErrLabel.setText("User Password changes successfully");
-                TokenStorage.saveInfo("password",this.newPassword);
+                TokenStorage.saveInfo("password", this.newPassword);
 
 
             } else {
