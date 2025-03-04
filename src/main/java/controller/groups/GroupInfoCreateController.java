@@ -1,6 +1,7 @@
 package controller.groups;
 
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -47,6 +48,9 @@ public class GroupInfoCreateController {
     @FXML
     private Button logOutBtn;
 
+    @FXML
+    private Button EditGroupBtn1;
+
 
     @FXML
     private Label localTime;
@@ -92,7 +96,7 @@ public class GroupInfoCreateController {
         String password = TokenStorage.getToken();
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
-        nameLabel.setText("Wellcome " + username);
+        nameLabel.setText("Welcome " + username);
         MainPageServices.updateLocalTime(localTime);
 //        httpInstance = HttpClientSingleton.getInstance();
 
@@ -117,7 +121,7 @@ public class GroupInfoCreateController {
 
     @FXML
     public void allGroupsBtnClick() {
-        // go to allgroup page
+        // go to all group page
         controllerUtils.goPage(stage, allGroupsBtn, FXMLSource + "/main_pages/groups/all_groups.fxml");
     }
 
@@ -180,21 +184,34 @@ public class GroupInfoCreateController {
         }
     }
 
-
     @FXML
     public void createGroupBtnClick() {
         try {
             String groupName = groupNameInput.getText();
             String groupDesc = groupDescInput.getText();
+            System.out.println("Group Name: " + groupName);
+            System.out.println("Group Description: " + groupDesc);
             if (validInputs(groupName, groupDesc)) {
                 createGroup(groupName, groupDesc);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        String pageLink = "/fxml/main_pages/groups/group_info_edit_group.fxml";
+        this.controllerUtils.goPage(stage,createGroupBtn, pageLink);
     }
 
+    @FXML
+    public void editGroupBtnClick() {
+        String pageLink = "/fxml/main_pages/groups/group_info_edit_group.fxml";
+        this.controllerUtils.goPage(stage,createGroupBtn, pageLink);
+    }
+
+/*    @FXML
+    public void createGroupBtnClick() {
+        System.out.println("create button is clicked");
+    }
+    */
     public boolean validInputs(String groupName, String groupDesc) {
         return (!controllerUtils.isInputEmpty(groupName)) && (!controllerUtils.isInputEmpty(groupDesc));
     }

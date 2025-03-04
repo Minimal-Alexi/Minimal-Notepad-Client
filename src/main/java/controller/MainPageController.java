@@ -54,6 +54,10 @@ public class MainPageController {
     private Button shareNoteBtn;
     @FXML
     private Button favoriteBtn;
+
+    @FXML
+    private Button testBtn;
+
     @FXML
     private Button recyleBinBtn;
     @FXML

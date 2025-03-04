@@ -86,24 +86,6 @@
                   <Insets />
                </VBox.margin>
             </Button>
-            <Button fx:id="recycleBinBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" stylesheets="@../../CSS/button.css" text="Recyle Bin" VBox.vgrow="ALWAYS">
-               <font>
-                  <Font size="16.0" />
-               </font>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <graphic>
-                  <AnchorPane prefHeight="24.0" prefWidth="21.0">
-                     <children>
-                        <SVGPath content="M 8.00,4.00           C 8.00,4.00 9.84,4.00 9.84,4.00             10.57,4.00 11.24,3.64 11.64,3.04             11.81,2.78 12.19,2.78 12.36,3.04             12.76,3.64 13.43,4.00 14.16,4.00             14.16,4.00 16.00,4.00 16.00,4.00M 18.00,8.00           C 18.00,8.00 17.21,18.23 17.21,18.23             17.09,19.79 15.79,21.00 14.22,21.00             14.22,21.00 9.78,21.00 9.78,21.00             8.21,21.00 6.91,19.79 6.79,18.23             6.79,18.23 6.00,8.00 6.00,8.00M 5.00,4.00           C 5.00,4.00 19.00,4.00 19.00,4.00" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
-                     </children>
-                  </AnchorPane>
-               </graphic>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </Button>
             <Button fx:id="groupsBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onAction="#groupsClicked" stylesheets="@../../CSS/button.css" text="Groups" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
@@ -122,6 +104,21 @@
                <VBox.margin>
                   <Insets />
                </VBox.margin>
+            </Button>
+            <Button fx:id="testBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#accountBtnClick" stylesheets="@../../CSS/button.css" text="Test">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <graphic>
+                  <AnchorPane prefHeight="24.0" prefWidth="21.0">
+                     <children>
+                        <SVGPath content="M 12.00,8.00           C 10.02,8.00 8.42,9.60 8.42,11.58             8.42,13.56 10.02,15.17 12.00,15.17             13.98,15.17 15.58,13.56 15.58,11.58             15.58,9.60 13.98,8.00 12.00,8.00 Z           M 16.19,2.00           C 16.19,2.00 7.81,2.00 7.81,2.00             4.17,2.00 2.00,4.17 2.00,7.81             2.00,7.81 2.00,16.19 2.00,16.19             2.00,19.00 3.29,20.93 5.56,21.66             6.22,21.89 6.98,22.00 7.81,22.00             7.81,22.00 16.19,22.00 16.19,22.00             17.02,22.00 17.78,21.89 18.44,21.66             20.71,20.93 22.00,19.00 22.00,16.19             22.00,16.19 22.00,7.81 22.00,7.81             22.00,4.17 19.83,2.00 16.19,2.00 Z           M 20.50,16.19           C 20.50,18.33 19.66,19.68 17.97,20.24             17.00,18.33 14.70,16.97 12.00,16.97             9.30,16.97 7.01,18.32 6.03,20.24             6.03,20.24 6.02,20.24 6.02,20.24             4.35,19.70 3.50,18.34 3.50,16.20             3.50,16.20 3.50,7.81 3.50,7.81             3.50,4.99 4.99,3.50 7.81,3.50             7.81,3.50 16.19,3.50 16.19,3.50             19.01,3.50 20.50,4.99 20.50,7.81             20.50,7.81 20.50,16.19 20.50,16.19 Z" fill="#898989" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
+                     </children>
+                  </AnchorPane>
+               </graphic>
             </Button>
             <Button fx:id="settingBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" stylesheets="@../../CSS/button.css" text="Setting" VBox.vgrow="ALWAYS">
                <font>
