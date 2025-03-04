@@ -111,7 +111,7 @@ public class AllGroupsController implements Initializable {
         String password = TokenStorage.getToken();
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
-        nameLabel.setText("Wellcome " + username);
+        nameLabel.setText("Welcome, " + username);
         MainPageServices.updateLocalTime(localTime);
 
 
@@ -447,14 +447,11 @@ public class AllGroupsController implements Initializable {
         SelectedGroup selectedGroup = SelectedGroup.getInstance();
         selectedGroup.setId(group.getId());
         controllerUtils.goPage(stage, button, FXMLString);
-
-
     }
 
     public void setDefaultAndHandCursorBehaviour(Button button) {
         button.addEventHandler(MouseEvent.MOUSE_ENTERED, (e -> this.controllerUtils.setHandCursor((Button) e.getSource())));
         button.addEventHandler(MouseEvent.MOUSE_EXITED, (e -> this.controllerUtils.setDefaultCursor((Button) e.getSource())));
-
     }
 
 }
