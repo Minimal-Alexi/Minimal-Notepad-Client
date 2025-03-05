@@ -55,6 +55,10 @@ public class MainPageController {
     private TextField searchBar;
     @FXML
     private ChoiceBox<String> filterChoice;
+    @FXML
+    private Button searchReset;
+
+    private boolean isResetting = false;
 
     //side bar
     @FXML
@@ -168,9 +172,17 @@ public class MainPageController {
 
     private void searchBarSetup() {
         searchBar.setOnKeyPressed(event -> {
-            if (searchBar.isFocused() && event.getCode() == KeyCode.ENTER) {
+            if (searchBar.isFocused() && event.getCode() == KeyCode.ENTER && !isResetting) {
                 performSearch();
             }
+        });
+        searchReset.setOnAction(event -> {
+            isResetting = true;
+            searchBar.setText("");
+            filterChoice.getSelectionModel().select("Any");
+            isResetting = false;
+            noteObservableList.clear();
+            noteObservableList.addAll(noteArrayList);
         });
     }
 
@@ -222,7 +234,7 @@ public class MainPageController {
         filterChoice.getItems().add("Any");
         filterChoice.getSelectionModel().select("Any");
         filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue != null && !newValue.equals(oldValue))
+            if(newValue != null && !newValue.equals(oldValue) && !isResetting)
             {
                 performFilter();
             }
@@ -231,14 +243,12 @@ public class MainPageController {
     private void performSearch() {
         String inputText = searchBar.getText();
         if (!inputText.isEmpty()) {
-            System.out.println("search start");
             HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/search", true);
             JSONObject searchRequest = new JSONObject();
             JSONArray noteArray = arrayInitializer(noteObservableList);
             searchRequest.put("query", inputText);
             searchRequest.put("notes", noteArray);
             requestBuilder(httpRequestBuilder, searchRequest);
-            System.out.println("search finish");
         } else {
             noteObservableList.clear();
             noteObservableList.addAll(noteArrayList);
