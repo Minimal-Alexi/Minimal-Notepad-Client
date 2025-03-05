@@ -36,6 +36,7 @@ public class Group {
         this.groupOwnerName = new SimpleStringProperty(this.groupOwner.getUsername());
     }
 
+
     public int getNumberOfUsers() {
         // return number of user participating in the group + 1 (owner)
 //        if (numberOfMembers.get() != 0) {

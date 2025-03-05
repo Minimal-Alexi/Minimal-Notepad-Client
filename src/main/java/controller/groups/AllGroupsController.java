@@ -420,7 +420,7 @@ public class AllGroupsController implements Initializable {
 
     public void edit(Group group, Button button) {
         //set a singleton object to use in edit page
-        String FXMLString = "/fxml/main_pages/groups/group_info_create_group.fxml";
+        String FXMLString = "/fxml/main_pages/groups/group_info_edit_group.fxml";
         SelectedGroup selectedGroup = SelectedGroup.getInstance();
         selectedGroup.setId(group.getId());
         controllerUtils.goPage(stage, button, FXMLString);
