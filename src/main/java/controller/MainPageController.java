@@ -169,7 +169,7 @@ public class MainPageController {
     private void searchBarSetup() {
         searchBar.setOnKeyPressed(event -> {
             if (searchBar.isFocused() && event.getCode() == KeyCode.ENTER) {
-                performSearchOrFilter();
+                performSearch();
             }
         });
     }
@@ -196,9 +196,6 @@ public class MainPageController {
                             jsonArrayToHashMap(result.getJSONArray("categoriesList")),
                             null);
                     noteObservableList.add(note);
-                }
-                if (!filterChoice.getSelectionModel().getSelectedItem().equals("Any")) {
-                    performFilter();
                 }
             } catch (JSONException e) {
                 System.out.println(e);
@@ -227,17 +224,17 @@ public class MainPageController {
         filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null && !newValue.equals(oldValue))
             {
-                performSearchOrFilter();
+                performFilter();
             }
         });
     }
-    private void performSearchOrFilter() {
+    private void performSearch() {
         String inputText = searchBar.getText();
         if (!inputText.isEmpty()) {
             System.out.println("search start");
             HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/search", true);
             JSONObject searchRequest = new JSONObject();
-            JSONArray noteArray = arrayInitializer(noteArrayList);
+            JSONArray noteArray = arrayInitializer(noteObservableList);
             searchRequest.put("query", inputText);
             searchRequest.put("notes", noteArray);
             requestBuilder(httpRequestBuilder, searchRequest);
@@ -245,9 +242,7 @@ public class MainPageController {
         } else {
             noteObservableList.clear();
             noteObservableList.addAll(noteArrayList);
-            if (!filterChoice.getSelectionModel().getSelectedItem().equals("Any")) {
-                performFilter();
-            }
+            performFilter();
         }
     }
     private JSONArray arrayInitializer(List<Note> usedList) {
@@ -284,7 +279,6 @@ public class MainPageController {
         responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetSearchResults);
     }
     private void performFilter() {
-        System.out.println("filter start");
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/filter", true);
         JSONObject filterRequest = new JSONObject();
         JSONArray noteArray = arrayInitializer(noteObservableList);
@@ -299,7 +293,6 @@ public class MainPageController {
         }
         filterRequest.put("notes", noteArray);
         requestBuilder(httpRequestBuilder, filterRequest);
-        System.out.println("filter finish");
     }
 
 
