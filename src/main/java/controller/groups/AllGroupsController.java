@@ -158,7 +158,7 @@ public class AllGroupsController implements Initializable {
 
     @FXML
     void logOutBtnClick() {
-        controllerUtils.goToHelloPage(stage, logOutBtn);
+        controllerUtils.logout(stage, logOutBtn);
     }
 
 

@@ -45,8 +45,21 @@ public class ControllerUtils {
         return stage;
     }
 
+    public Stage getStage(Label label, Stage stage) {
+        if (stage == null) {
+            stage = (Stage) label.getScene().getWindow();
+        }
+        return stage;
+    }
+
     public void goPage(Stage stage, Button btn, String fxmlPage) {
         stage = getStage(btn, stage);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPage));
+        updateStage(stage, fxmlLoader);
+    }
+
+    public void goPage(Stage stage, Label label, String fxmlPage) {
+        stage = getStage(label, stage);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPage));
         updateStage(stage, fxmlLoader);
     }
@@ -100,7 +113,7 @@ public class ControllerUtils {
         return matcher.matches();
     }
 
-    public void goToHelloPage(Stage stage, Button btn) {
+    public void logout(Stage stage, Button btn) {
         String helloPage = "/fxml/hello_view.fxml";
         TokenStorage.clearToken();
         goPage(stage, btn, helloPage);
