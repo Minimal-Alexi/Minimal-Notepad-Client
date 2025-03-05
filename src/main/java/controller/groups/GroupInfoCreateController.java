@@ -188,7 +188,7 @@ public class GroupInfoCreateController {
     @FXML
     public void logOutBtnClick() {
         {
-            this.controllerUtils.goToHelloPage(stage, logOutBtn);
+            this.controllerUtils.logout(stage, logOutBtn);
         }
     }
 

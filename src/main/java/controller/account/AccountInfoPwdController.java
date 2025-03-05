@@ -56,11 +56,10 @@ public class AccountInfoPwdController {
     private Button myNotesBtn;
     @FXML
     private Button shareNotesBtn;
-
     @FXML
-    private Button groupsBtn;
-
-
+    private Button myGroupsBtn;
+    @FXML
+    private Button allGroupsBtn;
     @FXML
     private Button accountBtn;
 
@@ -122,8 +121,13 @@ public class AccountInfoPwdController {
     }
 
     @FXML
-    void groupsBtnClick() {
-        controllerUtils.goPage(stage, groupsBtn, "/fxml/main_pages/groups/group_info_create_group.fxml/");
+    void myGroupsBtnClick() {
+        controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml/");
+    }
+
+    @FXML
+    void allGroupsBtnClick() {
+        controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
     }
 
     @FXML
@@ -176,35 +180,43 @@ public class AccountInfoPwdController {
 //    }
 
     @FXML
-    public void groupsClicked(){
+    public void groupsClicked() {
 
     }
 
     @FXML
     void mouseEnter(MouseEvent event) {
-        this.controllerUtils.setHandCursor(saveBtn);
-        this.controllerUtils.setHandCursor(deleteBtn);
-        this.controllerUtils.setHandCursor(groupsBtn);
         this.controllerUtils.setHandCursor(myNotesBtn);
         this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(myGroupsBtn);
+        this.controllerUtils.setHandCursor(allGroupsBtn);
         this.controllerUtils.setHandCursor(accountBtn);
+
+        this.controllerUtils.setHandCursor(deleteBtn);
+//        this.controllerUtils.setHandCursor(groupsBtn);
+        this.controllerUtils.setHandCursor(saveBtn);
+
+
         this.controllerUtils.setHandCursor(logOutBtn);
+
     }
 
     @FXML
     void mouseExit(MouseEvent event) {
-        this.controllerUtils.setDefaultCursor(saveBtn);
-        this.controllerUtils.setDefaultCursor(deleteBtn);
-        this.controllerUtils.setDefaultCursor(groupsBtn);
         this.controllerUtils.setDefaultCursor(myNotesBtn);
         this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(myGroupsBtn);
+        this.controllerUtils.setDefaultCursor(allGroupsBtn);
         this.controllerUtils.setDefaultCursor(accountBtn);
+        this.controllerUtils.setDefaultCursor(deleteBtn);
+        this.controllerUtils.setDefaultCursor(saveBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
+//        this.controllerUtils.setDefaultCursor(groupsBtn);
     }
 
     @FXML
     void logOutBtnClick() {
-        this.controllerUtils.goToHelloPage(stage, logOutBtn);
+        this.controllerUtils.logout(stage, logOutBtn);
     }
 
 

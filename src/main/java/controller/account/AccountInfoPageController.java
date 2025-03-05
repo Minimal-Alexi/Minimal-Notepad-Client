@@ -35,7 +35,9 @@ public class AccountInfoPageController {
     @FXML
     private Button shareNotesBtn;
     @FXML
-    private Button groupsBtn;
+    private Button myGroupsBtn;
+    @FXML
+    private Button allGroupsBtn;
     @FXML
     private Button accountBtn;
     @FXML
@@ -77,7 +79,6 @@ public class AccountInfoPageController {
     private CloseableHttpClient httpClient;
 
 
-
     //URI API
     private static final String URI = "http://localhost:8093/api/user/";
 
@@ -101,12 +102,13 @@ public class AccountInfoPageController {
     public void mouseEnter() {
         this.controllerUtils.setHandCursor(myNotesBtn);
         this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(myGroupsBtn);
+        this.controllerUtils.setHandCursor(allGroupsBtn);
         this.controllerUtils.setHandCursor(accountBtn);
         this.controllerUtils.setHandCursor(saveBtn);
         this.controllerUtils.setHandCursor(changePwdBtn);
         this.controllerUtils.setHandCursor(deleteBtn);
         this.controllerUtils.setHandCursor(logOutBtn);
-        this.controllerUtils.setHandCursor(groupsBtn);
 
     }
 
@@ -114,29 +116,44 @@ public class AccountInfoPageController {
     public void mouseExit() {
         this.controllerUtils.setDefaultCursor(myNotesBtn);
         this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(myGroupsBtn);
+        this.controllerUtils.setDefaultCursor(allGroupsBtn);
         this.controllerUtils.setDefaultCursor(accountBtn);
         this.controllerUtils.setDefaultCursor(saveBtn);
         this.controllerUtils.setDefaultCursor(changePwdBtn);
         this.controllerUtils.setDefaultCursor(deleteBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
-        this.controllerUtils.setDefaultCursor(groupsBtn);
+
+
     }
 
     @FXML
-    public void myNotesBtnClick(){
-        controllerUtils.goPage(stage,myNotesBtn,"/fxml/main_pages/main_page.fxml");
+    public void myNotesBtnClick() {
+        controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
     }
 
     @FXML
-    public void shareNotesBtnClick(){
+    public void shareNotesBtnClick() {
         System.out.println("Go to share notes pages");
     }
 
     @FXML
-    void groupsBtnClick() {
-        controllerUtils.goPage(stage, groupsBtn, "/fxml/main_pages/groups/group_info_create_group.fxml/");
-
+    void myGroupsBtnClick() {
+        controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/group_info_create_group.fxml/");
     }
+
+    @FXML
+    void allGroupsBtnClick() {
+        controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+    }
+
+    // sidebar
+    @FXML
+    public void accountBtnClick() {
+        String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
+        this.controllerUtils.goPage(stage, accountBtn, pageLink);
+    }
+
 
     @FXML
     public void saveBtnClick() {
@@ -149,7 +166,6 @@ public class AccountInfoPageController {
 //    public void groupsBtnClick(){
 //
 //    }
-
 
 
     private void getUserInfo() {
@@ -197,7 +213,7 @@ public class AccountInfoPageController {
         httpResponseService.handleReponse(httpGet, httpClient, this::handleGetUserInfoResponse);
     }
 
-//    private void handleGetUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
+    //    private void handleGetUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
     private void handleGetUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
 //        JSONObject jsonObject = new JSONObject(response);
 //        JSONObject object = null;
@@ -311,7 +327,7 @@ public class AccountInfoPageController {
     }
 
     @FXML
-    public void groupsClicked(){
+    public void groupsClicked() {
 
     }
 
@@ -322,12 +338,7 @@ public class AccountInfoPageController {
         this.controllerUtils.updateStage(this.stage, fxmlLoader);
     }
 
-    // sidebar
-    @FXML
-    public void accountBtnClick() {
-        String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
-        this.controllerUtils.goPage(stage, accountBtn, pageLink);
-    }
+
 
     @FXML
     public void deleteBtnClick() {
@@ -355,7 +366,7 @@ public class AccountInfoPageController {
 
     @FXML
     public void logOutBtnClick() {
-        this.controllerUtils.goToHelloPage(stage, logOutBtn);
+        this.controllerUtils.logout(stage, logOutBtn);
     }
 
     private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {
@@ -367,7 +378,7 @@ public class AccountInfoPageController {
 //            String helloPage = "/fxml/hello_view.fxml";
 //            TokenStorage.clearToken();
 //            controllerUtils.goPage(stage, deleteBtn, helloPage);
-            this.controllerUtils.goToHelloPage(stage, deleteBtn);
+            this.controllerUtils.logout(stage, deleteBtn);
         } catch (JSONException e) {
 
             displayGeneralErrMessages(e.getMessage());

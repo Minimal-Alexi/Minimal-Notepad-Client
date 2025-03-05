@@ -39,15 +39,23 @@ public class MainPageController {
     @FXML
     private Label nameLabel;
     // Note table
-    @FXML private TableView<Note> table;
-    @FXML private TableColumn<Note, Void> icon;
-    @FXML private TableColumn<Note, String> title;
-    @FXML private TableColumn<Note, String> group;
-    @FXML private TableColumn<Note, String> owner;
-    @FXML private TableColumn<Note, String> category;
-    @FXML private TableColumn<Note, String> createTime;
+    @FXML
+    private TableView<Note> table;
+    @FXML
+    private TableColumn<Note, Void> icon;
+    @FXML
+    private TableColumn<Note, String> title;
+    @FXML
+    private TableColumn<Note, String> group;
+    @FXML
+    private TableColumn<Note, String> owner;
+    @FXML
+    private TableColumn<Note, String> category;
+    @FXML
+    private TableColumn<Note, String> createTime;
     // Recently edited
-    @FXML private HBox recentlyEditedHBox;
+    @FXML
+    private HBox recentlyEditedHBox;
 
 
     // search bar
@@ -58,17 +66,15 @@ public class MainPageController {
 
     //side bar
     @FXML
-    private Button myFileBtn;
+    private Button myNotesBtn;
     @FXML
-    private Button shareNoteBtn;
+    private Button shareNotesBtn;
     @FXML
-    private Button favoriteBtn;
+    private Button myGroupsBtn;
     @FXML
-    private Button recyleBinBtn;
-    @FXML
-    private Button groupsBtn;
-    @FXML
-    private Button settingBtn;
+    private Button allGroupsBtn;
+
+
     @FXML
     private Button accountBtn;
     @FXML
@@ -78,7 +84,7 @@ public class MainPageController {
     private ControllerUtils controllerUtils;
     private ObservableList<Note> noteObservableList;
     private ArrayList<Note> noteArrayList;
-    private HashMap<Integer,String> categoryList;
+    private HashMap<Integer, String> categoryList;
 
 
     public void initialize() {
@@ -95,7 +101,7 @@ public class MainPageController {
 
         updateNoteTable(noteObservableList, table, title, group, owner, category, createTime, icon);
 
-        if(noteArrayList != null) {
+        if (noteArrayList != null) {
             updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
         }
         filterChoiceSetup();
@@ -133,36 +139,67 @@ public class MainPageController {
         goToPage(stage, scene, event, "/fxml/main_pages/create_note_page.fxml");
     }
 
+    // go to myGroupPage
     public void groupsClicked(ActionEvent event) throws IOException {
 //        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
 //        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
         String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
-        this.controllerUtils.goPage(stage,groupsBtn, pageLink);
+        this.controllerUtils.goPage(stage, myGroupsBtn, pageLink);
     }
 
+    public void myGroupsBtnClick() {
+        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+    }
+
+    @FXML
+    public void myNotesBtnClick() {
+        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+    }
+
+    @FXML
+    public void shareNotesBtnClick() {
+//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
+        System.out.println("Go to share notes page");
+    }
+
+    @FXML
+    public void allGroupsBtnClick() {
+        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+    }
 
     @FXML
     public void accountBtnClick() {
 
 //        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
 //        goToPage(stage, scene, event, "/fxml/main_pages/account_user_info_page.fxml");
-        this.stage = controllerUtils.getStage(myFileBtn, this.stage);
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/account_user_info_page.fxml"));
-        this.controllerUtils.updateStage(this.stage, fxmlLoader);
+//        this.stage = controllerUtils.getStage(myNotesBtn, this.stage);
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/account_user_info_page.fxml"));
+//        this.controllerUtils.updateStage(this.stage, fxmlLoader);
+        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
     }
 
     @FXML
     public void logOutBtnClick() {
-        this.controllerUtils.goToHelloPage(stage, logOutBtn);
+        this.controllerUtils.logout(stage, logOutBtn);
     }
 
     @FXML
     void mouseEnter(MouseEvent event) {
+        this.controllerUtils.setHandCursor(myNotesBtn);
+        this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(myGroupsBtn);
+        this.controllerUtils.setHandCursor(allGroupsBtn);
+        this.controllerUtils.setHandCursor(accountBtn);
         this.controllerUtils.setHandCursor(logOutBtn);
     }
 
     @FXML
     void mouseExit(MouseEvent event) {
+        this.controllerUtils.setDefaultCursor(myNotesBtn);
+        this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(myGroupsBtn);
+        this.controllerUtils.setDefaultCursor(allGroupsBtn);
+        this.controllerUtils.setDefaultCursor(accountBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
@@ -214,23 +251,23 @@ public class MainPageController {
             }
         }
     }
+
     private void filterChoiceSetup() {
         categoryList = new HashMap<>();
-        for (Note note : noteArrayList)
-        {
+        for (Note note : noteArrayList) {
             categoryList.putAll(note.getCategory());
         }
-        categoryList.put(-1,"No Category");
+        categoryList.put(-1, "No Category");
         filterChoice.getItems().addAll(categoryList.values());
         filterChoice.getItems().add("Any");
         filterChoice.getSelectionModel().select("Any");
         filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue != null && !newValue.equals(oldValue))
-            {
+            if (newValue != null && !newValue.equals(oldValue)) {
                 performSearchOrFilter();
             }
         });
     }
+
     private void performSearchOrFilter() {
         String inputText = searchBar.getText();
         if (!inputText.isEmpty()) {
@@ -250,17 +287,17 @@ public class MainPageController {
             }
         }
     }
+
     private JSONArray arrayInitializer(List<Note> usedList) {
         JSONArray noteArray = new JSONArray();
-        for(Note note : usedList)
-        {
+        for (Note note : usedList) {
             JSONObject noteJson = new JSONObject();
             noteJson.put("id", note.getId());
             noteJson.put("title", note.getTitle());
-            noteJson.put("text",note.getText());
-            noteJson.put("colour",note.getColor());
+            noteJson.put("text", note.getText());
+            noteJson.put("colour", note.getColor());
             JSONObject userObject = new JSONObject();
-            userObject.put("username",note.getOwner());
+            userObject.put("username", note.getOwner());
             noteJson.put("user", userObject);
             noteJson.put("createdAt", note.getCreatedAt());
             noteJson.put("updatedAt", note.getUpdatedAt());
@@ -275,14 +312,14 @@ public class MainPageController {
         httpRequestBuilder.setJsonRequest(request);
         HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequest();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
-        try
-        {
+        try {
             httpRequestBuilder.setRequestBody();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetSearchResults);
+        responseService.handleReponse(filterRequestHttp, httpClient, this::handleGetSearchResults);
     }
+
     private void performFilter() {
         System.out.println("filter start");
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/filter", true);
@@ -303,11 +340,9 @@ public class MainPageController {
     }
 
 
-    private int getCategoryViaFilter(){
-        for(Map.Entry<Integer,String> entry : categoryList.entrySet())
-        {
-            if(entry.getValue().equals(filterChoice.getSelectionModel().getSelectedItem()))
-            {
+    private int getCategoryViaFilter() {
+        for (Map.Entry<Integer, String> entry : categoryList.entrySet()) {
+            if (entry.getValue().equals(filterChoice.getSelectionModel().getSelectedItem())) {
                 return entry.getKey();
             }
         }
