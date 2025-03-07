@@ -27,6 +27,18 @@ public class NoteJson {
         return jsonBody;
     }
     public static Note JsonToNote(JSONObject noteJson) {
+        int groupId;
+        String groupName;
+        if(noteJson.isNull("group"))
+        {
+            groupId = -1;
+            groupName = "N/A";
+        }
+        else
+        {
+            groupId = noteJson.getInt("group");
+            groupName = noteJson.getString("group");
+        }
         Note note = new Note(noteJson.getInt("id"),
                 noteJson.getString("title"),
                 noteJson.getString("text"),
@@ -34,8 +46,8 @@ public class NoteJson {
                 timestampToString(noteJson.getString("createdAt")),
                 timestampToString(noteJson.getString("updatedAt")),
                 noteJson.getJSONObject("user").getString("username"),
-                -1,
-                " ",
+                groupId,
+                groupName,
                 jsonArrayToHashMap(noteJson.getJSONArray("categoriesList")),
                 jsonArrayToFigureList(noteJson.getJSONArray("figures"))
         );

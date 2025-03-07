@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utils.MainPageServices.*;
-
+import static utils.NoteJson.*;
 
 public class NoteServices {
 
@@ -219,12 +219,7 @@ public class NoteServices {
     }
 
     public static void updateNote(String url, int id, String token, Note note){
-        JSONObject jsonBody = new JSONObject();
-        jsonBody.put("colour", note.getColor());
-        jsonBody.put("text", note.getText());
-        jsonBody.put("title", note.getTitle());
-        jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
-        jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
+        JSONObject jsonBody = NoteJson.NoteToJson(note);
 
         HttpClient client = HttpClient.newHttpClient();
 

@@ -141,6 +141,7 @@ public class EditNoteController {
     }
     public void groupSharingSetUp(){
         groupSharingChoiceBox.getItems().addAll(groupList.values());
+        groupSharingChoiceBox.getSelectionModel().select("No Group");
     }
     public void groupSharingFetching(){
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET","http://localhost:8093/api/groups/my-groups",true);
@@ -186,6 +187,7 @@ public class EditNoteController {
                     JSONObject jsonObject = jsonResponse.getJSONObject(i);
                     groupList.put(jsonObject.getInt("id"), jsonObject.getString("name"));
                 }
+                groupList.put(-1,"No Group");
                 groupSharingSetUp();
             } catch (JSONException e) {
                 System.out.println(e);
@@ -193,6 +195,7 @@ public class EditNoteController {
         } else {
             JSONObject jsonResponse = (JSONObject) responseObject;
             if (response.getStatusLine().getStatusCode() == 404) {
+                groupList.put(-1,"No Group");
 //                Alert alert = new Alert(Alert.AlertType.INFORMATION);
 //                alert.setTitle("Error");
 //                alert.setHeaderText(null);
@@ -200,7 +203,6 @@ public class EditNoteController {
 //                alert.showAndWait();
             }
         }
-        groupList.put(-1,"No Group");
     }
     private int getGroupId(){
         for(Map.Entry<Integer,String> entry:groupList.entrySet())
