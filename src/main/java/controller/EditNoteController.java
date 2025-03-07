@@ -15,13 +15,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import model.HttpRequestBuilder;
 import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import utils.GoogleDriveUploader;
+import utils.HttpResponseService;
+import utils.HttpResponseServiceImpl;
 import utils.NoteServices;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,13 +53,16 @@ public class EditNoteController {
     @FXML private Button uploadPicBtn;
     @FXML private ColorPicker colorPicker;
     @FXML private Rectangle noteBackground;
+    @FXML private ChoiceBox<String> groupSharingChoiceBox;
 
+    private HttpResponseService responseService;
     SelectedNote selectedNote = SelectedNote.getInstance();
     private HashMap<Integer, String> categoryList = new HashMap<>();
     private ArrayList<String> figureList = new ArrayList<>();
 
     // Initialize
     public void initialize() {
+        responseService = new HttpResponseServiceImpl();
 
         System.out.println(selectedNote.getId());
 
@@ -123,6 +136,18 @@ public class EditNoteController {
         addCategory.setDisable(false);
 
     }
+    public void groupSharingSetup(){
+        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET","http://localhost:8093/api/groups/my-groups",true);
+        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
+        try
+        {
+            httpRequestBuilder.setRequestBody();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetOwnGroups);
+    }
 
     public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
         uploadPicture(uploadPicBtn, figureList, textVBox);
@@ -145,6 +170,28 @@ public class EditNoteController {
         colorPicker.setOnAction(event -> {
             noteBackground.setFill(colorPicker.getValue());
         });
+    }
+    private void handleGetOwnGroups(CloseableHttpResponse response, Object responseObject){
+        System.out.println(response.getStatusLine().getStatusCode());
+        if (response.getStatusLine().getStatusCode() == 200) {
+            JSONArray jsonResponse = (JSONArray) responseObject;
+            try {
+                for(int i = 0; i < jsonResponse.length(); i++){
+                    JSONObject jsonObject = jsonResponse.getJSONObject(i);
+                }
+            } catch (JSONException e) {
+                System.out.println(e);
+            }
+        } else {
+            JSONObject jsonResponse = (JSONObject) responseObject;
+            if (response.getStatusLine().getStatusCode() == 404) {
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setTitle("Error");
+//                alert.setHeaderText(null);
+//                alert.setContentText(jsonResponse.getString("message"));
+//                alert.showAndWait();
+            }
+        }
     }
 
 
