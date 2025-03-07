@@ -57,7 +57,8 @@ public class EditNoteController {
     @FXML private ChoiceBox<String> groupSharingChoiceBox;
 
     private HttpResponseService responseService;
-    SelectedNote selectedNote = SelectedNote.getInstance();
+    private SelectedNote selectedNote = SelectedNote.getInstance();
+    private Note note;
     private HashMap<Integer, String> categoryList = new HashMap<>();
     private HashMap<Integer, String> groupList = new HashMap<>();
     private ArrayList<String> figureList = new ArrayList<>();
@@ -68,7 +69,7 @@ public class EditNoteController {
 
         System.out.println(selectedNote.getId());
 
-        Note note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
+        note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
 
         assert note != null;
         textArea1.setText(note.getText());
@@ -76,7 +77,7 @@ public class EditNoteController {
         categoryList = note.getCategory();
         figureList = note.getFigure();
 
-        colorSetUp(note.getColor());
+        colorSetUp();
         groupSharingFetching();
 
         // query the categoryList to add categories to the ui
@@ -141,7 +142,7 @@ public class EditNoteController {
     }
     public void groupSharingSetUp(){
         groupSharingChoiceBox.getItems().addAll(groupList.values());
-        groupSharingChoiceBox.getSelectionModel().select("No Group");
+        groupSharingChoiceBox.getSelectionModel().select(note.getGroup());
     }
     public void groupSharingFetching(){
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET","http://localhost:8093/api/groups/my-groups",true);
@@ -171,9 +172,9 @@ public class EditNoteController {
         goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
     }
 
-    private void colorSetUp(String initialColor) {
-        noteBackground.setFill(Color.web(initialColor));
-        colorPicker.setValue(Color.web(initialColor));
+    private void colorSetUp() {
+        noteBackground.setFill(Color.web(note.getColor()));
+        colorPicker.setValue(Color.web(note.getColor()));
         colorPicker.setOnAction(event -> {
             noteBackground.setFill(colorPicker.getValue());
         });

@@ -36,8 +36,9 @@ public class NoteJson {
         }
         else
         {
-            groupId = noteJson.getInt("group");
-            groupName = noteJson.getString("group");
+            JSONObject group = noteJson.getJSONObject("group");
+            groupId = group.getInt("id");
+            groupName = group.getString("name");
         }
         Note note = new Note(noteJson.getInt("id"),
                 noteJson.getString("title"),

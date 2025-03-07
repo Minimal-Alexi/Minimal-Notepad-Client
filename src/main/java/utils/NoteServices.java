@@ -24,18 +24,12 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static utils.MainPageServices.*;
 import static utils.NoteJson.*;
 
 public class NoteServices {
 
     public static void createNote(String url, Note note, String token) {
-        JSONObject jsonBody = new JSONObject();
-        jsonBody.put("colour", note.getColor());
-        jsonBody.put("text", note.getText());
-        jsonBody.put("title", note.getTitle());
-        jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
-        jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
+        JSONObject jsonBody = NoteToJson(note);
 
         HttpClient client = HttpClient.newHttpClient();
 
@@ -75,17 +69,7 @@ public class NoteServices {
             if (response.statusCode() == 200) {
                 JSONObject result = new JSONObject(response.body());
 
-                return new Note(result.getInt("id"),
-                        result.getString("title") ,
-                        result.getString("text"),
-                        result.getString("colour"),
-                        timestampToString(result.getString("createdAt")),
-                        timestampToString(result.getString("updatedAt")),
-                        result.getJSONObject("user").getString("username"),
-                        -1,
-                        " ",
-                        jsonArrayToHashMap(result.getJSONArray("categoriesList")),
-                        jsonArrayToFigureList(result.getJSONArray("figures")));
+                return JsonToNote(result);
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -219,7 +203,7 @@ public class NoteServices {
     }
 
     public static void updateNote(String url, int id, String token, Note note){
-        JSONObject jsonBody = NoteJson.NoteToJson(note);
+        JSONObject jsonBody = NoteToJson(note);
 
         HttpClient client = HttpClient.newHttpClient();
 
