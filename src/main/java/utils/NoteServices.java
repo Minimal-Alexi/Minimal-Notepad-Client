@@ -82,6 +82,7 @@ public class NoteServices {
                         timestampToString(result.getString("createdAt")),
                         timestampToString(result.getString("updatedAt")),
                         result.getJSONObject("user").getString("username"),
+                        -1,
                         " ",
                         jsonArrayToHashMap(result.getJSONArray("categoriesList")),
                         jsonArrayToFigureList(result.getJSONArray("figures")));
