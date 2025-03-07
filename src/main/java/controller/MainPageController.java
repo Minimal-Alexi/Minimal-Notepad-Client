@@ -173,12 +173,6 @@ public class MainPageController {
 
     @FXML
     public void accountBtnClick() {
-
-//        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
-//        goToPage(stage, scene, event, "/fxml/main_pages/account_user_info_page.fxml");
-//        this.stage = controllerUtils.getStage(myNotesBtn, this.stage);
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/account_user_info_page.fxml"));
-//        this.controllerUtils.updateStage(this.stage, fxmlLoader);
         this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
     }
 
@@ -188,7 +182,7 @@ public class MainPageController {
     }
 
     @FXML
-    void mouseEnter(MouseEvent event) {
+    void mouseEnter() {
         this.controllerUtils.setHandCursor(myNotesBtn);
         this.controllerUtils.setHandCursor(shareNotesBtn);
         this.controllerUtils.setHandCursor(myGroupsBtn);
@@ -198,7 +192,7 @@ public class MainPageController {
     }
 
     @FXML
-    void mouseExit(MouseEvent event) {
+    void mouseExit() {
         this.controllerUtils.setDefaultCursor(myNotesBtn);
         this.controllerUtils.setDefaultCursor(shareNotesBtn);
         this.controllerUtils.setDefaultCursor(myGroupsBtn);
@@ -278,8 +272,7 @@ public class MainPageController {
             }
         });
     }
-    private void performSearch() {
-        String inputText = searchBar.getText();
+    private void performSearch() {        String inputText = searchBar.getText();
         if (!inputText.isEmpty()) {
             HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/search", true);
             JSONObject searchRequest = new JSONObject();

@@ -209,7 +209,7 @@
                   <Insets top="10.0" />
                </padding>
             </Button>
-            <Button fx:id="myGroupsBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myGroupsBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="40.0" prefWidth="190.0" stylesheets="@../../CSS/button.css" text="My Groups">
+            <Button fx:id="myGroupsBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#myGroupsBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" stylesheets="@../../CSS/button.css" text="My Groups">
                <font>
                   <Font size="14.0" />
                </font>
@@ -224,7 +224,7 @@
                   </AnchorPane>
                </graphic>
             </Button>
-            <Button fx:id="allGroupsBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#allGroupsBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="40.0" prefWidth="190.0" stylesheets="@../../CSS/button.css" text="All Groups">
+            <Button fx:id="allGroupsBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#allGroupsBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" stylesheets="@../../CSS/button.css" text="All Groups">
                <font>
                   <Font size="14.0" />
                </font>
@@ -249,7 +249,7 @@
                <graphic>
                   <AnchorPane prefHeight="24.0" prefWidth="21.0">
                      <children>
-                        <SVGPath content="M 12.00,8.00           C 10.02,8.00 8.42,9.60 8.42,11.58             8.42,13.56 10.02,15.17 12.00,15.17             13.98,15.17 15.58,13.56 15.58,11.58             15.58,9.60 13.98,8.00 12.00,8.00 Z           M 16.19,2.00           C 16.19,2.00 7.81,2.00 7.81,2.00             4.17,2.00 2.00,4.17 2.00,7.81             2.00,7.81 2.00,16.19 2.00,16.19             2.00,19.00 3.29,20.93 5.56,21.66             6.22,21.89 6.98,22.00 7.81,22.00             7.81,22.00 16.19,22.00 16.19,22.00             17.02,22.00 17.78,21.89 18.44,21.66             20.71,20.93 22.00,19.00 22.00,16.19             22.00,16.19 22.00,7.81 22.00,7.81             22.00,4.17 19.83,2.00 16.19,2.00 Z           M 20.50,16.19           C 20.50,18.33 19.66,19.68 17.97,20.24             17.00,18.33 14.70,16.97 12.00,16.97             9.30,16.97 7.01,18.32 6.03,20.24             6.03,20.24 6.02,20.24 6.02,20.24             4.35,19.70 3.50,18.34 3.50,16.20             3.50,16.20 3.50,7.81 3.50,7.81             3.50,4.99 4.99,3.50 7.81,3.50             7.81,3.50 16.19,3.50 16.19,3.50             19.01,3.50 20.50,4.99 20.50,7.81             20.50,7.81 20.50,16.19 20.50,16.19 Z" fill="#fffefe" stroke="WHITE" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
+                        <SVGPath content="M 12.00,8.00           C 10.02,8.00 8.42,9.60 8.42,11.58             8.42,13.56 10.02,15.17 12.00,15.17             13.98,15.17 15.58,13.56 15.58,11.58             15.58,9.60 13.98,8.00 12.00,8.00 Z           M 16.19,2.00           C 16.19,2.00 7.81,2.00 7.81,2.00             4.17,2.00 2.00,4.17 2.00,7.81             2.00,7.81 2.00,16.19 2.00,16.19             2.00,19.00 3.29,20.93 5.56,21.66             6.22,21.89 6.98,22.00 7.81,22.00             7.81,22.00 16.19,22.00 16.19,22.00             17.02,22.00 17.78,21.89 18.44,21.66             20.71,20.93 22.00,19.00 22.00,16.19             22.00,16.19 22.00,7.81 22.00,7.81             22.00,4.17 19.83,2.00 16.19,2.00 Z           M 20.50,16.19           C 20.50,18.33 19.66,19.68 17.97,20.24             17.00,18.33 14.70,16.97 12.00,16.97             9.30,16.97 7.01,18.32 6.03,20.24             6.03,20.24 6.02,20.24 6.02,20.24             4.35,19.70 3.50,18.34 3.50,16.20             3.50,16.20 3.50,7.81 3.50,7.81             3.50,4.99 4.99,3.50 7.81,3.50             7.81,3.50 16.19,3.50 16.19,3.50             19.01,3.50 20.50,4.99 20.50,7.81             20.50,7.81 20.50,16.19 20.50,16.19 Z" fill="#fffefe" stroke="#a276ff" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="0.8" styleClass="icon" />
                      </children>
                   </AnchorPane>
                </graphic>

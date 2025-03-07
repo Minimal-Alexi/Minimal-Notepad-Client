@@ -34,9 +34,7 @@ public class GroupInfoCreateController {
     @FXML
     private Button myNotesBtn;
     @FXML
-    private Button mySharedGroupNotesBtn;
-    @FXML
-    private Button groupsBtn;
+    private Button shareNotesBtn;
     @FXML
     private Button myGroupsBtn;
     @FXML
@@ -44,9 +42,10 @@ public class GroupInfoCreateController {
     @FXML
     private Button accountBtn;
     @FXML
-    private Button createGroupBtn;
-    @FXML
     private Button logOutBtn;
+
+    @FXML
+    private Button createGroupBtn;
 
 
     @FXML
@@ -105,91 +104,63 @@ public class GroupInfoCreateController {
 
             nameLabel.setText("Wellcome " + username);
             MainPageServices.updateLocalTime(localTime);
-//        httpInstance = HttpClientSingleton.getInstance();
-
-
-//        myNotesBtn.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
             root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/search_bar.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/table_view.css").toExternalForm());
             root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/groups.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE +"/button.css").toExternalForm());
-
             createGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
         }
 
-
-    }
-
-    @FXML
-    public void accountBtnClick() {
-        controllerUtils.goPage(stage, accountBtn, FXMLSource + "/main_pages/account_user_info_page.fxml");
-    }
-
-    @FXML
-    public void allGroupsBtnClick() {
-        // go to allgroup page
-        controllerUtils.goPage(stage, allGroupsBtn, FXMLSource + "/main_pages/groups/all_groups.fxml");
-    }
-
-    @FXML
-    public void groupsBtnClick() {
-        // go to create group page
-        controllerUtils.goPage(stage, createGroupBtn, FXMLSource + "/main_pages/groups/group_info_create_group.fxml");
-    }
-
-    @FXML
-    public void mouseEnter() {
-        controllerUtils.setHandCursor(myNotesBtn);
-        controllerUtils.setHandCursor(mySharedGroupNotesBtn);
-        controllerUtils.setHandCursor(groupsBtn);
-        controllerUtils.setHandCursor(myGroupsBtn);
-        controllerUtils.setHandCursor(allGroupsBtn);
-        controllerUtils.setHandCursor(accountBtn);
-        controllerUtils.setHandCursor(logOutBtn);
-
-        controllerUtils.setHandCursor(createGroupBtn);
-    }
-
-    @FXML
-    public void mouseExit() {
-        controllerUtils.setDefaultCursor(myNotesBtn);
-        controllerUtils.setDefaultCursor(mySharedGroupNotesBtn);
-        controllerUtils.setDefaultCursor(groupsBtn);
-        controllerUtils.setDefaultCursor(myGroupsBtn);
-        controllerUtils.setDefaultCursor(allGroupsBtn);
-        controllerUtils.setDefaultCursor(accountBtn);
-        controllerUtils.setDefaultCursor(logOutBtn);
-        controllerUtils.setDefaultCursor(createGroupBtn);
     }
 
 
-    @FXML
     public void myGroupsBtnClick() {
-        // go to my groups page
+        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
     }
 
     @FXML
     public void myNotesBtnClick() {
-        // go to my notes page
+        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
     }
 
     @FXML
-    public void shareNoteBtnClick() {
-        // go to share note page
+    public void shareNotesBtnClick() {
+        System.out.println("Go to share notes page");
     }
 
     @FXML
-    public void mySharedGroupNotesBtnClick() {
+    public void allGroupsBtnClick() {
+        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+    }
 
+    @FXML
+    public void accountBtnClick() {
+        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
     }
 
     @FXML
     public void logOutBtnClick() {
-        {
-            this.controllerUtils.logout(stage, logOutBtn);
-        }
+        this.controllerUtils.logout(stage, logOutBtn);
+    }
+
+    @FXML
+    void mouseEnter() {
+        this.controllerUtils.setHandCursor(myNotesBtn);
+        this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(myGroupsBtn);
+        this.controllerUtils.setHandCursor(allGroupsBtn);
+        this.controllerUtils.setHandCursor(accountBtn);
+        this.controllerUtils.setHandCursor(logOutBtn);
+        this.controllerUtils.setHandCursor(createGroupBtn);
+    }
+
+    @FXML
+    void mouseExit() {
+        this.controllerUtils.setDefaultCursor(myNotesBtn);
+        this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(myGroupsBtn);
+        this.controllerUtils.setDefaultCursor(allGroupsBtn);
+        this.controllerUtils.setDefaultCursor(accountBtn);
+        this.controllerUtils.setDefaultCursor(logOutBtn);
+        this.controllerUtils.setDefaultCursor(createGroupBtn);
     }
 
 
@@ -229,6 +200,7 @@ public class GroupInfoCreateController {
         String statusCode = response.getStatusLine().toString();
         try {
             System.out.println("response " + response);
+            this.controllerUtils.goPage(stage,createGroupBtn,FXMLSource+"/main_pages/groups/my_groups.fxml");
         } catch (JSONException e) {
             String message = (String) object.get("message");
         }
