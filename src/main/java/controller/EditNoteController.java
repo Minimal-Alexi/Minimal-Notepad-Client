@@ -142,7 +142,14 @@ public class EditNoteController {
     }
     public void groupSharingSetUp(){
         groupSharingChoiceBox.getItems().addAll(groupList.values());
-        groupSharingChoiceBox.getSelectionModel().select(note.getGroup());
+        if(note.getGroupId() == -1)
+        {
+            groupSharingChoiceBox.getSelectionModel().select("No Group");
+        }
+        else
+        {
+            groupSharingChoiceBox.getSelectionModel().select(note.getGroup());
+        }
     }
     public void groupSharingFetching(){
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET","http://localhost:8093/api/groups/my-groups",true);
