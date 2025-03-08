@@ -291,7 +291,6 @@
                         </Label>
                         <TableView fx:id="table1" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../../CSS/table_view.css">
                            <columns>
-                              <TableColumn fx:id="name1" prefWidth="39.73330307006836" />
                               <TableColumn fx:id="group1" prefWidth="229.86671447753906" text="Username" />
                               <TableColumn fx:id="category1" prefWidth="165.06671142578125" text="Email" />
                            </columns>

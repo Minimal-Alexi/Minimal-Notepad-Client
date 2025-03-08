@@ -2,6 +2,8 @@ package model;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ public class Group {
     private SimpleIntegerProperty numberOfMembers;
     private GroupOwner groupOwner;
     private List<AppUser> userList;
+    private List<GroupMember> members;  // Add a list of GroupMembers
 
     public Group(int id, String name, String description, GroupOwner groupOwner, List<AppUser> userList) {
         this.id = new SimpleIntegerProperty(id);
@@ -30,8 +33,8 @@ public class Group {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
-        this.numberOfMembers = new SimpleIntegerProperty(numberOfMembers + 1); // + owner
-//        this.userList = new ArrayList<>();
+        this.numberOfMembers = new SimpleIntegerProperty(numberOfMembers);
+        this.userList = new ArrayList<>();
         this.groupOwner = groupOwner;
         this.groupOwnerName = new SimpleStringProperty(this.groupOwner.getUsername());
     }
@@ -63,6 +66,15 @@ public class Group {
         this.userList = userList;
     }
 
+    public List<GroupMember> getMembers() {
+/*        List<GroupMember> members = new ArrayList<>();
+        if (userList != null) {
+            for (AppUser user : userList) {
+                members.add(new GroupMember(user.getUsername(), user.getEmail()));
+            }
+        }*/
+        return members;
+    }
 
     public int getId() {
         return id.get();
@@ -117,6 +129,35 @@ public class Group {
         this.numberOfMembers = new SimpleIntegerProperty(numberOfMembers);
     }
 
+    private List<GroupMember> userGroupParticipationsList;  // This list will hold participating users
+
+    // Existing constructor and methods...
+
+    public List<GroupMember> getUserGroupParticipationsList() {
+        return userGroupParticipationsList;
+    }
+
+    public void setUserGroupParticipationsList(List<GroupMember> userGroupParticipationsList) {
+        this.userGroupParticipationsList = userGroupParticipationsList;
+    }
+
+
+
+    // Add this method to parse and return members
+    public List<GroupMember> parseMembers(JSONArray membersArray) {
+        List<GroupMember> membersList = new ArrayList<>();
+        for (int i = 0; i < membersArray.length(); i++) {
+            JSONObject memberObject = membersArray.getJSONObject(i);
+            GroupMember member = new GroupMember(
+                    String.valueOf(id.get()),  // Convert SimpleIntegerProperty id to String
+                    memberObject.getString("username"),
+                    memberObject.getString("email")
+            );
+            membersList.add(member);
+        }
+        return membersList;
+    }
+
     public boolean isExist(String name) {
         for (AppUser user : this.userList) {
             if (user.getUsername().equals(name)) {
@@ -136,4 +177,5 @@ public class Group {
                 ", numberOfMembers=" + numberOfMembers +
                 '}';
     }
+
 }

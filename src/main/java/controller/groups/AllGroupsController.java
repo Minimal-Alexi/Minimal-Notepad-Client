@@ -225,7 +225,8 @@ public class AllGroupsController implements Initializable {
             for (Object groupObject : array) {
 //                System.out.println(groupObject);
                 JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-                GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"));
+                String ownerEmail = null;
+                GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), ownerEmail);
                 int id = (int) ((JSONObject) groupObject).get("id");
                 String name = (String) ((JSONObject) groupObject).get("name");
                 String description = (String) ((JSONObject) groupObject).get("description");

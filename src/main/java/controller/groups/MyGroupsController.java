@@ -74,8 +74,25 @@ public class MyGroupsController {
             });
 
         }).start();
+    }
 
+    /**
+     * This method fetches user group participations and populates the group lists for display.
+     */
+    public void fetchUserGroupParticipations() {
+        // API to fetch user group participations
+        String URI = "http://localhost:8093/api/groups/my-participations";
+        GroupServices gs = new GroupServices();
 
+        // Fetching the groups the user is participating in
+        new Thread(() -> {
+            gs.fetchGroups(URI, TokenStorage.getToken(), joinedGroups);
+
+            Platform.runLater(() -> {
+                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, "Edit");
+                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, deleteCol, "Delete");
+            });
+        }).start();
     }
 
 

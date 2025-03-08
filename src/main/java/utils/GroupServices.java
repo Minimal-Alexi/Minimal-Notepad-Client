@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Group;
+import model.GroupMember;
 import model.GroupOwner;
 import model.selected.SelectedGroup;
 import org.json.JSONArray;
@@ -42,7 +43,8 @@ public class GroupServices {
                     JSONObject jsonGroup = (JSONObject) groupObject;
                     JSONObject owner = jsonGroup.getJSONObject("owner");
 
-                    GroupOwner groupOwner = new GroupOwner(owner.getInt("id"), owner.getString("username"));
+                    String ownerEmail = null;
+                    GroupOwner groupOwner = new GroupOwner(owner.getInt("id"), owner.getString("username"), ownerEmail);
                     int id = jsonGroup.getInt("id");
                     String name = jsonGroup.getString("name");
                     String description = jsonGroup.getString("description");
@@ -60,6 +62,42 @@ public class GroupServices {
             throw new RuntimeException(e);
         }
     }
+
+    public void fetchGroupMembers(String url, String token, int groupId, List<GroupMember> groupMembers) {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url + "/" + groupId + "/members")) // Assuming the API has an endpoint to fetch members for a specific group
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .GET()
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                JSONArray result = new JSONArray(response.body());
+
+                for (Object memberObject : result) {
+                    JSONObject jsonMember = (JSONObject) memberObject;
+                    int memberId = jsonMember.getInt("id");
+                    String username = jsonMember.getString("username");
+                    String email = jsonMember.getString("email");
+/*
+                    GroupMember newMember = new GroupMember(memberId, username, email);
+                    System.out.println(newMember);
+                    groupMembers.add(newMember);*/
+                }
+            } else {
+                System.out.println("Failed to fetch group members: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching group members: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /*
      * Update Groups UI
@@ -121,7 +159,6 @@ public class GroupServices {
      */
     public static Group findGroupById(String url, Integer id, String token) {
         HttpClient client = HttpClient.newHttpClient();
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + id))
                 .header("Content-Type", "application/json")
@@ -131,27 +168,51 @@ public class GroupServices {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
             System.out.println("Response Status Code: " + response.statusCode());
             System.out.println("Response Body: " + response.body());
 
             if (response.statusCode() == 200) {
-                JSONObject result = new JSONObject(response.body());
+                String responseBody = response.body();
 
-                int groupId = result.getInt("id");
-                String name = result.getString("name");
-                String description = result.getString("description");
-                int numberOfMembers = result.getInt("numberOfMembers");
+                int groupId = Integer.parseInt(responseBody.split("\"id\":")[1].split(",")[0]);
+                String name = responseBody.split("\"name\":\"")[1].split("\"")[0];
+                String description = responseBody.split("\"description\":\"")[1].split("\"")[0];
 
-                JSONObject ownerJson = result.getJSONObject("owner");
-                GroupOwner groupOwner = new GroupOwner(ownerJson.getInt("id"), ownerJson.getString("username"));
+                int ownerId = Integer.parseInt(responseBody.split("\"owner\":\\{\"id\":")[1].split(",")[0]);
+                String ownerUsername = responseBody.split("\"username\":\"")[1].split("\"")[0];
+                String ownerEmail = responseBody.split("\"email\":\"")[1].split("\"")[0];
 
-                return new Group(groupId, name, description, groupOwner, numberOfMembers);
-            } else {
-                System.out.println("Failed to find group: " + response.statusCode());
+                GroupOwner groupOwner = new GroupOwner(ownerId, ownerUsername, ownerEmail);
+                return new Group(groupId, name, description, groupOwner, 0);
             }
         } catch (Exception e) {
             System.err.println("Error finding group: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean updateGroup(String url, int groupId, String requestBody, String token) {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url + groupId)) // URL with group ID
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .PUT(HttpRequest.BodyPublishers.ofString(requestBody)) // Send updated data
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Update Response Status: " + response.statusCode());
+            System.out.println("Update Response Body: " + response.body());
+
+            return response.statusCode() == 200; // Return true if update is successful
+        } catch (Exception e) {
+            System.err.println("Error updating group: " + e.getMessage());
+            return false;
+        }
     }
 }
