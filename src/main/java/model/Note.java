@@ -11,12 +11,13 @@ public class Note {
     private String createdAt;
     private String updatedAt;
     private String owner;
+    private int groupId;
     private String group;
     private HashMap<Integer, String> category;
     private ArrayList<String> figure;
 
 
-    public Note(int id, String title, String text, String color, String createdAt, String updatedAt, String owner, String group, HashMap<Integer, String> category, ArrayList<String> figure) {
+    public Note(int id, String title, String text, String color, String createdAt, String updatedAt, String owner, int groupId, String group, HashMap<Integer, String> category, ArrayList<String> figure) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -24,6 +25,7 @@ public class Note {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.owner = owner;
+        this.groupId = groupId;
         this.group = group;
         this.category = category;
         this.figure = figure;
@@ -70,6 +72,12 @@ public class Note {
     }
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+    public int getGroupId() {
+        return groupId;
+    }
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
     public String getGroup() {
         return group;

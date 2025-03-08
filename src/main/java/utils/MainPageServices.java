@@ -113,6 +113,7 @@ public class MainPageServices {
                             timestampToString(noteJson.getString("createdAt")),
                             timestampToString(noteJson.getString("updatedAt")),
                             noteJson.getJSONObject("user").getString("username"),
+                            -1,
                             " ",
                             jsonArrayToHashMap(noteJson.getJSONArray("categoriesList")),
                             jsonArrayToFigureList(noteJson.getJSONArray("figures"))

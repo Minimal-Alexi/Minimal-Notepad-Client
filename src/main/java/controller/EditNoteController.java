@@ -15,16 +15,28 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import model.HttpRequestBuilder;
 import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import utils.ControllerUtils;
 import utils.GoogleDriveUploader;
+import utils.HttpResponseService;
+import utils.HttpResponseServiceImpl;
 import utils.NoteServices;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static utils.MainPageServices.*;
 import static utils.NoteServices.*;
@@ -32,6 +44,7 @@ import static utils.NoteServices.*;
 
 public class EditNoteController {
 
+    @FXML private ChoiceBox<String> groupSharingChoiceBox;
     @FXML
     private Label localTime;
     @FXML
@@ -73,18 +86,22 @@ public class EditNoteController {
     private ControllerUtils controllerUtils;
 
 
-    SelectedNote selectedNote = SelectedNote.getInstance();
+    private HttpResponseService responseService;
+    private SelectedNote selectedNote = SelectedNote.getInstance();
+    private Note note;
     private HashMap<Integer, String> categoryList = new HashMap<>();
+    private HashMap<Integer, String> groupList = new HashMap<>();
     private ArrayList<String> figureList = new ArrayList<>();
 
     // Initialize
     public void initialize() {
+        responseService = new HttpResponseServiceImpl();
         this.controllerUtils = new ControllerUtils();
 
 
         System.out.println(selectedNote.getId());
 
-        Note note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
+        note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
 
         assert note != null;
         textArea1.setText(note.getText());
@@ -92,7 +109,8 @@ public class EditNoteController {
         categoryList = note.getCategory();
         figureList = note.getFigure();
 
-        colorSetUp(note.getColor());
+        colorSetUp();
+        groupSharingFetching();
 
         // query the categoryList to add categories to the ui
         updateCategory(categoryList, categoryHBox);
@@ -122,8 +140,8 @@ public class EditNoteController {
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note = new Note(selectedNote.getId(), titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), "N/A", categoryList, figureList);
-        NoteServices.updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), note);
+        Note updatedNote= new Note(selectedNote.getId(), titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), note.getCreatedAt(), note.getUpdatedAt(), TokenStorage.getUser(), getGroupId(), getGroupName(), categoryList, figureList);
+        NoteServices.updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), updatedNote);
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
 
@@ -154,6 +172,29 @@ public class EditNoteController {
         addCategory.setDisable(false);
 
     }
+    public void groupSharingSetUp(){
+        groupSharingChoiceBox.getItems().addAll(groupList.values());
+        if(note.getGroupId() == -1)
+        {
+            groupSharingChoiceBox.getSelectionModel().select("No Group");
+        }
+        else
+        {
+            groupSharingChoiceBox.getSelectionModel().select(note.getGroup());
+        }
+    }
+    public void groupSharingFetching(){
+        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET","http://localhost:8093/api/groups/my-groups",true);
+        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
+        try
+        {
+            httpRequestBuilder.setRequestBody();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetOwnGroups);
+    }
 
     public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
         uploadPicture(uploadPicBtn, figureList, textVBox);
@@ -170,12 +211,51 @@ public class EditNoteController {
 //        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
 //    }
 
-    private void colorSetUp(String initialColor) {
-        noteBackground.setFill(Color.web(initialColor));
-        colorPicker.setValue(Color.web(initialColor));
+    private void colorSetUp() {
+        noteBackground.setFill(Color.web(note.getColor()));
+        colorPicker.setValue(Color.web(note.getColor()));
         colorPicker.setOnAction(event -> {
             noteBackground.setFill(colorPicker.getValue());
         });
+    }
+    private void handleGetOwnGroups(CloseableHttpResponse response, Object responseObject){
+        System.out.println(response.getStatusLine().getStatusCode());
+        if (response.getStatusLine().getStatusCode() == 200) {
+            JSONArray jsonResponse = (JSONArray) responseObject;
+            try {
+                for(int i = 0; i < jsonResponse.length(); i++){
+                    JSONObject jsonObject = jsonResponse.getJSONObject(i);
+                    groupList.put(jsonObject.getInt("id"), jsonObject.getString("name"));
+                }
+                groupList.put(-1,"No Group");
+                groupSharingSetUp();
+            } catch (JSONException e) {
+                System.out.println(e);
+            }
+        } else {
+            JSONObject jsonResponse = (JSONObject) responseObject;
+            if (response.getStatusLine().getStatusCode() == 404) {
+                groupList.put(-1,"No Group");
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setTitle("Error");
+//                alert.setHeaderText(null);
+//                alert.setContentText(jsonResponse.getString("message"));
+//                alert.showAndWait();
+            }
+        }
+    }
+    private int getGroupId(){
+        for(Map.Entry<Integer,String> entry:groupList.entrySet())
+        {
+            if(entry.getValue().equals(groupSharingChoiceBox.getValue()))
+            {
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
+    private String getGroupName(){
+        return groupSharingChoiceBox.getValue();
     }
 
 
