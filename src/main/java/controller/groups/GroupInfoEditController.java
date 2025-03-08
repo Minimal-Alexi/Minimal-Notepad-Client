@@ -201,6 +201,9 @@ public class GroupInfoEditController {
         actionOneCol = addAppUserCol("Action");
 
         // update Table View with updated action button
+        // 1. get group based on ID
+        // 2. update user table with the groups's member list
+        // 3. update the button in the user table based on the member role
         getGroupUserInfoByGroupId();
 //        updateTableView();
         // Optional: You can refresh the table or set listeners here if necessary
@@ -241,11 +244,6 @@ public class GroupInfoEditController {
         List<AppUser> userList = createUserList(userListObj);
         userList.add(currentOwner);
 
-//        System.out.println("Current Owner " + currentOwner);
-//
-//        System.out.println("User list " + userList);
-//        Group newGroup = new Group(id, name, description, groupOwner, userList);
-
 
         this.group = new Group(id, name, description, groupOwner, userList);
         //updatedAllGroups.add(newGroup);
@@ -256,14 +254,14 @@ public class GroupInfoEditController {
 //        System.out.println("member list " + memberList);
 
         // setup, display data to table with processed data
-        setupTable();
+        displayUserTable();
         updateColumnOne();
 
 
 
 /*          this.allgroups = updatedAllGroups;
             System.out.println(this.allgroups);*/
-        //setupTable();
+        //displayUserTable();
         //}
     }
 
@@ -279,7 +277,7 @@ public class GroupInfoEditController {
         return userList;
     }
 
-    public void setupTable() {
+    public void displayUserTable() {
 
 //        idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         // group1 í column name, "Name" is the property name of the AppUser
@@ -414,25 +412,53 @@ public class GroupInfoEditController {
             };
 
             // updatedCell.getItem() == group object
+            //edit my own info
             editButton.setOnAction(e -> {
                 Button source = (Button) e.getSource();
                 System.out.println("is button " + source);
+                editAccountInfo(source);
 //                edit(updatedCell.getItem(), (source));
             });
 
             removeButton.setOnAction((e -> {
                 Button source = (Button) e.getSource();
                 System.out.println("is button " + source);
+                System.out.println(updatedCell.getItem());
+                removeUser(updatedCell.getItem());
             }));
 
 
             this.controllerUtils.setDefaultAndHandCursorBehaviour(removeButton);
+            this.controllerUtils.setDefaultAndHandCursorBehaviour(editButton);
             return updatedCell;
 
         });
     }
 
+    public void editAccountInfo(Button btn) {
+        String FXMLString = "/fxml/main_pages/account_user_info_page.fxml";
 
+        selectedGroup.setId(group.getId());
+        controllerUtils.goPage(stage, btn, FXMLString);
+    }
+
+    public void removeUser(AppUser appUser) {
+        System.out.println("delete group");
+        int appUserId = appUser.getId();
+        String REMOVE_URI = URI + "/remove/" + appUserId;
+        System.out.println(REMOVE_URI);
+        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("DELETE", REMOVE_URI, true);
+        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
+        httpResponseService.handleReponse(request, httpClient, this::handleRemoveUser);
+    }
+
+    public void handleRemoveUser(CloseableHttpResponse response, Object object) {
+        System.out.println("response " + response);
+//        updateTableView();
+        // get a updated group info from database after remove member
+        getGroupUserInfoByGroupId();
+    }
     @FXML
     void accountBtnClick() {
 
