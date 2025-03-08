@@ -201,7 +201,7 @@ public class GroupInfoEditController {
         actionOneCol = addAppUserCol("Action");
 
         // update Table View with updated action button
-        // 1. get group based on ID
+        // 1. get group based on ID and its member list
         // 2. update user table with the groups's member list
         // 3. update the button in the user table based on the member role
         getGroupUserInfoByGroupId();
@@ -219,11 +219,11 @@ public class GroupInfoEditController {
 //        return null;
     }
 
-    // get group info with specific Id and its member list
-    // update button based on the member ( owner or member)
-    public void updateTableView() {
-        getGroupUserInfoByGroupId();
-    }
+//    // get group info with specific Id
+//    // update button based on the member ( owner or member)
+//    public void updateTableView() {
+//        getGroupUserInfoByGroupId();
+//    }
 
     public void handleGroupUserInfoByGroupId(CloseableHttpResponse response, Object jsonResponse) {
         // convert response to Group Object
@@ -282,13 +282,37 @@ public class GroupInfoEditController {
 //        idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         // group1 í column name, "Name" is the property name of the AppUser
         group1.setCellValueFactory(new PropertyValueFactory<>("Username"));
+//        System.out.println("name: "+ group1.getCellValueFactory().equals(TokenStorage.getUser()));
         category1.setCellValueFactory(new PropertyValueFactory<>("Email"));
 //        numOfMembersCol.setCellValueFactory(new PropertyValueFactory<>("NumberOfMembers"));
 
         groupMembers = FXCollections.observableArrayList(this.memberList);
         table1.setItems(groupMembers);
+        transformUsername();
+//        table1.getItems();
+
     }
 
+    public boolean isOwner(String username) {
+        String loginnedUsername = TokenStorage.getUser();
+        String formattedUsername = "owner - " + loginnedUsername;
+
+        return username.equals(loginnedUsername) || username.equals(formattedUsername);
+    }
+
+    public void transformUsername() {
+        System.out.println("Items: " + table1.getItems().getClass());
+        List<AppUser> curMemberList = table1.getItems();
+        String loginnedUsername = TokenStorage.getUser();
+        for (AppUser user : curMemberList) {
+            String username = user.getUsername();
+            System.out.println(user);
+            if (username.equals(loginnedUsername)) {
+                user.setUsername("owner - " + username);
+            }
+            System.out.println(user);
+        }
+    }
 
 //    private void setUpTableListeners() {
 //        // Listener for the "Username" column
@@ -392,11 +416,13 @@ public class GroupInfoEditController {
                         setGraphic(null);
                     } else {
                         // if logined user != group owner
+//                        if (!owner.equals(groupOwner)) {
                         if (!owner.equals(groupOwner)) {
                             setGraphic(null);
                         } else {
                             // if current member is the same as logined user
-                            if (owner.equals(appUser.getUsername())) {
+//                            if (owner.equals(appUser.getUsername())) {
+                            if (isOwner(appUser.getUsername())) {
 //                            setGraphic(null);
                                 setGraphic(editButton);
                                 ViewUtils.addStyle(editButton, "/edit-button.css");
@@ -459,6 +485,7 @@ public class GroupInfoEditController {
         // get a updated group info from database after remove member
         getGroupUserInfoByGroupId();
     }
+
     @FXML
     void accountBtnClick() {
 

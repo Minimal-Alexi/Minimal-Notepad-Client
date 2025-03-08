@@ -42,8 +42,8 @@ public class HttpResponseServiceImpl implements HttpResponseService {
                     // return an empty JSONObject on delete method as the response body is empty
                     jsonResponse = new JSONObject();
                 }
-                System.out.println("json " + jsonResponse);
-                System.out.println("response " + response);
+//                System.out.println("json " + jsonResponse);
+//                System.out.println("response " + response);
 //                System.out.println("status code " + statusLine);
                 Platform.runLater(() -> {
                     // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
