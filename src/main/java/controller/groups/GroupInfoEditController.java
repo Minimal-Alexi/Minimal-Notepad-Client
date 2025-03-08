@@ -1,5 +1,6 @@
 package controller.groups;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,10 +20,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import utils.ControllerUtils;
-import utils.HttpResponseService;
-import utils.HttpResponseServiceImpl;
-import utils.MainPageServices;
+import utils.*;
+
 import static utils.GroupServices.updateGroup;
 
 
@@ -67,6 +66,7 @@ public class GroupInfoEditController {
     @FXML
     private Button mySharedGroupNotesBtn;
 
+
     @FXML
     private Label nameLabel;
 
@@ -88,14 +88,14 @@ public class GroupInfoEditController {
     private Label editedGroupDescLabel;
 
     @FXML
-    private TableView<GroupMember> table1;
+    private TableView<AppUser> table1;
 
     @FXML
-    private TableColumn<GroupMember, String> group1;  // Username column
+    private TableColumn<AppUser, String> group1;  // Username column
     @FXML
-    private TableColumn<GroupMember, String> category1;  // Email column
+    private TableColumn<AppUser, String> category1;  // Email column
 
-    private ObservableList<GroupMember> groupMembers = FXCollections.observableArrayList();
+    private ObservableList<AppUser> groupMembers = FXCollections.observableArrayList();
 
     private Group group;
     private Stage stage;
@@ -104,13 +104,17 @@ public class GroupInfoEditController {
     private ControllerUtils controllerUtils;
     SelectedGroup selectedGroup = SelectedGroup.getInstance();
     private HttpResponseService httpResponseService;
+    private List<AppUser> memberList;
 //    private HttpClientSingleton httpInstance;
+
+    TableColumn<AppUser, AppUser> actionOneCol;
 
 
     private String getGroupUri() {
         int groupId = selectedGroup.getId();
         return "http://localhost:8093/api/groups/" + groupId;
     }
+
     String URI = getGroupUri();
     private static final String FXMLSource = "/fxml";
     private static final String CSSSOURCE = "/CSS";
@@ -129,6 +133,8 @@ public class GroupInfoEditController {
 
 
     public void initialize() {
+        this.memberList = new ArrayList<>();
+
         System.out.println("Start Edit Group Page");
         System.out.println("scene " + scene);
         this.controllerUtils = new ControllerUtils();
@@ -140,11 +146,22 @@ public class GroupInfoEditController {
         System.out.println("Group is " + group);
         System.out.println("Fetching group with ID: " + selectedGroup.getId());
 
-        getGroupUserInfoByGroupId();
-        /*String groupID = String.valueOf(selectedGroup.getId());
         if (group != null) {
             groupNameInput.setText(group.getName());
             groupDescInput.setText(group.getDescription());
+        } else {
+            System.out.println("Group not found.");
+
+        }
+
+
+
+        /*
+        String groupID = String.valueOf(selectedGroup.getId());
+        if (group != null) {
+            groupNameInput.setText(group.getName());
+            groupDescInput.setText(group.getDescription());
+        // set group name and group desc to text field
 
             // Assuming you get the group members as a List<GroupMember>
             List<GroupMember> groupMembersList = group.getMembers(); // Assuming `getMembers()` returns a List
@@ -165,7 +182,7 @@ public class GroupInfoEditController {
         TokenStorage.getIntance();
         String username = TokenStorage.getUser();
         String password = TokenStorage.getToken();
-        System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
+//        System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
         nameLabel.setText("Welcome " + username);
         MainPageServices.updateLocalTime(localTime);
@@ -176,11 +193,16 @@ public class GroupInfoEditController {
         editGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
 
         // Set up the table with members
-        group1.setCellValueFactory(new PropertyValueFactory<>("username"));
-        category1.setCellValueFactory(new PropertyValueFactory<>("email"));
+//        group1.setCellValueFactory(new PropertyValueFactory<>("username"));
+//        category1.setCellValueFactory(new PropertyValueFactory<>("email"));
+//
+//        table1.setItems(groupMembers);
+        // create action collumn with default button
+        actionOneCol = addAppUserCol("Action");
 
-        table1.setItems(groupMembers);
-
+        // update Table View with updated action button
+        getGroupUserInfoByGroupId();
+//        updateTableView();
         // Optional: You can refresh the table or set listeners here if necessary
         //setUpTableListeners();
     }
@@ -194,34 +216,54 @@ public class GroupInfoEditController {
 //        return null;
     }
 
+    // get group info with specific Id and its member list
+    // update button based on the member ( owner or member)
+    public void updateTableView() {
+        getGroupUserInfoByGroupId();
+    }
+
     public void handleGroupUserInfoByGroupId(CloseableHttpResponse response, Object jsonResponse) {
+        // convert response to Group Object
+
         List<Group> updatedAllGroups = new ArrayList<>();
         JSONObject groupObject = controllerUtils.toJSonObject(jsonResponse);
-        System.out.println("Group Object " + groupObject );
+//        System.out.println("Group Object " + groupObject);
 //        System.out.println(array);
 //               System.out.println(groupObject);
-                JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-                String ownerEmail = owner.getString("email");
-                GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), ownerEmail);
-                int id = (int) ((JSONObject) groupObject).get("id");
-                String name = (String) ((JSONObject) groupObject).get("name");
-                String description = (String) ((JSONObject) groupObject).get("description");
-                JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).get("userGroupParticipationsList");
-                AppUser currentOwner = new AppUser((int) owner.get("id"),(String) owner.get("username"), ownerEmail);
-                List<AppUser> userList = createUserList(userListObj);
-                userList.add(currentOwner);
+        JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
+        String ownerEmail = owner.getString("email");
+        GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), ownerEmail);
+        int id = (int) ((JSONObject) groupObject).get("id");
+        String name = (String) ((JSONObject) groupObject).get("name");
+        String description = (String) ((JSONObject) groupObject).get("description");
+        JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).get("userGroupParticipationsList");
+        AppUser currentOwner = new AppUser((int) owner.get("id"), (String) owner.get("username"), ownerEmail);
+        List<AppUser> userList = createUserList(userListObj);
+        userList.add(currentOwner);
 
-                System.out.println("Current Owner " + currentOwner);
+//        System.out.println("Current Owner " + currentOwner);
+//
+//        System.out.println("User list " + userList);
+//        Group newGroup = new Group(id, name, description, groupOwner, userList);
 
-                System.out.println("User list " + userList);
-                Group newGroup = new Group(id, name, description, groupOwner, userList);
-                //updatedAllGroups.add(newGroup);
 
-                System.out.println("New Group User List " + newGroup.getMembers());
+        this.group = new Group(id, name, description, groupOwner, userList);
+        //updatedAllGroups.add(newGroup);
+
+//        System.out.println("New Group User List " + this.group.getMembers());
+//        System.out.println("New Group User List " + this.group.getMembers());
+        this.memberList = this.group.getUserList();
+//        System.out.println("member list " + memberList);
+
+        // setup, display data to table with processed data
+        setupTable();
+        updateColumnOne();
+
+
 
 /*          this.allgroups = updatedAllGroups;
             System.out.println(this.allgroups);*/
-            //setupTable();
+        //setupTable();
         //}
     }
 
@@ -237,32 +279,44 @@ public class GroupInfoEditController {
         return userList;
     }
 
+    public void setupTable() {
 
-    private void setUpTableListeners() {
-        // Listener for the "Username" column
-        group1.setCellFactory(column -> {
-            return new TextFieldTableCell<>(); // Create an editable cell for the column
-        });
+//        idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        // group1 í column name, "Name" is the property name of the AppUser
+        group1.setCellValueFactory(new PropertyValueFactory<>("Username"));
+        category1.setCellValueFactory(new PropertyValueFactory<>("Email"));
+//        numOfMembersCol.setCellValueFactory(new PropertyValueFactory<>("NumberOfMembers"));
 
-        group1.setOnEditCommit(event -> {
-            GroupMember editedMember = event.getRowValue();
-            String newUsername = event.getNewValue();
-            editedMember.setUsername(newUsername); // Update the username
-            // Optionally, send update request to server here if needed
-        });
-
-        // Listener for the "Email" column
-        category1.setCellFactory(column -> {
-            return new TextFieldTableCell<>(); // Create an editable cell for the column
-        });
-
-        category1.setOnEditCommit(event -> {
-            GroupMember editedMember = event.getRowValue();
-            String newEmail = event.getNewValue();
-            editedMember.setEmail(newEmail); // Update the email
-            // Optionally, send update request to server here if needed
-        });
+        groupMembers = FXCollections.observableArrayList(this.memberList);
+        table1.setItems(groupMembers);
     }
+
+
+//    private void setUpTableListeners() {
+//        // Listener for the "Username" column
+//        group1.setCellFactory(column -> {
+//            return new TextFieldTableCell<>(); // Create an editable cell for the column
+//        });
+//
+//        group1.setOnEditCommit(event -> {
+//            GroupMember editedMember = event.getRowValue();
+//            String newUsername = event.getNewValue();
+//            editedMember.setUsername(newUsername); // Update the username
+//            // Optionally, send update request to server here if needed
+//        });
+//
+//        // Listener for the "Email" column
+//        category1.setCellFactory(column -> {
+//            return new TextFieldTableCell<>(); // Create an editable cell for the column
+//        });
+//
+//        category1.setOnEditCommit(event -> {
+//            GroupMember editedMember = event.getRowValue();
+//            String newEmail = event.getNewValue();
+//            editedMember.setEmail(newEmail); // Update the email
+//            // Optionally, send update request to server here if needed
+//        });
+//    }
 
     public void handleGetGroupUserId(CloseableHttpResponse response, Object jsonResponse) {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
@@ -292,6 +346,86 @@ public class GroupInfoEditController {
         }
     }*/
 
+    public TableColumn<AppUser, AppUser> addAppUserCol(String columnName) {
+        int TABLE_CELL_WIDTH = 100;
+        TableColumn<AppUser, AppUser> column = ViewUtils.column(columnName, ReadOnlyObjectWrapper<AppUser>::new, TABLE_CELL_WIDTH);
+
+        table1.getColumns().add(column);
+        column.setCellFactory(col -> {
+            Button editButton = new Button(columnName);
+            TableCell<AppUser, AppUser> cell = new TableCell<AppUser, AppUser>() {
+                @Override
+                public void updateItem(AppUser person, boolean empty) {
+                    super.updateItem(person, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(editButton);
+                    }
+                }
+            };
+
+            editButton.setOnAction(e -> System.out.println("click edit button for: " + cell.getItem()));
+            return cell;
+        });
+        return column;
+    }
+
+
+    private void updateColumnOne() {
+        String owner = TokenStorage.getUser();
+        String groupOwner = this.group.getGroupOwnerName();
+        System.out.println("Group Owner: " + groupOwner);
+        System.out.println("logineed user: " + owner);
+
+
+//        String fName = "Jacob";
+        actionOneCol.setCellFactory(col -> {
+            Button editButton = new Button("Edit");
+            Button removeButton = new Button("Remove");
+//            Button joinButton = new Button("Join");
+            TableCell<AppUser, AppUser> updatedCell = new TableCell<AppUser, AppUser>() {
+                @Override
+                // display button
+                public void updateItem(AppUser appUser, boolean empty) {
+                    super.updateItem(appUser, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        if (!owner.equals(groupOwner)) {
+                            setGraphic(null);
+                        } else if (owner.equals(appUser.getUsername())) {
+//                            setGraphic(null);
+                            setGraphic(editButton);
+                            ViewUtils.addStyle(editButton, "/edit-button.css");
+                        } else {
+//                            setGraphic(null);
+                            setGraphic(removeButton);
+                            ViewUtils.addStyle(removeButton, "/delete-button.css");
+                        }
+                    }
+                }
+            };
+
+            // updatedCell.getItem() == group object
+            editButton.setOnAction(e -> {
+                Button source = (Button) e.getSource();
+                System.out.println("is button " + source);
+//                edit(updatedCell.getItem(), (source));
+            });
+
+            removeButton.setOnAction((e -> {
+                Button source = (Button) e.getSource();
+                System.out.println("is button " + source);
+            }));
+
+
+            this.controllerUtils.setDefaultAndHandCursorBehaviour(removeButton);
+            return updatedCell;
+
+        });
+    }
+
 
     @FXML
     void accountBtnClick() {
@@ -301,7 +435,7 @@ public class GroupInfoEditController {
     @FXML
     void allGroupsBtnClick() {
         String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
-        this.controllerUtils.goPage(stage,editGroupBtn, pageLink);
+        this.controllerUtils.goPage(stage, editGroupBtn, pageLink);
     }
 
     @FXML
@@ -382,6 +516,7 @@ public class GroupInfoEditController {
 
     @FXML
     void logOutBtnClick() {
+        this.controllerUtils.goToHelloPage(stage, logOutBtn);
 
     }
 
