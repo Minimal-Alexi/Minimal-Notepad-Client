@@ -8,11 +8,14 @@ import static utils.MainPageServices.*;
 public class NoteJson {
     public static JSONObject NoteToJson(Note note) {
         JSONObject jsonBody = new JSONObject();
+        jsonBody.put("id", note.getId());
         jsonBody.put("colour", note.getColor());
         jsonBody.put("text", note.getText());
         jsonBody.put("title", note.getTitle());
         jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
         jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
+        jsonBody.put("createdAt", note.getCreatedAt());
+        jsonBody.put("updatedAt", note.getUpdatedAt());
         if(note.getGroupId() != -1)
         {
             JSONObject group = new JSONObject();
@@ -24,6 +27,9 @@ public class NoteJson {
         {
             jsonBody.put("group", JSONObject.NULL);
         }
+        JSONObject user = new JSONObject();
+        user.put("username",note.getOwner());
+        jsonBody.put("user",user);
         return jsonBody;
     }
     public static Note JsonToNote(JSONObject noteJson) {

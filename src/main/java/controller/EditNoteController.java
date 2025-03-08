@@ -32,6 +32,7 @@ import utils.NoteServices;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -108,8 +109,8 @@ public class EditNoteController {
     public void saveNoteClicked(ActionEvent event) throws IOException {
         //Disable the button
         saveNoteBtn.setDisable(true);
-        Note note= new Note(selectedNote.getId(), titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "N/A", "N/A", TokenStorage.getUser(), getGroupId(), getGroupName(), categoryList, figureList);
-        NoteServices.updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), note);
+        Note updatedNote= new Note(selectedNote.getId(), titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), note.getCreatedAt(), note.getUpdatedAt(), TokenStorage.getUser(), getGroupId(), getGroupName(), categoryList, figureList);
+        NoteServices.updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), updatedNote);
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
 

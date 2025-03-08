@@ -31,6 +31,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 import static utils.MainPageServices.*;
+import static utils.NoteJson.JsonToNote;
+import static utils.NoteJson.NoteToJson;
 
 public class MainPageController {
 
@@ -196,18 +198,7 @@ public class MainPageController {
                 for (int i = 0; i < jsonResponse.length(); i++) {
                     JSONObject result = (JSONObject) jsonResponse.get(i);
                     // Process and add each note
-                    Note note = new Note(
-                            result.getInt("id"),
-                            result.getString("title"),
-                            result.getString("text"),
-                            result.getString("colour"),
-                            timestampToString(result.getString("createdAt")),
-                            timestampToString(result.getString("updatedAt")),
-                            result.getJSONObject("user").getString("username"),
-                            -1,
-                            " ",
-                            jsonArrayToHashMap(result.getJSONArray("categoriesList")),
-                            null);
+                    Note note = JsonToNote(result);
                     noteObservableList.add(note);
                 }
             } catch (JSONException e) {
@@ -260,18 +251,7 @@ public class MainPageController {
         JSONArray noteArray = new JSONArray();
         for(Note note : usedList)
         {
-            JSONObject noteJson = new JSONObject();
-            noteJson.put("id", note.getId());
-            noteJson.put("title", note.getTitle());
-            noteJson.put("text",note.getText());
-            noteJson.put("colour",note.getColor());
-            JSONObject userObject = new JSONObject();
-            userObject.put("username",note.getOwner());
-            noteJson.put("user", userObject);
-            noteJson.put("createdAt", note.getCreatedAt());
-            noteJson.put("updatedAt", note.getUpdatedAt());
-            noteJson.put("categoriesList", hashMapToJSONArray(note.getCategory()));
-
+            JSONObject noteJson = NoteToJson(note);
             noteArray.put(noteJson);
         }
         return noteArray;
