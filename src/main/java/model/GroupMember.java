@@ -1,25 +1,25 @@
 package model;
 
 public class GroupMember {
-    private String id;
+    private int id;
     private String username;
     private String email;
 
     // Updated Constructor
     public GroupMember(String id, String username, String email) {
-        this.id = id;
+        this.id = Integer.parseInt(id);
         this.username = username;
         this.email = email;
     }
 
     // Getters and Setters
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = Integer.parseInt(id);
     }
 
     public String getUsername() {
@@ -36,5 +36,14 @@ public class GroupMember {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "GroupMember{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

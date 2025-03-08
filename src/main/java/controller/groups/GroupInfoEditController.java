@@ -140,6 +140,7 @@ public class GroupInfoEditController {
         System.out.println("Group is " + group);
         System.out.println("Fetching group with ID: " + selectedGroup.getId());
 
+        getGroupUserInfoByGroupId();
         /*String groupID = String.valueOf(selectedGroup.getId());
         if (group != null) {
             groupNameInput.setText(group.getName());
@@ -185,7 +186,7 @@ public class GroupInfoEditController {
     }
 
     public void getGroupUserInfoByGroupId() {
-        String ALL_GROUP_URI = URI + "/all";
+        String ALL_GROUP_URI = URI;
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", ALL_GROUP_URI, true);
         HttpRequestBase request = httpRequestBuilder.getHttpRequest();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
@@ -198,20 +199,26 @@ public class GroupInfoEditController {
         JSONObject groupObject = controllerUtils.toJSonObject(jsonResponse);
         System.out.println("Group Object " + groupObject );
 //        System.out.println(array);
-        /*if (array != null) {
-            for (Object groupObject : array) {
-//                System.out.println(groupObject);
+//               System.out.println(groupObject);
                 JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-                String ownerEmail = null;
+                String ownerEmail = owner.getString("email");
                 GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), ownerEmail);
                 int id = (int) ((JSONObject) groupObject).get("id");
                 String name = (String) ((JSONObject) groupObject).get("name");
                 String description = (String) ((JSONObject) groupObject).get("description");
                 JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).get("userGroupParticipationsList");
+                AppUser currentOwner = new AppUser((int) owner.get("id"),(String) owner.get("username"), ownerEmail);
                 List<AppUser> userList = createUserList(userListObj);
+                userList.add(currentOwner);
+
+                System.out.println("Current Owner " + currentOwner);
+
+                System.out.println("User list " + userList);
                 Group newGroup = new Group(id, name, description, groupOwner, userList);
-                updatedAllGroups.add(newGroup);
-            }*/
+                //updatedAllGroups.add(newGroup);
+
+                System.out.println("New Group User List " + newGroup.getMembers());
+
 /*          this.allgroups = updatedAllGroups;
             System.out.println(this.allgroups);*/
             //setupTable();
@@ -300,7 +307,7 @@ public class GroupInfoEditController {
     @FXML
     void editGroupBtnClick() {
         // Get edited values
-        String editedGroupName = groupNameInput.getText();
+        /*String editedGroupName = groupNameInput.getText();
         String editedDescInput = groupDescInput.getText();
         int groupId = selectedGroup.getId();
 
@@ -341,14 +348,14 @@ public class GroupInfoEditController {
             editedGroupDescLabel.setText("Edited group description: " + editedDescInput);
 
             // Refresh the group list
-            refreshGroupList();
+            //refreshGroupList();
             //controllerUtils.goPage(stage, button, FXMLString);
         } else {
             notiLabel1.setText("Failed to edit group. Please try again.");
-        }
+        }*/
     }
 
-    private void refreshGroupList() {
+/*    private void refreshGroupList() {
         // Fetch updated group from the server
         Group updatedGroup = findGroupById("http://localhost:8093/api/groups/", selectedGroup.getId(), TokenStorage.getToken());
 
@@ -365,7 +372,7 @@ public class GroupInfoEditController {
         } else {
             System.out.println("Failed to refresh group details.");
         }
-    }
+    }*/
 
 
     @FXML

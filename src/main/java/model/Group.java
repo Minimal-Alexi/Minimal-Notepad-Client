@@ -67,12 +67,12 @@ public class Group {
     }
 
     public List<GroupMember> getMembers() {
-/*        List<GroupMember> members = new ArrayList<>();
+        List<GroupMember> members = new ArrayList<>();
         if (userList != null) {
             for (AppUser user : userList) {
-                members.add(new GroupMember(user.getUsername(), user.getEmail()));
+                members.add(new GroupMember("5", user.getUsername(), user.getEmail()));
             }
-        }*/
+        }
         return members;
     }
 
