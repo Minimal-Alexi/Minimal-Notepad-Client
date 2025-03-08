@@ -389,19 +389,25 @@ public class GroupInfoEditController {
                 // display button
                 public void updateItem(AppUser appUser, boolean empty) {
                     super.updateItem(appUser, empty);
+                    // if data is null, add no button
                     if (empty) {
                         setGraphic(null);
                     } else {
+                        // if logined user != group owner
                         if (!owner.equals(groupOwner)) {
                             setGraphic(null);
-                        } else if (owner.equals(appUser.getUsername())) {
-//                            setGraphic(null);
-                            setGraphic(editButton);
-                            ViewUtils.addStyle(editButton, "/edit-button.css");
                         } else {
+                            // if current member is the same as logined user
+                            if (owner.equals(appUser.getUsername())) {
 //                            setGraphic(null);
-                            setGraphic(removeButton);
-                            ViewUtils.addStyle(removeButton, "/delete-button.css");
+                                setGraphic(editButton);
+                                ViewUtils.addStyle(editButton, "/edit-button.css");
+                                // if current memeber is not the logined user
+                            } else {
+//                            setGraphic(null);
+                                setGraphic(removeButton);
+                                ViewUtils.addStyle(removeButton, "/delete-button.css");
+                            }
                         }
                     }
                 }
