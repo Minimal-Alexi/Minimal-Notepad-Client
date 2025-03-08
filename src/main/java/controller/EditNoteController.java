@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
+import utils.ControllerUtils;
 import utils.GoogleDriveUploader;
 import utils.NoteServices;
 
@@ -31,18 +32,46 @@ import static utils.NoteServices.*;
 
 public class EditNoteController {
 
-    @FXML private Label localTime;
-    @FXML private Label nameLabel;
-    @FXML private VBox textVBox;
-    @FXML private TextField titleTextArea;
-    @FXML private TextArea textArea1;
-    @FXML private Button saveNoteBtn;
-    @FXML private Button deleteNoteBtn;
-    @FXML private HBox categoryHBox;
-    @FXML private Label addCategory;
-    @FXML private Button uploadPicBtn;
-    @FXML private ColorPicker colorPicker;
-    @FXML private Rectangle noteBackground;
+    @FXML
+    private Label localTime;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private VBox textVBox;
+    @FXML
+    private TextField titleTextArea;
+    @FXML
+    private TextArea textArea1;
+    @FXML
+    private Button saveNoteBtn;
+    @FXML
+    private Button deleteNoteBtn;
+    @FXML
+    private HBox categoryHBox;
+    @FXML
+    private Label addCategory;
+    @FXML
+    private Button uploadPicBtn;
+    @FXML
+    private ColorPicker colorPicker;
+    @FXML
+    private Rectangle noteBackground;
+
+    @FXML
+    private Button myNotesBtn;
+    @FXML
+    private Button shareNotesBtn;
+    @FXML
+    private Button myGroupsBtn;
+    @FXML
+    private Button allGroupsBtn;
+    @FXML
+    private Button accountBtn;
+    @FXML
+    private Button logOutBtn;
+
+    private ControllerUtils controllerUtils;
+
 
     SelectedNote selectedNote = SelectedNote.getInstance();
     private HashMap<Integer, String> categoryList = new HashMap<>();
@@ -50,6 +79,8 @@ public class EditNoteController {
 
     // Initialize
     public void initialize() {
+        this.controllerUtils = new ControllerUtils();
+
 
         System.out.println(selectedNote.getId());
 
@@ -135,9 +166,9 @@ public class EditNoteController {
     private Scene scene;
     private Parent root;
 
-    public void groupsClicked(ActionEvent event) throws IOException {
-        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
-    }
+//    public void groupsClicked(ActionEvent event) throws IOException {
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+//    }
 
     private void colorSetUp(String initialColor) {
         noteBackground.setFill(Color.web(initialColor));
@@ -147,5 +178,57 @@ public class EditNoteController {
         });
     }
 
+
+    // side bar button
+
+    public void myGroupsBtnClick() {
+        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+    }
+
+    @FXML
+    public void myNotesBtnClick() {
+        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+    }
+
+    @FXML
+    public void shareNotesBtnClick() {
+//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
+        System.out.println("Go to share notes page");
+    }
+
+    @FXML
+    public void allGroupsBtnClick() {
+        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+    }
+
+    @FXML
+    public void accountBtnClick() {
+        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+    }
+
+    @FXML
+    public void logOutBtnClick() {
+        this.controllerUtils.logout(stage, logOutBtn);
+    }
+
+    @FXML
+    void mouseEnter() {
+        this.controllerUtils.setHandCursor(myNotesBtn);
+        this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(myGroupsBtn);
+        this.controllerUtils.setHandCursor(allGroupsBtn);
+        this.controllerUtils.setHandCursor(accountBtn);
+        this.controllerUtils.setHandCursor(logOutBtn);
+    }
+
+    @FXML
+    void mouseExit() {
+        this.controllerUtils.setDefaultCursor(myNotesBtn);
+        this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(myGroupsBtn);
+        this.controllerUtils.setDefaultCursor(allGroupsBtn);
+        this.controllerUtils.setDefaultCursor(accountBtn);
+        this.controllerUtils.setDefaultCursor(logOutBtn);
+    }
 
 }
