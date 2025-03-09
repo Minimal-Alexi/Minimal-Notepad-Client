@@ -306,7 +306,7 @@ public class AllGroupsController implements Initializable {
             editButton.setOnAction(e -> {
                 Button source = (Button) e.getSource();
                 System.out.println("is button " + source);
-                edit(updatedCell.getItem(), (source));
+                edit(updatedCell.getItem(), source);
             });
             this.controllerUtils.setDefaultAndHandCursorBehaviour(editButton);
             return updatedCell;
