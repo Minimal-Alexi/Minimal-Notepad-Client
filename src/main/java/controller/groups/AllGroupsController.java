@@ -212,7 +212,8 @@ public class AllGroupsController implements Initializable {
             for (Object groupObject : array) {
 //                System.out.println(groupObject);
                 JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-                GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"));
+                String ownerEmail = null;
+                GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), ownerEmail);
                 int id = (int) ((JSONObject) groupObject).get("id");
                 String name = (String) ((JSONObject) groupObject).get("name");
                 String description = (String) ((JSONObject) groupObject).get("description");
@@ -292,7 +293,7 @@ public class AllGroupsController implements Initializable {
             editButton.setOnAction(e -> {
                 Button source = (Button) e.getSource();
                 System.out.println("is button " + source);
-                edit(updatedCell.getItem(), (source));
+                edit(updatedCell.getItem(), source);
             });
             this.controllerUtils.setDefaultAndHandCursorBehaviour(editButton);
             return updatedCell;
@@ -407,7 +408,7 @@ public class AllGroupsController implements Initializable {
 
     public void edit(Group group, Button button) {
         //set a singleton object to use in edit page
-        String FXMLString = "/fxml/main_pages/groups/group_info_create_group.fxml";
+        String FXMLString = "/fxml/main_pages/groups/group_info_edit_group.fxml";
         SelectedGroup selectedGroup = SelectedGroup.getInstance();
         selectedGroup.setId(group.getId());
         controllerUtils.goPage(stage, button, FXMLString);

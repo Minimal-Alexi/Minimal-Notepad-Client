@@ -4,7 +4,7 @@ public class GroupOwner {
     private int id;
     private String username;
 
-    public GroupOwner(int id, String username) {
+    public GroupOwner(int id, String username, String ownerEmail) {
         this.id = id;
         this.username = username;
     }
