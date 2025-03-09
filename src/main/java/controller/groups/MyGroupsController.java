@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import model.Group;
 import model.TokenStorage;
 import utils.ControllerUtils;
+import utils.ControllerUtils_v2;
 import utils.GroupServices;
 
 import java.util.ArrayList;
@@ -140,58 +141,62 @@ public class MyGroupsController {
 
     }
 
-    @FXML
-    public void mouseEnter() {
-        this.controllerUtils.setHandCursor(myNotesBtn);
-        this.controllerUtils.setHandCursor(shareNotesBtn);
-        this.controllerUtils.setHandCursor(myGroupsBtn);
-        this.controllerUtils.setHandCursor(allGroupsBtn);
-        this.controllerUtils.setHandCursor(logOutBtn);
-        this.controllerUtils.setHandCursor(createGroupBtn);
-        this.controllerUtils.setHandCursor(seeAllLabel);
-    }
-
-    @FXML
-    public void mouseExit() {
-        this.controllerUtils.setDefaultCursor(myNotesBtn);
-        this.controllerUtils.setDefaultCursor(shareNotesBtn);
-        this.controllerUtils.setDefaultCursor(myGroupsBtn);
-        this.controllerUtils.setDefaultCursor(allGroupsBtn);
-        this.controllerUtils.setDefaultCursor(logOutBtn);
-        this.controllerUtils.setDefaultCursor(createGroupBtn);
-        this.controllerUtils.setDefaultCursor(seeAllLabel);
-
+    //sidebar
+    public void myGroupsBtnClick() {
+//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+        ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
-        this.controllerUtils.goPage(stage, myNotesBtn, FXMLSource + "/main_pages/main_page.fxml");
+
+//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+        ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
-//        this.controllerUtils.goPage(stage,shareNotesBtn, FXMLSource+"/");
-        System.out.println("go to share notes page");
-    }
-
-    @FXML
-    public void myGroupsBtnClick() {
-        this.controllerUtils.goPage(stage, myGroupsBtn, FXMLSource + "/main_pages/groups/my_groups.fxml");
+//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
+        System.out.println("Go to share notes page");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+        ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
-        this.controllerUtils.goPage(stage, allGroupsBtn, FXMLSource + "/main_pages/groups/all_groups.fxml");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+        ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
-        this.controllerUtils.goPage(stage, accountBtn, FXMLSource + "/main_pages/account_user_info_page.fxml");
+//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+        ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
     @FXML
     public void logOutBtnClick() {
         this.controllerUtils.logout(stage, logOutBtn);
+    }
+
+    @FXML
+    void mouseEnter() {
+        this.controllerUtils.setHandCursor(myNotesBtn);
+        this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(myGroupsBtn);
+        this.controllerUtils.setHandCursor(allGroupsBtn);
+        this.controllerUtils.setHandCursor(accountBtn);
+        this.controllerUtils.setHandCursor(logOutBtn);
+    }
+
+    @FXML
+    void mouseExit() {
+        this.controllerUtils.setDefaultCursor(myNotesBtn);
+        this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(myGroupsBtn);
+        this.controllerUtils.setDefaultCursor(allGroupsBtn);
+        this.controllerUtils.setDefaultCursor(accountBtn);
+        this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
     @FXML

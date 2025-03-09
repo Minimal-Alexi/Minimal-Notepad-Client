@@ -50,7 +50,7 @@ public class ControllerUtils_v2 {
         }
     }
 
-    public  static Stage getStage(Button btn, Stage stage) {
+    public static Stage getStage(Button btn, Stage stage) {
         if (stage == null) {
             stage = (Stage) btn.getScene().getWindow();
         }
@@ -113,25 +113,20 @@ public class ControllerUtils_v2 {
         return matcher.matches();
     }
 
-    public static void logout(Stage stage, Button btn) {
-        String helloPage = "/fxml/hello_view.fxml";
-        TokenStorage.clearToken();
-        goPage(stage, btn, helloPage);
-    }
 
-    public static boolean isInputEmpty(String input){
+    public static boolean isInputEmpty(String input) {
         return input.trim().equals("");
     }
 
-    public static JSONObject toJSonObject(Object response){
-        if (response instanceof JSONObject){
+    public static JSONObject toJSonObject(Object response) {
+        if (response instanceof JSONObject) {
             return (JSONObject) response;
         }
         return null;
     }
 
-    public static JSONArray toJSONArray(Object response){
-        if(response instanceof JSONArray){
+    public static JSONArray toJSONArray(Object response) {
+        if (response instanceof JSONArray) {
             return (JSONArray) response;
         }
         return null;
@@ -140,5 +135,42 @@ public class ControllerUtils_v2 {
     public static void setDefaultAndHandCursorBehaviour(Button button) {
         button.addEventHandler(MouseEvent.MOUSE_ENTERED, (e -> setHandCursor((Button) e.getSource())));
         button.addEventHandler(MouseEvent.MOUSE_EXITED, (e -> setDefaultCursor((Button) e.getSource())));
+    }
+
+//    public static void goToMainPage(Stage stage, Button btn) {
+//        String mainPageLink = "/fxml/main_pages/main_page.fxml";
+//        goPage(stage, btn, mainPageLink);
+//    }
+
+    public static void goToMyNotesPage(Stage stage, Button btn){
+        String mainPage = "/fxml/main_pages/main_page.fxml";
+        goPage(stage,btn,mainPage);
+
+    }
+
+    public static void goToMyGroupNotesPage(Stage stage, Button btn){
+        String myGroupsNotesPage = "/fxml/main_pages/groups/my_groups_notes.fxml";
+        goPage(stage,btn,myGroupsNotesPage);
+
+    }
+    public static void goToMyGroupsPage(Stage stage, Button btn){
+        String myGroupPage = "/fxml/main_pages/groups/my_groups.fxml";
+        goPage(stage,btn,myGroupPage);
+    }
+
+    public static void goToAllGroupsPage(Stage stage, Button btn){
+        String allGroupsPage = "/fxml/main_pages/groups/all_groups.fxml";
+        goPage(stage, btn,allGroupsPage);
+    }
+
+    public static void goToAccountPage(Stage stage, Button btn){
+        String accountPage = "/fxml/main_pages/account_user_info_page.fxml";
+        goPage(stage, btn, accountPage);
+    }
+
+    public static void logout(Stage stage, Button btn) {
+        String helloPage = "/fxml/hello_view.fxml";
+        TokenStorage.clearToken();
+        goPage(stage, btn, helloPage);
     }
 }

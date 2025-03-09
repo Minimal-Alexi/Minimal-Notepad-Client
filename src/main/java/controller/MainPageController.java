@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ControllerUtils;
+import utils.ControllerUtils_v2;
 import utils.HttpResponseService;
 import utils.HttpResponseServiceImpl;
 
@@ -79,8 +80,6 @@ public class MainPageController {
     private Button myGroupsBtn;
     @FXML
     private Button allGroupsBtn;
-
-
     @FXML
     private Button accountBtn;
     @FXML
@@ -153,30 +152,38 @@ public class MainPageController {
         this.controllerUtils.goPage(stage, myGroupsBtn, pageLink);
     }
 
+    // side bar button
+    @FXML
     public void myGroupsBtnClick() {
-        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+        ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
-        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+
+//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+        ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
 //        this.controllerUtils.goPage(stage,shareNoteBtn,"");
         System.out.println("Go to share notes page");
-        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+        ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
-        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+        ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
-        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+        ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
     @FXML

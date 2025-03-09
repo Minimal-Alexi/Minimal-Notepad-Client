@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -14,6 +15,7 @@ import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
 import utils.ControllerUtils;
+import utils.ControllerUtils_v2;
 import utils.HttpResponseService;
 import utils.HttpResponseServiceImpl;
 
@@ -29,13 +31,34 @@ public class MyGroupsNotesController {
     private Label localTime;
     @FXML
     private Label nameLabel;
-    @FXML private TableView<Note> table;
-    @FXML private TableColumn<Note, Void> icon;
-    @FXML private TableColumn<Note, String> title;
-    @FXML private TableColumn<Note, String> group;
-    @FXML private TableColumn<Note, String> owner;
-    @FXML private TableColumn<Note, String> category;
-    @FXML private TableColumn<Note, String> createTime;
+    @FXML
+    private TableView<Note> table;
+    @FXML
+    private TableColumn<Note, Void> icon;
+    @FXML
+    private TableColumn<Note, String> title;
+    @FXML
+    private TableColumn<Note, String> group;
+    @FXML
+    private TableColumn<Note, String> owner;
+    @FXML
+    private TableColumn<Note, String> category;
+    @FXML
+    private TableColumn<Note, String> createTime;
+
+    //side bar
+    @FXML
+    private Button myNotesBtn;
+    @FXML
+    private Button shareNotesBtn;
+    @FXML
+    private Button myGroupsBtn;
+    @FXML
+    private Button allGroupsBtn;
+    @FXML
+    private Button accountBtn;
+    @FXML
+    private Button logOutBtn;
 
     private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
@@ -88,15 +111,61 @@ Go to another page
 
     }
 
-    public void groupsBtnClick(MouseEvent mouseEvent) {
-
+    //sidebar
+    public void myGroupsBtnClick() {
+//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+        ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
-    public void accountBtnClick(MouseEvent mouseEvent) {
+    @FXML
+    public void myNotesBtnClick() {
 
+//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+        ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
-    public void logOutBtnClick(MouseEvent mouseEvent) {
+    @FXML
+    public void shareNotesBtnClick() {
+//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
+        System.out.println("Go to share notes page");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+        ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
+    }
 
+    @FXML
+    public void allGroupsBtnClick() {
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+        ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
+    }
+
+    @FXML
+    public void accountBtnClick() {
+//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+        ControllerUtils_v2.goToAccountPage(stage, accountBtn);
+    }
+
+    @FXML
+    public void logOutBtnClick() {
+        this.controllerUtils.logout(stage, logOutBtn);
+    }
+
+    @FXML
+    void mouseEnter() {
+        this.controllerUtils.setHandCursor(myNotesBtn);
+        this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(myGroupsBtn);
+        this.controllerUtils.setHandCursor(allGroupsBtn);
+        this.controllerUtils.setHandCursor(accountBtn);
+        this.controllerUtils.setHandCursor(logOutBtn);
+    }
+
+    @FXML
+    void mouseExit() {
+        this.controllerUtils.setDefaultCursor(myNotesBtn);
+        this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(myGroupsBtn);
+        this.controllerUtils.setDefaultCursor(allGroupsBtn);
+        this.controllerUtils.setDefaultCursor(accountBtn);
+        this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 }

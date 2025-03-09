@@ -148,31 +148,38 @@ public class AllGroupsController implements Initializable {
 //    }
 
 
-    // side bar button
-
+    // sidebar
+    @FXML
     public void myGroupsBtnClick() {
-        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+        ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
-        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+
+//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+        ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
 //        this.controllerUtils.goPage(stage,shareNoteBtn,"");
         System.out.println("Go to share notes page");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+        ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
-        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+        ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
-        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+        ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
     @FXML
@@ -422,7 +429,7 @@ public class AllGroupsController implements Initializable {
     public void handleJoinOrLeaveOrDeleteResponse(CloseableHttpResponse response, Object object) {
 //        System.out.println("response " + response);
 //        updateTableView();
-        GroupControllerUtils.updateTableView(stage,actionOneCol,actionOneCol,httpResponseService,this::handleGetAllGroups, this::handleJoinOrLeaveOrDeleteResponse);
+        GroupControllerUtils.updateTableView(stage,actionOneCol,actionTwoCol,httpResponseService,this::handleGetAllGroups, this::handleJoinOrLeaveOrDeleteResponse);
     }
 //
 //    public void edit(Group group, Button button) {
