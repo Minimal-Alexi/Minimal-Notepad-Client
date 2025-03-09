@@ -48,7 +48,7 @@ public class GroupServices {
                     int id = jsonGroup.getInt("id");
                     String name = jsonGroup.getString("name");
                     String description = jsonGroup.getString("description");
-                    int numberOfMembers = jsonGroup.getInt("numberOfMembers");
+                    int numberOfMembers = jsonGroup.has("numberOfMembers")? jsonGroup.getInt("numberOfMembers") : jsonGroup.getJSONArray("userGroupParticipationsList").length();
 
                     Group newGroup = new Group(id, name, description, groupOwner, numberOfMembers);
                     System.out.println(newGroup);
