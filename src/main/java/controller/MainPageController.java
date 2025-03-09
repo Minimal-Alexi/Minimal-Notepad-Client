@@ -166,6 +166,7 @@ public class MainPageController {
     public void shareNotesBtnClick() {
 //        this.controllerUtils.goPage(stage,shareNoteBtn,"");
         System.out.println("Go to share notes page");
+        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
     }
 
     @FXML

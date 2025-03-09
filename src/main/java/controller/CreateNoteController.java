@@ -103,7 +103,7 @@ public class CreateNoteController {
     }
 
     public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
-        uploadPicture(uploadPicBtn, figureList, textVBox);
+        uploadPictureLocal(uploadPicBtn, figureList, textVBox);
     }
 
     /*

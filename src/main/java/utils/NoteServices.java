@@ -202,6 +202,41 @@ public class NoteServices {
         }
     }
 
+    public static void uploadPictureLocal(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) {
+        uploadPicBtn.setDisable(true);
+        uploadPicBtn.setText("Uploading... ");
+
+        Stage stage = new Stage();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Upload picture");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg", "*.png", "*.jpeg"));
+        fileChooser.setInitialDirectory(new File("C:"));
+
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            String filePath = file.getAbsolutePath();
+            figureList.add(filePath);
+            System.out.println(filePath);
+
+            // Get the picture from local disk
+            ImageView imageView = new ImageView();
+            Image image = new Image(filePath);
+            imageView.setImage(image);
+            imageView.setFitHeight(200);
+            imageView.setFitWidth(200);
+            imageView.setPreserveRatio(true);
+            textVBox.getChildren().add(imageView);
+
+            uploadPicBtn.setDisable(false);
+            uploadPicBtn.setText("Upload picture");
+        } else  {
+            System.out.println("no file selected");
+            uploadPicBtn.setDisable(false);
+        }
+    }
+
     public static void updateNote(String url, int id, String token, Note note){
         JSONObject jsonBody = NoteToJson(note);
 

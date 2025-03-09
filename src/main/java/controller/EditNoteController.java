@@ -31,6 +31,8 @@ import utils.HttpResponseService;
 import utils.HttpResponseServiceImpl;
 import utils.NoteServices;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
@@ -119,6 +121,7 @@ public class EditNoteController {
         updateNameLabel(nameLabel, TokenStorage.getUser());
 
         // add pictures to the ui
+        /*
         Platform.runLater(() -> {
             figureList.forEach(figure -> {
                 GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
@@ -135,6 +138,24 @@ public class EditNoteController {
                 }
             });
         });
+
+         */
+        Platform.runLater(() -> {
+            figureList.forEach(figure -> {
+                ImageView imageView = new ImageView();
+                try {
+                    Image image = new Image(new FileInputStream(figure));
+                    imageView.setImage(image);
+                    imageView.setFitHeight(200);
+                    imageView.setFitWidth(200);
+                    imageView.setPreserveRatio(true);
+                    textVBox.getChildren().add(imageView);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
+
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
@@ -197,7 +218,7 @@ public class EditNoteController {
     }
 
     public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
-        uploadPicture(uploadPicBtn, figureList, textVBox);
+        uploadPictureLocal(uploadPicBtn, figureList, textVBox);
     }
 
     /*
