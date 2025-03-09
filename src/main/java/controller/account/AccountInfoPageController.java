@@ -173,45 +173,14 @@ public class AccountInfoPageController {
     private void getUserInfo() {
         String username = TokenStorage.getUser();
         String token = TokenStorage.getToken();
-//        String URI = "http://localhost:8093/api/user/";
-//        HttpGet httpGet = new HttpGet(URI);
-//        httpGet.addHeader("Accept", "application/json");
-//        httpGet.addHeader("Content-Type", "application/json");
-//        httpGet.addHeader("Authorization", "Bearer " + token);
+
 
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("GET", URI, true);
 
-        // call this method only if you have body in your request
-//            httpRequest.setRequestBody();
-//        HttpGet httpGet = (HttpGet) httpRequest.getHttpRequest();
+
         HttpRequestBase httpGet = httpRequest.getHttpRequest();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-//        JSONObject json = new JSONObject();
-//        json.put("username",)
-//        httpResponseService.handleReponse(httpGet);
-//        new Thread(() -> {
-//            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-//                HttpEntity responseEntity = response.getEntity();
-//                String data = EntityUtils.toString(responseEntity);
-//                JSONObject jsonResponse = new JSONObject(data);
-//                EntityUtils.consume(responseEntity);
-//                // Do more processing here...
-//                StatusLine statusLine = response.getStatusLine();
-//                System.out.println("json " + jsonResponse);
-//                System.out.println("response " + responseEntity);
-//                System.out.println("status code " + statusLine);
-//                Platform.runLater(() -> {
-//                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-////                    callback.handleResponse(response, jsonResponse);
-//                    handleGetUserInfoResponse(response, jsonResponse);
-//                });
-//            } catch (IOException e) {
-//                Alert a = new Alert(Alert.AlertType.ERROR);
-//                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-//                a.show();
-//            }
-//        }).start();
         httpResponseService.handleReponse(httpGet, httpClient, this::handleGetUserInfoResponse);
     }
 
