@@ -171,10 +171,12 @@ public class GroupControllerUtils {
 
     public static void edit(Stage stage, Group group, Button button) {
         //set a singleton object to use in edit page
-        String FXMLString = "/fxml/main_pages/groups/group_info_create_group.fxml";
+//        String FXMLString = "/fxml/main_pages/groups/group_info_create_group.fxml";
+        String pageLink = "/fxml/main_pages/groups/group_info_edit_group.fxml";
+
         SelectedGroup selectedGroup = SelectedGroup.getInstance();
         selectedGroup.setId(group.getId());
-        ControllerUtils_v2.goPage(stage, button, FXMLString);
+        ControllerUtils_v2.goPage(stage, button, pageLink);
     }
 
     public static void join(Group group, HttpResponseService httpResponseService, HandleResponseCallback callback) {
@@ -244,7 +246,7 @@ public class GroupControllerUtils {
         List<Group> updatedAllGroups = new ArrayList<>();
         for (Object groupObject : array) {
             JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-            GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"));
+            GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), (String)owner.get("email"));
             int id = (int) ((JSONObject) groupObject).get("id");
             String name = (String) ((JSONObject) groupObject).get("name");
             String description = (String) ((JSONObject) groupObject).get("description");
