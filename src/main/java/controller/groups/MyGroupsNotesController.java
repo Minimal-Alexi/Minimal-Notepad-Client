@@ -2,9 +2,11 @@ package controller.groups;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,6 +26,21 @@ import java.util.HashMap;
 import static utils.MainPageServices.*;
 
 public class MyGroupsNotesController {
+
+    //side bar
+    @FXML
+    private Button myNotesBtn;
+    @FXML
+    private Button shareNotesBtn;
+    @FXML
+    private Button myGroupsBtn;
+    @FXML
+    private Button allGroupsBtn;
+
+    @FXML
+    private Button accountBtn;
+    @FXML
+    private Button logOutBtn;
 
     @FXML
     private Label localTime;
@@ -88,15 +105,64 @@ Go to another page
 
     }
 
-    public void groupsBtnClick(MouseEvent mouseEvent) {
-
+    // go to myGroupPage
+    public void groupsClicked(ActionEvent event) throws IOException {
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
+        String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
+        this.controllerUtils.goPage(stage, myGroupsBtn, pageLink);
     }
 
-    public void accountBtnClick(MouseEvent mouseEvent) {
-
+    public void myGroupsBtnClick() {
+        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
     }
 
-    public void logOutBtnClick(MouseEvent mouseEvent) {
-
+    @FXML
+    public void myNotesBtnClick() {
+        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
     }
+
+    @FXML
+    public void shareNotesBtnClick() {
+//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
+        System.out.println("Go to share notes page");
+        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+    }
+
+    @FXML
+    public void allGroupsBtnClick() {
+        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+    }
+
+    @FXML
+    public void accountBtnClick() {
+        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+    }
+
+    @FXML
+    public void logOutBtnClick() {
+        this.controllerUtils.logout(stage, logOutBtn);
+    }
+
+    @FXML
+    void mouseEnter() {
+        this.controllerUtils.setHandCursor(myNotesBtn);
+        this.controllerUtils.setHandCursor(shareNotesBtn);
+        this.controllerUtils.setHandCursor(myGroupsBtn);
+        this.controllerUtils.setHandCursor(allGroupsBtn);
+        this.controllerUtils.setHandCursor(accountBtn);
+        this.controllerUtils.setHandCursor(logOutBtn);
+    }
+
+    @FXML
+    void mouseExit() {
+        this.controllerUtils.setDefaultCursor(myNotesBtn);
+        this.controllerUtils.setDefaultCursor(shareNotesBtn);
+        this.controllerUtils.setDefaultCursor(myGroupsBtn);
+        this.controllerUtils.setDefaultCursor(allGroupsBtn);
+        this.controllerUtils.setDefaultCursor(accountBtn);
+        this.controllerUtils.setDefaultCursor(logOutBtn);
+    }
+
+
 }
