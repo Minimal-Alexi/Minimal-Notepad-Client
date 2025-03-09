@@ -109,7 +109,8 @@ public class MyGroupsController {
             Platform.runLater(() -> {
                gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1, "Join");
 
-                gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1);
+               // missing action type, self write to Join
+                gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1,"Join");
             });
 
         }).start();
