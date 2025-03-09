@@ -24,18 +24,12 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static utils.MainPageServices.*;
-
+import static utils.NoteJson.*;
 
 public class NoteServices {
 
     public static void createNote(String url, Note note, String token) {
-        JSONObject jsonBody = new JSONObject();
-        jsonBody.put("colour", note.getColor());
-        jsonBody.put("text", note.getText());
-        jsonBody.put("title", note.getTitle());
-        jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
-        jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
+        JSONObject jsonBody = NoteToJson(note);
 
         HttpClient client = HttpClient.newHttpClient();
 
@@ -75,16 +69,7 @@ public class NoteServices {
             if (response.statusCode() == 200) {
                 JSONObject result = new JSONObject(response.body());
 
-                return new Note(result.getInt("id"),
-                        result.getString("title") ,
-                        result.getString("text"),
-                        result.getString("colour"),
-                        timestampToString(result.getString("createdAt")),
-                        timestampToString(result.getString("updatedAt")),
-                        result.getJSONObject("user").getString("username"),
-                        " ",
-                        jsonArrayToHashMap(result.getJSONArray("categoriesList")),
-                        jsonArrayToFigureList(result.getJSONArray("figures")));
+                return JsonToNote(result);
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -217,13 +202,43 @@ public class NoteServices {
         }
     }
 
+    public static void uploadPictureLocal(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) {
+        uploadPicBtn.setDisable(true);
+        uploadPicBtn.setText("Uploading... ");
+
+        Stage stage = new Stage();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Upload picture");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg", "*.png", "*.jpeg"));
+        fileChooser.setInitialDirectory(new File("C:"));
+
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            String filePath = file.getAbsolutePath();
+            figureList.add(filePath);
+            System.out.println(filePath);
+
+            // Get the picture from local disk
+            ImageView imageView = new ImageView();
+            Image image = new Image(filePath);
+            imageView.setImage(image);
+            imageView.setFitHeight(200);
+            imageView.setFitWidth(200);
+            imageView.setPreserveRatio(true);
+            textVBox.getChildren().add(imageView);
+
+            uploadPicBtn.setDisable(false);
+            uploadPicBtn.setText("Upload picture");
+        } else  {
+            System.out.println("no file selected");
+            uploadPicBtn.setDisable(false);
+        }
+    }
+
     public static void updateNote(String url, int id, String token, Note note){
-        JSONObject jsonBody = new JSONObject();
-        jsonBody.put("colour", note.getColor());
-        jsonBody.put("text", note.getText());
-        jsonBody.put("title", note.getTitle());
-        jsonBody.put("categoriesList", hashMapToJSONArray(note.getCategory()));
-        jsonBody.put("figures", figureListToJSONArray(note.getFigure()));
+        JSONObject jsonBody = NoteToJson(note);
 
         HttpClient client = HttpClient.newHttpClient();
 

@@ -81,7 +81,7 @@ public class GroupInfoCreateController {
     private static final String CSSSOURCE = "/CSS";
 
     public void initialize() {
-        System.out.println("start Create Group  Page");
+        System.out.println("start Create Group Page");
 
         // try to get id from selected group
         try {
@@ -102,7 +102,7 @@ public class GroupInfoCreateController {
             String password = TokenStorage.getToken();
             System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
-            nameLabel.setText("Wellcome " + username);
+            nameLabel.setText("Welcome " + username);
             MainPageServices.updateLocalTime(localTime);
             root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
             root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());

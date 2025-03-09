@@ -98,7 +98,8 @@ public class MyGroupsController {
             gs.fetchGroups("http://localhost:8093/api/groups/my-groups", TokenStorage.getToken(), joinedGroups);
 
             Platform.runLater(() -> {
-                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, deleteCol);
+                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, "Edit");
+                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, deleteCol, "Delete");
             });
         }).start();
 
@@ -106,9 +107,31 @@ public class MyGroupsController {
             gs.fetchGroups("http://localhost:8093/api/groups/available", TokenStorage.getToken(), canJoinGroups);
 
             Platform.runLater(() -> {
-                gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1);
+               gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1, "Join");
+
+               // missing action type, self write to Join
+                gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1,"Join");
             });
 
+        }).start();
+    }
+
+    /**
+     * This method fetches user group participations and populates the group lists for display.
+     */
+    public void fetchUserGroupParticipations() {
+        // API to fetch user group participations
+        String URI = "http://localhost:8093/api/groups/my-participations";
+        GroupServices gs = new GroupServices();
+
+        // Fetching the groups the user is participating in
+        new Thread(() -> {
+            gs.fetchGroups(URI, TokenStorage.getToken(), joinedGroups);
+
+            Platform.runLater(() -> {
+                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, "Edit");
+                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, deleteCol, "Delete");
+            });
         }).start();
 
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
