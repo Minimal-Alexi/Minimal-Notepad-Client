@@ -2,6 +2,7 @@ package controller.groups;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import static utils.MainPageServices.*;
 
 public class MyGroupsNotesController {
+
 
     @FXML
     private Label localTime;
