@@ -472,7 +472,7 @@ public class GroupInfoEditController {
 
     @FXML
     void logOutBtnClick() {
-        this.controllerUtils.goToHelloPage(stage, logOutBtn);
+        this.controllerUtils.logout(stage, logOutBtn);
 
     }
 
