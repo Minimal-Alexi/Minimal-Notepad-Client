@@ -1,21 +1,17 @@
 package controller.groups;
 
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Group;
 import model.TokenStorage;
-import utils.ControllerUtils;
-import utils.ControllerUtils_v2;
-import utils.GroupServices;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.json.JSONArray;
+import utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,35 +21,49 @@ public class MyGroupsController {
 
     @FXML
     private BorderPane root;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label localTime;
 
+    // joined group table
     @FXML
     private TableView<Group> joinedGroupTable;
 
     @FXML
     private TableColumn<Group, Integer> idCol;
-    @FXML
-    private TableColumn<Group, Void> editCol;
-    @FXML
-    private TableColumn<Group, Void> deleteCol;
+
+//    @FXML
+//    private TableColumn<Group, Void> editCol;
+//    @FXML
+//    private TableColumn<Group, Void> deleteCol;
+
     @FXML
     private TableColumn<Group, String> groupNameCol;
     @FXML
-    private TableColumn<Group, Integer> numOfMembersCol;
-    @FXML
     private TableColumn<Group, String> ownerCol;
+    @FXML
+    private TableColumn<Group, Integer> numOfMembersCol;
 
+    private TableColumn<Group, Group> joinedTableActionOneCol;
+    private TableColumn<Group, Group> joinedTableActionTwoCol;
+
+
+    // can join group table
     @FXML
     private TableView<Group> canJoinGroupTable;
     @FXML
     private TableColumn<Group, Integer> idCol1;
-    @FXML
-    private TableColumn<Group, Void> joinCol1;
+    //    @FXML
+//    private TableColumn<Group, Void> joinCol1;
     @FXML
     private TableColumn<Group, String> groupNameCol1;
     @FXML
-    private TableColumn<Group, Integer> numOfMembersCol1;
-    @FXML
     private TableColumn<Group, String> ownerCol1;
+    @FXML
+    private TableColumn<Group, Integer> numOfMembersCol1;
+
+    private TableColumn<Group, Group> canJoinTableActionOneCol;
 
     @FXML
     private Button myNotesBtn;
@@ -73,72 +83,171 @@ public class MyGroupsController {
     @FXML
     private Label seeAllLabel;
 
-
     private ControllerUtils controllerUtils;
-
+    private HttpResponseService httpResponseService;
 
     Stage stage;
 
 
-    private final List<Group> joinedGroups = new ArrayList<>();
-    private final List<Group> canJoinGroups = new ArrayList<>();
+    //    private final List<Group> joinedGroups = new ArrayList<>();
+//    private final List<Group> canJoinGroups = new ArrayList<>();
+    private List<Group> joinedGroups = new ArrayList<>();
+    private List<Group> canJoinGroups = new ArrayList<>();
 
     private static final String FXMLSource = "/fxml";
     private static final String CSSSOURCE = "/CSS";
+    private static final String URI = "http://localhost:8093/api/groups";
 
     public void initialize() {
 
         controllerUtils = new ControllerUtils();
+        httpResponseService = new HttpResponseServiceImpl();
+
+        TokenStorage.getIntance();//
+        String username = TokenStorage.getUser();
+        String password = TokenStorage.getToken();
+        System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
+
+        nameLabel.setText("Welcome, " + username);
+        MainPageServices.updateLocalTime(localTime);
 
         /*
         update the joined group table
          */
-        GroupServices gs = new GroupServices();
+//        GroupServices gs = new GroupServices();
+//
+//        new Thread(() -> {
+//            gs.fetchGroups("http://localhost:8093/api/groups/my-groups", TokenStorage.getToken(), joinedGroups);
+//
+//            Platform.runLater(() -> {
+//                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, "Edit");
+//                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, deleteCol, "Delete");
+//            });
+//        }).start();
+//
+//        new Thread(() -> {
+//            gs.fetchGroups("http://localhost:8093/api/groups/available", TokenStorage.getToken(), canJoinGroups);
+//
+//            Platform.runLater(() -> {
+//               gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1, "Join");
+//
+//               // missing action type, self write to Join
+////                gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1,"Join");
+//            });
+//
+//        }).start();
 
-        new Thread(() -> {
-            gs.fetchGroups("http://localhost:8093/api/groups/my-groups", TokenStorage.getToken(), joinedGroups);
+        // joined table set up
+        joinedTableActionOneCol = GroupControllerUtils.addGroupColumn(joinedGroupTable, "Action One");
+        joinedTableActionTwoCol = GroupControllerUtils.addGroupColumn(joinedGroupTable, "Action One");
+        GroupControllerUtils.updateJoinedTable(
+                stage,
+                joinedTableActionOneCol,
+                joinedTableActionTwoCol,
+                httpResponseService,
+                this::handleGetJoinedGroupsResponse,
+//                this::handleJoinOrLeaveOrDeleteResponseOfJoinedTable
+                this::handleResponseFromBothTable
+        );
 
-            Platform.runLater(() -> {
-                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, "Edit");
-                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, deleteCol, "Delete");
-            });
-        }).start();
+        // can join table set up
+        canJoinTableActionOneCol = GroupControllerUtils.addGroupColumn(canJoinGroupTable, "Action One");
+        GroupControllerUtils.updateCanJoinTable(
+                stage,
+                canJoinTableActionOneCol,
+                httpResponseService,
+                this::handleGetCanJoinTable,
+//                this::handleJoinResponseOfCanJoinTable
+                this::handleResponseFromBothTable
+        );
 
-        new Thread(() -> {
-            gs.fetchGroups("http://localhost:8093/api/groups/available", TokenStorage.getToken(), canJoinGroups);
-
-            Platform.runLater(() -> {
-               gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1, "Join");
-
-               // missing action type, self write to Join
-                gs.updateGroupsUI(canJoinGroups, canJoinGroupTable, idCol1, groupNameCol1, ownerCol1, numOfMembersCol1, joinCol1,"Join");
-            });
-
-        }).start();
-    }
-
-    /**
-     * This method fetches user group participations and populates the group lists for display.
-     */
-    public void fetchUserGroupParticipations() {
-        // API to fetch user group participations
-        String URI = "http://localhost:8093/api/groups/my-participations";
-        GroupServices gs = new GroupServices();
-
-        // Fetching the groups the user is participating in
-        new Thread(() -> {
-            gs.fetchGroups(URI, TokenStorage.getToken(), joinedGroups);
-
-            Platform.runLater(() -> {
-                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, "Edit");
-                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, deleteCol, "Delete");
-            });
-        }).start();
-
+        /**
+         * This method fetches user group participations and populates the group lists for display.
+         */
+//    public void fetchUserGroupParticipations() {
+//        // API to fetch user group participations
+//        String URI = "http://localhost:8093/api/groups/my-participations";
+//        GroupServices gs = new GroupServices();
+//
+//        // Fetching the groups the user is participating in
+//        new Thread(() -> {
+//            gs.fetchGroups(URI, TokenStorage.getToken(), joinedGroups);
+//
+//            Platform.runLater(() -> {
+//                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, editCol, "Edit");
+//                gs.updateGroupsUI(joinedGroups, joinedGroupTable, idCol, groupNameCol, ownerCol, numOfMembersCol, deleteCol, "Delete");
+//            });
+//        }).start();
+//
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/table_view.css").toExternalForm());
+    }
 
+    // handler of action buttons in joined table
+    public void handleGetJoinedGroupsResponse(CloseableHttpResponse response, Object jsonResponse) {
+        JSONArray array = controllerUtils.toJSONArray(jsonResponse);
+        if (array != null) {
+
+            this.joinedGroups = GroupControllerUtils.getGroupListInfoFromJSONArray(array);
+            GroupControllerUtils.setupGroupTable(
+                    joinedGroupTable,
+                    this.joinedGroups,
+                    idCol,
+                    groupNameCol,
+                    ownerCol,
+                    numOfMembersCol
+            );
+        }
+    }
+
+    public void handleJoinOrLeaveOrDeleteResponseOfJoinedTable(CloseableHttpResponse response, Object object) {
+
+        GroupControllerUtils.updateJoinedTable(
+                stage,
+                joinedTableActionOneCol,
+                joinedTableActionTwoCol,
+                httpResponseService,
+                this::handleGetJoinedGroupsResponse,
+//                this::handleJoinOrLeaveOrDeleteResponseOfJoinedTable);
+                this::handleResponseFromBothTable);
+    }
+
+
+    // handler of action button in canjoin table
+    public void handleGetCanJoinTable(CloseableHttpResponse response, Object jsonResponse) {
+        JSONArray array = controllerUtils.toJSONArray(jsonResponse);
+        if (array != null) {
+
+            this.canJoinGroups = GroupControllerUtils.getGroupListInfoFromJSONArray(array);
+
+        } else {
+            // reset canjoingroup when response from api is null
+            this.canJoinGroups = new ArrayList<>();
+        }
+        GroupControllerUtils.setupGroupTable(
+                canJoinGroupTable,
+                this.canJoinGroups,
+                idCol1,
+                groupNameCol1,
+                ownerCol1,
+                numOfMembersCol1);
+    }
+
+    public void handleJoinResponseOfCanJoinTable(CloseableHttpResponse response, Object object) {
+        GroupControllerUtils.updateCanJoinTable(
+                stage,
+                canJoinTableActionOneCol,
+                httpResponseService,
+                this::handleGetCanJoinTable,
+//                this::handleJoinResponseOfCanJoinTable);
+                this::handleResponseFromBothTable);
+    }
+
+
+    public void handleResponseFromBothTable(CloseableHttpResponse response, Object object) {
+        handleJoinOrLeaveOrDeleteResponseOfJoinedTable(response, object);
+        handleJoinResponseOfCanJoinTable(response, object);
     }
 
     //sidebar

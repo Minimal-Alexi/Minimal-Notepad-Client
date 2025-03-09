@@ -48,6 +48,7 @@ public class GroupServices {
                     int id = jsonGroup.getInt("id");
                     String name = jsonGroup.getString("name");
                     String description = jsonGroup.getString("description");
+                    // cannot use this, since it reutn a list of user instead of number of users
                     int numberOfMembers = jsonGroup.getInt("numberOfMembers");
 
                     Group newGroup = new Group(id, name, description, groupOwner, numberOfMembers);

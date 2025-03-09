@@ -23,7 +23,6 @@ public class GroupControllerUtils {
     private static final String URI = "http://localhost:8093/api/groups";
 
 
-
     public static void setupGroupTable(
             TableView groupTable,
             List<Group> groupList,
@@ -103,7 +102,6 @@ public class GroupControllerUtils {
             return updatedCell;
 
         });
-
     }
 
 
@@ -213,12 +211,32 @@ public class GroupControllerUtils {
     }
 
 
-
     public static void updateTableView(Stage stage, TableColumn actionOneCol, TableColumn actionTwoCol, HttpResponseService httpResponseService, HandleResponseCallback getAllCallback, HandleResponseCallback joinDeleteRemoveCallBack) {
         getAllgroups(httpResponseService, getAllCallback);
         updateColumnOne(stage, actionOneCol);
 //        updateColumnOne();
         updateColumnTwo(actionTwoCol, httpResponseService, joinDeleteRemoveCallBack);
+    }
+
+//    public static void getJoinedAndCreatedGroups(HttpResponseService httpResponseService, HandleResponseCallback callback){
+//
+//    }
+
+    public static void updateJoinedTable(Stage stage, TableColumn actionOneCol, TableColumn actionTwoCol, HttpResponseService httpResponseService, HandleResponseCallback getJoinedCallback, HandleResponseCallback joinDeleteLeaveCallBack) {
+//    public static void updateJoinedTable(Stage stage, TableColumn actionOneCol, TableColumn actionTwoCol, HttpResponseService httpResponseService, HandleResponseCallback getJoinedCallback) {
+        getJoinedGroup(httpResponseService, getJoinedCallback);
+        updateColumnOne(stage, actionOneCol);
+////        updateColumnOne();
+        updateColumnTwo(actionTwoCol, httpResponseService, joinDeleteLeaveCallBack);
+    }
+
+    public static void getJoinedGroup(HttpResponseService httpResponseService, HandleResponseCallback callback) {
+        String JOIN_GROUP_URI = URI + "/my-groups";
+        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", JOIN_GROUP_URI, true);
+        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
+        httpResponseService.handleReponse(request, httpClient, callback);
+//        return null;
     }
 
     public static void getAllgroups(HttpResponseService httpResponseService, HandleResponseCallback callback) {
@@ -229,6 +247,24 @@ public class GroupControllerUtils {
         httpResponseService.handleReponse(request, httpClient, callback);
 //        return null;
     }
+
+    //    public static void updateCanJoinTable(Stage stage, TableColumn actionOneCol, TableColumn actionTwoCol, HttpResponseService httpResponseService, HandleResponseCallback getJoinedCallback, HandleResponseCallback joinDeleteLeaveCallBack) {
+    public static void updateCanJoinTable(Stage stage, TableColumn actionOneCol, HttpResponseService httpResponseService, HandleResponseCallback getCanJoinCallBack, HandleResponseCallback getJoinCallBack) {
+        getCanJoinGroup(httpResponseService, getCanJoinCallBack);
+//        updateColumnOne(stage, actionOneCol);
+//////        updateColumnOne();
+        updateColumnTwo(actionOneCol, httpResponseService, getJoinCallBack);
+    }
+
+    public static void getCanJoinGroup(HttpResponseService httpResponseService, HandleResponseCallback callback) {
+        String CAN_JOIN_URI = URI + "/available";
+        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", CAN_JOIN_URI, true);
+        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
+        httpResponseService.handleReponse(request, httpClient, callback);
+//        return null;
+    }
+
 
     public static List<AppUser> createUserList(JSONArray userObjectArray) {
         List<AppUser> userList = new ArrayList<>();
@@ -245,14 +281,27 @@ public class GroupControllerUtils {
     public static List<Group> getGroupListInfoFromJSONArray(JSONArray array) {
         List<Group> updatedAllGroups = new ArrayList<>();
         for (Object groupObject : array) {
+            Group newGroup;
+//            JSONArray userListObj = null;
             JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-            GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), (String)owner.get("email"));
+            String email = owner.optString("email", "");
+            GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), email);
             int id = (int) ((JSONObject) groupObject).get("id");
             String name = (String) ((JSONObject) groupObject).get("name");
             String description = (String) ((JSONObject) groupObject).get("description");
-            JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).get("userGroupParticipationsList");
-            List<AppUser> userList = createUserList(userListObj);
-            Group newGroup = new Group(id, name, description, groupOwner, userList);
+
+
+           JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).optJSONArray("userGroupParticipationsList",null);
+
+            if (userListObj != null) {
+
+                List<AppUser> userList = createUserList(userListObj);
+                newGroup = new Group(id, name, description, groupOwner, userList);
+            } else {
+                int numberOfUsers = (Integer) ((JSONObject) groupObject).get("numberOfMembers");
+                newGroup = new Group(id, name, description, groupOwner, numberOfUsers);
+
+            }
             updatedAllGroups.add(newGroup);
         }
         return updatedAllGroups;

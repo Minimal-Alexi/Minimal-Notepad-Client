@@ -41,10 +41,6 @@ public class AllGroupsController implements Initializable {
 
     @FXML
     private TableColumn<Group, Integer> idCol;
-    //    @FXML
-//    private TableColumn<?, ?> actionCol;
-//    @FXML
-//    private TableColumn<?, ?> editCol;
     @FXML
     private TableColumn<Group, String> groupNameCol;
     @FXML
