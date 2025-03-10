@@ -138,8 +138,8 @@ public class MyGroupsController {
 //        }).start();
 
         // joined table set up
-        joinedTableActionOneCol = GroupControllerUtils.addGroupColumn(joinedGroupTable, "Action One");
-        joinedTableActionTwoCol = GroupControllerUtils.addGroupColumn(joinedGroupTable, "Action One");
+        joinedTableActionOneCol = GroupControllerUtils.addGroupColumn(joinedGroupTable, "");
+        joinedTableActionTwoCol = GroupControllerUtils.addGroupColumn(joinedGroupTable, "");
         GroupControllerUtils.updateJoinedTable(
                 stage,
                 joinedTableActionOneCol,
@@ -151,7 +151,7 @@ public class MyGroupsController {
         );
 
         // can join table set up
-        canJoinTableActionOneCol = GroupControllerUtils.addGroupColumn(canJoinGroupTable, "Action One");
+        canJoinTableActionOneCol = GroupControllerUtils.addGroupColumn(canJoinGroupTable, "");
         GroupControllerUtils.updateCanJoinTable(
                 stage,
                 canJoinTableActionOneCol,
