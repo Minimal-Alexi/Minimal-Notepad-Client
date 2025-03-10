@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
+?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -16,7 +15,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="parent" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.groups.MyGroupsController">
+<BorderPane id="parent" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.groups.MyGroupsControllerBackup">
    <center>
       <VBox id="parent" prefHeight="853.0" prefWidth="914.0" BorderPane.alignment="CENTER">
          <children>
@@ -54,20 +53,18 @@
                   <Insets bottom="10.0" top="20.0" />
                </padding>
             </Label>
-            <TableView fx:id="joinedGroupTable" onMouseClicked="#tableClicked">
+            <TableView fx:id="joinedGroupTable" onMouseClicked="#tableClicked" stylesheets="@../../../CSS/table_view.css">
                <columns>
                   <TableColumn fx:id="idCol" prefWidth="49.066646575927734" />
                   <TableColumn fx:id="groupNameCol" prefWidth="170.933349609375" text="Group Name" />
                   <TableColumn fx:id="ownerCol" prefWidth="174.39996337890625" text="Owner" />
                   <TableColumn fx:id="numOfMembersCol" prefWidth="187.20004272460938" text="Number of members" />
+                  <TableColumn fx:id="editCol" prefWidth="188.2667236328125" text="Edit" />
+                  <TableColumn fx:id="deleteCol" prefWidth="151.73333740234375" text="Action" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
-               <stylesheets>
-                  <URL value="@../../../CSS/table_view.css" />
-                  <URL value="@../../../CSS/button.css" />
-               </stylesheets>
             </TableView>
             <HBox alignment="CENTER_LEFT">
                <children>
@@ -83,20 +80,18 @@
                      </font></Label>
                </children>
             </HBox>
-            <TableView fx:id="canJoinGroupTable" layoutX="10.0" layoutY="256.0" onMouseClicked="#tableClicked">
+            <TableView fx:id="canJoinGroupTable" layoutX="10.0" layoutY="256.0" onMouseClicked="#tableClicked" stylesheets="@../../../CSS/table_view.css">
                <columns>
                   <TableColumn fx:id="idCol1" prefWidth="49.066646575927734" />
                   <TableColumn fx:id="groupNameCol1" prefWidth="170.933349609375" text="Group Name" />
                   <TableColumn fx:id="ownerCol1" prefWidth="174.39996337890625" text="Owner" />
                   <TableColumn fx:id="numOfMembersCol1" prefWidth="271.7334289550781" text="Number of members" />
+                  <TableColumn fx:id="joinCol1" prefWidth="177.86663818359375" text="Edit" />
+                  <TableColumn prefWidth="69.599853515625" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
-               <stylesheets>
-                  <URL value="@../../../CSS/table_view.css" />
-                  <URL value="@../../../CSS/button.css" />
-               </stylesheets>
             </TableView>
          </children>
          <padding>
@@ -210,7 +205,7 @@
                </VBox.margin>
             </Button>
             <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS" />
-            <Button fx:id="logOutBtn" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#logOutBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff; -fx-alignment: center; -fx-border-radius: 0,0,0;" text="Log out" textFill="WHITE">
+            <Button fx:id="logOutBtn" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#logOutBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff; -fx-alignment: center;" text="Log out" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>

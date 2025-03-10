@@ -16,6 +16,7 @@ import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
 import utils.ControllerUtils;
+import utils.ControllerUtils_v2;
 import utils.HttpResponseService;
 import utils.HttpResponseServiceImpl;
 
@@ -27,6 +28,26 @@ import static utils.MainPageServices.*;
 
 public class MyGroupsNotesController {
 
+
+    @FXML
+    private Label localTime;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private TableView<Note> table;
+    @FXML
+    private TableColumn<Note, Void> icon;
+    @FXML
+    private TableColumn<Note, String> title;
+    @FXML
+    private TableColumn<Note, String> group;
+    @FXML
+    private TableColumn<Note, String> owner;
+    @FXML
+    private TableColumn<Note, String> category;
+    @FXML
+    private TableColumn<Note, String> createTime;
+
     //side bar
     @FXML
     private Button myNotesBtn;
@@ -36,23 +57,10 @@ public class MyGroupsNotesController {
     private Button myGroupsBtn;
     @FXML
     private Button allGroupsBtn;
-
     @FXML
     private Button accountBtn;
     @FXML
     private Button logOutBtn;
-
-    @FXML
-    private Label localTime;
-    @FXML
-    private Label nameLabel;
-    @FXML private TableView<Note> table;
-    @FXML private TableColumn<Note, Void> icon;
-    @FXML private TableColumn<Note, String> title;
-    @FXML private TableColumn<Note, String> group;
-    @FXML private TableColumn<Note, String> owner;
-    @FXML private TableColumn<Note, String> category;
-    @FXML private TableColumn<Note, String> createTime;
 
     private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
@@ -105,38 +113,37 @@ Go to another page
 
     }
 
-    // go to myGroupPage
-    public void groupsClicked(ActionEvent event) throws IOException {
-//        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
-//        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
-        String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
-        this.controllerUtils.goPage(stage, myGroupsBtn, pageLink);
-    }
-
+    //sidebar
     public void myGroupsBtnClick() {
-        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+        ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
-        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+
+//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+        ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
 //        this.controllerUtils.goPage(stage,shareNoteBtn,"");
         System.out.println("Go to share notes page");
-        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+        ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
-        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+        ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
-        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+        ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
     @FXML
@@ -163,6 +170,4 @@ Go to another page
         this.controllerUtils.setDefaultCursor(accountBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
     }
-
-
 }

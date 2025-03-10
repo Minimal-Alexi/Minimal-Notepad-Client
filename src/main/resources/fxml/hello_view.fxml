@@ -27,7 +27,7 @@
                   </Label>
                   <HBox prefHeight="101.0" prefWidth="111.0">
                      <children>
-                        <Label text="Do not have am account? " />
+                        <Label text="Do not have an account? " />
                         <Label fx:id="registerLabel" onMouseClicked="#registerLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" text="Register here" />
                      </children>
                   </HBox>

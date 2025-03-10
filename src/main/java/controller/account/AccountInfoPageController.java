@@ -15,10 +15,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-import utils.ControllerUtils;
-import utils.HttpResponseService;
-import utils.HttpResponseServiceImpl;
-import utils.MainPageServices;
+import utils.*;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -96,6 +93,8 @@ public class AccountInfoPageController {
         httpInstance = HttpClientSingleton.getInstance();
         httpClient = httpInstance.getHttpClient();
         getUserInfo();
+        ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
+
     }
 
     @FXML
@@ -105,10 +104,10 @@ public class AccountInfoPageController {
         this.controllerUtils.setHandCursor(myGroupsBtn);
         this.controllerUtils.setHandCursor(allGroupsBtn);
         this.controllerUtils.setHandCursor(accountBtn);
+        this.controllerUtils.setHandCursor(logOutBtn);
         this.controllerUtils.setHandCursor(saveBtn);
         this.controllerUtils.setHandCursor(changePwdBtn);
         this.controllerUtils.setHandCursor(deleteBtn);
-        this.controllerUtils.setHandCursor(logOutBtn);
 
     }
 
@@ -119,41 +118,51 @@ public class AccountInfoPageController {
         this.controllerUtils.setDefaultCursor(myGroupsBtn);
         this.controllerUtils.setDefaultCursor(allGroupsBtn);
         this.controllerUtils.setDefaultCursor(accountBtn);
+        this.controllerUtils.setDefaultCursor(logOutBtn);
         this.controllerUtils.setDefaultCursor(saveBtn);
         this.controllerUtils.setDefaultCursor(changePwdBtn);
         this.controllerUtils.setDefaultCursor(deleteBtn);
-        this.controllerUtils.setDefaultCursor(logOutBtn);
-
-
-    }
-
-    @FXML
-    public void myNotesBtnClick() {
-        controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
-    }
-
-    @FXML
-    public void shareNotesBtnClick() {
-        System.out.println("Go to share notes pages");
-    }
-
-    @FXML
-    void myGroupsBtnClick() {
-        controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/group_info_create_group.fxml/");
-    }
-
-    @FXML
-    void allGroupsBtnClick() {
-        controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+//        this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
     // sidebar
     @FXML
-    public void accountBtnClick() {
-        String pageLink = "/fxml/main_pages/account_user_info_page.fxml";
-        this.controllerUtils.goPage(stage, accountBtn, pageLink);
+    public void myGroupsBtnClick() {
+//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+        ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
+    @FXML
+    public void myNotesBtnClick() {
+
+//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+        ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
+    }
+
+    @FXML
+    public void shareNotesBtnClick() {
+//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
+        System.out.println("Go to share notes page");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+        ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
+    }
+
+    @FXML
+    public void allGroupsBtnClick() {
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+        ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
+    }
+
+    @FXML
+    public void accountBtnClick() {
+//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+        ControllerUtils_v2.goToAccountPage(stage, accountBtn);
+    }
+
+    @FXML
+    public void logOutBtnClick() {
+        this.controllerUtils.logout(stage, logOutBtn);
+    }
 
     @FXML
     public void saveBtnClick() {
@@ -162,54 +171,18 @@ public class AccountInfoPageController {
         handleInput(email, username);
     }
 
-//    @FXML
-//    public void groupsBtnClick(){
-//
-//    }
-
 
     private void getUserInfo() {
         String username = TokenStorage.getUser();
         String token = TokenStorage.getToken();
-//        String URI = "http://localhost:8093/api/user/";
-//        HttpGet httpGet = new HttpGet(URI);
-//        httpGet.addHeader("Accept", "application/json");
-//        httpGet.addHeader("Content-Type", "application/json");
-//        httpGet.addHeader("Authorization", "Bearer " + token);
+
 
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("GET", URI, true);
 
-        // call this method only if you have body in your request
-//            httpRequest.setRequestBody();
-//        HttpGet httpGet = (HttpGet) httpRequest.getHttpRequest();
+
         HttpRequestBase httpGet = httpRequest.getHttpRequest();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-//        JSONObject json = new JSONObject();
-//        json.put("username",)
-//        httpResponseService.handleReponse(httpGet);
-//        new Thread(() -> {
-//            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-//                HttpEntity responseEntity = response.getEntity();
-//                String data = EntityUtils.toString(responseEntity);
-//                JSONObject jsonResponse = new JSONObject(data);
-//                EntityUtils.consume(responseEntity);
-//                // Do more processing here...
-//                StatusLine statusLine = response.getStatusLine();
-//                System.out.println("json " + jsonResponse);
-//                System.out.println("response " + responseEntity);
-//                System.out.println("status code " + statusLine);
-//                Platform.runLater(() -> {
-//                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-////                    callback.handleResponse(response, jsonResponse);
-//                    handleGetUserInfoResponse(response, jsonResponse);
-//                });
-//            } catch (IOException e) {
-//                Alert a = new Alert(Alert.AlertType.ERROR);
-//                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-//                a.show();
-//            }
-//        }).start();
         httpResponseService.handleReponse(httpGet, httpClient, this::handleGetUserInfoResponse);
     }
 
@@ -361,12 +334,6 @@ public class AccountInfoPageController {
             this.httpResponseService.handleReponse(httpDelete, httpClient, this::handleDeleteResponse);
 
         }
-    }
-
-
-    @FXML
-    public void logOutBtnClick() {
-        this.controllerUtils.logout(stage, logOutBtn);
     }
 
     private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {

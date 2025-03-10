@@ -16,6 +16,7 @@ import model.TokenStorage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import utils.ControllerUtils;
+import utils.ControllerUtils_v2;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -68,9 +69,11 @@ public class HelloController {
 
     @FXML
     public void registerLabelClick() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/register_view.fxml"));
-        this.stage = this.getStage();
-        this.controllerUtil.updateStage(stage, fxmlLoader);
+        String registerLink = "/fxml/register_view.fxml";
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/register_view.fxml"));
+//        this.stage = this.getStage();
+//        this.controllerUtil.updateStage(stage, fxmlLoader);
+        ControllerUtils_v2.goPage(stage,registerLabel,registerLink);
     }
 
 
