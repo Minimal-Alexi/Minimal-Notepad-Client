@@ -76,7 +76,7 @@ public class MyGroupsNotesController {
         this.responseService = new HttpResponseServiceImpl();
 
         noteObservableList = FXCollections.observableArrayList();
-        noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
+        noteArrayList = findAllMyNotes("http://localhost:8093/api/note/my-groups", TokenStorage.getToken());
         if (noteArrayList != null) {
             noteObservableList.addAll(noteArrayList);
         } else {
