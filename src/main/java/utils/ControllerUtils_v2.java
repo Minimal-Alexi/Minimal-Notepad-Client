@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
@@ -179,6 +180,10 @@ public class ControllerUtils_v2 {
 
     public static void addStyle(Button btn, String styleLink){
         btn.getStylesheets().add(btn.getClass().getResource(CSSSOURCE + styleLink).toExternalForm());
-
     }
+
+    public static void addStyle(BorderPane root, String styleLink){
+        root.getStylesheets().add(root.getClass().getResource(CSSSOURCE + styleLink).toExternalForm());
+    }
+
 }

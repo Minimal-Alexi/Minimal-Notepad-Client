@@ -210,6 +210,7 @@ public class MyGroupsController {
                 joinedTableActionOneCol,
                 joinedTableActionTwoCol,
                 httpResponseService,
+                // get joined groups from db
                 this::handleGetJoinedGroupsResponse,
 //                this::handleJoinOrLeaveOrDeleteResponseOfJoinedTable);
                 this::handleResponseFromBothTable);
@@ -241,8 +242,10 @@ public class MyGroupsController {
                 stage,
                 canJoinTableActionOneCol,
                 httpResponseService,
+                // get can join group from db
                 this::handleGetCanJoinTable,
 //                this::handleJoinResponseOfCanJoinTable);
+                // update view to both table
                 this::handleResponseFromBothTable);
     }
 
@@ -287,7 +290,9 @@ public class MyGroupsController {
 
     @FXML
     public void logOutBtnClick() {
-        this.controllerUtils.logout(stage, logOutBtn);
+//        this.controllerUtils.logout(stage, logOutBtn);
+        ControllerUtils_v2.logout(stage, logOutBtn);
+
     }
 
     @FXML
