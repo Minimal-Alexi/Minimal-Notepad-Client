@@ -49,7 +49,7 @@
                         </AnchorPane>
                      </graphic>
                   </Button>
-                  <Button fx:id="shareNoteBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#shareNoteBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../../CSS/button.css" text="Share Notes">
+                  <Button fx:id="shareNoteBtn" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#shareNoteBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../../CSS/button.css" text="My Groups' Notes">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -273,20 +273,6 @@
                               </Label>
                            </graphic>
                         </Label>
-                        <AnchorPane prefHeight="62.0" prefWidth="210.0" stylesheets="@../../../CSS/search_bar.css">
-                           <children>
-                              <TextField cache="true" layoutX="5.0" layoutY="28.0" styleClass="search-box" stylesheets="@../../../CSS/table_view.css" text="Search">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextField>
-                              <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="16.0" layoutY="37.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                              <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="15.0" layoutY="38.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                           </children>
-                        </AnchorPane>
                      </children>
                      <opaqueInsets>
                         <Insets />

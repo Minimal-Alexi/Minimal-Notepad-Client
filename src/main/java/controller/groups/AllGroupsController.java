@@ -108,8 +108,8 @@ public class AllGroupsController implements Initializable {
         ControllerUtils_v2.addStyle(root,"/text_input.css");
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
-        actionOneCol=GroupControllerUtils.addGroupColumn(groupTable,"Action One");
-        actionTwoCol=GroupControllerUtils.addGroupColumn(groupTable,"Action Two");
+        actionOneCol=GroupControllerUtils.addGroupColumn(groupTable,"");
+        actionTwoCol=GroupControllerUtils.addGroupColumn(groupTable,"");
         GroupControllerUtils.updateTableView(stage,actionOneCol,actionTwoCol,httpResponseService,this::handleGetAllGroups, this::handleJoinOrLeaveOrDeleteResponse);
     }
 

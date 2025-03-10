@@ -93,7 +93,7 @@
                   <Insets />
                </VBox.margin>
             </Button>
-            <Button fx:id="shareNotesBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#shareNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff;" stylesheets="@../../../CSS/button.css" text="Share Notes" VBox.vgrow="ALWAYS">
+            <Button fx:id="shareNotesBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#shareNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff;" stylesheets="@../../../CSS/button.css" text="My Groups' Notes" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>

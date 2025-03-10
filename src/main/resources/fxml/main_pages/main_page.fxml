@@ -48,7 +48,7 @@
                   <Insets />
                </VBox.margin>
             </Button>
-            <Button fx:id="shareNotesBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#shareNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" stylesheets="@../../CSS/button.css" text="Share Notes" VBox.vgrow="ALWAYS">
+            <Button fx:id="shareNotesBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#shareNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" stylesheets="@../../CSS/button.css" text="My Groups' Notes" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>
@@ -150,20 +150,6 @@
                      </graphic>
                   </Label>
                   <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                  <AnchorPane stylesheets="@../../CSS/search_bar.css">
-                     <children>
-                        <TextField cache="true" layoutX="5.0" layoutY="28.0" styleClass="search-box" stylesheets="@../../CSS/table_view.css" text="Search">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="16.0" layoutY="37.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                        <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="15.0" layoutY="38.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                     </children>
-                  </AnchorPane>
                </children>
                <opaqueInsets>
                   <Insets />
