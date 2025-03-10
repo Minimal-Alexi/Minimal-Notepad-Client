@@ -100,6 +100,7 @@ public class AccountInfoPwdController {
         TokenStorage.getIntance();//
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
+        ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
         updateLocalTime(localTime);
 
         httpInstance = HttpClientSingleton.getInstance();

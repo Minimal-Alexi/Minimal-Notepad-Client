@@ -182,6 +182,8 @@ public class MyGroupsController {
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/table_view.css").toExternalForm());
+//        logOutBtn.getStylesheets().add(g)
+        ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
     }
 
     // handler of action buttons in joined table

@@ -21,6 +21,9 @@ import java.util.regex.Pattern;
 
 public class ControllerUtils_v2 {
 
+    private static final String FXMLSource = "/fxml";
+    private static final String CSSSOURCE = "/CSS";
+
     final static Cursor handCursor = Cursor.HAND;
     final static Cursor defaultCursor = Cursor.DEFAULT;
 
@@ -172,5 +175,10 @@ public class ControllerUtils_v2 {
         String helloPage = "/fxml/hello_view.fxml";
         TokenStorage.clearToken();
         goPage(stage, btn, helloPage);
+    }
+
+    public static void addStyle(Button btn, String styleLink){
+        btn.getStylesheets().add(btn.getClass().getResource(CSSSOURCE + styleLink).toExternalForm());
+
     }
 }

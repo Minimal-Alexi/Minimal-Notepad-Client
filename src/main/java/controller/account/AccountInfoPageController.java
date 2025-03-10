@@ -93,6 +93,8 @@ public class AccountInfoPageController {
         httpInstance = HttpClientSingleton.getInstance();
         httpClient = httpInstance.getHttpClient();
         getUserInfo();
+        ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
+
     }
 
     @FXML

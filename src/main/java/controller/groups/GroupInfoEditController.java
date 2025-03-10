@@ -162,6 +162,8 @@ public class GroupInfoEditController {
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
 
         editGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
+        ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
+
 
         table1.setItems(groupMembers);
 

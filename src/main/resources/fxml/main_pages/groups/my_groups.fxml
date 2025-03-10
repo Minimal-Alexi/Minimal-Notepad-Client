@@ -210,7 +210,7 @@
                </VBox.margin>
             </Button>
             <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS" />
-            <Button fx:id="logOutBtn" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#logOutBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff; -fx-alignment: center;" text="Log out" textFill="WHITE">
+            <Button fx:id="logOutBtn" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#logOutBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff; -fx-alignment: center; -fx-border-radius: 0,0,0;" text="Log out" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>

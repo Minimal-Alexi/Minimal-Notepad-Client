@@ -105,6 +105,8 @@ public class GroupInfoCreateController {
             root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
             root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
             createGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
+            ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
+
         }
 
     }
