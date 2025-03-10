@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.*;
@@ -402,7 +403,7 @@ public class GroupInfoEditController {
 
     @FXML
     void accountBtnClick() {
-
+        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
     }
 
     @FXML
@@ -467,7 +468,8 @@ public class GroupInfoEditController {
 
     @FXML
     void groupsBtnClick() {
-
+        String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
+        this.controllerUtils.goPage(stage, myGroupsBtn, pageLink);
     }
 
     @FXML
@@ -488,16 +490,20 @@ public class GroupInfoEditController {
 
     @FXML
     void myGroupsBtnClick() {
-
+        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
     }
 
     @FXML
     void myNotesBtnClick() {
-
+        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
     }
 
     @FXML
     void mySharedGroupNotesBtnClick() {
 
+    }
+
+    public void shareNotesBtnClick(MouseEvent mouseEvent) {
+        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
     }
 }
