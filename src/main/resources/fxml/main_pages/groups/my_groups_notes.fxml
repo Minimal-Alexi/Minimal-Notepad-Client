@@ -74,7 +74,7 @@
                   <Insets bottom="40.0" top="40.0" />
                </VBox.margin>
             </ImageView>
-            <Button fx:id="myNotesBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#myNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff;" stylesheets="@../../../CSS/button.css" text="My notes" VBox.vgrow="ALWAYS">
+            <Button fx:id="myNotesBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#myNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" stylesheets="@../../../CSS/button.css" text="My notes" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>
@@ -84,8 +84,8 @@
                <graphic>
                   <AnchorPane prefHeight="24.0" prefWidth="24.0">
                      <children>
-                        <SVGPath content="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" fill="WHITE" stroke="#a276ff" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
-                        <SVGPath content="M13.5 8C10.47 8 8 10.48 8 13.5C8 14.87 9.12 16 10.5 16C13.52 16 16 13.52 16 10.5C16 9.13 14.87 8 13.5 8Z" fill="WHITE" stroke="#a276ff" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
+                        <SVGPath content="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
+                        <SVGPath content="M13.5 8C10.47 8 8 10.48 8 13.5C8 14.87 9.12 16 10.5 16C13.52 16 16 13.52 16 10.5C16 9.13 14.87 8 13.5 8Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
                      </children>
                   </AnchorPane>
                </graphic>
@@ -93,7 +93,7 @@
                   <Insets />
                </VBox.margin>
             </Button>
-            <Button fx:id="shareNotesBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#shareNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" stylesheets="@../../../CSS/button.css" text="Share Notes" VBox.vgrow="ALWAYS">
+            <Button fx:id="shareNotesBtn" graphicTextGap="10.0" minHeight="50.0" minWidth="200.0" mnemonicParsing="false" onMouseClicked="#shareNotesBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" style="-fx-background-color: #a276ff; -fx-text-fill: #ffffff;" stylesheets="@../../../CSS/button.css" text="Share Notes" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>
@@ -103,7 +103,7 @@
                <graphic>
                   <AnchorPane prefHeight="24.0" prefWidth="21.0">
                      <children>
-                        <SVGPath content="M 8.50,11.49           C 8.50,11.49 5.50,11.49 5.50,11.49M 7.75,8.49           C 7.75,8.49 5.50,8.49 5.50,8.49M 12.00,5.49           C 12.00,5.49 12.00,20.49 12.00,20.49M 22.00,16.74           C 22.00,16.74 22.00,4.67 22.00,4.67             22.00,3.47 21.02,2.58 19.83,2.68             19.83,2.68 19.77,2.68 19.77,2.68             17.67,2.86 14.48,3.93 12.70,5.05             12.70,5.05 12.53,5.16 12.53,5.16             12.24,5.34 11.76,5.34 11.47,5.16             11.47,5.16 11.22,5.01 11.22,5.01             9.44,3.90 6.26,2.84 4.16,2.67             2.97,2.57 2.00,3.47 2.00,4.66             2.00,4.66 2.00,16.74 2.00,16.74             2.00,17.70 2.78,18.60 3.74,18.72             3.74,18.72 4.03,18.76 4.03,18.76             6.20,19.05 9.55,20.15 11.47,21.20             11.47,21.20 11.51,21.22 11.51,21.22             11.78,21.37 12.21,21.37 12.47,21.22             14.39,20.16 17.75,19.05 19.93,18.76             19.93,18.76 20.26,18.72 20.26,18.72             21.22,18.60 22.00,17.70 22.00,16.74 Z" fill="WHITE" stroke="#898989" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
+                        <SVGPath content="M 8.50,11.49           C 8.50,11.49 5.50,11.49 5.50,11.49M 7.75,8.49           C 7.75,8.49 5.50,8.49 5.50,8.49M 12.00,5.49           C 12.00,5.49 12.00,20.49 12.00,20.49M 22.00,16.74           C 22.00,16.74 22.00,4.67 22.00,4.67             22.00,3.47 21.02,2.58 19.83,2.68             19.83,2.68 19.77,2.68 19.77,2.68             17.67,2.86 14.48,3.93 12.70,5.05             12.70,5.05 12.53,5.16 12.53,5.16             12.24,5.34 11.76,5.34 11.47,5.16             11.47,5.16 11.22,5.01 11.22,5.01             9.44,3.90 6.26,2.84 4.16,2.67             2.97,2.57 2.00,3.47 2.00,4.66             2.00,4.66 2.00,16.74 2.00,16.74             2.00,17.70 2.78,18.60 3.74,18.72             3.74,18.72 4.03,18.76 4.03,18.76             6.20,19.05 9.55,20.15 11.47,21.20             11.47,21.20 11.51,21.22 11.51,21.22             11.78,21.37 12.21,21.37 12.47,21.22             14.39,20.16 17.75,19.05 19.93,18.76             19.93,18.76 20.26,18.72 20.26,18.72             21.22,18.60 22.00,17.70 22.00,16.74 Z" fill="WHITE" stroke="#a276ff" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0" styleClass="icon" />
                      </children>
                   </AnchorPane>
                </graphic>
