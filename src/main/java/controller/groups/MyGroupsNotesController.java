@@ -1,28 +1,28 @@
 package controller.groups;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Note;
 import model.TokenStorage;
 import model.selected.SelectedNote;
-import utils.ControllerUtils;
-import utils.ControllerUtils_v2;
-import utils.HttpResponseService;
-import utils.HttpResponseServiceImpl;
+import model.selected.SelectedReadOnlyNote;
+import utils.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import static utils.MainPageServices.*;
 
@@ -47,6 +47,8 @@ public class MyGroupsNotesController {
     private TableColumn<Note, String> category;
     @FXML
     private TableColumn<Note, String> createTime;
+    @FXML
+    private TableColumn<Note, Void> actionCol;
 
     //side bar
     @FXML
@@ -83,7 +85,8 @@ public class MyGroupsNotesController {
             System.out.println("Connection failed");
         }
 
-        updateNoteTable(noteObservableList, table, title, group, owner, category, createTime, icon);
+        //updateNoteTable(noteObservableList, table, title, group, owner, category, createTime, icon);
+        updateNoteTableWithAction(noteObservableList, table, title, group, owner, category, createTime, icon, actionCol, "Read");
 
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
@@ -111,6 +114,77 @@ Go to another page
             }
         }
 
+    }
+
+    public static void updateNoteTableWithAction(ObservableList<Note> notes, TableView<Note> table, TableColumn<Note, String> title, TableColumn<Note, String> group, TableColumn<Note, String> owner, TableColumn<Note, String> category, TableColumn<Note, String> createTime, TableColumn<Note, Void> icon, TableColumn<Note, Void> actionCol, String buttonName) {
+        table.setItems(notes);
+        title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
+        group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
+        owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
+        category.setCellValueFactory(cellData -> {
+            HashMap<Integer, String> catMap = cellData.getValue().getCategory();
+            String categoriesListString = "";
+            if (catMap != null && !catMap.isEmpty()) {
+                categoriesListString = String.join(", ", catMap.values());
+            }
+            return new ReadOnlyStringWrapper(categoriesListString);
+        });
+        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
+        icon.setCellFactory(param -> new TableCell<Note, Void>() {
+            private final ImageView imageView = new ImageView(
+                    new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
+            );
+
+            {
+                imageView.setFitWidth(20);
+                imageView.setFitHeight(20);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(imageView);
+                }
+            }
+        });
+
+        actionCol.setCellFactory(param -> new TableCell<>() {
+            private final Button actionButton = new Button(buttonName);
+
+            {
+                actionButton.setOnAction(event -> {
+                    Note selectedNote = getTableView().getItems().get(getIndex());
+
+                    if ("Read".equals(buttonName)) {
+                        SelectedReadOnlyNote selectedReadOnlyNote = SelectedReadOnlyNote.getInstance();
+                        selectedReadOnlyNote.setId(selectedNote.getId());
+
+                        System.out.println("Reading note: " + selectedNote.getId() + " " + selectedNote.getTitle());
+
+                        String pageLink = "/fxml/main_pages/readonly_note_page.fxml";
+                        ControllerUtils c = new ControllerUtils();
+                        Stage stage = (Stage) actionButton.getScene().getWindow();
+                        c.goPage(stage, actionButton, pageLink);
+                    } else if ("Delete".equals(buttonName)) {
+                        System.out.println("Deleting note: " + selectedNote.getId());
+                        // Implement delete logic here
+                    } else if ("Join".equals(buttonName)) {
+                        System.out.println("Joining note: " + selectedNote.getId());
+                        // Implement join logic here
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : actionButton);
+                ViewUtils.addStyle(actionButton, "/button.css");
+            }
+        });
     }
 
     //sidebar

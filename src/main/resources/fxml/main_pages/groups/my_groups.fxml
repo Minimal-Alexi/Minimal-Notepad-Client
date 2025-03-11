@@ -24,16 +24,14 @@
                <font>
                   <Font name="Dubai Medium" size="30.0" />
                </font>
-               <graphic>
-                  <Label fx:id="localTime" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="loading time ..." textFill="#00000099">
-                     <font>
-                        <Font name="System Italic" size="14.0" />
-                     </font>
-                  </Label>
-               </graphic>
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
+            </Label>
+            <Label fx:id="localTime" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="232.0" text="loading time ..." textFill="#00000099">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
             </Label>
             <Button fx:id="createGroupBtn" mnemonicParsing="false" onMouseClicked="#createGroupBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefWidth="167.0" stylesheets="@../../../CSS/button.css" text="Create new group">
                <opaqueInsets>
