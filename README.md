@@ -4,8 +4,8 @@ Minimal Notepad is a digital note-taking tool designed for students, teachers, a
 
 This project was created as part of SEP1 (Software Engineering Project 1) and SEP2 (Software Engineering Project 2) from the Metropolia University of Applied Sciences. 
 
-This is the Frontend part of the Minimal Notepad Application.
-- BE:[link](https://github.com/Minimal-Alexi/Minimal-Notepad)
+- This is the Frontend part of the Minimal Notepad Application.
+- The BE part can be found here:[link](https://github.com/Minimal-Alexi/Minimal-Notepad)
 ### Purpose
 - The purpose of the project is to learn how to use Agile with Scrum Methodlogy to work on a software project.
 - At the same time, practice creating diagrams such as UML, class diagram, sequence diagram, use case diagram.
@@ -24,6 +24,8 @@ This is the Frontend part of the Minimal Notepad Application.
 - JavaFx
 
 ### How to run locally
+- Clone the Backend repository
+- Start the Backend Server following the instruction in the `README.md`in the Backend repository
 - Clone the repository
 - cd to the project directory
 - open the project with Intellij
@@ -32,10 +34,11 @@ This is the Frontend part of the Minimal Notepad Application.
 
 ### Features
 - Create and Login user
+  - User can edit user's detail or password after logged in
 - Create, Read, Update and Delete notes
-  - You can add photos, change the background color
-  - You can filter notes by categories
-  - You can search notes by title 
+  - User can add photos, change the background color
+  - User can filter notes by categories
+  - User can search notes by title 
 - Create, Read, Update and Delete Groups
 - Join group to read notes from that group
 - Share notes through sharing in a group. Whoever in the same group can read the note that you just shared
