@@ -111,6 +111,7 @@ public class GroupControllerUtils {
                 ;
             });
             ControllerUtils_v2.setDefaultAndHandCursorBehaviour(editButton);
+            ControllerUtils_v2.setDefaultAndHandCursorBehaviour(viewButton);
             return updatedCell;
 
         });
