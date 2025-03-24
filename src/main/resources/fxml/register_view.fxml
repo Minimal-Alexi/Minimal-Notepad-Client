@@ -28,7 +28,7 @@
                <children>
                   <VBox fillWidth="false" layoutX="14.0" layoutY="15.0" prefHeight="525.0" prefWidth="267.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome !" wrappingWidth="219.47006225585938">
+                        <Text fx:id="welcomeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome !" wrappingWidth="219.47006225585938">
                            <VBox.margin>
                               <Insets top="14.0" />
                            </VBox.margin>
@@ -36,7 +36,7 @@
                               <Font size="16.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Register to " wrappingWidth="219.47006225585938">
+                        <Text fx:id="registerTo" strokeType="OUTSIDE" strokeWidth="0.0" text="Register to " wrappingWidth="219.47006225585938">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
@@ -44,7 +44,7 @@
                               <Font size="31.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NoteApp is simple" wrappingWidth="219.47006225585938">
+                        <Text fx:id="noteApp" strokeType="OUTSIDE" strokeWidth="0.0" text="NoteApp is simple" wrappingWidth="219.47006225585938">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
@@ -66,7 +66,7 @@
                                  <children>
                                     <HBox prefHeight="27.0" prefWidth="423.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                                          <Text fx:id="emailText" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -95,7 +95,7 @@
                                  <children>
                                     <HBox prefHeight="61.0" prefWidth="423.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                                          <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -124,7 +124,7 @@
                                  <children>
                                     <HBox prefHeight="61.0" prefWidth="423.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+                                          <Text fx:id="passwordText" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -188,7 +188,7 @@
                                  <children>
                                     <HBox prefHeight="61.0" prefWidth="423.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password">
+                                          <Text fx:id="confirmPwdText" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -265,7 +265,7 @@
                                     <Insets />
                                  </VBox.margin>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Already have an Account?">
+                                    <Text fx:id="alreadyHaveAccount" strokeType="OUTSIDE" strokeWidth="0.0" text="Already have an Account?">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
