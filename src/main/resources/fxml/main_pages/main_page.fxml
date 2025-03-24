@@ -162,7 +162,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label text="Recently edited">
+                        <Label fx:id="recentlyEditedLabel" text="Recently edited">
                            <font>
                               <Font name="Gadugi Bold" size="20.0" />
                            </font>
@@ -206,7 +206,7 @@
              </HBox>
             <VBox>
                <children>
-                  <Label prefHeight="35.0" prefWidth="211.0" text="Your notes">
+                  <Label fx:id="yourNotesLabel" prefHeight="35.0" prefWidth="211.0" text="Your notes">
                      <font>
                         <Font name="Gadugi Bold" size="20.0" />
                      </font>

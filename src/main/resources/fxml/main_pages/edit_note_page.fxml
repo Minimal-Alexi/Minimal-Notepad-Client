@@ -51,7 +51,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label prefHeight="70.0" prefWidth="646.0" text="Editing Note">
+                              <Label fx:id="editingNoteLabel" prefHeight="70.0" prefWidth="646.0" text="Editing Note">
                                  <font>
                                     <Font name="Gadugi Bold" size="20.0" />
                                  </font>
