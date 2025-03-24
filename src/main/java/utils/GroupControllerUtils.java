@@ -73,6 +73,7 @@ public class GroupControllerUtils {
 //        String fName = "Jacob";
         actionOneCol.setCellFactory(col -> {
             Button editButton = new Button("Edit");
+            Button viewButton = new Button ("View");
 //            Button joinButton = new Button("Join");
             TableCell<Group, Group> updatedCell = new TableCell<Group, Group>() {
                 @Override
@@ -85,7 +86,12 @@ public class GroupControllerUtils {
                         if (owner.equals(group.getGroupOwner().getUsername())) {
                             setGraphic(editButton);
                             ViewUtils.addStyle(editButton, "/edit-button.css");
-                        } else {
+                        } else if (group.isExist(owner) &&  (!group.getGroupOwner().equals(owner))) {
+                            System.out.println("Owner: "+owner+ "is in group: "+group.getName());
+                            setGraphic(viewButton);
+                            ViewUtils.addStyle(viewButton, "/delete-button.css");
+                        }
+                        else {
                             setGraphic(null);
                         }
                     }
@@ -96,9 +102,16 @@ public class GroupControllerUtils {
             editButton.setOnAction(e -> {
                 Button source = (Button) e.getSource();
                 System.out.println("is button " + source);
-                edit(stage, updatedCell.getItem(), (source));
+                edit(stage, updatedCell.getItem(), source);
+            });
+            viewButton.setOnAction( e-> {
+                Button source = (Button) e.getSource();
+                System.out.println("is button " + source+", view button click");
+                view(stage, updatedCell.getItem(), source)
+                ;
             });
             ControllerUtils_v2.setDefaultAndHandCursorBehaviour(editButton);
+            ControllerUtils_v2.setDefaultAndHandCursorBehaviour(viewButton);
             return updatedCell;
 
         });
@@ -165,6 +178,13 @@ public class GroupControllerUtils {
             return updatedCell;
 
         });
+    }
+
+    public static void view(Stage stage, Group group, Button button){
+        String pageLink = "/fxml/main_pages/groups/readonly_group_page.fxml";
+        SelectedGroup selectedGroup = SelectedGroup.getInstance();
+        selectedGroup.setId(group.getId());
+        ControllerUtils_v2.goPage(stage, button, pageLink);
     }
 
     public static void edit(Stage stage, Group group, Button button) {
