@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -48,7 +47,7 @@
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label prefHeight="60.0" prefWidth="747.0" text="All Groups">
+                              <Label fx:id="allGroupsLLabel" prefHeight="60.0" prefWidth="747.0" text="All Groups">
                                  <font>
                                     <Font name="Gadugi Bold" size="20.0" />
                                  </font>

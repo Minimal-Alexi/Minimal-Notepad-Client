@@ -23,7 +23,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefWidth="802.0">
                      <children>
-                        <Label contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Edit Your Account">
+                        <Label fx:id="editYourAccountLabel" contentDisplay="BOTTOM" prefHeight="90.0" prefWidth="670.0" text="Edit Your Account">
                            <font>
                               <Font name="Dubai Medium" size="30.0" />
                            </font>
@@ -59,7 +59,7 @@
                                  <children>
                                     <VBox layoutX="-7.0" layoutY="-1.0" prefHeight="546.0" prefWidth="973.0">
                                        <children>
-                                          <Label text="Account Detail">
+                                          <Label fx:id="accountDetailLabel" text="Account Detail">
                                              <font>
                                                 <Font size="31.0" />
                                              </font>
@@ -71,9 +71,9 @@
                                                       <Font size="24.0" />
                                                    </font>
                                                 </Label>
-                                                <HBox prefHeight="33.0" prefWidth="908.0">
+                                                <HBox fx:id="emailLabel" prefHeight="33.0" prefWidth="908.0">
                                                    <children>
-                                                      <Label text="Email">
+                                                      <Label fx:id="emailLabel" text="Email">
                                                          <font>
                                                             <Font size="24.0" />
                                                          </font>
@@ -95,7 +95,7 @@
                                                 </TextField>
                                                 <HBox prefHeight="34.0" prefWidth="908.0">
                                                    <children>
-                                                      <Label text="Username">
+                                                      <Label fx:id="usernameLabel" text="Username">
                                                          <font>
                                                             <Font size="24.0" />
                                                          </font>
