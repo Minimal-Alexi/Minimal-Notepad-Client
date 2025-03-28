@@ -181,29 +181,29 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </VBox>
-             <HBox alignment="CENTER_RIGHT" prefHeight="48.0" prefWidth="894.0" spacing="20.0">
-                 <children>
+            <HBox alignment="CENTER_RIGHT" prefHeight="48.0" prefWidth="894.0" spacing="20.0">
+               <children>
                   <Button fx:id="searchReset" mnemonicParsing="false" text="Reset" />
-                     <ChoiceBox fx:id="filterChoice" prefHeight="25.0" prefWidth="196.0" />
-                     <AnchorPane prefHeight="62.0" prefWidth="210.0" stylesheets="@../../CSS/search_bar.css">
-                         <children>
-                             <TextField fx:id="searchBar" alignment="TOP_LEFT" cache="true" layoutX="1.0" layoutY="4.0" promptText="Search notes" styleClass="search-box" stylesheets="@../../CSS/table_view.css">
-                                 <opaqueInsets>
-                                     <Insets />
-                                 </opaqueInsets>
-                                 <font>
-                                     <Font size="14.0" />
-                                 </font>
-                             </TextField>
-                             <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="12.0" layoutY="13.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                             <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="11.0" layoutY="14.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
-                         </children>
-                     </AnchorPane>
-                 </children>
-                 <VBox.margin>
-                     <Insets />
-                 </VBox.margin>
-             </HBox>
+                  <ChoiceBox fx:id="filterChoice" prefHeight="25.0" prefWidth="196.0" />
+                  <AnchorPane prefHeight="62.0" prefWidth="210.0" stylesheets="@../../CSS/search_bar.css">
+                     <children>
+                        <TextField fx:id="searchBar" alignment="TOP_LEFT" cache="true" layoutX="1.0" layoutY="4.0" promptText="Search notes" styleClass="search-box" stylesheets="@../../CSS/table_view.css">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <SVGPath content="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" fill="WHITE" layoutX="12.0" layoutY="13.0" stroke="#aba6a6" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
+                        <SVGPath content="M22 22L20 20" fill="WHITE" layoutX="11.0" layoutY="14.0" stroke="#ada7a7" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="1.5" />
+                     </children>
+                  </AnchorPane>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
             <VBox>
                <children>
                   <Label fx:id="yourNotesLabel" prefHeight="35.0" prefWidth="211.0" text="Your notes">
@@ -215,14 +215,14 @@
                      </padding>
                   </Label>
                   <TableView fx:id="table" onMouseClicked="#tableClicked" prefHeight="358.0" prefWidth="894.0" stylesheets="@../../CSS/table_view.css">
-                    <columns>
+                     <columns>
                         <TableColumn fx:id="icon" prefWidth="49.066646575927734" />
                         <TableColumn fx:id="title" prefWidth="170.933349609375" text="Title" />
                         <TableColumn fx:id="group" prefWidth="182.40000915527344" text="Group" />
                         <TableColumn fx:id="owner" prefWidth="174.39996337890625" text="Owner" />
-                      <TableColumn fx:id="category" prefWidth="165.06671142578125" text="Category" />
-                      <TableColumn fx:id="createTime" prefWidth="204.2667236328125" text="Create Time" />
-                    </columns>
+                        <TableColumn fx:id="category" prefWidth="165.06671142578125" text="Category" />
+                        <TableColumn fx:id="createTime" prefWidth="204.2667236328125" text="Create Time" />
+                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
