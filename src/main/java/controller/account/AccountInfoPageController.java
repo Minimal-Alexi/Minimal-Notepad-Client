@@ -1,5 +1,6 @@
 package controller.account;
 
+import controller.PageController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,9 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import model.HttpClientSingleton;
-import model.HttpRequestBuilder;
-import model.TokenStorage;
+import model.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONException;
@@ -24,7 +23,7 @@ import static utils.MainPageServices.goToPage;
 import static utils.MainPageServices.updateLocalTime;
 
 
-public class AccountInfoPageController {
+public class AccountInfoPageController extends PageController {
 
     //FXML element
     @FXML
@@ -57,9 +56,29 @@ public class AccountInfoPageController {
     private Label generalErrLabel;
 
     @FXML
+    private Label editYourAccountLabel;
+    @FXML
+    private Label changeLanguageLabel;
+    @FXML
+    private Label accountDetailLabel;
+    @FXML
+    private Label emailLabel;
+    @FXML
+    private Label usernameLabel;
+
+
+
+
+    @FXML
     private TextField usernameInput;
     @FXML
     private TextField emailInput;
+
+    @FXML private
+    ComboBox<LanguageLabel> languageBox;
+
+    private ObservableResourceFactory RESOURCE_FACTORY ;
+    private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
 
 
     // properties
@@ -95,6 +114,16 @@ public class AccountInfoPageController {
         getUserInfo();
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+        RESOURCE_FACTORY.getResources();
+//        setupLanguageBox();
+        Utils.setupLanguageBox(
+                languageBox,
+                supportedLanguages,
+                RESOURCE_FACTORY,
+                this
+        );
+        super.updateDisplay();
     }
 
     @FXML
@@ -367,5 +396,30 @@ public class AccountInfoPageController {
 //        alert.getButtonTypes().add()
         Optional<ButtonType> result = alert.showAndWait();
         return result;
+    }
+
+    @Override
+    public void updateAllUIComponents() {
+
+    }
+
+    @Override
+    public void bindUIComponents() {
+//        textInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("prompt"));
+//        button.textProperty().bind(RESOURCE_FACTORY.getStringBinding("button"));
+//        nextBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("next"));
+        editYourAccountLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editAccountLabel"));
+        deleteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("deleteBtn"));
+        changeLanguageLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("changeLanguageLabel"));
+        accountDetailLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("accountDetailLabel"));
+        emailLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailLabel"));
+        emailInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("emailInput"));
+        usernameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameLabel"));
+        usernameInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameInput"));
+        saveBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("saveBtn"));
+        changePwdBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("changePwdBtn"));
+
+
+
     }
 }

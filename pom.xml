@@ -115,7 +115,8 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                org.metropolia.minimalnotepadclient/org.metropolia.minimalnotepadclient.HelloApplication
+<!--                              org.metropolia.minimalnotepadclient/org.metropolia.minimalnotepadclient.HelloApplication -->
+                                HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
