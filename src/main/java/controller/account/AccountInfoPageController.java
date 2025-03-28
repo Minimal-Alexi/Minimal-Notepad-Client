@@ -105,6 +105,8 @@ public class AccountInfoPageController extends PageController {
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
 
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+
         TokenStorage.getIntance();//
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
@@ -115,7 +117,6 @@ public class AccountInfoPageController extends PageController {
         getUserInfo();
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
-        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
         RESOURCE_FACTORY.getResources();
 //        setupLanguageBox();
         Utils.setupLanguageBox(
