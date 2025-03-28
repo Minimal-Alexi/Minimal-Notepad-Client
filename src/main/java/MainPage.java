@@ -6,6 +6,7 @@ public class MainPage {
         TokenStorage.getIntance();
         TokenStorage.saveToken("username", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTc0MTA5MTYxNSwiZXhwIjoxNzQxMTc4MDE1fQ.RSU0dBdoJIYPEDMGYwUYXibDDLvRUKxa193QHJoPYck");
 
+        //中文测试
         MainPageView.launch(MainPageView.class);
     }
 }
