@@ -13,11 +13,15 @@ import model.LanguageLabel;
 import model.ObservableResourceFactory;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Utils {
+    public static ObservableResourceFactory instance = ObservableResourceFactory.getInstance();
 
     public  static void gotoPage(String pageName, Button btn){
 
@@ -190,5 +194,19 @@ public class Utils {
         return selectedLanguageKey;
     }
 
+    public static SimpleDateFormat getTheCurrentLocaleDateTimeFormatString(
+            ) {
+
+        Locale currentLocale = instance.getResources().getLocale();
+        return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.FULL, currentLocale);
+    }
+
+
+    public static void displayTime(Label lblTime) {
+        String formattedTime = getTheCurrentLocaleDateTimeFormatString().format(new Date());
+        lblTime.setText(formattedTime);
+
+
+    }
 }
 

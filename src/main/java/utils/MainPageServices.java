@@ -28,6 +28,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Note;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -132,10 +133,31 @@ public class MainPageServices {
     Update the time Label
      */
     public static void updateLocalTime(Label timeLabel) {
+
+//        DateFormat currentTime = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+
+        DateFormat currentTime = Utils.getTheCurrentLocaleDateTimeFormatString();
+
+        EventHandler<ActionEvent> eventHandler = e -> {
+            // get current time
+//            Utils.
+            timeLabel.setText(currentTime.format(new Date()));
+//            Utils.displayTime(timeLabel);
+        };
+
+        Timeline animation = new Timeline(new KeyFrame(Duration.millis(1000), eventHandler));
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.play();
+    }
+
+    public static void updateLocalTime(Label timeLabel, ObservableResourceFactory RESOURCE_FACTORY) {
         DateFormat currentTime = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            timeLabel.setText(currentTime.format(new Date()));
+            // get current time
+//            Utils.
+//            timeLabel.setText(currentTime.format(new Date()));
+//            Utils.displayTime(timeLabel, RESOURCE_FACTORY);
         };
 
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(1000), eventHandler));

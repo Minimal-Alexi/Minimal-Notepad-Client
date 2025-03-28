@@ -108,6 +108,7 @@ public class AccountInfoPageController extends PageController {
         TokenStorage.getIntance();//
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
+//        updateLocalTime(localTime,RESOURCE_FACTORY);
         updateLocalTime(localTime);
         httpInstance = HttpClientSingleton.getInstance();
         httpClient = httpInstance.getHttpClient();
@@ -400,6 +401,7 @@ public class AccountInfoPageController extends PageController {
 
     @Override
     public void updateAllUIComponents() {
+        updateLocalTime(localTime);
 
     }
 
