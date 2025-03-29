@@ -439,8 +439,11 @@ public class AccountInfoPwdController {
     }
 
     private Optional<ButtonType> displayDeleteWarningDialog() {
+
         // add alert dialog
         Alert alert = new Alert(Alert.AlertType.WARNING);
+
+
         String yesTxt = "Yes";
         String noTxt = "No";
         ButtonType yesBtn = new ButtonType(yesTxt);

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -9,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
@@ -19,7 +19,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox layoutX="32.0" prefHeight="853.0" prefWidth="914.0">
+            <VBox layoutX="38.0" prefHeight="853.0" prefWidth="914.0">
                <children>
                   <HBox alignment="CENTER_LEFT" prefWidth="802.0">
                      <children>
@@ -43,110 +43,115 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </HBox>
-                  <VBox prefHeight="631.0" prefWidth="973.0">
+                  <VBox prefHeight="715.0" prefWidth="894.0">
                      <children>
-                        <VBox prefHeight="631.0" prefWidth="973.0">
+                        <AnchorPane prefHeight="47.0" prefWidth="894.0">
                            <children>
-                              <AnchorPane prefHeight="47.0" prefWidth="894.0">
+                              <Button fx:id="deleteBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="662.0" mnemonicParsing="false" onMouseClicked="#deleteBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="47.0" prefWidth="232.0" style="-fx-background-color: #FF7272;" text="Delete Account" textFill="WHITE" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #878787; -fx-border-radius: 15;">
+                           <children>
+                              <Label fx:id="changeLanguageLabel" layoutX="68.0" layoutY="47.0" prefHeight="38.0" prefWidth="332.0" text="Change your language">
+                                 <font>
+                                    <Font size="31.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="languageBox" layoutX="447.0" layoutY="46.0" prefHeight="40.0" prefWidth="150.0" promptText="English" stylesheets="@../../CSS/combobox.css" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="20.0" />
+                           </VBox.margin>
+                        </AnchorPane>
+                        <VBox prefHeight="556.0" prefWidth="894.0" style="-fx-border-color: #878787; -fx-border-width: 1; -fx-border-radius: 15;">
+                           <children>
+                              <Label fx:id="accountDetailLabel" text="Account Detail">
+                                 <font>
+                                    <Font size="31.0" />
+                                 </font>
+                              </Label>
+                              <VBox prefHeight="405.0" prefWidth="685.0">
                                  <children>
-                                    <Button fx:id="deleteBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="662.0" mnemonicParsing="false" onMouseClicked="#deleteBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="47.0" prefWidth="232.0" style="-fx-background-color: #FF7272;" text="Delete Account" textFill="WHITE" />
-                                 </children>
-                              </AnchorPane>
-                              <Pane prefHeight="546.0" prefWidth="973.0">
-                                 <VBox.margin>
-                                    <Insets bottom="220.0" left="75.0" right="102.0" top="40.0" />
-                                 </VBox.margin>
-                                 <children>
-                                    <VBox layoutX="-7.0" layoutY="-1.0" prefHeight="546.0" prefWidth="973.0">
+                                    <Label fx:id="generalErrLabel" textFill="RED">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox prefHeight="33.0" prefWidth="908.0">
                                        <children>
-                                          <Label fx:id="accountDetailLabel" text="Account Detail">
+                                          <Label fx:id="emailLabel" text="Email">
                                              <font>
-                                                <Font size="31.0" />
+                                                <Font size="24.0" />
                                              </font>
                                           </Label>
-                                          <VBox prefHeight="436.0" prefWidth="908.0">
-                                             <children>
-                                                <Label fx:id="generalErrLabel" textFill="RED">
-                                                   <font>
-                                                      <Font size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <HBox fx:id="emailLabel" prefHeight="33.0" prefWidth="908.0">
-                                                   <children>
-                                                      <Label fx:id="emailLabel" text="Email">
-                                                         <font>
-                                                            <Font size="24.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label fx:id="emailErrLabel" textFill="RED">
-                                                         <font>
-                                                            <Font size="24.0" />
-                                                         </font>
-                                                         <HBox.margin>
-                                                            <Insets left="10.0" />
-                                                         </HBox.margin>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                                <TextField fx:id="emailInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="48.0" prefWidth="535.0">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <HBox prefHeight="34.0" prefWidth="908.0">
-                                                   <children>
-                                                      <Label fx:id="usernameLabel" text="Username">
-                                                         <font>
-                                                            <Font size="24.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label fx:id="userErrLabel" textFill="RED">
-                                                         <font>
-                                                            <Font size="24.0" />
-                                                         </font>
-                                                         <HBox.margin>
-                                                            <Insets left="10.0" />
-                                                         </HBox.margin>
-                                                      </Label>
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets top="5.0" />
-                                                   </VBox.margin>
-                                                </HBox>
-                                                <TextField fx:id="usernameInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="46.0" prefWidth="535.0">
-                                                   <VBox.margin>
-                                                      <Insets top="5.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#saveBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="47.0" prefWidth="232.0" style="-fx-background-color: #a276ff;" text="Save" textFill="WHITE">
-                                                   <font>
-                                                      <Font size="31.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets top="20.0" />
-                                                   </VBox.margin>
-                                                </Button>
-                                                <Button fx:id="changePwdBtn" mnemonicParsing="false" onMouseClicked="#changePwdClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="47.0" prefWidth="300.0" style="-fx-background-color: #a276ff;" text="Change Password" textFill="WHITE">
-                                                   <font>
-                                                      <Font size="31.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets top="20.0" />
-                                                   </VBox.margin>
-                                                </Button>
-                                             </children>
-                                             <VBox.margin>
-                                                <Insets top="20.0" />
-                                             </VBox.margin>
-                                          </VBox>
+                                          <Label fx:id="emailErrLabel" textFill="RED">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Label>
                                        </children>
-                                       <padding>
-                                          <Insets bottom="63.0" left="65.0" top="20.0" />
-                                       </padding>
-                                    </VBox>
+                                    </HBox>
+                                    <TextField fx:id="emailInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="48.0" prefWidth="535.0">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <HBox prefHeight="34.0" prefWidth="908.0">
+                                       <children>
+                                          <Label fx:id="usernameLabel" text="Username">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="userErrLabel" textFill="RED">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <TextField fx:id="usernameInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="46.0" prefWidth="535.0">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#saveBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #a276ff;" text="Save" textFill="WHITE">
+                                       <font>
+                                          <Font size="31.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="changePwdBtn" mnemonicParsing="false" onMouseClicked="#changePwdClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #a276ff;" text="Change Password" textFill="WHITE">
+                                       <font>
+                                          <Font size="31.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </Button>
                                  </children>
-                              </Pane>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </VBox>
                            </children>
+                           <padding>
+                              <Insets bottom="63.0" left="65.0" top="20.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
                         </VBox>
                      </children>
                   </VBox>
