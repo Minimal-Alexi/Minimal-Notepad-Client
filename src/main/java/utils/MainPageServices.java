@@ -134,9 +134,18 @@ public class MainPageServices {
      */
     public static void updateLocalTime(Label timeLabel) {
 
-//        DateFormat currentTime = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+        DateFormat currentTime = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 
-        DateFormat currentTime = Utils.getTheCurrentLocaleDateTimeFormatString();
+        // the method from Utils will get the date time format from current locale
+        // however, there is bug with the current implementation, the date time format is not displayed correctly
+        // it shuffle between the old format and new format
+
+//        DateFormat currentTime = Utils.getTheCurrentLocaleDateTimeFormatString();
+        System.out.println(timeLabel.getUserData());
+        if (timeLabel.getUserData() instanceof Timeline) {
+//            ((Timeline) timeLabel.getUserData()).stop();
+            System.out.println("time label is instance of timeline");
+        }
 
         EventHandler<ActionEvent> eventHandler = e -> {
             // get current time

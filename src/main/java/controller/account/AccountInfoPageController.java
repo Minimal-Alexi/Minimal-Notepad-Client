@@ -1,7 +1,7 @@
 package controller.account;
 
 import controller.PageController;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,8 +18,8 @@ import utils.*;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
-import static utils.MainPageServices.goToPage;
 import static utils.MainPageServices.updateLocalTime;
 
 
@@ -87,7 +87,6 @@ public class AccountInfoPageController extends PageController {
     private Parent parent;
 //    private
 
-
     private MainPageServices mainPageServices;
     private ControllerUtils controllerUtils;
     private HttpResponseService httpResponseService;
@@ -98,12 +97,25 @@ public class AccountInfoPageController extends PageController {
     //URI API
     private static final String URI = "http://localhost:8093/api/user/";
 
+    // variable to store key of generalError key and keyValue
+    private GeneralErrorKey generalErrorKey;
+    private final String wrongEmailFormatKey = "wrongEmailFormatText";
+    private final String updateSuccessKey = "updateSuccessText";
+    private final  String unableToSaveKey = "unableToUpdateText";
+    private final String serverExceptionErrorKey = "serverExeptionText";
+    private final String serverErrorKey = "serverErrorText";
+
+
+
+
     // this method must be public so javafx can use it
     public void initialize() {
         System.out.println("start Account User Page");
         this.mainPageServices = new MainPageServices();
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
+        this.generalErrorKey = new GeneralErrorKey("");
+        this.generalErrLabel.setUserData(this.generalErrorKey);
 
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
@@ -119,13 +131,16 @@ public class AccountInfoPageController extends PageController {
 
         RESOURCE_FACTORY.getResources();
 //        setupLanguageBox();
-        Utils.setupLanguageBox(
-                languageBox,
-                supportedLanguages,
-                RESOURCE_FACTORY,
-                this
-        );
-        super.updateDisplay();
+        Platform.runLater(()->{
+            Utils.setupLanguageBox(
+                    languageBox,
+                    supportedLanguages,
+                    RESOURCE_FACTORY,
+                    this
+            );
+            super.updateDisplay();
+        });
+
     }
 
     @FXML
@@ -219,11 +234,7 @@ public class AccountInfoPageController extends PageController {
 
     //    private void handleGetUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
     private void handleGetUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
-//        JSONObject jsonObject = new JSONObject(response);
-//        JSONObject object = null;
-//        if (jsonResponse instanceof JSONObject){
-//            object = (JSONObject) jsonResponse;
-//        }
+
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
             String email = (String) object.get("email");
@@ -231,17 +242,26 @@ public class AccountInfoPageController extends PageController {
             emailInput.setText(email);
             usernameInput.setText(username);
         } catch (JSONException e) {
+            // TODO: update to use resource bundle, add key to the GeneralErrorKey
             String errMessage = (String) object.get("message");
+
+            generalErrorKey.setKey(serverExceptionErrorKey);
             displayGeneralErrMessages(errMessage);
         }
     }
 
+    // TODO: update to use resource bundle, by adding the key to the GeneralErrorKey
     private void handleInput(String email, String username) {
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
         generalErrLabel.setText("");
         if (username.equals("") || email.equals("")) {
-            displayEmptyErrorMessage(email, username);
+            displayEmptyErrorMessage();
         } else if (!controllerUtils.validEmail(email)) {
-            displayGeneralErrMessages("Wrong email format. Should follow xyz@mail.com");
+            String wrongEmailFormatMessage = rb.getString(wrongEmailFormatKey);
+            generalErrorKey.setKey(wrongEmailFormatKey);
+//            displayGeneralErrMessages("Wrong email format. Should follow xyz@mail.com");
+            displayGeneralErrMessages(wrongEmailFormatMessage);
+//            generalErrLabel.setUserData(generalErrorKey);
         } else {
             try {
                 saveUserInfo(email, username);
@@ -258,22 +278,66 @@ public class AccountInfoPageController extends PageController {
         generalErrLabel.setText("");
     }
 
+    // TODO: update to use resource bundle
     private void displayGeneralErrMessages(String errMessage) {
         resetAllErrMessages();
         this.generalErrLabel.setText(errMessage);
     }
 
-    private void displayEmptyErrorMessage(String email, String username) {
-        if (username.equals("")) {
-            this.userErrLabel.setText("Username is empty");
+    // TODO: update to use resource bundle
+    private void displayEmptyErrorMessage() {
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        String emailInputText = emailInput.getText();
+        String usernameInputText = usernameInput.getText();
+
+
+        if (usernameInputText.equals("")) {
+//            String result = MessageFormat.format(rb.getString("name"), input);
+            String userErrMessage = rb.getString("userErrLabel");
+            this.userErrLabel.setText(userErrMessage);
+//            this.userErrLabel.setText("Username is empty");
+//            String userErrMessage = rb.
         } else {
             this.userErrLabel.setText("");
         }
-        if (email.equals("")) {
-            this.emailErrLabel.setText("Email is empty");
+        if (emailInputText.equals("")) {
+            String emailErrMessage = rb.getString("emailErrLabel");
+//            this.emailErrLabel.setText("Email is empty");
+            this.emailErrLabel.setText(emailErrMessage);
 
         } else {
             this.emailErrLabel.setText("");
+        }
+    }
+
+    // TODO: add a refresh error message method when the language is changed
+    private void updateEmptyErrorMessagesWhenLanguageChange() {
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+
+        if (!userErrLabel.getText().isEmpty()) {
+            userErrLabel.setText(rb.getString("userErrLabel"));
+        }
+
+        if (!emailErrLabel.getText().isEmpty()) {
+            emailErrLabel.setText(rb.getString("emailErrLabel"));
+        }
+
+        // Add similar check if you want to localize generalErrLabel later
+    }
+
+    private void updateGeneralErrorMessageWhenLanguageChange(){
+        if ( !generalErrLabel.getText().isEmpty()){
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+//        System.out.println(generalErrLabel.getText());
+//        GeneralErrorKey errGeneralKey = (GeneralErrorKey) generalErrLabel.getUserData();
+//        String key = errGeneralKey.getKey();
+//        System.out.println("key"+key);
+//            private final String wrongEmailFormatKey = "wrongEmailFormatText";
+//            private final String updateSuccessKey = "updateSuccessText";
+//            private final  String unableToSaveKey = "unableToUpdateText";
+//            private final String serverExceptionErrorKey = "serverExeptionText";
+//            private final String serverErrorKey = "serverErrorText";
+
         }
     }
 
@@ -300,6 +364,7 @@ public class AccountInfoPageController extends PageController {
     public void handleSaveUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
 
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
         try {
 
             String statusLine = response.getStatusLine().toString();
@@ -316,18 +381,34 @@ public class AccountInfoPageController extends PageController {
                 }
 
                 // 2. if username is not the same, token in response body
+                // TODO: update to use resource bundle
                 generalErrLabel.setTextFill(Color.GREEN);
-                generalErrLabel.setText("User Information updates successfully");
+
+//                generalErrLabel.setText("User Information updates successfully");
+                String updateSuccessMessage = rb.getString(updateSuccessKey);
+                generalErrLabel.setText(updateSuccessMessage);
+                generalErrorKey.setKey(updateSuccessKey);
+//                generalErrLabel.setUserData(generalErrorKey);
 //                generalErrLabel.setTextFill(Color.RED);
             } else {
                 // get message from generic response
+
                 String message = (String) object.get("message");
+                generalErrorKey.setKey(serverErrorKey);
                 generalErrLabel.setText(message);
+//                generalErrLabel.setUserData(generalErrorKey);
             }
         } catch (JSONException e) {
-            generalErrLabel.setText("Unable to save information");
+            // TODO: update to use resource bundle
+
+//            generalErrLabel.setText("Unable to save information");
+            String unabletoSaveMessage = rb.getString("unableToSaveText");
+            generalErrorKey.setKey(unableToSaveKey);
+            generalErrLabel.setText(rb.getString(unabletoSaveMessage));
+//            generalErrLabel.setUserData(generalErrorKey);
+
         }
-//        String
+//
     }
 
     @FXML
@@ -344,17 +425,18 @@ public class AccountInfoPageController extends PageController {
 
 
 
+    // TODO: update to use resource bundle
     @FXML
     public void deleteBtnClick() {
 
-        String yesTxt = "Yes";
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+//        String yesTxt = "Yes";
+        String yesTxt =rb.getString("yesText");
 
         Optional<ButtonType> result = displayDeleteWarningDialog();
         System.out.println("result of dialog " + result.get().getText());
         if (result.get().getText().equals(yesTxt)) {
             System.out.println("Deleting user");
-
-
             HttpRequestBuilder httpRequest = new HttpRequestBuilder("DELETE", URI, true);
 
             // call this method only if you have body in your request
@@ -384,33 +466,52 @@ public class AccountInfoPageController extends PageController {
     }
 
 
+    // TODO: update to use resource bundle
     private Optional<ButtonType> displayDeleteWarningDialog() {
         // add alert dialog
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        String yesTxt = "Yes";
-        String noTxt = "No";
+
+        // TODO: replace these yes and no with the localization
+        // get the resource bundle from the RESOURCE_FACTORY
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+
+        // retrive all the yes, no , title and warning text from resource bundle
+        String yesTxt = rb.getString("yesText");
+        String noTxt = rb.getString("noText");
+        String warningTxt = rb.getString("deleteWarningText");
+        String warningTitle = rb.getString("deleteWarningTitle");
+        String warningHeader = rb.getString("deleteWarningHeader");
+
         ButtonType yesBtn = new ButtonType(yesTxt);
         ButtonType noBtn = new ButtonType(noTxt);
-        alert.setTitle("Warning");
-        alert.setContentText("Are you sure you want to delete your account?");
+        alert.setTitle(warningTitle);
+        alert.setHeaderText(warningHeader);
+        alert.setContentText(warningTxt);
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(yesBtn, noBtn);
 //        alert.getButtonTypes().add()
         Optional<ButtonType> result = alert.showAndWait();
         return result;
     }
-
+    // include in this method all the update/display methods of this controller
+    // eg: display error message, update local time, show/hide buttons
+    //
     @Override
     public void updateAllUIComponents() {
+//        resetAllErrMessages();
         updateLocalTime(localTime);
-
+//        displayEmptyErrorMessage();
+        updateEmptyErrorMessagesWhenLanguageChange();
+        updateGeneralErrorMessageWhenLanguageChange();
+//        dis
     }
 
+    // this method is used to bind the UI components with the resource bundle
+    // these UI components will be constant throughout the user session in this page
+    // example, sidebar, page title, page labels/ input, save button, etc
     @Override
     public void bindUIComponents() {
-//        textInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("prompt"));
-//        button.textProperty().bind(RESOURCE_FACTORY.getStringBinding("button"));
-//        nextBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("next"));
+
         editYourAccountLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editAccountLabel"));
         deleteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("deleteBtn"));
         changeLanguageLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("changeLanguageLabel"));
@@ -421,6 +522,7 @@ public class AccountInfoPageController extends PageController {
         usernameInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameInput"));
         saveBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("saveBtn"));
         changePwdBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("changePwdBtn"));
+
 
 
 
