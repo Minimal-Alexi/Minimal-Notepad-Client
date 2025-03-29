@@ -164,7 +164,7 @@ public class RegisterController {
             this.errPwd.setText("");
         }
         if (confirmPwd.equals("")) {
-            this.errConfirmPwd.setText("password is empty");
+            this.errConfirmPwd.setText("confirmed password is empty");
         } else {
             this.errConfirmPwd.setText("");
         }
