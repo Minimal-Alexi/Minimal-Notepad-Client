@@ -1,6 +1,7 @@
+/* src/main/resources/CSS/logout-button.css */
 .button {
     -fx-background-color:  #a276ff;
-    -fx-tẽt-fill: #FFFFFF;
+    -fx-text-fill: #FFFFFF;
     -fx-background-insets: 1,1,1;
     -fx-background-radius: 0;
     -fx-padding: 3 3 3 10;
@@ -8,12 +9,3 @@
     -fx-alignment: center;
 }
 
-/*.button:hover {*/
-/*    -fx-background-color: #A276FF;*/
-/*    -fx-text-fill: #FFFFFF;*/
-/*}*/
-
-/*.button:hover .icon {*/
-/*    -fx-fill: #FFFFFF;*/
-/*    -fx-stroke: derive(#A276FF, 30%);*/
-/*}*/

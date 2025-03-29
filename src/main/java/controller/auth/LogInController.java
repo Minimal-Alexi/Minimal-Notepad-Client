@@ -244,8 +244,6 @@ public class LogInController {
         HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-
-
         httpResponseService.handleReponse(httpPost, httpClient, this::handleLoginReponse);
 
 
