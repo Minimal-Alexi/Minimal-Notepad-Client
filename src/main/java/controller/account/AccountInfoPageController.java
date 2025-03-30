@@ -522,9 +522,5 @@ public class AccountInfoPageController extends PageController {
         usernameInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameInput"));
         saveBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("saveBtn"));
         changePwdBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("changePwdBtn"));
-
-
-
-
     }
 }

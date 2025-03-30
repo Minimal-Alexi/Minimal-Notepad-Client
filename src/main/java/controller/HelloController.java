@@ -1,33 +1,41 @@
 package controller;
 
+import controller.PageController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.LanguageLabel;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import utils.ControllerUtils;
 import utils.ControllerUtils_v2;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class HelloController {
+public class HelloController extends PageController {
     private static final Log log = LogFactory.getLog(HelloController.class);
     @FXML
     private Label logIn;
 
     @FXML
     private Label registerLabel;
+    @FXML
+    private Label accountExistCheckLabel;
 
     @FXML
     private ImageView imageView;
@@ -38,6 +46,10 @@ public class HelloController {
     private Stage stage;
     private ControllerUtils controllerUtil;
 
+    @FXML private
+    ComboBox<LanguageLabel> languageBox;
+    private ObservableResourceFactory RESOURCE_FACTORY ;
+    private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
 
     @FXML
     protected void loginClicked() {
@@ -80,6 +92,20 @@ public class HelloController {
     public void initialize() {
         TokenStorage.getIntance();
         this.controllerUtil = new ControllerUtils();
+
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+
+        RESOURCE_FACTORY.getResources();
+//        setupLanguageBox();
+        Platform.runLater(()->{
+            Utils.setupLanguageBox(
+                    languageBox,
+                    supportedLanguages,
+                    RESOURCE_FACTORY,
+                    this
+            );
+            super.updateDisplay();
+        });
     }
 
     private Stage getStage() {
@@ -104,4 +130,14 @@ public class HelloController {
     }
 
 
+    @Override
+    public void updateAllUIComponents() {
+
+    }
+    @Override
+    public void bindUIComponents() {
+        logIn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("logInNowLabel"));
+        registerLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerHereLabel"));
+        accountExistCheckLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("doyouHaveLabel"));
+    }
 }
