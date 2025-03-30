@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -13,27 +15,39 @@
    <children>
       <AnchorPane>
          <children>
-            <ImageView fx:id="imageView" fitHeight="600.0" fitWidth="745.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imageView" fitHeight="696.0" fitWidth="774.0" layoutX="-104.0" layoutY="-95.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/MinimalHelloPage.png" />
                </image>
             </ImageView>
-            <VBox fx:id="loginVBox" layoutX="465.0" layoutY="482.0" prefHeight="80.0" prefWidth="260.0">
+            <VBox fx:id="loginVBox" layoutX="373.0" layoutY="482.0" prefHeight="80.0" prefWidth="352.0">
                <children>
-                  <Label fx:id="logIn" onMouseClicked="#loginClicked" onMouseEntered="#loginMouseEnter" onMouseExited="#loginMouseExit" prefHeight="64.0" prefWidth="268.0" text="Log In Now...">
+                  <Label fx:id="logIn" onMouseClicked="#loginClicked" onMouseEntered="#loginMouseEnter" onMouseExited="#loginMouseExit" prefHeight="50.0" prefWidth="342.0" text="Log In Now...">
                      <font>
                         <Font size="40.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
                   </Label>
                   <HBox prefHeight="101.0" prefWidth="111.0">
                      <children>
-                        <Label text="Do not have an account? " />
-                        <Label fx:id="registerLabel" onMouseClicked="#registerLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" text="Register here" />
+                        <Label fx:id="accountExistCheckLabel" onMouseClicked="#registerLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" text="Do not have an account? ">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin></Label>
+                        <Label fx:id="registerLabel" onMouseClicked="#registerLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" text="Register here">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
                      </children>
                   </HBox>
                </children>
             </VBox>
+            <ComboBox fx:id="languageBox" layoutX="520.0" layoutY="10.0" prefHeight="40.0" prefWidth="150.0" promptText="English" stylesheets="@../CSS/combobox.css" />
          </children>
       </AnchorPane>
+      <AnchorPane layoutX="132.0" layoutY="27.0" prefHeight="200.0" prefWidth="200.0" />
    </children>
 </Pane>
