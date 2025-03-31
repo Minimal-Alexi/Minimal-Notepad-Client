@@ -30,6 +30,7 @@ import java.util.List;
 
 import static utils.GroupServices.findGroupById;
 import static utils.GroupServices.updateGroup;
+import static utils.MainPageServices.setSidebarLanguages;
 
 public class GroupInfoEditController {
 
@@ -178,6 +179,10 @@ public class GroupInfoEditController {
         //        updateTableView();
         // Optional: You can refresh the table or set listeners here if necessary
         //setUpTableListeners();
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
     }
 
     public void getGroupUserInfoByGroupId() {

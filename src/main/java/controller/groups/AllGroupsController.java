@@ -20,6 +20,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static utils.MainPageServices.setSidebarLanguages;
+
 public class AllGroupsController implements Initializable {
 
 
@@ -111,6 +113,10 @@ public class AllGroupsController implements Initializable {
         actionOneCol=GroupControllerUtils.addGroupColumn(groupTable,"");
         actionTwoCol=GroupControllerUtils.addGroupColumn(groupTable,"");
         GroupControllerUtils.updateTableView(stage,actionOneCol,actionTwoCol,httpResponseService,this::handleGetAllGroups, this::handleJoinOrLeaveOrDeleteResponse);
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
     }
 
 

@@ -90,6 +90,9 @@ public class CreateNoteController {
         updateNameLabel(nameLabel, TokenStorage.getUser());
         colorSetUp();
         groupSharingFetching();
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {

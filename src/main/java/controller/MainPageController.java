@@ -12,10 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import model.HttpRequestBuilder;
-import model.Note;
+import model.*;
 import model.selected.SelectedNote;
-import model.TokenStorage;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -91,6 +89,10 @@ public class MainPageController {
     private ArrayList<Note> noteArrayList;
     private HashMap<Integer, String> categoryList;
 
+    // set language
+    // private ObservableResourceFactory RESOURCE_FACTORY ;
+    // private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
+
 
     public void initialize() {
         this.controllerUtils = new ControllerUtils();
@@ -113,6 +115,9 @@ public class MainPageController {
         searchBarSetup();
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
     }
 
     /*

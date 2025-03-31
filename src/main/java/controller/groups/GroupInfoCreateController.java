@@ -23,6 +23,8 @@ import utils.*;
 
 import java.io.IOException;
 
+import static utils.MainPageServices.setSidebarLanguages;
+
 
 public class GroupInfoCreateController {
 
@@ -108,6 +110,10 @@ public class GroupInfoCreateController {
             ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
         }
+
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
 
     }
 

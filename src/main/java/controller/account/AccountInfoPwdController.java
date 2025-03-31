@@ -20,8 +20,7 @@ import utils.*;
 import java.io.IOException;
 import java.util.Optional;
 
-import static utils.MainPageServices.goToPage;
-import static utils.MainPageServices.updateLocalTime;
+import static utils.MainPageServices.*;
 
 public class AccountInfoPwdController {
 
@@ -106,6 +105,9 @@ public class AccountInfoPwdController {
         httpInstance = HttpClientSingleton.getInstance();
         httpClient = httpInstance.getHttpClient();
 //        getUserInfo();
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
     }
 
     @FXML

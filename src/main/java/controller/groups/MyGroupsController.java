@@ -16,6 +16,8 @@ import utils.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utils.MainPageServices.setSidebarLanguages;
+
 
 public class MyGroupsController {
 
@@ -184,6 +186,10 @@ public class MyGroupsController {
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/table_view.css").toExternalForm());
 //        logOutBtn.getStylesheets().add(g)
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
     }
 
     // handler of action buttons in joined table

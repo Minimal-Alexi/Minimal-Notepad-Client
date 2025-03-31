@@ -91,6 +91,9 @@ public class MyGroupsNotesController {
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
 
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
     }
 
     /*

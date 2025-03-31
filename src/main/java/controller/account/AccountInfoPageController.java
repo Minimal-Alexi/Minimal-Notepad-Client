@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static utils.MainPageServices.setSidebarLanguages;
 import static utils.MainPageServices.updateLocalTime;
 
 
@@ -140,6 +141,10 @@ public class AccountInfoPageController extends PageController {
             );
             super.updateDisplay();
         });
+
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
 
     }
 
@@ -504,6 +509,10 @@ public class AccountInfoPageController extends PageController {
         updateEmptyErrorMessagesWhenLanguageChange();
         updateGeneralErrorMessageWhenLanguageChange();
 //        dis
+
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
     }
 
     // this method is used to bind the UI components with the resource bundle

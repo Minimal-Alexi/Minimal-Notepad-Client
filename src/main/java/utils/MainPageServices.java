@@ -8,14 +8,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +25,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.LanguageLabel;
 import model.Note;
 import model.ObservableResourceFactory;
 import model.TokenStorage;
@@ -115,7 +114,7 @@ public class MainPageServices {
                             timestampToString(noteJson.getString("updatedAt")),
                             noteJson.getJSONObject("user").getString("username"),
                             -1,
-                            noteJson.isNull("group")? "N/A" : noteJson.getJSONObject("group").getString("name"),
+                            noteJson.isNull("group") ? "N/A" : noteJson.getJSONObject("group").getString("name"),
                             jsonArrayToHashMap(noteJson.getJSONArray("categoriesList")),
                             jsonArrayToFigureList(noteJson.getJSONArray("figures"))
                     );
@@ -308,5 +307,24 @@ public class MainPageServices {
             jsonArray.put(jsonObject);
         }
         return jsonArray;
+    }
+
+    // Set language of sidebars
+    public static void setSidebarLanguages(Button myNotesBtn,
+                                           Button shareNotesBtn,
+                                           Button myGroupsBtn,
+                                           Button allGroupsBtn,
+                                           Button accountBtn,
+                                           Button logOutBtn) {
+        ObservableResourceFactory RESOURCE_FACTORY;
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+        RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        myNotesBtn.setText(rb.getString("sidebarMyNotes"));
+        shareNotesBtn.setText(rb.getString("sidebarMyGroupsNotes"));
+        myGroupsBtn.setText(rb.getString("sidebarMyGroups"));
+        allGroupsBtn.setText(rb.getString("sidebarAllGroups"));
+        accountBtn.setText(rb.getString("sidebarAccount"));
+        logOutBtn.setText(rb.getString("sidebarLogOut"));
     }
 }

@@ -152,6 +152,9 @@ public class EditNoteController {
             });
         });
 
+        // set sidebar language
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
