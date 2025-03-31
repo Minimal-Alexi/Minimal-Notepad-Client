@@ -1,5 +1,7 @@
 package controller.account;
 
+import controller.PageController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -10,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.HttpClientSingleton;
 import model.HttpRequestBuilder;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -22,7 +25,7 @@ import java.util.Optional;
 
 import static utils.MainPageServices.*;
 
-public class AccountInfoPwdController {
+public class AccountInfoPwdController extends PageController {
 
     @FXML
     private PasswordField curPwdInput;
@@ -69,6 +72,19 @@ public class AccountInfoPwdController {
     @FXML
     private Button logOutBtn;
 
+    @FXML
+    private Label editAccountLabel;
+    @FXML
+    private Label changePasswordLabel;
+    @FXML
+    private Label curPasswordLabel;
+    @FXML
+    private Label newPwdLabel;
+    @FXML
+    private Label repeatPwdLabel;
+
+
+
 
     // properties
     private Stage stage;
@@ -86,6 +102,7 @@ public class AccountInfoPwdController {
     private HttpClientSingleton httpInstance;
     private CloseableHttpClient httpClient;
 
+    private ObservableResourceFactory RESOURCE_FACTORY;
 
     //URI API
     private static final String URI = "http://localhost:8093/api/user/";
@@ -95,6 +112,7 @@ public class AccountInfoPwdController {
         this.mainPageServices = new MainPageServices();
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         TokenStorage.getIntance();//
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
@@ -108,6 +126,8 @@ public class AccountInfoPwdController {
 
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
+        Platform.runLater(super::updateDisplay);
     }
 
     @FXML
@@ -457,6 +477,24 @@ public class AccountInfoPwdController {
 //        alert.getButtonTypes().add()
         Optional<ButtonType> result = alert.showAndWait();
         return result;
+    }
+
+    @Override
+    public void updateAllUIComponents() {
+
+    }
+
+    @Override
+    public void bindUIComponents() {
+        editAccountLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editAccountLabel"));
+        deleteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("deleteBtn"));
+        changePasswordLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("changePasswordLabel"));
+        curPasswordLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("curPasswordLabel"));
+        curPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("curPwdInput"));
+        newPwdLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("newPwdLabel"));
+        newPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("newPwdInput"));
+        repeatPwdLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("repeatPwdLabel"));
+        repeatPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("repeatPwdInput"));
     }
 }
 
