@@ -22,6 +22,7 @@ import utils.*;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static utils.MainPageServices.*;
 
@@ -133,7 +134,8 @@ public class AccountInfoPwdController extends PageController {
     @FXML
     public void deleteBtnClick() throws IOException {
         String yesTxt = "Yes";
-        Optional<ButtonType> result = displayDeleteWarningDialog();
+//        Optional<ButtonType> result = displayDeleteWarningDialog();
+        Optional<ButtonType> result = Utils.displayDeleteWarningDialog();
         System.out.println("result of dialog " + result.get().getText());
         if (result.get().getText().equals(yesTxt)) {
             System.out.println("Deleting user");
@@ -281,26 +283,7 @@ public class AccountInfoPwdController extends PageController {
     // must add IOException
     private void saveUserPwd(String curPwd, String newPwd, String repeatNewPwd) throws IOException {
         resetAllErrMessages();
-//        String URI = ""
 
-//        String token = TokenStorage.getToken();
-//        HttpPut httpPut = new HttpPut(URI + "change-password");
-//        httpPut.addHeader("Accept", "application/json");
-//        httpPut.addHeader("Content-Type", "application/json");
-//        httpPut.addHeader("Authorization", "Bearer " + token);
-//
-//        JSONObject json = new JSONObject();
-////        {
-////            "oldPassword":"123",
-////                "newPassword":"333",
-////                "confirmPassword":"333"
-////        }
-//        json.put("oldPassword", curPwd);
-//        json.put("newPassword", newPwd);
-//        json.put("confirmPassword", repeatNewPwd);
-//
-//        StringEntity entity = new StringEntity(json.toString());
-//        httpPut.setEntity(entity);
 
         String changwPwdURI = URI + "change-password";
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("PUT", changwPwdURI, true);
@@ -319,31 +302,6 @@ public class AccountInfoPwdController extends PageController {
         HttpRequestBase httpPut = httpRequest.getHttpRequest();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-//        new Thread(() -> {
-//            try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
-//                HttpEntity responseEntity = response.getEntity();
-//                String data = EntityUtils.toString(responseEntity);
-//                JSONObject jsonResponse = new JSONObject(data);
-//                EntityUtils.consume(responseEntity);
-//                // Do more processing here...
-//                String statusLine = response.getStatusLine().toString();
-//                System.out.println("json " + jsonResponse);
-//                System.out.println("response " + responseEntity);
-//                System.out.println("status code " + statusLine);
-//                Platform.runLater(() -> {
-//                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-//                    TokenStorage.saveInfo("password",newPwd);
-//                    handleSaveUserinfoResponse(response,jsonResponse);
-//                });
-//            } catch (IOException e) {
-//                Alert a = new Alert(Alert.AlertType.ERROR);
-//                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-//                a.show();
-//            } catch (JSONException e) {
-////                e.setStackTrace();
-//                generalErrLabel.setText(e.getMessage());
-//            }
-//        }).start();
         this.httpResponseService.handleReponse(httpPut, httpClient, this::handleSaveUserinfoResponse);
         // after the update info successfully, do does below
 //        TokenStorage.saveInfo("password", newPwd);
@@ -376,77 +334,56 @@ public class AccountInfoPwdController extends PageController {
         return newPwd.equals(repeatNewPwd);
     }
 
+
+    private String getEmptyCurPwdErrorMessage() {
+        return RESOURCE_FACTORY.getResources().getString("errCurPwdLabel");
+    }
+
+    private String getEmptyNewPwdErrorMessage(){
+        return RESOURCE_FACTORY.getResources().getString("errNewPwdLabel");
+    }
+
+    private String getRepeatNewPwdErrorMessage(){
+        return RESOURCE_FACTORY.getResources().getString("errRepeatPwd");
+    }
+
     private void displayEmptyErrorMessage(String curPwd, String newPwd, String repeatNewPwd) {
         if (curPwd.equals("")) {
-            this.errCurPwd.setText("This field cannot be empty");
+            this.errCurPwd.setText(getEmptyCurPwdErrorMessage());
         } else {
             this.errCurPwd.setText("");
         }
         if (newPwd.equals("")) {
-            this.errNewPwd.setText("This field cannot be empty");
+            this.errNewPwd.setText(getEmptyNewPwdErrorMessage());
 
         } else {
             this.errNewPwd.setText("");
         }
         if (repeatNewPwd.equals("")) {
-            this.errRepeatPwd.setText("This field cannot be empty");
+            this.errRepeatPwd.setText(getRepeatNewPwdErrorMessage());
 
         } else {
             this.errRepeatPwd.setText("");
         }
 
     }
-//
-//    private void getUserInfo() {
-//        String username = TokenStorage.getUser();
-//        String token = TokenStorage.getToken();
-////        String URI = "http://localhost:8093/api/user/";
-//        HttpGet httpGet = new HttpGet(URI);
-//        httpGet.addHeader("Accept", "application/json");
-//        httpGet.addHeader("Content-Type", "application/json");
-//        httpGet.addHeader("Authorization", "Bearer " + token);
-//
-////        JSONObject json = new JSONObject();
-////        json.put("username",)
-////        httpResponseService.handleReponse(httpGet);
-//        new Thread(() -> {
-//            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-//                HttpEntity responseEntity = response.getEntity();
-//                String data = EntityUtils.toString(responseEntity);
-//                JSONObject jsonResponse = new JSONObject(data);
-//                EntityUtils.consume(responseEntity);
-//                // Do more processing here...
-//                StatusLine statusLine = response.getStatusLine();
-//                System.out.println("json " + jsonResponse);
-//                System.out.println("response " + responseEntity);
-//                System.out.println("status code " + statusLine);
-//                Platform.runLater(() -> {
-//                    // the callback response from controller using this method, the callback will extract the response and update the GUI of the controller
-////                    callback.handleResponse(response, jsonResponse);
-//                    handleGetUserInfoResponse(jsonResponse);
-//                });
-//            } catch (IOException e) {
-//                Alert a = new Alert(Alert.AlertType.ERROR);
-//                a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
-//                a.show();
-//            }
-//        }).start();
-//    }
-//
-//    private void handleGetUserInfoResponse(JSONObject jsonResponse) {
-////        JSONObject jsonObject = new JSONObject(response);
-//        try {
-////            String email = (String) jsonResponse.get("email");
-////            String username = (String) jsonResponse.get("username");
-//            String password = (String) jsonResponse.get("password");
-//            System.out.println("Current password: " + password);
-//            curPwdInput.setText(password);
-////            usernameInput.setText(username);
-//        } catch (JSONException e) {
-//            String errMessage = (String) jsonResponse.get("message");
-//            displayGeneralErrMessages(errMessage);
-//        }
-//    }
+    private void updateEmptyErrorMessagesWhenLanguageChange() {
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+
+        if (!errCurPwd.getText().isEmpty()) {
+            errCurPwd.setText(getEmptyCurPwdErrorMessage());
+        }
+
+        if (!errNewPwd.getText().isEmpty()) {
+            errNewPwd.setText(getEmptyNewPwdErrorMessage());
+        }
+
+        if (!errRepeatPwd.getText().isEmpty()) {
+            errRepeatPwd.setText(getRepeatNewPwdErrorMessage());
+        }
+
+        // Add similar check if you want to localize generalErrLabel later
+    }
 
     private void resetAllErrMessages() {
         generalErrLabel.setTextFill(Color.RED);
@@ -460,28 +397,9 @@ public class AccountInfoPwdController extends PageController {
         this.generalErrLabel.setText(errMessage);
     }
 
-    private Optional<ButtonType> displayDeleteWarningDialog() {
-
-        // add alert dialog
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-
-
-        String yesTxt = "Yes";
-        String noTxt = "No";
-        ButtonType yesBtn = new ButtonType(yesTxt);
-        ButtonType noBtn = new ButtonType(noTxt);
-        alert.setTitle("Warning");
-        alert.setContentText("Are you sure you want to delete your account?");
-        alert.getButtonTypes().clear();
-        alert.getButtonTypes().addAll(yesBtn, noBtn);
-//        alert.getButtonTypes().add()
-        Optional<ButtonType> result = alert.showAndWait();
-        return result;
-    }
-
     @Override
     public void updateAllUIComponents() {
-
+        updateEmptyErrorMessagesWhenLanguageChange();
     }
 
     @Override

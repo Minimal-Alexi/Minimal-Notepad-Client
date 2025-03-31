@@ -18,10 +18,11 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Utils {
-    public static ObservableResourceFactory instance = ObservableResourceFactory.getInstance();
+    public static ObservableResourceFactory RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
     public  static void gotoPage(String pageName, Button btn){
 
@@ -197,7 +198,7 @@ public class Utils {
     }
 
     public static SimpleDateFormat getTheCurrentLocaleDateTimeFormatString() {
-        Locale currentLocale = instance.getResources().getLocale();
+        Locale currentLocale = RESOURCE_FACTORY.getResources().getLocale();
         return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, currentLocale);
     }
 
@@ -206,6 +207,33 @@ public class Utils {
         String formattedTime = getTheCurrentLocaleDateTimeFormatString().format(new Date());
         lblTime.setText(formattedTime);
 
+    }
+
+    public static Optional<ButtonType> displayDeleteWarningDialog() {
+        // add alert dialog
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+
+        // TODO: replace these yes and no with the localization
+        // get the resource bundle from the RESOURCE_FACTORY
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+
+        // retrive all the yes, no , title and warning text from resource bundle
+        String yesTxt = rb.getString("yesText");
+        String noTxt = rb.getString("noText");
+        String warningTxt = rb.getString("deleteWarningText");
+        String warningTitle = rb.getString("deleteWarningTitle");
+        String warningHeader = rb.getString("deleteWarningHeader");
+
+        ButtonType yesBtn = new ButtonType(yesTxt);
+        ButtonType noBtn = new ButtonType(noTxt);
+        alert.setTitle(warningTitle);
+        alert.setHeaderText(warningHeader);
+        alert.setContentText(warningTxt);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(yesBtn, noBtn);
+//        alert.getButtonTypes().add()
+        Optional<ButtonType> result = alert.showAndWait();
+        return result;
     }
 }
 
