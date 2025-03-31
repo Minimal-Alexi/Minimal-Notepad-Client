@@ -3,9 +3,8 @@ package controller.auth;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import controller.PageController;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -14,6 +13,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.HttpRequestBuilder;
+import model.LanguageLabel;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -23,13 +24,14 @@ import org.json.JSONObject;
 import utils.ControllerUtils;
 import utils.HttpResponseService;
 import utils.HttpResponseServiceImpl;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class RegisterController {
+public class RegisterController extends PageController {
     @FXML
     private BorderPane registerPage;
 
@@ -37,6 +39,12 @@ public class RegisterController {
     private Text errGeneral;
     @FXML
     private Text errEmail;
+    @FXML
+    private Text emailText;
+
+    @FXML
+    private Text usernameText;
+
     @FXML
     private Text errUser;
     @FXML
@@ -58,6 +66,9 @@ public class RegisterController {
     private PasswordField confirmPwdInput;
     @FXML
     private TextField unmaskedConfirmPwdInput;
+    @FXML
+    private Text alreadyHaveAccount;
+
 
     @FXML
     private Button registerBtn;
@@ -75,6 +86,20 @@ public class RegisterController {
     private AnchorPane maskedPane;
     @FXML
     private AnchorPane unmaskedPane;
+    @FXML
+    private Text welcomeText;
+    @FXML
+    private Text registerTo;
+    @FXML
+    private Text noteApp;
+
+    @FXML
+    private Text passwordText;
+    @FXML
+    private Text confirmPwdText;
+
+
+
 
     @FXML
     private StackPane confirmPwdStackPane;
@@ -94,12 +119,20 @@ public class RegisterController {
 
     private boolean pwdIsHidden;
     private boolean confirmPwdIsHidden;
+    private ObservableResourceFactory RESOURCE_FACTORY ;
+    private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
 
     public void initialize() {
-        controllerUtil = new ControllerUtils();
+        TokenStorage.getIntance();
+        this.controllerUtil = new ControllerUtils();
         httpResponseService = new HttpResponseServiceImpl();
         pwdIsHidden = true;
         confirmPwdIsHidden = true;
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+
+        RESOURCE_FACTORY.getResources();
+
+        Platform.runLater(()-> super.updateDisplay());
     }
 
     @FXML
@@ -265,7 +298,7 @@ public class RegisterController {
     }
 
 
-    // each controller must implemnt its own reponse as callback when work with httpResponse method
+    // each controller must implement its own response as callback when work with httpResponse method
     private void handleRegisterResponse(CloseableHttpResponse response, Object jsonResponse) {
         JSONObject object = controllerUtil.toJSonObject(jsonResponse);
 
@@ -434,4 +467,35 @@ public class RegisterController {
         }
         return password;
     }
+
+    @Override
+    public void updateAllUIComponents() {
+    }
+
+    @Override
+    public void bindUIComponents() {
+        welcomeText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("welcomeText"));
+        registerTo.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerTo"));
+        noteApp.textProperty().bind(RESOURCE_FACTORY.getStringBinding("noteApp"));
+        //errGeneral.textProperty().bind(RESOURCE_FACTORY.getStringBinding(""));
+        emailText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailText"));
+        emailInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailInputPrompt"));
+        //errPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
+        //errConfirmPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
+        usernameText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameText"));
+        passwordText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
+        confirmPwdText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("confirmPwdText"));
+
+        unmaskedPwdInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedPwdInputPrompt"));
+        unmaskedConfirmPwdInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedConfirmPwdInputPrompt"));
+        alreadyHaveAccount.textProperty().bind(RESOURCE_FACTORY.getStringBinding("alreadyHaveAccount"));
+        userInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
+        registerBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerLabel"));
+        backBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("backBtn"));
+    }
+
+
+
+
 }
+

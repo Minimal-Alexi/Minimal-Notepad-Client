@@ -27,6 +27,9 @@ import utils.Utils;
 import java.io.IOException;
 import java.util.Objects;
 
+import static utils.MainPageServices.setSidebarLanguages;
+import static utils.MainPageServices.updateLocalTime;
+
 public class HelloController extends PageController {
     private static final Log log = LogFactory.getLog(HelloController.class);
     @FXML
@@ -132,7 +135,6 @@ public class HelloController extends PageController {
 
     @Override
     public void updateAllUIComponents() {
-
     }
     @Override
     public void bindUIComponents() {

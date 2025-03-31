@@ -95,6 +95,8 @@ public class Utils {
 
                 // call the UI update function from the page
                 pageController.updateAllUIComponents();
+
+                pageController.bindUIComponents();      // Rebind labels
 //                updateNameLabelIfInputExists();
             }
         });

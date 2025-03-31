@@ -10,4 +10,6 @@ public abstract class PageController {
     public abstract void updateAllUIComponents();
 
     public abstract  void bindUIComponents();
+
+
 }
