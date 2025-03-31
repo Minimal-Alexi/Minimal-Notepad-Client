@@ -438,7 +438,8 @@ public class AccountInfoPageController extends PageController {
 //        String yesTxt = "Yes";
         String yesTxt =rb.getString("yesText");
 
-        Optional<ButtonType> result = displayDeleteWarningDialog();
+//        Optional<ButtonType> result = displayDeleteWarningDialog();
+        Optional<ButtonType> result = Utils.displayDeleteWarningDialog();
         System.out.println("result of dialog " + result.get().getText());
         if (result.get().getText().equals(yesTxt)) {
             System.out.println("Deleting user");
@@ -470,34 +471,7 @@ public class AccountInfoPageController extends PageController {
         }
     }
 
-
-    // TODO: update to use resource bundle
-    private Optional<ButtonType> displayDeleteWarningDialog() {
-        // add alert dialog
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-
-        // TODO: replace these yes and no with the localization
-        // get the resource bundle from the RESOURCE_FACTORY
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
-
-        // retrive all the yes, no , title and warning text from resource bundle
-        String yesTxt = rb.getString("yesText");
-        String noTxt = rb.getString("noText");
-        String warningTxt = rb.getString("deleteWarningText");
-        String warningTitle = rb.getString("deleteWarningTitle");
-        String warningHeader = rb.getString("deleteWarningHeader");
-
-        ButtonType yesBtn = new ButtonType(yesTxt);
-        ButtonType noBtn = new ButtonType(noTxt);
-        alert.setTitle(warningTitle);
-        alert.setHeaderText(warningHeader);
-        alert.setContentText(warningTxt);
-        alert.getButtonTypes().clear();
-        alert.getButtonTypes().addAll(yesBtn, noBtn);
-//        alert.getButtonTypes().add()
-        Optional<ButtonType> result = alert.showAndWait();
-        return result;
-    }
+//
     // include in this method all the update/display methods of this controller
     // eg: display error message, update local time, show/hide buttons
     //
@@ -521,7 +495,7 @@ public class AccountInfoPageController extends PageController {
     @Override
     public void bindUIComponents() {
 
-        editYourAccountLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editAccountLabel"));
+        editYourAccountLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editYourAccountLabel"));
         deleteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("deleteBtn"));
         changeLanguageLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("changeLanguageLabel"));
         accountDetailLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("accountDetailLabel"));

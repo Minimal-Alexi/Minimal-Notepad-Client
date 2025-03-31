@@ -1,5 +1,7 @@
 package controller.groups;
 
+import controller.PageController;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,7 +25,7 @@ import java.util.ResourceBundle;
 import static utils.MainPageServices.setSidebarLanguages;
 import static utils.MainPageServices.updateNameLabel;
 
-public class AllGroupsController implements Initializable {
+public class AllGroupsController extends PageController implements Initializable {
 
 
     //sidebar
@@ -62,6 +64,10 @@ public class AllGroupsController implements Initializable {
     @FXML
     private BorderPane root;
 
+    @FXML
+    private Label allGroupsLabel;
+
+
 
     // properties
     private Stage stage;
@@ -75,6 +81,9 @@ public class AllGroupsController implements Initializable {
 
     private ControllerUtils controllerUtils;
     private HttpResponseService httpResponseService;
+
+    private ObservableResourceFactory RESOURCE_FACTORY;
+
     //    private HttpClientSingleton httpInstance;
     TableColumn<Group, Group> actionOneCol;
     TableColumn<Group, Group> actionTwoCol;
@@ -89,12 +98,17 @@ public class AllGroupsController implements Initializable {
     private static final String FXMLSource = "/fxml";
     private static final String CSSSOURCE = "/CSS";
 
+
+//myTableView.setPlaceholder(new Label("My table is empty message"));
+
+
     public void initialize(URL location, ResourceBundle resourceBundle) {
         System.out.println("start Create Group  Page");
 
         System.out.println("scene " + scene);
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         TokenStorage.getIntance();//
         String username = TokenStorage.getUser();
@@ -117,7 +131,7 @@ public class AllGroupsController implements Initializable {
 
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
-
+        Platform.runLater(super::updateDisplay);
     }
 
 
@@ -207,5 +221,16 @@ public class AllGroupsController implements Initializable {
     }
 
 
+    @Override
+    public void updateAllUIComponents() {
 
+    }
+
+    @Override
+    public void bindUIComponents() {
+        allGroupsLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("allGroupsLLabel"));
+        groupNameCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("groupNameCol"));
+        ownerCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("ownerCol"));
+        numOfMembersCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("numOfMembersCol"));
+    }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,20 +21,18 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import utils.ControllerUtils;
-import utils.ControllerUtils_v2;
-import utils.HttpResponseService;
-import utils.HttpResponseServiceImpl;
+import utils.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static utils.MainPageServices.*;
 import static utils.NoteJson.JsonToNote;
 import static utils.NoteJson.NoteToJson;
 
-public class MainPageController {
+public class MainPageController extends PageController {
 
     @FXML
     private Label localTime;
@@ -83,6 +82,15 @@ public class MainPageController {
     @FXML
     private Button logOutBtn;
 
+    @FXML
+    private Label recentlyEditedLabel;
+    @FXML
+    private Label yourNotesLabel;
+    @FXML
+    private Button newNoteBtn;
+
+
+
     private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
     private ObservableList<Note> noteObservableList;
@@ -90,13 +98,15 @@ public class MainPageController {
     private HashMap<Integer, String> categoryList;
 
     // set language
-    // private ObservableResourceFactory RESOURCE_FACTORY ;
+     private ObservableResourceFactory RESOURCE_FACTORY ;
     // private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
 
 
     public void initialize() {
         this.controllerUtils = new ControllerUtils();
         this.responseService = new HttpResponseServiceImpl();
+
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         noteObservableList = FXCollections.observableArrayList();
         noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
@@ -109,7 +119,7 @@ public class MainPageController {
         updateNoteTable(noteObservableList, table, title, group, owner, category, createTime, icon);
 
         if (noteArrayList != null) {
-            updateRecentlyEdited(recentlyEditedHBox, noteArrayList);
+            updateRecentlyEdited(recentlyEditedHBox, noteArrayList, RESOURCE_FACTORY);
         }
         filterChoiceSetup();
         searchBarSetup();
@@ -118,6 +128,8 @@ public class MainPageController {
 
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+        // localize happen
+        Platform.runLater(super::updateDisplay);
     }
 
     /*
@@ -340,5 +352,30 @@ public class MainPageController {
             }
         }
         return -1;
+    }
+
+    private void updateEdittedTimeLabel(){
+        SimpleDateFormat currentTimeFormat = Utils.getTheCurrentLocaleDateTimeFormatString();
+        String edittedTimeStr = RESOURCE_FACTORY.getResources().getString("edittedTime");
+
+    }
+
+    @Override
+    public void updateAllUIComponents() {
+
+    }
+
+    @Override
+    public void bindUIComponents() {
+        recentlyEditedLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("edited"));
+        newNoteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("newNote"));
+        searchReset.textProperty().bind(RESOURCE_FACTORY.getStringBinding("reset"));
+        searchBar.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("searchBar"));
+        yourNotesLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("yourNotes"));
+        title.textProperty().bind(RESOURCE_FACTORY.getStringBinding("titleColName"));
+        group.textProperty().bind(RESOURCE_FACTORY.getStringBinding("groupColName"));
+        owner.textProperty().bind(RESOURCE_FACTORY.getStringBinding("OwnerColName"));
+        category.textProperty().bind(RESOURCE_FACTORY.getStringBinding("CategoryColName"));
+        createTime.textProperty().bind(RESOURCE_FACTORY.getStringBinding("CreateTimeColName"));
     }
 }

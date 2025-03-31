@@ -47,7 +47,7 @@
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="allGroupsLLabel" prefHeight="60.0" prefWidth="747.0" text="All Groups">
+                              <Label fx:id="allGroupsLabel" prefHeight="60.0" prefWidth="747.0" text="All Groups">
                                  <font>
                                     <Font name="Gadugi Bold" size="20.0" />
                                  </font>

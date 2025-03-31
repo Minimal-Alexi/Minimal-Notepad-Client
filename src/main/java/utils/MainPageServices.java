@@ -38,6 +38,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -208,7 +209,7 @@ public class MainPageServices {
     /*
     Update the recently edited part of the main page
      */
-    public static void updateRecentlyEdited(HBox REHBox, ArrayList<Note> noteArrayList) {
+    public static void updateRecentlyEdited(HBox REHBox, ArrayList<Note> noteArrayList, ObservableResourceFactory RESOURCE_FACTORY) {
         // Get the first 4 notes
         noteArrayList.sort(new Comparator<Note>() {
 
@@ -227,11 +228,35 @@ public class MainPageServices {
             title.getStyleClass().add("title");
             pane.getChildren().add(title);
             Label editAt = new Label();
-            editAt.setText("Edited at " + noteArrayList.get(j).getUpdatedAt());
-            editAt.getStyleClass().add("edit-at");
-            pane.getChildren().add(editAt);
+            // TODO: need to add the time localization
+            String dateString = noteArrayList.get(j).getUpdatedAt().toString();
+//            System.out.println("Date String "+ dateString);
+//            SimpleDateFormat sdf = Utils.getTheCurrentLocaleDateTimeFormatString();
+//            System.out.println("format "+sdf);
+            try{
+//                2025-03-28
+                // convert the dateString into a Date object ( fixed locale is 'us')
+                String baseDateFormatString = "yyyy-MM-dd";
+                SimpleDateFormat baseSDF = new SimpleDateFormat(baseDateFormatString);
+                Date inputDate = baseSDF.parse(dateString);
 
-            REHBox.getChildren().add(pane);
+                // localize by convert the Date object into the localized version
+                Locale currentLocale = RESOURCE_FACTORY.getResources().getLocale();
+                String outputDateTimeFormatString = "yyyy-MM-dd";
+                SimpleDateFormat outputSdf = new SimpleDateFormat(outputDateTimeFormatString, currentLocale);
+
+                String localizedDateStr = outputSdf.format(inputDate);
+
+                String edditedString = RESOURCE_FACTORY.getResources().getString("edited");
+
+                editAt.setText(edditedString + " "+ localizedDateStr);
+                editAt.getStyleClass().add("edit-at");
+                pane.getChildren().add(editAt);
+
+                REHBox.getChildren().add(pane);
+            } catch (ParseException e){
+                e.printStackTrace();
+            }
         }
     }
 
