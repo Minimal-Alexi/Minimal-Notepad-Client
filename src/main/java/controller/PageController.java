@@ -13,4 +13,6 @@ public abstract class PageController {
 
     // bind the fix UI with the key
     public abstract  void bindUIComponents();
+
+
 }

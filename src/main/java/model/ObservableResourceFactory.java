@@ -45,21 +45,22 @@ public class ObservableResourceFactory {
             setResources(defaultRs);
             return defaultRs;
         }
-        return resourcesProperty().get();
+        return resources.get(); // Use resources.get() directly
     }
 
     // set the resource bundle to the new language
-    public final void setResources(ResourceBundle resources) {
-        resourcesProperty().set(resources);
+    public final void setResources(ResourceBundle newResources) {
+        resources.set(newResources); // Correct way to update JavaFX property
     }
 
 
     public StringBinding getStringBinding(String key) {
         return new StringBinding() {
-            { bind(resourcesProperty()); }
+            { bind(resourcesProperty()); } // Bind the property so it updates dynamically
             @Override
             public String computeValue() {
-                return getResources().getString(key);
+                ResourceBundle rb = getResources();
+                return rb.containsKey(key) ? rb.getString(key) : "!!" + key + "!!"; // Handle missing keys
             }
         };
     }
@@ -69,20 +70,14 @@ public class ObservableResourceFactory {
     }
 
 
-    public ResourceBundle findResourcebundle(String string) {
-        Locale locale;
-        if (string.equals("Chinese")) {
-            locale = new Locale("zh", "CN");
-
-        } else if (string.equals("Finnish")) {
-            locale = new Locale("fi", "FI");
-
-        }else if (string.equals("Russian")) {
-            locale = new Locale("ru", "RU");
-        }
-        else {
-            locale = new Locale("en", "US");
-        }
+    public ResourceBundle findResourcebundle(String key) {
+        Locale locale = switch (key.toLowerCase()) { // Use lowercase for consistency
+            case "chinese" -> new Locale("zh", "CN");
+            case "finnish" -> new Locale("fi", "FI");
+            case "russian" -> new Locale("ru", "RU");
+            default -> new Locale("en", "US"); // Default to English
+        };
         return ResourceBundle.getBundle("messages", locale);
     }
+
 }
