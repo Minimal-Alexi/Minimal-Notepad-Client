@@ -52,7 +52,7 @@ public class RegisterController extends PageController {
     @FXML
     private Text errConfirmPwd;
     @FXML
-    private Text loginLabel;
+    private Label loginLabel;
 
     @FXML
     private TextField emailInput;
@@ -128,6 +128,7 @@ public class RegisterController extends PageController {
         httpResponseService = new HttpResponseServiceImpl();
         pwdIsHidden = true;
         confirmPwdIsHidden = true;
+
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         RESOURCE_FACTORY.getResources();
@@ -479,19 +480,28 @@ public class RegisterController extends PageController {
         noteApp.textProperty().bind(RESOURCE_FACTORY.getStringBinding("noteApp"));
         //errGeneral.textProperty().bind(RESOURCE_FACTORY.getStringBinding(""));
         emailText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailText"));
-        emailInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailInputPrompt"));
+        emailInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("emailInputPrompt"));
         //errPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
         //errConfirmPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
+
         usernameText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameText"));
+        userInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
+
         passwordText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
         confirmPwdText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("confirmPwdText"));
 
+        pwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("pwdInputPrompt"));
+        confirmPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("confirmPwdInputPrompt"));
         unmaskedPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedPwdInputPrompt"));
         unmaskedConfirmPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedConfirmPwdInputPrompt"));
+
         alreadyHaveAccount.textProperty().bind(RESOURCE_FACTORY.getStringBinding("alreadyHaveAccount"));
-        userInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
         registerBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerBtn"));
         backBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("backBtn"));
+
+
+
+        loginLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("loginLabel"));
     }
 }
 
