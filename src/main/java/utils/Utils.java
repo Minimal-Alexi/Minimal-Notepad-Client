@@ -225,7 +225,8 @@ public class Utils {
         String warningHeader = rb.getString("deleteWarningHeader");
 
         ButtonType yesBtn = new ButtonType(yesTxt);
-        ButtonType noBtn = new ButtonType(noTxt);
+        // Button.ButtonData.CANCEL_CLOSE will let closing the button by click the X button
+        ButtonType noBtn = new ButtonType(noTxt, ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.setTitle(warningTitle);
         alert.setHeaderText(warningHeader);
         alert.setContentText(warningTxt);
