@@ -392,6 +392,7 @@ public class LogInController extends PageController {
         //emailText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailText"));
         loginUserInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
         loginPassInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("loginPassInputPrompt"));
+        loginPassTxtInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("loginPassTxtInputPrompt"));
         rememberBox.textProperty().bind(RESOURCE_FACTORY.getStringBinding("rememberBox"));
         //errPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
         //errConfirmPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));

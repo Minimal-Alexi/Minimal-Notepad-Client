@@ -18,9 +18,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class GroupControllerUtils {
     private static final String URI = "http://localhost:8093/api/groups";
+    private static final ObservableResourceFactory RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
 
     public static void setupGroupTable(
@@ -70,10 +72,11 @@ public class GroupControllerUtils {
 
     public static void updateColumnOne(Stage stage, TableColumn actionOneCol) {
         String owner = TokenStorage.getUser();
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
 //        String fName = "Jacob";
         actionOneCol.setCellFactory(col -> {
-            Button editButton = new Button("Edit");
-            Button viewButton = new Button ("View");
+            Button editButton = new Button(rb.getString("editBtnText"));
+            Button viewButton = new Button (rb.getString("viewBtnText"));
 //            Button joinButton = new Button("Join");
             TableCell<Group, Group> updatedCell = new TableCell<Group, Group>() {
                 @Override
@@ -89,7 +92,7 @@ public class GroupControllerUtils {
                         } else if (group.isExist(owner) &&  (!group.getGroupOwner().equals(owner))) {
                             System.out.println("Owner: "+owner+ "is in group: "+group.getName());
                             setGraphic(viewButton);
-                            ViewUtils.addStyle(viewButton, "/delete-button.css");
+                            ViewUtils.addStyle(viewButton, "/view-button.css");
                         }
                         else {
                             setGraphic(null);
@@ -123,11 +126,12 @@ public class GroupControllerUtils {
             HttpResponseService httpResponseService,
             HandleResponseCallback handleReponse) {
         String owner = TokenStorage.getUser();
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
 //        String fName = "Jacob";
         actionTwoCol.setCellFactory(col -> {
-            Button deleteButton = new Button("Delete");
-            Button leaveButton = new Button("Leave");
-            Button joinButton = new Button("Join");
+            Button deleteButton = new Button(rb.getString("deleteBtnText"));
+            Button leaveButton = new Button(rb.getString("leaveBtnText"));
+            Button joinButton = new Button(rb.getString("joinBtnText"));
 //            Button joinButton = new Button("Join");
             TableCell<Group, Group> updatedCell = new TableCell<Group, Group>() {
                 @Override
