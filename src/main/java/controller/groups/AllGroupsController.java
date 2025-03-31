@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static utils.MainPageServices.setSidebarLanguages;
+import static utils.MainPageServices.updateNameLabel;
 
 public class AllGroupsController implements Initializable {
 
@@ -100,7 +101,7 @@ public class AllGroupsController implements Initializable {
         String password = TokenStorage.getToken();
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
-        nameLabel.setText("Welcome, " + username);
+        updateNameLabel(nameLabel, TokenStorage.getUser());
         MainPageServices.updateLocalTime(localTime);
 
 

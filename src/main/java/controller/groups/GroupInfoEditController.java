@@ -31,6 +31,7 @@ import java.util.List;
 import static utils.GroupServices.findGroupById;
 import static utils.GroupServices.updateGroup;
 import static utils.MainPageServices.setSidebarLanguages;
+import static utils.MainPageServices.updateNameLabel;
 
 public class GroupInfoEditController {
 
@@ -156,7 +157,7 @@ public class GroupInfoEditController {
         String password = TokenStorage.getToken();
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
-        nameLabel.setText("Welcome " + username);
+        updateNameLabel(nameLabel, TokenStorage.getUser());
         MainPageServices.updateLocalTime(localTime);
 
         root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());

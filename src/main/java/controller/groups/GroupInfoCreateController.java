@@ -24,6 +24,7 @@ import utils.*;
 import java.io.IOException;
 
 import static utils.MainPageServices.setSidebarLanguages;
+import static utils.MainPageServices.updateNameLabel;
 
 
 public class GroupInfoCreateController {
@@ -102,7 +103,7 @@ public class GroupInfoCreateController {
             String password = TokenStorage.getToken();
             System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
-            nameLabel.setText("Welcome " + username);
+            updateNameLabel(nameLabel, TokenStorage.getUser());
             MainPageServices.updateLocalTime(localTime);
             root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
             root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());

@@ -196,7 +196,13 @@ public class MainPageServices {
     Update the name label after log in
      */
     public static void updateNameLabel(Label nameLabel, String username) {
-        nameLabel.setText("Welcome " + username);
+
+        ObservableResourceFactory RESOURCE_FACTORY;
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+        RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+
+        nameLabel.setText(rb.getString("welcome") + " " + username);
     }
 
     /*
