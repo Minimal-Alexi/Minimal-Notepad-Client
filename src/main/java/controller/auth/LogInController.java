@@ -8,8 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import controller.PageController;
+
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.LanguageLabel;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 
 import model.HttpRequestBuilder;
@@ -28,7 +32,7 @@ import utils.HttpResponseServiceImpl;
 import java.io.IOException;
 
 
-public class LogInController {
+public class LogInController extends PageController {
 
     @FXML
     private Button loginBtn;
@@ -48,14 +52,31 @@ public class LogInController {
     private Text errUser;
     @FXML
     private Text errPwd;
+    @FXML
+    private Text signInText;
 
     @FXML
     Text registerLabel;
 
     @FXML
     private CheckBox rememberBox;
+    @FXML
+    private Text welcomeText;
+    @FXML
+    private Text noteApp;
+
+    @FXML
+    private Text passwordText;
+
+    @FXML
+    private Text DontHaveAccountText;
 
 
+
+
+
+    @FXML
+    private Text usernameText;
     private Stage stage;
     private ControllerUtils controllerUtil;
     private TokenStorage storage;
@@ -73,6 +94,10 @@ public class LogInController {
     private AnchorPane unmaskedPane;
 
     private boolean pwdIsHidden;
+    private ObservableResourceFactory RESOURCE_FACTORY ;
+    private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
+
+
 
 
 //    private TokenStorage tokenStorage;
@@ -80,7 +105,7 @@ public class LogInController {
 
 
     public void initialize() {
-//        TokenStorage.getIntance(); // this step is important, to access to the token storage
+        TokenStorage.getIntance();
         controllerUtil = new ControllerUtils();
         httpResponseService = new HttpResponseServiceImpl();
         pwdIsHidden = true;
@@ -93,6 +118,13 @@ public class LogInController {
             loginPassInput.setText(password);
             this.rememberBox.setSelected(true);
         }
+
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+        RESOURCE_FACTORY.getResources();
+        Platform.runLater(()-> super.updateDisplay());
+
+
+
     }
 
     @FXML
@@ -343,4 +375,32 @@ public class LogInController {
         }
         return password;
     }
+
+    @Override
+    public void updateAllUIComponents() {
+    }
+
+    @Override
+    public void bindUIComponents() {
+        welcomeText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("welcomeText"));
+        signInText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("signInText"));
+        noteApp.textProperty().bind(RESOURCE_FACTORY.getStringBinding("noteApp"));
+        usernameText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameText"));
+        passwordText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
+
+        //errGeneral.textProperty().bind(RESOURCE_FACTORY.getStringBinding(""));
+        //emailText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailText"));
+        loginUserInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
+        loginPassInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("loginPassInputPrompt"));
+        rememberBox.textProperty().bind(RESOURCE_FACTORY.getStringBinding("rememberBox"));
+        //errPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
+        //errConfirmPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
+        loginBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("loginBtn"));
+        DontHaveAccountText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("DontHaveAccountText"));
+        registerLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerLabel"));
+
+        backBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("backBtn"));
+    }
+
 }
+

@@ -486,16 +486,12 @@ public class RegisterController extends PageController {
         passwordText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
         confirmPwdText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("confirmPwdText"));
 
-        unmaskedPwdInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedPwdInputPrompt"));
-        unmaskedConfirmPwdInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedConfirmPwdInputPrompt"));
+        unmaskedPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedPwdInputPrompt"));
+        unmaskedConfirmPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedConfirmPwdInputPrompt"));
         alreadyHaveAccount.textProperty().bind(RESOURCE_FACTORY.getStringBinding("alreadyHaveAccount"));
         userInput.textProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
-        registerBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerLabel"));
+        registerBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerBtn"));
         backBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("backBtn"));
     }
-
-
-
-
 }
 
