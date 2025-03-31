@@ -196,10 +196,9 @@ public class Utils {
         return selectedLanguageKey;
     }
 
-    public static SimpleDateFormat getTheCurrentLocaleDateTimeFormatString(
-            ) {
+    public static SimpleDateFormat getTheCurrentLocaleDateTimeFormatString() {
         Locale currentLocale = instance.getResources().getLocale();
-        return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.FULL, currentLocale);
+        return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, currentLocale);
     }
 
 
