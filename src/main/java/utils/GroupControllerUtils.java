@@ -89,7 +89,7 @@ public class GroupControllerUtils {
                         } else if (group.isExist(owner) &&  (!group.getGroupOwner().equals(owner))) {
                             System.out.println("Owner: "+owner+ "is in group: "+group.getName());
                             setGraphic(viewButton);
-                            ViewUtils.addStyle(viewButton, "/delete-button.css");
+                            ViewUtils.addStyle(viewButton, "/view-button.css");
                         }
                         else {
                             setGraphic(null);
