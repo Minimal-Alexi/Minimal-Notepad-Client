@@ -52,7 +52,7 @@ public class RegisterController extends PageController {
     @FXML
     private Text errConfirmPwd;
     @FXML
-    private Label loginLabel;
+    private Text loginLabel;
 
     @FXML
     private TextField emailInput;
