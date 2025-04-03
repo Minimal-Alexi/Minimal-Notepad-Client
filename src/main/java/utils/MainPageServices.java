@@ -141,7 +141,7 @@ public class MainPageServices {
         // it shuffle between the old format and new format
 
 //        DateFormat currentTime = Utils.getTheCurrentLocaleDateTimeFormatString();
-        System.out.println(timeLabel.getUserData());
+//        System.out.println("time Label"+ timeLabel.getUserData());
         if (timeLabel.getUserData() instanceof Timeline) {
 //            ((Timeline) timeLabel.getUserData()).stop();
             System.out.println("time label is instance of timeline");
