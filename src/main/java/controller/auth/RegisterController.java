@@ -288,6 +288,8 @@ public class RegisterController extends PageController {
         httpRequest.updateJsonRequest("username", username);
         httpRequest.updateJsonRequest("email", email);
         httpRequest.updateJsonRequest("password", password);
+        String languageCode = RESOURCE_FACTORY.getResources().getLocale().getLanguage();
+        httpRequest.updateJsonRequest("language", languageCode);
         httpRequest.setRequestBody();
         HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
         // implement later, need to work with handleReponse method
