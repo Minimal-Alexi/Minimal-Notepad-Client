@@ -107,6 +107,8 @@ public class Utils {
     }
 
 
+
+
     //    public LanguageLabel[] getSupportedLanguages() {
     public static void getAndSetSupportedLanguages(LanguageLabel[] supportedLanguages, ObservableResourceFactory RESOURCE_FACTORY) {
         String[] keys = {"en", "fi", "zh", "ru"};
