@@ -1,6 +1,7 @@
 package controller.groups;
 
 
+import controller.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,7 +28,7 @@ import static utils.MainPageServices.setSidebarLanguages;
 import static utils.MainPageServices.updateNameLabel;
 
 
-public class GroupInfoCreateController {
+public class GroupInfoCreateController extends PageController {
 
     @FXML
     private BorderPane root;
@@ -228,6 +229,16 @@ public class GroupInfoCreateController {
     }
 
     public void groupsBtnClick(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void updateAllUIComponents() {
+
+    }
+
+    @Override
+    public void bindUIComponents() {
 
     }
 }
