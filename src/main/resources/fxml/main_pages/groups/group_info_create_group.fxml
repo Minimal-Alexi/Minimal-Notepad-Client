@@ -160,7 +160,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="894.0">
                            <children>
-                              <Label prefHeight="70.0" prefWidth="748.0" text="Create a new group">
+                              <Label fx:id="createNewGroupLabel" prefHeight="70.0" prefWidth="748.0" text="Create a new group">
                                  <font>
                                     <Font name="Gadugi Bold" size="36.0" />
                                  </font>
@@ -170,9 +170,17 @@
                               </Label>
                            </children>
                         </HBox>
+                        <Label fx:id="groupNameErrLabel" textFill="RED">
+                           <VBox.margin>
+                              <Insets left="20.0" top="44.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
                         <HBox alignment="CENTER_LEFT" prefHeight="16.0" prefWidth="894.0">
                            <children>
-                              <Label text="Group Name: ">
+                              <Label fx:id="createGroupNameLabel" text="Group Name: ">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -190,12 +198,20 @@
                               </TextField>
                            </children>
                            <VBox.margin>
-                              <Insets bottom="10.0" left="20.0" top="54.0" />
+                              <Insets bottom="10.0" left="20.0" top="5.0" />
                            </VBox.margin>
                         </HBox>
+                        <Label fx:id="groupDescErrLabel" textFill="RED">
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
                         <HBox alignment="CENTER_LEFT" prefHeight="16.0" prefWidth="894.0">
                            <children>
-                              <Label text="Group description: ">
+                              <Label fx:id="createGroupDescLabel" text="Group description: ">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -213,7 +229,7 @@
                               </TextField>
                            </children>
                            <VBox.margin>
-                              <Insets top="20.0" />
+                              <Insets top="5.0" />
                            </VBox.margin>
                         </HBox>
                      </children>
