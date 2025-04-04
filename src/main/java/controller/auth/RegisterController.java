@@ -132,6 +132,7 @@ public class RegisterController extends PageController {
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         RESOURCE_FACTORY.getResources();
+        System.out.println("resource "+RESOURCE_FACTORY);
 
         Platform.runLater(()-> super.updateDisplay());
     }
@@ -149,18 +150,20 @@ public class RegisterController extends PageController {
         String username = userInput.getText();
         String password = getPassword();
         String confirmPwd = getConfirmPassword();
+        String selectedLanguageKey = RESOURCE_FACTORY.getSelectedLanguage().getKey();
+        System.out.println(selectedLanguageKey);
 
-        handleInput(email, username, password, confirmPwd);
+        handleInput(email, username, password, confirmPwd,selectedLanguageKey);
     }
 
-    private void handleInput(String email, String username, String password, String confirmPwd) {
+    private void handleInput(String email, String username, String password, String confirmPwd, String selectedLanguageKey) {
         if (isEmptyInput(email) || isEmptyInput(username) || isEmptyInput(password) || isEmptyInput(confirmPwd)) {
             displayErrMessages(email, username, password, confirmPwd);
         } else if ((!validEmail(email)) || (!samePassword(password, confirmPwd))) {
             checkEmailAndPassword(email, password, confirmPwd);
         } else {
             try {
-                register(username, password, email);
+                register(username, password, email, selectedLanguageKey);
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -265,7 +268,7 @@ public class RegisterController extends PageController {
         errEmail.setText("");
     }
 
-    private void register(String username, String password, String email) throws IOException {
+    private void register(String username, String password, String email, String selectedLanguageKey) throws IOException {
         resetAllErrMesg();
 
 //        HttpClientSingleton instance = HttpClientSingleton.getInstance();
@@ -288,6 +291,7 @@ public class RegisterController extends PageController {
         httpRequest.updateJsonRequest("username", username);
         httpRequest.updateJsonRequest("email", email);
         httpRequest.updateJsonRequest("password", password);
+        httpRequest.updateJsonRequest("language", selectedLanguageKey);
         httpRequest.setRequestBody();
         HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
         // implement later, need to work with handleReponse method
@@ -498,7 +502,6 @@ public class RegisterController extends PageController {
         alreadyHaveAccount.textProperty().bind(RESOURCE_FACTORY.getStringBinding("alreadyHaveAccount"));
         registerBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerBtn"));
         backBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("backBtn"));
-
 
 
         loginLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("loginLabel"));
