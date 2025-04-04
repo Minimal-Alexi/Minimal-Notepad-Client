@@ -34,6 +34,11 @@ public class ObservableResourceFactory {
     }
 
     public LanguageLabel getSelectedLanguage() {
+        // in case this is a total new app, new user, get default selected language
+        if (selectedLanguage == null){
+            ResourceBundle rb = getResources();
+            return new LanguageLabel("en",rb.getString("en"));
+        }
         return selectedLanguage;
     }
 

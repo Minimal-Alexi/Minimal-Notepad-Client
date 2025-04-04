@@ -109,7 +109,7 @@ public class Utils {
 
     //    public LanguageLabel[] getSupportedLanguages() {
     public static void getAndSetSupportedLanguages(LanguageLabel[] supportedLanguages, ObservableResourceFactory RESOURCE_FACTORY) {
-        String[] keys = {"english", "finnish", "chinese", "russian"};
+        String[] keys = {"en", "fi", "zh", "ru"};
         ResourceBundle rb = RESOURCE_FACTORY.getResources();
         for (int i = 0; i < keys.length; i++) {
             String key  = keys[i];
@@ -120,10 +120,10 @@ public class Utils {
 
     private static ResourceBundle getResourceBundleFromKey(String key) {
         return switch (key) {
-            case "english"-> ResourceBundle.getBundle("messages", new Locale("en", "US"));
-            case "finnish" -> ResourceBundle.getBundle("messages", new Locale("fi", "FI"));
-            case "chinese" -> ResourceBundle.getBundle("messages", new Locale("zh", "CN"));
-            case "russian" -> ResourceBundle.getBundle("messages", new Locale("ru", "RU"));
+            case "en"-> ResourceBundle.getBundle("messages", new Locale("en", "US"));
+            case "fi" -> ResourceBundle.getBundle("messages", new Locale("fi", "FI"));
+            case "zh" -> ResourceBundle.getBundle("messages", new Locale("zh", "CN"));
+            case "ru" -> ResourceBundle.getBundle("messages", new Locale("ru", "RU"));
             default -> ResourceBundle.getBundle("messages", new Locale("en", "US"));
         };
     }
@@ -146,10 +146,10 @@ public class Utils {
 
         // Rebuild language items with translated labels
         LanguageLabel[] updatedLanguages = {
-                new LanguageLabel("english", rb.getString("english")),
-                new LanguageLabel("finnish", rb.getString("finnish")),
-                new LanguageLabel("chinese", rb.getString("chinese")),
-                new LanguageLabel("russian", rb.getString("russian"))
+                new LanguageLabel("en", rb.getString("en")),
+                new LanguageLabel("fi", rb.getString("fi")),
+                new LanguageLabel("zh", rb.getString("zh")),
+                new LanguageLabel("ru", rb.getString("ru"))
         };
 
         // Temporarily remove event handler to avoid recursion
@@ -188,9 +188,9 @@ public class Utils {
         } else if (preservedLabel != null) {
             return preservedLabel.getKey();
         } else {
-            return "english";
+            return "en";
         }
-//        return selected != null ? selected.getKey() : preservedLabel != null ? preservedLabel.getKey() : "english";
+//        return selected != null ? selected.getKey() : preservedLabel != null ? preservedLabel.getKey() : "en";
     }
     public static String getselectedLanguageKey(LanguageLabel preservedLabel){
         String selectedLanguageKey =  getSelectedLanguageKey(null, preservedLabel);
