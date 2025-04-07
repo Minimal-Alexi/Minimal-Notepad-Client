@@ -1,6 +1,7 @@
 package controller.groups;
 
 
+import controller.PageController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.HttpRequestBuilder;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import model.selected.SelectedGroup;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,12 +24,13 @@ import org.json.JSONObject;
 import utils.*;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import static utils.MainPageServices.setSidebarLanguages;
 import static utils.MainPageServices.updateNameLabel;
 
 
-public class GroupInfoCreateController {
+public class GroupInfoCreateController extends PageController {
 
     @FXML
     private BorderPane root;
@@ -61,6 +64,19 @@ public class GroupInfoCreateController {
     @FXML
     private TextField groupDescInput;
 
+    //Error Message
+    @FXML
+    private Label groupNameErrLabel;
+    @FXML
+    private Label groupDescErrLabel;
+
+    //UI components Label
+    @FXML
+    private Label createNewGroupLabel;
+    @FXML
+    private Label createGroupNameLabel;
+    @FXML
+    private Label createGroupDescLabel;
 
     // properties
     private Stage stage;
@@ -70,6 +86,8 @@ public class GroupInfoCreateController {
 
     private ControllerUtils controllerUtils;
     private HttpResponseService httpResponseService;
+    private ObservableResourceFactory RESOURCE_FACTORY;
+//    private ResourceBundle rb;
 //    private HttpClientSingleton httpInstance;
 
 
@@ -83,6 +101,7 @@ public class GroupInfoCreateController {
 
     public void initialize() {
         System.out.println("start Create Group Page");
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         // try to get id from selected group
         try {
@@ -116,6 +135,8 @@ public class GroupInfoCreateController {
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
 
+        // set up localization
+        super.updateDisplay();
     }
 
 
@@ -188,11 +209,44 @@ public class GroupInfoCreateController {
             String groupDesc = groupDescInput.getText();
             if (validInputs(groupName, groupDesc)) {
                 createGroup(groupName, groupDesc);
+            } else if(controllerUtils.isInputEmpty(groupName) || controllerUtils.isInputEmpty(groupDesc)) {
+                displayEmptyErrorMessages(groupName, groupDesc);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void displayEmptyErrorMessages(String groupName, String groupDesc) {
+        this.groupNameErrLabel.setText("");
+        this.groupDescErrLabel.setText("");
+
+        if (controllerUtils.isInputEmpty(groupName)) {
+            displayErrorEmptyGroupName();
+        }
+        if (controllerUtils.isInputEmpty(groupDesc)) {
+            displayErrorEmptyGroupDesc();
+        }
+    }
+
+    public void updateLocalizedEmptyErrorMessages() {
+        if (!groupNameErrLabel.getText().isEmpty()) {
+            displayErrorEmptyGroupName();
+        }
+        if (!groupDescErrLabel.getText().isEmpty()) {
+            displayErrorEmptyGroupDesc();
+        }
+    }
+
+    public void displayErrorEmptyGroupName(){
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        this.groupNameErrLabel.setText(rb.getString("groupNameErrLabel"));
+    }
+
+    public void displayErrorEmptyGroupDesc(){
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        this.groupDescErrLabel.setText(rb.getString("groupDescErrLabel"));
     }
 
     public boolean validInputs(String groupName, String groupDesc) {
@@ -223,11 +277,21 @@ public class GroupInfoCreateController {
         }
     }
 
-    public void mySharedGroupNotesBtnClick(MouseEvent mouseEvent) {
 
+
+    @Override
+    public void updateAllUIComponents() {
+        updateLocalizedEmptyErrorMessages();
     }
 
-    public void groupsBtnClick(MouseEvent mouseEvent) {
+    @Override
+    public void bindUIComponents() {
+        createNewGroupLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("createNewGroupLabel"));
+        createGroupNameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("createGroupNameLabel"));
+        groupNameInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("groupNameInput"));
+        createGroupDescLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("createGroupDescLabel"));
+        groupDescInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("groupDescInput"));
+        createGroupBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("createGroupBtnTxt"));
 
     }
 }
