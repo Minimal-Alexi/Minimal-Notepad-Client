@@ -1,13 +1,19 @@
 package controller.groups;
 
+import controller.PageController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Group;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.json.JSONArray;
@@ -15,12 +21,13 @@ import utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static utils.MainPageServices.setSidebarLanguages;
 import static utils.MainPageServices.updateNameLabel;
 
 
-public class MyGroupsController {
+public class MyGroupsController extends PageController {
 
     @FXML
     private BorderPane root;
@@ -100,6 +107,8 @@ public class MyGroupsController {
     private static final String FXMLSource = "/fxml";
     private static final String CSSSOURCE = "/CSS";
     private static final String URI = "http://localhost:8093/api/groups";
+
+    private ObservableResourceFactory RESOURCE_FACTORY;
 
     public void initialize() {
 
@@ -189,8 +198,10 @@ public class MyGroupsController {
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
         // set sidebar language
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
 
+        Platform.runLater(super::updateDisplay);
     }
 
     // handler of action buttons in joined table
@@ -337,4 +348,25 @@ public class MyGroupsController {
 
     }
 
+    @Override
+    public void updateAllUIComponents() {
+
+    }
+
+
+    @FXML private Label joinedLabel;
+    @FXML private Label suggestedLabel;
+
+    @Override
+    public void bindUIComponents() {
+        joinedLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsLabel"));
+        groupNameCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsGroupNameCol"));
+        ownerCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsGroupOwnerCol"));
+        numOfMembersCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsGroupNumberOfMembersCol"));
+        suggestedLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsSuggestedLabel"));
+        seeAllLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsSuggestedSeeAll"));
+        groupNameCol1.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsGroupNameCol"));
+        ownerCol1.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsGroupOwnerCol"));
+        numOfMembersCol1.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsGroupNumberOfMembersCol"));
+    }
 }
