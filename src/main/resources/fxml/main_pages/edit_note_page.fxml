@@ -51,7 +51,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="editingNoteLabel" prefHeight="70.0" prefWidth="646.0" text="Editing Note">
+                              <Label fx:id="editingNoteLabel" prefHeight="66.0" prefWidth="496.0" text="Editing Note">
                                  <font>
                                     <Font name="Gadugi Bold" size="20.0" />
                                  </font>
@@ -59,12 +59,12 @@
                                     <Insets bottom="20.0" top="20.0" />
                                  </padding>
                               </Label>
-                              <Button fx:id="saveNoteBtn" mnemonicParsing="false" onAction="#saveNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/table_view.css" text="  Save Note">
+                              <Button fx:id="saveNoteBtn" mnemonicParsing="false" onAction="#saveNoteClicked" prefHeight="37.0" prefWidth="191.0" stylesheets="@../../CSS/table_view.css" text="  Save Note">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="deleteNoteBtn" mnemonicParsing="false" onAction="#deleteNoteClicked" prefHeight="40.0" prefWidth="120.0" stylesheets="@../../CSS/table_view.css" text="Delete Note">
+                              <Button fx:id="deleteNoteBtn" mnemonicParsing="false" onAction="#deleteNoteClicked" prefHeight="45.0" prefWidth="194.0" stylesheets="@../../CSS/table_view.css" text="Delete Note">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -103,7 +103,7 @@
                                     </HBox>
                                     <HBox fx:id="categoryHBox" alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" styleClass="category-HBox" stylesheets="@../../CSS/category.css">
                                        <children>
-                                          <Label text="  Categories: ">
+                                          <Label fx:id="categoriesId" text="  Categories: ">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
@@ -120,7 +120,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" stylesheets="@../../CSS/category.css">
                                        <children>
-                                          <Label text="  Groups: ">
+                                          <Label fx:id="GroupsId" text="  Groups: ">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
