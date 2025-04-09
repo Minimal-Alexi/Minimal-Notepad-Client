@@ -78,7 +78,7 @@
                                     </Text>
                                  </children>
                               </HBox>
-                              <TextField fx:id="loginUserInput" prefHeight="30.0" prefWidth="185.0" promptText="Enter your username" />
+                              <TextField fx:id="loginUserInput" prefHeight="30.0" prefWidth="185.0" promptText="Entgit er your username" />
                            </children>
                            <VBox.margin>
                               <Insets />
