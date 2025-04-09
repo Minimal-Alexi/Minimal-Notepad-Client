@@ -108,7 +108,7 @@ public class MyGroupsController extends PageController {
     private static final String CSSSOURCE = "/CSS";
     private static final String URI = "http://localhost:8093/api/groups";
 
-    private ObservableResourceFactory RESOURCE_FACTORY ;
+    private ObservableResourceFactory RESOURCE_FACTORY;
 
     public void initialize() {
 
