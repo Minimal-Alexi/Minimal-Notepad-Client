@@ -237,7 +237,7 @@ public class MainPageController extends PageController {
         searchReset.setOnAction(event -> {
             isResetting = true;
             searchBar.setText("");
-            filterChoice.getSelectionModel().select("Any");
+            filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString("anyCategoryOption"));
             isResetting = false;
             noteObservableList.clear();
             noteObservableList.addAll(noteArrayList);
