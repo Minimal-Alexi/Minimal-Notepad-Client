@@ -40,9 +40,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static utils.MainPageServices.*;
 import static utils.NoteServices.*;
+import static utils.MainPageServices.setSidebarLanguages;
+import static utils.MainPageServices.updateNameLabel;
 
 
 public class EditNoteController extends PageController {
@@ -362,33 +365,24 @@ public class EditNoteController extends PageController {
         this.controllerUtils.setDefaultCursor(accountBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
     }
+
+    public String getLocalizedActionColOneName(){
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        return rb.getString("actionColOneName");
+    }
     @Override
     public void updateAllUIComponents() {
     }
 
+
     @Override
     public void bindUIComponents() {
-        //welcomeText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("welcomeText"));
         editingNoteLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editingNoteLabel"));
         saveNoteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("saveNoteBtn"));
         deleteNoteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("deleteNoteBtn"));
-        //errPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("userInputPrompt"));
-        //errConfirmPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
-
-        //colorPicker.textProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameText"));
         titleTextArea.textProperty().bind(RESOURCE_FACTORY.getStringBinding("titleTextArea"));
-
-        //categoryHBox.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
         uploadPicBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("uploadPicBtn"));
-
-//        pwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("pwdInputPrompt"));
-//        confirmPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("confirmPwdInputPrompt"));
-//        unmaskedPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedPwdInputPrompt"));
-//        unmaskedConfirmPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedConfirmPwdInputPrompt"));
-//
-          categoriesId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("categoriesId"));
-          GroupsId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupsId"));
-//        backBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("backBtn"));
-//        loginLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("loginLabel"));
+        categoriesId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("categoriesId"));
+        GroupsId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupsId"));
     }
 }
