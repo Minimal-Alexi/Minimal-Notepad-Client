@@ -70,6 +70,11 @@ public class ObservableResourceFactory {
         };
     }
 
+    public String getString(String key) {
+        ResourceBundle rb = getResources();
+        return rb.getString(key);
+    }
+
     public void getCurrentResourceBundle(){
 
     }
