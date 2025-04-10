@@ -121,7 +121,7 @@ public class EditNoteController extends PageController {
         note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
 
         Platform.runLater(()-> super.updateDisplay());
 

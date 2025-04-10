@@ -113,7 +113,7 @@ public class ReadOnlyNoteController extends PageController {
 
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
         Platform.runLater(()-> super.updateDisplay());
 
         System.out.println(selectedReadOnlyNote.getId());

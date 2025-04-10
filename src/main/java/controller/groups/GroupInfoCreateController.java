@@ -240,12 +240,12 @@ public class GroupInfoCreateController extends PageController {
     }
 
     public void displayErrorEmptyGroupName(){
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         this.groupNameErrLabel.setText(rb.getString("groupNameErrLabel"));
     }
 
     public void displayErrorEmptyGroupDesc(){
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         this.groupDescErrLabel.setText(rb.getString("groupDescErrLabel"));
     }
 

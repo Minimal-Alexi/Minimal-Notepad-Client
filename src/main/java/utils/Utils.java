@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class Utils {
     public static ObservableResourceFactory RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+    public static PageService pageService = new PageService();
 
     public  static void gotoPage(String pageName, Button btn){
 
@@ -45,7 +46,8 @@ public class Utils {
             ComboBox<LanguageLabel> languageBox,
             LanguageLabel[] supportedLanguages,
             ObservableResourceFactory RESOURCE_FACTORY,
-            PageController pageController) {
+            PageController pageController,
+            HandlePageCallback callback) {
         // get the supported languages from the resource bundle
         getAndSetSupportedLanguages(supportedLanguages, RESOURCE_FACTORY);
 
@@ -99,12 +101,28 @@ public class Utils {
 
                 pageController.bindUIComponents();      // Rebind labels
 //                updateNameLabelIfInputExists();
+                pageService.handlePageAction(callback);
             }
         });
 
         // Initial label setup
         updateLanguageBoxLabels(RESOURCE_FACTORY, languageBox);
     }
+    public static void setupLanguageBox(
+            ComboBox<LanguageLabel> languageBox,
+            LanguageLabel[] supportedLanguages,
+            ObservableResourceFactory RESOURCE_FACTORY,
+            PageController pageController){
+        setupLanguageBox(languageBox, supportedLanguages, RESOURCE_FACTORY, pageController, Utils::dummyFunction);
+    }
+
+    // a placeholder function when you dont want to add any action from the page where you inject setupLanguageBox
+    public static void dummyFunction(){
+        System.out.println("dummyFunction");
+    }
+
+    //
+
 
 
 
@@ -112,7 +130,7 @@ public class Utils {
     //    public LanguageLabel[] getSupportedLanguages() {
     public static void getAndSetSupportedLanguages(LanguageLabel[] supportedLanguages, ObservableResourceFactory RESOURCE_FACTORY) {
         String[] keys = {"en", "fi", "zh", "ru"};
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         for (int i = 0; i < keys.length; i++) {
             String key  = keys[i];
             String value = rb.getString(key);
@@ -133,7 +151,7 @@ public class Utils {
 
     private static void updateLanguageBoxLabels(ObservableResourceFactory RESOURCE_FACTORY, ComboBox<LanguageLabel> languageBox) {
         // get and set the supported languages from the resource bundle
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         languageBox.getItems();
 
         // preserve old selection key
@@ -178,7 +196,7 @@ public class Utils {
     private static void updateNameLabelIfInputExists(TextField textInput, ObservableResourceFactory RESOURCE_FACTORY, Label label, String key) {
         String input = textInput.getText();
         if (!input.isEmpty()) {
-            ResourceBundle rb = RESOURCE_FACTORY.getResources();
+            ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
             String result = MessageFormat.format(rb.getString(key), input);
             Platform.runLater(() -> label.setText(result));
         }
@@ -200,7 +218,7 @@ public class Utils {
     }
 
     public static SimpleDateFormat getTheCurrentLocaleDateTimeFormatString() {
-        Locale currentLocale = RESOURCE_FACTORY.getResources().getLocale();
+        Locale currentLocale = RESOURCE_FACTORY.getResourceBundle().getLocale();
         return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, currentLocale);
     }
 
@@ -217,7 +235,7 @@ public class Utils {
 
         // TODO: replace these yes and no with the localization
         // get the resource bundle from the RESOURCE_FACTORY
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 
         // retrive all the yes, no , title and warning text from resource bundle
         String yesTxt = rb.getString("yesText");

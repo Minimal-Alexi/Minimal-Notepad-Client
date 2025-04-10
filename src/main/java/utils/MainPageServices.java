@@ -200,8 +200,8 @@ public class MainPageServices {
 
         ObservableResourceFactory RESOURCE_FACTORY;
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
-        RESOURCE_FACTORY.getResources();
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 
         nameLabel.setText(rb.getString("welcome") + " " + username);
     }
@@ -241,13 +241,13 @@ public class MainPageServices {
                 Date inputDate = baseSDF.parse(dateString);
 
                 // localize by convert the Date object into the localized version
-                Locale currentLocale = RESOURCE_FACTORY.getResources().getLocale();
+                Locale currentLocale = RESOURCE_FACTORY.getResourceBundle().getLocale();
                 String outputDateTimeFormatString = "yyyy-MM-dd";
                 SimpleDateFormat outputSdf = new SimpleDateFormat(outputDateTimeFormatString, currentLocale);
 
                 String localizedDateStr = outputSdf.format(inputDate);
 
-                String edditedString = RESOURCE_FACTORY.getResources().getString("edited");
+                String edditedString = RESOURCE_FACTORY.getResourceBundle().getString("edited");
 
                 editAt.setText(edditedString + " "+ localizedDateStr);
                 editAt.getStyleClass().add("edit-at");
@@ -349,8 +349,8 @@ public class MainPageServices {
                                            Button logOutBtn) {
         ObservableResourceFactory RESOURCE_FACTORY;
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
-        RESOURCE_FACTORY.getResources();
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         myNotesBtn.setText(rb.getString("sidebarMyNotes"));
         shareNotesBtn.setText(rb.getString("sidebarMyGroupsNotes"));
         myGroupsBtn.setText(rb.getString("sidebarMyGroups"));

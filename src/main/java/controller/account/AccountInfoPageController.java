@@ -130,14 +130,15 @@ public class AccountInfoPageController extends PageController {
         getUserInfo();
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
-        RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
 //        setupLanguageBox();
         Platform.runLater(()->{
             Utils.setupLanguageBox(
                     languageBox,
                     supportedLanguages,
                     RESOURCE_FACTORY,
-                    this
+                    this,
+                    this::saveLanguage
             );
             super.updateDisplay();
         });
@@ -145,6 +146,34 @@ public class AccountInfoPageController extends PageController {
 
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
+    }
+
+    public void saveLanguage(){
+//        System.out.println("saving language from User Detail Page");
+
+        String languageKey = RESOURCE_FACTORY.getSelectedLanguage().getKey();
+        String savingLanguageURI = URI+ "change-language?lang=" + languageKey;
+//        System.out.println(savingLanguageURI);
+//        {{host}}/api/user/change-language?lang=fi
+
+
+        HttpRequestBuilder httpRequest = new HttpRequestBuilder("PUT", savingLanguageURI, true);
+//        HttpRequestBase httpPut = httpRequest.getHttpRequest();
+//        CloseableHttpClient httpClient = httpRequest.getHttpClient();
+        httpResponseService.handleReponse(
+                httpRequest.getHttpRequest(),
+                httpRequest.getHttpClient(),
+                this::handleSaveLanguage
+        );
+
+    }
+
+    public void handleSaveLanguage(CloseableHttpResponse response, Object jsonResponse){
+        // save selected language to client
+        System.out.println("Update UI after saving language from User Detail Page successful");
+        String languageKey = RESOURCE_FACTORY.getSelectedLanguage().getKey();
+        TokenStorage.saveInfo("lang", languageKey);
 
     }
 
@@ -257,7 +286,7 @@ public class AccountInfoPageController extends PageController {
 
     // TODO: update to use resource bundle, by adding the key to the GeneralErrorKey
     private void handleInput(String email, String username) {
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         generalErrLabel.setText("");
         if (username.equals("") || email.equals("")) {
             displayEmptyErrorMessage();
@@ -291,7 +320,7 @@ public class AccountInfoPageController extends PageController {
 
     // TODO: update to use resource bundle
     private void displayEmptyErrorMessage() {
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         String emailInputText = emailInput.getText();
         String usernameInputText = usernameInput.getText();
 
@@ -317,7 +346,7 @@ public class AccountInfoPageController extends PageController {
 
     // TODO: add a refresh error message method when the language is changed
     private void updateEmptyErrorMessagesWhenLanguageChange() {
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 
         if (!userErrLabel.getText().isEmpty()) {
             userErrLabel.setText(rb.getString("userErrLabel"));
@@ -332,7 +361,7 @@ public class AccountInfoPageController extends PageController {
 
     private void updateGeneralErrorMessageWhenLanguageChange(){
         if ( !generalErrLabel.getText().isEmpty()){
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 //        System.out.println(generalErrLabel.getText());
 //        GeneralErrorKey errGeneralKey = (GeneralErrorKey) generalErrLabel.getUserData();
 //        String key = errGeneralKey.getKey();
@@ -369,7 +398,7 @@ public class AccountInfoPageController extends PageController {
     public void handleSaveUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
 
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         try {
 
             String statusLine = response.getStatusLine().toString();
@@ -434,7 +463,7 @@ public class AccountInfoPageController extends PageController {
     @FXML
     public void deleteBtnClick() {
 
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 //        String yesTxt = "Yes";
         String yesTxt =rb.getString("yesText");
 
