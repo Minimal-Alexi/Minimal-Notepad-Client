@@ -93,4 +93,28 @@ public class ObservableResourceFactory {
         return ResourceBundle.getBundle("messages", locale);
     }
 
+    public void changeLanguage(String key) {
+        Locale locale;
+
+        switch (key.toLowerCase()) {
+            case "chinese":
+            case "zh":
+                locale = new Locale("zh", "CN");
+                break;
+            case "finnish":
+            case "fi":
+                locale = new Locale("fi", "FI");
+                break;
+            case "russian":
+            case "ru":
+                locale = new Locale("ru", "RU");
+                break;
+            default:
+                locale = new Locale("en", "US");
+                break;
+        }
+
+        ResourceBundle newBundle = ResourceBundle.getBundle("messages", locale);
+        setResources(newBundle);
+    }
 }
