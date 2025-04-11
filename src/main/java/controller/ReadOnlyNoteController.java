@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import controller.PageController;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -16,9 +17,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.HttpRequestBuilder;
 import model.Note;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import model.selected.SelectedReadOnlyNote;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import model.ObservableResourceFactory;
+
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONArray;
@@ -37,7 +41,7 @@ import java.util.Map;
 import static utils.MainPageServices.*;
 import static utils.NoteServices.*;
 
-public class ReadOnlyNoteController {
+public class ReadOnlyNoteController extends PageController {
 
 
     @FXML private ChoiceBox<String> groupName1;
@@ -55,6 +59,7 @@ public class ReadOnlyNoteController {
     private Label titleTextArea;
     @FXML
     private TextArea textArea1;
+
     @FXML
     private Button saveNoteBtn;
     @FXML
@@ -98,11 +103,18 @@ public class ReadOnlyNoteController {
     private HashMap<Integer, String> groupList = new HashMap<>();
     private ArrayList<String> figureList = new ArrayList<>();
 
+    private ObservableResourceFactory RESOURCE_FACTORY ;
+
     // Initialize
     public void initialize() {
+        TokenStorage.getIntance();
         responseService = new HttpResponseServiceImpl();
         this.controllerUtils = new ControllerUtils();
 
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+
+        RESOURCE_FACTORY.getResourceBundle();
+        Platform.runLater(()-> super.updateDisplay());
 
         System.out.println(selectedReadOnlyNote.getId());
 
@@ -122,6 +134,7 @@ public class ReadOnlyNoteController {
 
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
+
 
         // add pictures to the ui
         /*
@@ -199,7 +212,7 @@ public class ReadOnlyNoteController {
 
     }*/
     public void groupSharingSetUp(){
-        groupName.setText("Note of group " + note.getGroup());
+        groupName.setText(note.getGroup());
         /*groupName.getItems().addAll(groupList.values());
         if(note.getGroupId() == -1)
         {
@@ -356,5 +369,17 @@ public class ReadOnlyNoteController {
         this.controllerUtils.goPage(stage, backToAllNotes, "/fxml/main_pages/groups/my_groups_notes.fxml");
     }
 
+    @Override
+    public void updateAllUIComponents() {
+    }
+
+    @Override
+    public void bindUIComponents() {
+        titleTextArea.textProperty().bind(RESOURCE_FACTORY.getStringBinding("titleTextArea"));
+        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("welcomeText"));
+        backToAllNotes.textProperty().bind(RESOURCE_FACTORY.getStringBinding("backToAllNotes"));
+
+
+    }
 }
 

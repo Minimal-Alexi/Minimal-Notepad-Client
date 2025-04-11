@@ -72,7 +72,7 @@ public class GroupControllerUtils {
 
     public static void updateColumnOne(Stage stage, TableColumn actionOneCol) {
         String owner = TokenStorage.getUser();
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 //        String fName = "Jacob";
         actionOneCol.setCellFactory(col -> {
             Button editButton = new Button(rb.getString("editBtnText"));
@@ -126,7 +126,7 @@ public class GroupControllerUtils {
             HttpResponseService httpResponseService,
             HandleResponseCallback handleReponse) {
         String owner = TokenStorage.getUser();
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 //        String fName = "Jacob";
         actionTwoCol.setCellFactory(col -> {
             Button deleteButton = new Button(rb.getString("deleteBtnText"));
@@ -331,4 +331,6 @@ public class GroupControllerUtils {
         return updatedAllGroups;
 
     }
+
+
 }

@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class Utils {
     public static ObservableResourceFactory RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+    public static PageService pageService = new PageService();
 
     public  static void gotoPage(String pageName, Button btn){
 
@@ -45,7 +46,8 @@ public class Utils {
             ComboBox<LanguageLabel> languageBox,
             LanguageLabel[] supportedLanguages,
             ObservableResourceFactory RESOURCE_FACTORY,
-            PageController pageController) {
+            PageController pageController,
+            HandlePageCallback callback) {
         // get the supported languages from the resource bundle
         getAndSetSupportedLanguages(supportedLanguages, RESOURCE_FACTORY);
 
@@ -99,18 +101,36 @@ public class Utils {
 
                 pageController.bindUIComponents();      // Rebind labels
 //                updateNameLabelIfInputExists();
+                pageService.handlePageAction(callback);
             }
         });
 
         // Initial label setup
         updateLanguageBoxLabels(RESOURCE_FACTORY, languageBox);
     }
+    public static void setupLanguageBox(
+            ComboBox<LanguageLabel> languageBox,
+            LanguageLabel[] supportedLanguages,
+            ObservableResourceFactory RESOURCE_FACTORY,
+            PageController pageController){
+        setupLanguageBox(languageBox, supportedLanguages, RESOURCE_FACTORY, pageController, Utils::dummyFunction);
+    }
+
+    // a placeholder function when you dont want to add any action from the page where you inject setupLanguageBox
+    public static void dummyFunction(){
+        System.out.println("dummyFunction");
+    }
+
+    //
+
+
+
 
 
     //    public LanguageLabel[] getSupportedLanguages() {
     public static void getAndSetSupportedLanguages(LanguageLabel[] supportedLanguages, ObservableResourceFactory RESOURCE_FACTORY) {
-        String[] keys = {"english", "finnish", "chinese", "russian"};
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        String[] keys = {"en", "fi", "zh", "ru"};
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         for (int i = 0; i < keys.length; i++) {
             String key  = keys[i];
             String value = rb.getString(key);
@@ -120,10 +140,10 @@ public class Utils {
 
     private static ResourceBundle getResourceBundleFromKey(String key) {
         return switch (key) {
-            case "english"-> ResourceBundle.getBundle("messages", new Locale("en", "US"));
-            case "finnish" -> ResourceBundle.getBundle("messages", new Locale("fi", "FI"));
-            case "chinese" -> ResourceBundle.getBundle("messages", new Locale("zh", "CN"));
-            case "russian" -> ResourceBundle.getBundle("messages", new Locale("ru", "RU"));
+            case "en"-> ResourceBundle.getBundle("messages", new Locale("en", "US"));
+            case "fi" -> ResourceBundle.getBundle("messages", new Locale("fi", "FI"));
+            case "zh" -> ResourceBundle.getBundle("messages", new Locale("zh", "CN"));
+            case "ru" -> ResourceBundle.getBundle("messages", new Locale("ru", "RU"));
             default -> ResourceBundle.getBundle("messages", new Locale("en", "US"));
         };
     }
@@ -131,7 +151,7 @@ public class Utils {
 
     private static void updateLanguageBoxLabels(ObservableResourceFactory RESOURCE_FACTORY, ComboBox<LanguageLabel> languageBox) {
         // get and set the supported languages from the resource bundle
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         languageBox.getItems();
 
         // preserve old selection key
@@ -146,10 +166,10 @@ public class Utils {
 
         // Rebuild language items with translated labels
         LanguageLabel[] updatedLanguages = {
-                new LanguageLabel("english", rb.getString("english")),
-                new LanguageLabel("finnish", rb.getString("finnish")),
-                new LanguageLabel("chinese", rb.getString("chinese")),
-                new LanguageLabel("russian", rb.getString("russian"))
+                new LanguageLabel("en", rb.getString("en")),
+                new LanguageLabel("fi", rb.getString("fi")),
+                new LanguageLabel("zh", rb.getString("zh")),
+                new LanguageLabel("ru", rb.getString("ru"))
         };
 
         // Temporarily remove event handler to avoid recursion
@@ -176,7 +196,7 @@ public class Utils {
     private static void updateNameLabelIfInputExists(TextField textInput, ObservableResourceFactory RESOURCE_FACTORY, Label label, String key) {
         String input = textInput.getText();
         if (!input.isEmpty()) {
-            ResourceBundle rb = RESOURCE_FACTORY.getResources();
+            ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
             String result = MessageFormat.format(rb.getString(key), input);
             Platform.runLater(() -> label.setText(result));
         }
@@ -188,9 +208,9 @@ public class Utils {
         } else if (preservedLabel != null) {
             return preservedLabel.getKey();
         } else {
-            return "english";
+            return "en";
         }
-//        return selected != null ? selected.getKey() : preservedLabel != null ? preservedLabel.getKey() : "english";
+//        return selected != null ? selected.getKey() : preservedLabel != null ? preservedLabel.getKey() : "en";
     }
     public static String getselectedLanguageKey(LanguageLabel preservedLabel){
         String selectedLanguageKey =  getSelectedLanguageKey(null, preservedLabel);
@@ -198,7 +218,7 @@ public class Utils {
     }
 
     public static SimpleDateFormat getTheCurrentLocaleDateTimeFormatString() {
-        Locale currentLocale = RESOURCE_FACTORY.getResources().getLocale();
+        Locale currentLocale = RESOURCE_FACTORY.getResourceBundle().getLocale();
         return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, currentLocale);
     }
 
@@ -215,7 +235,7 @@ public class Utils {
 
         // TODO: replace these yes and no with the localization
         // get the resource bundle from the RESOURCE_FACTORY
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 
         // retrive all the yes, no , title and warning text from resource bundle
         String yesTxt = rb.getString("yesText");

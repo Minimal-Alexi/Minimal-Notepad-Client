@@ -10,12 +10,15 @@ import java.util.ResourceBundle;
 public class ObservableResourceFactory {
     private static ObservableResourceFactory instance;
 
-    private ObjectProperty<ResourceBundle> resources ;
+    // get the current resource bundle, the reason using Object Property is in order to use the bind method,
+    // and turning the resource bundle into a Observable object
+    // by binding other object to this object, other objects become observers
+    private ObjectProperty<ResourceBundle> resourceBundle ;
 
     private LanguageLabel selectedLanguage;
 
     private ObservableResourceFactory() {
-        resources = new SimpleObjectProperty<>();
+        resourceBundle = new SimpleObjectProperty<>();
     }
 
     public static ObservableResourceFactory getInstance() {
@@ -26,7 +29,7 @@ public class ObservableResourceFactory {
     }
 
     public ObjectProperty<ResourceBundle> resourcesProperty() {
-        return resources ;
+        return resourceBundle ;
     }
 
     public void setSelectedLanguage(LanguageLabel selectedLanguage) {
@@ -34,23 +37,28 @@ public class ObservableResourceFactory {
     }
 
     public LanguageLabel getSelectedLanguage() {
+        // in case this is a total new app, new user, get default selected language
+        if (selectedLanguage == null){
+            ResourceBundle rb = getResourceBundle();
+            return new LanguageLabel("en",rb.getString("en"));
+        }
         return selectedLanguage;
     }
 
     // get the resource bundle
-    public final ResourceBundle getResources() {
+    public final ResourceBundle getResourceBundle() {
         ResourceBundle rs = resourcesProperty().get();
         if (rs == null){
             ResourceBundle defaultRs = ResourceBundle.getBundle("messages", new Locale("en", "US"));
             setResources(defaultRs);
             return defaultRs;
         }
-        return resources.get(); // Use resources.get() directly
+        return resourceBundle.get(); // Use resourceBundle.get() directly
     }
 
     // set the resource bundle to the new language
     public final void setResources(ResourceBundle newResources) {
-        resources.set(newResources); // Correct way to update JavaFX property
+        resourceBundle.set(newResources); // Correct way to update JavaFX property
     }
 
 
@@ -59,10 +67,15 @@ public class ObservableResourceFactory {
             { bind(resourcesProperty()); } // Bind the property so it updates dynamically
             @Override
             public String computeValue() {
-                ResourceBundle rb = getResources();
+                ResourceBundle rb = getResourceBundle();
                 return rb.containsKey(key) ? rb.getString(key) : "!!" + key + "!!"; // Handle missing keys
             }
         };
+    }
+
+    public String getString(String key) {
+        ResourceBundle rb = getResourceBundle();
+        return rb.getString(key);
     }
 
     public void getCurrentResourceBundle(){

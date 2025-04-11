@@ -1,9 +1,10 @@
 package controller.groups;
 
+import controller.PageController;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Note;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import model.selected.SelectedNote;
 import model.selected.SelectedReadOnlyNote;
@@ -26,7 +28,7 @@ import java.util.Objects;
 
 import static utils.MainPageServices.*;
 
-public class MyGroupsNotesController {
+public class MyGroupsNotesController extends PageController {
 
 
     @FXML
@@ -73,6 +75,8 @@ public class MyGroupsNotesController {
 
     private ObservableList<Note> notes = FXCollections.observableArrayList();
 
+    private ObservableResourceFactory RESOURCE_FACTORY;
+
     public void initialize() {
         this.controllerUtils = new ControllerUtils();
         this.responseService = new HttpResponseServiceImpl();
@@ -92,7 +96,9 @@ public class MyGroupsNotesController {
         updateNameLabel(nameLabel, TokenStorage.getUser());
 
         // set sidebar language
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+        Platform.runLater(super::updateDisplay);
 
     }
 
@@ -246,5 +252,21 @@ Go to another page
         this.controllerUtils.setDefaultCursor(allGroupsBtn);
         this.controllerUtils.setDefaultCursor(accountBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
+    }
+
+    @Override
+    public void updateAllUIComponents() {
+
+    }
+
+    @FXML private Label myGroupNotesLabel;
+    @Override
+    public void bindUIComponents() {
+        myGroupNotesLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesLabel"));
+        title.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesTitleCol"));
+        group.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesGroupCol"));
+        owner.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesOwnerCol"));
+        category.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesCategoryCol"));
+        createTime.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesCreateTimeCol"));
     }
 }

@@ -48,7 +48,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="groupName" prefHeight="50.0" prefWidth="794.0" text="Note of group">
+                              <Label fx:id="groupName" prefHeight="50.0" prefWidth="794.0">
                                  <font>
                                     <Font size="36.0" />
                                  </font>
@@ -58,7 +58,7 @@
                               </Label>
                               <AnchorPane prefHeight="84.0" prefWidth="274.0">
                                  <children>
-                                    <Label fx:id="backToAllNotes" layoutX="18.0" layoutY="52.0" onMouseClicked="#backToAllNotesClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="35.0" prefWidth="149.0" text="Back to  all notes &lt;-">
+                                    <Label fx:id="backToAllNotes" layoutX="-40.0" layoutY="55.0" onMouseClicked="#backToAllNotesClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="32.0" prefWidth="207.0" text="Back to  all notes &lt;-">
                                        <font>
                                           <Font size="15.0" />
                                        </font>

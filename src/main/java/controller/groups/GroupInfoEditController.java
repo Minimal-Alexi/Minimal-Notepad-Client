@@ -1,5 +1,7 @@
 package controller.groups;
 
+import controller.PageController;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.*;
+import model.ObservableResourceFactory;
 
 import model.selected.SelectedGroup;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -27,13 +30,14 @@ import static utils.GroupServices.updateGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import utils.ControllerUtils;
 
 import static utils.GroupServices.findGroupById;
 import static utils.GroupServices.updateGroup;
 import static utils.MainPageServices.setSidebarLanguages;
 import static utils.MainPageServices.updateNameLabel;
 
-public class GroupInfoEditController {
+public class GroupInfoEditController extends PageController {
 
 
     // group detail
@@ -69,6 +73,18 @@ public class GroupInfoEditController {
     private Label localTime;
 
     @FXML
+    private Label GroupNameId;
+
+    @FXML
+    private Label GroupDescId;
+
+    @FXML
+    private Label editmygroupid;
+
+    @FXML
+    private Label membersid;
+
+    @FXML
     private BorderPane root;
 
     @FXML
@@ -100,6 +116,8 @@ public class GroupInfoEditController {
     private Scene scene;
     private Parent parent;
     private ControllerUtils controllerUtils;
+    private ObservableResourceFactory RESOURCE_FACTORY ;
+
     private List<AppUser> memberList;
 
     SelectedGroup selectedGroup = SelectedGroup.getInstance();
@@ -131,12 +149,18 @@ public class GroupInfoEditController {
 
 
     public void initialize() {
+        TokenStorage.getIntance();
         this.memberList = new ArrayList<>();
 
         System.out.println("Start Edit Group Page");
         System.out.println("scene " + scene);
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+
+        RESOURCE_FACTORY.getResources();
+
+        Platform.runLater(()-> super.updateDisplay());
 
         // Fetch the group from the server
         Group group = findGroupById("http://localhost:8093/api/groups/", selectedGroup.getId(), TokenStorage.getToken());
@@ -527,5 +551,41 @@ public class GroupInfoEditController {
         this.controllerUtils.setDefaultCursor(allGroupsBtn);
         this.controllerUtils.setDefaultCursor(accountBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
+    }
+
+    @Override
+    public void updateAllUIComponents() {
+    }
+
+    @Override
+    public void bindUIComponents() {
+        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
+        //errGeneral.textProperty().bind(RESOURCE_FACTORY.getStringBinding(""));
+        GroupNameId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupNameId"));
+        GroupDescId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupDescId"));
+        //myGroupsBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsBtn"));
+        editmygroupid.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editmygroupid"));
+        //errConfirmPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
+
+        allGroupsBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("allGroupsBtn"));
+        accountBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("accountBtn"));
+
+        logOutBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("logOutBtn"));
+        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
+
+        editedGroupNameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editedGroupNameLabel"));
+        groupNameInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("groupNameInput"));
+
+        groupDescInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("groupDescInput"));
+        //unmaskedPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedPwdInputPrompt"));
+        //unmaskedConfirmPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedConfirmPwdInputPrompt"));
+
+        group1.textProperty().bind(RESOURCE_FACTORY.getStringBinding("group1"));
+        category1.textProperty().bind(RESOURCE_FACTORY.getStringBinding("category1"));
+        editGroupBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editGroupBtn"));
+
+
+
+        membersid.textProperty().bind(RESOURCE_FACTORY.getStringBinding("membersid"));
     }
 }

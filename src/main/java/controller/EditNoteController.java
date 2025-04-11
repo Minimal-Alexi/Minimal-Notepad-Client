@@ -11,12 +11,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import controller.PageController;
+import utils.ControllerUtils;
+
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.HttpRequestBuilder;
 import model.Note;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import model.selected.SelectedNote;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -35,12 +40,15 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static utils.MainPageServices.*;
 import static utils.NoteServices.*;
+import static utils.MainPageServices.setSidebarLanguages;
+import static utils.MainPageServices.updateNameLabel;
 
 
-public class EditNoteController {
+public class EditNoteController extends PageController {
 
     @FXML private ChoiceBox<String> groupSharingChoiceBox;
     @FXML
@@ -67,6 +75,17 @@ public class EditNoteController {
     private ColorPicker colorPicker;
     @FXML
     private Rectangle noteBackground;
+    @FXML
+    private Text welcomeText;
+
+    @FXML
+    private Label editingNoteLabel;
+
+    @FXML
+    private Label categoriesId;
+
+    @FXML
+    private Label GroupsId;
 
     @FXML
     private Button myNotesBtn;
@@ -90,9 +109,12 @@ public class EditNoteController {
     private HashMap<Integer, String> categoryList = new HashMap<>();
     private HashMap<Integer, String> groupList = new HashMap<>();
     private ArrayList<String> figureList = new ArrayList<>();
+    private ObservableResourceFactory RESOURCE_FACTORY ;
+
 
     // Initialize
     public void initialize() {
+        TokenStorage.getIntance();
         responseService = new HttpResponseServiceImpl();
         this.controllerUtils = new ControllerUtils();
 
@@ -100,6 +122,11 @@ public class EditNoteController {
         System.out.println(selectedNote.getId());
 
         note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+
+        RESOURCE_FACTORY.getResourceBundle();
+
+        Platform.runLater(()-> super.updateDisplay());
 
         assert note != null;
         textArea1.setText(note.getText());
@@ -339,5 +366,23 @@ public class EditNoteController {
         this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
+    public String getLocalizedActionColOneName(){
+        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        return rb.getString("actionColOneName");
+    }
+    @Override
+    public void updateAllUIComponents() {
+    }
 
+
+    @Override
+    public void bindUIComponents() {
+        editingNoteLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editingNoteLabel"));
+        saveNoteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("saveNoteBtn"));
+        deleteNoteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("deleteNoteBtn"));
+        titleTextArea.textProperty().bind(RESOURCE_FACTORY.getStringBinding("titleTextArea"));
+        uploadPicBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("uploadPicBtn"));
+        categoriesId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("categoriesId"));
+        GroupsId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupsId"));
+    }
 }

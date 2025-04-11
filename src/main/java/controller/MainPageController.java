@@ -237,7 +237,7 @@ public class MainPageController extends PageController {
         searchReset.setOnAction(event -> {
             isResetting = true;
             searchBar.setText("");
-            filterChoice.getSelectionModel().select("Any");
+            filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString("anyCategoryOption"));
             isResetting = false;
             noteObservableList.clear();
             noteObservableList.addAll(noteArrayList);
@@ -278,10 +278,10 @@ public class MainPageController extends PageController {
         {
             categoryList.putAll(note.getCategory());
         }
-        categoryList.put(-1,"No Category");
+        categoryList.put(-1,RESOURCE_FACTORY.getString("noCategoryOption"));
         filterChoice.getItems().addAll(categoryList.values());
-        filterChoice.getItems().add("Any");
-        filterChoice.getSelectionModel().select("Any");
+        filterChoice.getItems().add(RESOURCE_FACTORY.getString("anyCategoryOption"));
+        filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString("anyCategoryOption"));
         filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null && !newValue.equals(oldValue) && !isResetting)
             {
@@ -356,7 +356,7 @@ public class MainPageController extends PageController {
 
     private void updateEdittedTimeLabel(){
         SimpleDateFormat currentTimeFormat = Utils.getTheCurrentLocaleDateTimeFormatString();
-        String edittedTimeStr = RESOURCE_FACTORY.getResources().getString("edittedTime");
+        String edittedTimeStr = RESOURCE_FACTORY.getResourceBundle().getString("edittedTime");
 
     }
 

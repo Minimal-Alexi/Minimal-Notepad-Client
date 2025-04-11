@@ -141,7 +141,7 @@ public class MainPageServices {
         // it shuffle between the old format and new format
 
 //        DateFormat currentTime = Utils.getTheCurrentLocaleDateTimeFormatString();
-        System.out.println(timeLabel.getUserData());
+//        System.out.println("time Label"+ timeLabel.getUserData());
         if (timeLabel.getUserData() instanceof Timeline) {
 //            ((Timeline) timeLabel.getUserData()).stop();
             System.out.println("time label is instance of timeline");
@@ -200,8 +200,8 @@ public class MainPageServices {
 
         ObservableResourceFactory RESOURCE_FACTORY;
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
-        RESOURCE_FACTORY.getResources();
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 
         nameLabel.setText(rb.getString("welcome") + " " + username);
     }
@@ -241,13 +241,13 @@ public class MainPageServices {
                 Date inputDate = baseSDF.parse(dateString);
 
                 // localize by convert the Date object into the localized version
-                Locale currentLocale = RESOURCE_FACTORY.getResources().getLocale();
+                Locale currentLocale = RESOURCE_FACTORY.getResourceBundle().getLocale();
                 String outputDateTimeFormatString = "yyyy-MM-dd";
                 SimpleDateFormat outputSdf = new SimpleDateFormat(outputDateTimeFormatString, currentLocale);
 
                 String localizedDateStr = outputSdf.format(inputDate);
 
-                String edditedString = RESOURCE_FACTORY.getResources().getString("edited");
+                String edditedString = RESOURCE_FACTORY.getResourceBundle().getString("edited");
 
                 editAt.setText(edditedString + " "+ localizedDateStr);
                 editAt.getStyleClass().add("edit-at");
@@ -349,8 +349,8 @@ public class MainPageServices {
                                            Button logOutBtn) {
         ObservableResourceFactory RESOURCE_FACTORY;
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
-        RESOURCE_FACTORY.getResources();
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         myNotesBtn.setText(rb.getString("sidebarMyNotes"));
         shareNotesBtn.setText(rb.getString("sidebarMyGroupsNotes"));
         myGroupsBtn.setText(rb.getString("sidebarMyGroups"));

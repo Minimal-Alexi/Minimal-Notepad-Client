@@ -1,5 +1,6 @@
 package controller.groups;
 
+import controller.PageController;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,13 +23,14 @@ import utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static utils.GroupServices.findGroupById;
 import static utils.GroupServices.updateGroup;
 import static utils.MainPageServices.setSidebarLanguages;
 import static utils.MainPageServices.updateNameLabel;
 
-public class ReadOnlyGroupController {
+public class ReadOnlyGroupController extends PageController {
 
 
     // group detail
@@ -76,25 +78,31 @@ public class ReadOnlyGroupController {
     private Label notiLabel1;
 
     @FXML
-    private Label editedGroupNameLabel;
-    @FXML
-    private Label editedGroupDescLabel;
-
+    private Label groupDetailLabel;
     @FXML
     private Label groupNameLabel;
     @FXML
     private Label groupDescLabel;
+    @FXML
+    private Label membersInThisGroupLabel;
+
+    @FXML
+    private Label groupNameInfoLabel;
+    @FXML
+    private Label groupDescInfoLabel;
 
 
     @FXML
     private TableView<AppUser> table1;
 
     @FXML
-    private TableColumn<AppUser, String> group1;  // Username column
+    private TableColumn<AppUser, String> usernameCol;  // Username column
     @FXML
-    private TableColumn<AppUser, String> category1;  // Email column
+    private TableColumn<AppUser, String> emailCol;  // Email column
 
-    private ObservableList<AppUser> groupMembers = FXCollections.observableArrayList();
+    private ObservableList<AppUser> groupMembers ;
+
+
 
     private Group group;
     private Stage stage;
@@ -103,7 +111,9 @@ public class ReadOnlyGroupController {
     private ControllerUtils controllerUtils;
     private List<AppUser> memberList;
 
-    SelectedGroup selectedGroup = SelectedGroup.getInstance();
+    private ObservableResourceFactory RESOURCE_FACTORY;
+
+    SelectedGroup selectedGroup = SelectedGroup.getInstance(); ;
     private HttpResponseService httpResponseService;
 //    private HttpClientSingleton httpInstance;
 
@@ -118,21 +128,14 @@ public class ReadOnlyGroupController {
     private static final String FXMLSource = "/fxml";
     private static final String CSSSOURCE = "/CSS";
 
-    public JSONArray convertToJSONArray(List<GroupMember> groupMembers) {
-        JSONArray jsonArray = new JSONArray();
-        for (GroupMember member : groupMembers) {
-            JSONObject memberObject = new JSONObject();
-            memberObject.put("id", member.getId());
-            memberObject.put("username", member.getUsername());
-            memberObject.put("email", member.getEmail());
-            jsonArray.put(memberObject);
-        }
-        return jsonArray;
-    }
 
 
     public void initialize() {
         this.memberList = new ArrayList<>();
+
+//        selectedGroup = SelectedGroup.getInstance();
+        groupMembers = FXCollections.observableArrayList();
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         System.out.println("Start Edit Group Page");
         System.out.println("scene " + scene);
@@ -148,8 +151,8 @@ public class ReadOnlyGroupController {
         if (group != null) {
 //            groupNameInput.setText(group.getName());
 //            groupDescInput.setText(group.getDescription());
-            groupNameLabel.setText(group.getName());
-            groupDescLabel.setText(group.getDescription());
+            groupNameInfoLabel.setText(group.getName());
+            groupDescInfoLabel.setText(group.getDescription());
         } else {
             System.out.println("Group not found.");
 
@@ -173,7 +176,8 @@ public class ReadOnlyGroupController {
         table1.setItems(groupMembers);
 
         // create action column with default button
-        actionOneCol = addAppUserCol("Action");
+//        String localizedActionOneColName =
+        actionOneCol = addAppUserCol(getLocalizedActionColOneName());
 
         // update Table View with updated action button
         // 1. get group based on ID and its member list
@@ -186,7 +190,7 @@ public class ReadOnlyGroupController {
 
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
-
+        super.updateDisplay();
     }
 
     public void getGroupUserInfoByGroupId() {
@@ -245,10 +249,10 @@ public class ReadOnlyGroupController {
     public void displayUserTable() {
 
 //        idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
-        // group1 í column name, "Name" is the property name of the AppUser
-        group1.setCellValueFactory(new PropertyValueFactory<>("Username"));
-//        System.out.println("name: "+ group1.getCellValueFactory().equals(TokenStorage.getUser()));
-        category1.setCellValueFactory(new PropertyValueFactory<>("Email"));
+        // usernameCol í column name, "Name" is the property name of the AppUser
+        usernameCol.setCellValueFactory(new PropertyValueFactory<>("Username"));
+//        System.out.println("name: "+ usernameCol.getCellValueFactory().equals(TokenStorage.getUser()));
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("Email"));
 //        numOfMembersCol.setCellValueFactory(new PropertyValueFactory<>("NumberOfMembers"));
 
         groupMembers = FXCollections.observableArrayList(this.memberList);
@@ -285,8 +289,8 @@ public class ReadOnlyGroupController {
             System.out.println(object);
             String email = (String) object.get("email");
             String username = (String) object.get("username");
-            group1.setText(email);
-            category1.setText(username);
+            usernameCol.setText(email);
+            emailCol.setText(username);
         } catch (JSONException e) {
             System.out.println("Error parsing JSON: " + e.getMessage());
         }
@@ -530,5 +534,28 @@ public class ReadOnlyGroupController {
         this.controllerUtils.setDefaultCursor(allGroupsBtn);
         this.controllerUtils.setDefaultCursor(accountBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
+    }
+
+    public String getLocalizedActionColOneName(){
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
+        return rb.getString("actionColOneName");
+    }
+
+    @Override
+    public void updateAllUIComponents() {
+        getLocalizedActionColOneName();
+
+    }
+
+    @Override
+    public void bindUIComponents() {
+
+        groupDetailLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("groupDetailLabel"));
+        groupDescLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("groupDescLabel"));
+        groupNameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("groupNameLabel"));
+        membersInThisGroupLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("membersInThisGroupLabel"));
+        usernameCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameCol"));
+        emailCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailCol"));
+//        actionOneCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("actionOneCol"));
     }
 }

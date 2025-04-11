@@ -336,15 +336,15 @@ public class AccountInfoPwdController extends PageController {
 
 
     private String getEmptyCurPwdErrorMessage() {
-        return RESOURCE_FACTORY.getResources().getString("errCurPwdLabel");
+        return RESOURCE_FACTORY.getResourceBundle().getString("errCurPwdLabel");
     }
 
     private String getEmptyNewPwdErrorMessage(){
-        return RESOURCE_FACTORY.getResources().getString("errNewPwdLabel");
+        return RESOURCE_FACTORY.getResourceBundle().getString("errNewPwdLabel");
     }
 
     private String getRepeatNewPwdErrorMessage(){
-        return RESOURCE_FACTORY.getResources().getString("errRepeatPwd");
+        return RESOURCE_FACTORY.getResourceBundle().getString("errRepeatPwd");
     }
 
     private void displayEmptyErrorMessage(String curPwd, String newPwd, String repeatNewPwd) {
@@ -368,7 +368,7 @@ public class AccountInfoPwdController extends PageController {
 
     }
     private void updateEmptyErrorMessagesWhenLanguageChange() {
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 
         if (!errCurPwd.getText().isEmpty()) {
             errCurPwd.setText(getEmptyCurPwdErrorMessage());
