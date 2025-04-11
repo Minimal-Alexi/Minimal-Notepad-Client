@@ -272,6 +272,8 @@ public class LogInController extends PageController {
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI);
         httpRequest.updateJsonRequest("username", username);
         httpRequest.updateJsonRequest("password", password);
+        String languageCode = RESOURCE_FACTORY.getResources().getLocale().getLanguage();
+        httpRequest.addHeader("Accept-Language", languageCode);
         httpRequest.setRequestBody();
         HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
@@ -291,6 +293,8 @@ public class LogInController extends PageController {
                 TokenStorage.saveToken(username, token);
                 String savedUsername = TokenStorage.getUser();
                 String savedToken = TokenStorage.getToken();
+                String languageCode = (String) object.get("languageCode");
+                ObservableResourceFactory.getInstance().changeLanguage(languageCode);
                 goToMainPage();
 
             } catch (JSONException e) {
