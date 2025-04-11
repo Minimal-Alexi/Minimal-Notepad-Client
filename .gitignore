@@ -1,4 +1,9 @@
-target/
+### SonarQube ###
+sonar-scanner/
+!sonar-scanner/conf/
+!sonar-scanner/bin/sonar-scanner.properties
+
+### Maven ###
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

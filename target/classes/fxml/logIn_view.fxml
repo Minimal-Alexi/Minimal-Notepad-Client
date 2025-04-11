@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<FlowPane fx:id="loginPage" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.auth.LogInController">
+   <children>
+      <Pane prefHeight="551.0" prefWidth="282.0" style="-fx-border-color: black;">
+         <children>
+            <VBox fillWidth="false" layoutX="12.0" layoutY="15.0" prefHeight="520.0" prefWidth="253.0">
+               <children>
+                  <Text fx:id="welcomeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome !" wrappingWidth="219.47006225585938">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="signInText" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign In to" wrappingWidth="219.47006225585938">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="31.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="noteApp" strokeType="OUTSIDE" strokeWidth="0.0" text="NoteApp is simple" wrappingWidth="219.47006225585938">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <VBox prefHeight="346.0" prefWidth="244.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <children>
+                        <Text fx:id="errGeneral" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <VBox prefHeight="73.0" prefWidth="185.0">
+                           <children>
+                              <HBox prefHeight="28.0" prefWidth="185.0">
+                                 <children>
+                                    <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="User name">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fx:id="errUser" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <TextField fx:id="loginUserInput" prefHeight="30.0" prefWidth="185.0" promptText="Entgit er your username" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox prefHeight="88.0" prefWidth="185.0">
+                           <children>
+                              <HBox prefHeight="23.0" prefWidth="244.0">
+                                 <children>
+                                    <Text fx:id="passwordText" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fx:id="errPwd" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <StackPane fx:id="pwdStackPane" prefHeight="37.0" prefWidth="244.0">
+                                 <children>
+                                    <StackPane fx:id="maskedStackPane" prefHeight="150.0" prefWidth="200.0">
+                                       <children>
+                                          <TextField fx:id="loginPassTxtInput" prefHeight="94.0" prefWidth="423.0" promptText="Enter your Password" />
+                                          <AnchorPane fx:id="unmaskedPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#unmaskedIconClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="30.0" prefWidth="30.0" StackPane.alignment="CENTER_RIGHT">
+                                             <children>
+                                                <SVGPath fx:id="unmaskedIcon" content="M 12.50,16.13           C 10.43,16.13 8.79,14.50 8.79,12.42             8.79,10.35 10.42,8.71 12.50,8.71             14.57,8.71 16.21,10.34 16.21,12.42             16.21,14.50 14.57,16.13 12.50,16.13 Z           M 12.50,10.21           C 11.32,10.21 10.27,11.24 10.27,12.43             10.27,13.62 11.32,14.65 12.50,14.65             13.68,14.65 14.73,13.61 14.73,12.42             14.73,11.23 13.68,10.21 12.50,10.21 Z           M 12.50,20.58           C 8.50,20.58 4.79,18.06 1.08,13.02             0.94,12.72 0.94,12.42 1.08,12.13             1.23,11.83 6.12,4.42 12.79,4.42             16.80,4.42 20.50,6.94 23.91,12.13             24.05,12.42 24.05,12.72 23.91,12.87             23.61,13.32 19.17,20.58 12.50,20.58 Z           M 2.57,12.58           C 5.83,16.88 9.09,19.10 12.50,19.10             17.54,19.10 21.39,14.06 22.29,12.58             19.32,8.27 16.05,6.05 12.79,6.05             7.75,6.05 3.61,11.09 2.57,12.58 Z" />
+                                             </children>
+                                             <StackPane.margin>
+                                                <Insets right="10.0" />
+                                             </StackPane.margin>
+                                          </AnchorPane>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane fx:id="unmaskedStackPane" prefHeight="29.0" prefWidth="244.0">
+                                       <children>
+                                          <PasswordField fx:id="loginPassInput" prefHeight="35.0" prefWidth="244.0" promptText="Enter Your Password">
+                                             <StackPane.margin>
+                                                <Insets />
+                                             </StackPane.margin>
+                                          </PasswordField>
+                                          <AnchorPane fx:id="maskedPane" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#maskedIconClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="30.0" prefWidth="0.0" StackPane.alignment="CENTER_RIGHT">
+                                             <StackPane.margin>
+                                                <Insets right="15.0" />
+                                             </StackPane.margin>
+                                             <children>
+                                                <SVGPath fx:id="maskedIcon" content="M 14.58,14.83           C 14.03,15.32 13.30,15.63 12.50,15.63             10.77,15.63 9.38,14.23 9.38,12.50             9.38,11.64 9.72,10.86 10.28,10.30M 6.99,7.00           C 3.82,9.16 2.08,12.50 2.08,12.50             2.08,12.50 5.87,19.79 12.50,19.79             14.64,19.79 16.48,19.03 17.99,18.01M 11.46,5.27           C 11.80,5.23 12.14,5.21 12.50,5.21             19.13,5.21 22.92,12.50 22.92,12.50             22.92,12.50 22.20,13.89 20.83,15.45M 2.08,2.08           C 2.08,2.08 22.92,22.92 22.92,22.92" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                              </StackPane>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </VBox>
+                        <BorderPane prefHeight="20.0" prefWidth="244.0">
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="23.0" />
+                           </VBox.margin>
+                           <left>
+                              <CheckBox fx:id="rememberBox" mnemonicParsing="false" prefHeight="37.0" prefWidth="142.0" text="Remember me" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </CheckBox>
+                           </left>
+                        </BorderPane>
+                        <StackPane prefHeight="50.0" prefWidth="244.0">
+                           <children>
+                              <Button fx:id="loginBtn" mnemonicParsing="false" onMouseClicked="#loginBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="67.0" prefWidth="166.0" style="-fx-background-color: #a276ff;" text="Sign In" textFill="WHITE">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="31.0" />
+                           </VBox.margin>
+                        </StackPane>
+                        <FlowPane alignment="CENTER" prefHeight="41.0" prefWidth="423.0">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <Text fx:id="DontHaveAccountText" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an Account">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="registerLabel" fill="#a276ff" onMouseClicked="#registerClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Register">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <FlowPane.margin>
+                                    <Insets left="5.0" />
+                                 </FlowPane.margin>
+                              </Text>
+                           </children>
+                        </FlowPane>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+      <VBox alignment="TOP_RIGHT" prefHeight="453.0" prefWidth="306.0">
+         <children>
+            <Button fx:id="backBtn" mnemonicParsing="false" onMouseClicked="#backBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="41.0" prefWidth="162.0" style="-fx-background-color: #a276ff;" text="Back" textFill="WHITE">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <rotationAxis>
+                  <Point3D />
+               </rotationAxis>
+            </Button>
+            <ImageView fitHeight="500.0" fitWidth="475.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/small-team-discussing-ideas-2194220-0.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets left="30.0" top="30.0" />
+   </padding>
+</FlowPane>

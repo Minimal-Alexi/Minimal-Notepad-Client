@@ -1,0 +1,20 @@
+.text-input {
+    -fx-padding: 5 5 5 10;
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.text-input:focused {
+    -fx-border-color: #66afe9;
+}
+
+.text-input .text-field {
+    -fx-prompt-text-fill: #999;
+    -fx-text-fill: #333;
+}
+
+.text-input .input-text {
+    -fx-padding: 5 5 5 5;
+}

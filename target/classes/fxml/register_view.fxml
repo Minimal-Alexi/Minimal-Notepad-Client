@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="registerPage" onKeyPressed="#registerPagePress" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.auth.RegisterController">
+   <center>
+      <FlowPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER_RIGHT">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <Pane prefHeight="539.0" prefWidth="295.0" style="-fx-border-color: black;">
+               <children>
+                  <VBox fillWidth="false" layoutX="14.0" layoutY="15.0" prefHeight="525.0" prefWidth="267.0">
+                     <children>
+                        <Text fx:id="welcomeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome !" wrappingWidth="219.47006225585938">
+                           <VBox.margin>
+                              <Insets top="14.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="registerTo" strokeType="OUTSIDE" strokeWidth="0.0" text="Register to " wrappingWidth="219.47006225585938">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="31.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="noteApp" strokeType="OUTSIDE" strokeWidth="0.0" text="NoteApp is simple" wrappingWidth="219.47006225585938">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <VBox prefHeight="422.0" prefWidth="267.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <children>
+                              <Text fx:id="errGeneral" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <VBox prefHeight="78.0" prefWidth="267.0">
+                                 <children>
+                                    <HBox prefHeight="27.0" prefWidth="423.0">
+                                       <children>
+                                          <Text fx:id="emailText" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fx:id="errEmail" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Text>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <TextField fx:id="emailInput" prefHeight="41.0" prefWidth="423.0" promptText="Enter your email">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="68.0" prefWidth="267.0">
+                                 <children>
+                                    <HBox prefHeight="61.0" prefWidth="423.0">
+                                       <children>
+                                          <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fx:id="errUser" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Text>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <TextField fx:id="userInput" prefHeight="100.0" prefWidth="423.0" promptText="Enter your username">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="68.0" prefWidth="267.0">
+                                 <children>
+                                    <HBox prefHeight="61.0" prefWidth="423.0">
+                                       <children>
+                                          <Text fx:id="passwordText" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fx:id="errPwd" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Text>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </HBox>
+                                    <StackPane fx:id="pwdStackPane" prefHeight="150.0" prefWidth="267.0">
+                                       <children>
+                                          <StackPane fx:id="maskedStackPane" prefHeight="45.0" prefWidth="423.0">
+                                             <children>
+                                                <TextField fx:id="unmaskedPwdInput" prefHeight="94.0" prefWidth="423.0" promptText="Enter your Password" />
+                                                <AnchorPane fx:id="unmaskedPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#unmaskedIconClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="30.0" prefWidth="30.0" StackPane.alignment="CENTER_RIGHT">
+                                                   <children>
+                                                      <SVGPath content="M 12.50,16.13           C 10.43,16.13 8.79,14.50 8.79,12.42             8.79,10.35 10.42,8.71 12.50,8.71             14.57,8.71 16.21,10.34 16.21,12.42             16.21,14.50 14.57,16.13 12.50,16.13 Z           M 12.50,10.21           C 11.32,10.21 10.27,11.24 10.27,12.43             10.27,13.62 11.32,14.65 12.50,14.65             13.68,14.65 14.73,13.61 14.73,12.42             14.73,11.23 13.68,10.21 12.50,10.21 Z           M 12.50,20.58           C 8.50,20.58 4.79,18.06 1.08,13.02             0.94,12.72 0.94,12.42 1.08,12.13             1.23,11.83 6.12,4.42 12.79,4.42             16.80,4.42 20.50,6.94 23.91,12.13             24.05,12.42 24.05,12.72 23.91,12.87             23.61,13.32 19.17,20.58 12.50,20.58 Z           M 2.57,12.58           C 5.83,16.88 9.09,19.10 12.50,19.10             17.54,19.10 21.39,14.06 22.29,12.58             19.32,8.27 16.05,6.05 12.79,6.05             7.75,6.05 3.61,11.09 2.57,12.58 Z" />
+                                                   </children>
+                                                   <StackPane.margin>
+                                                      <Insets right="10.0" />
+                                                   </StackPane.margin>
+                                                </AnchorPane>
+                                             </children>
+                                          </StackPane>
+                                          <StackPane fx:id="unmaskedStackPane" prefHeight="150.0" prefWidth="200.0">
+                                             <children>
+                                                <PasswordField fx:id="pwdInput" prefHeight="75.0" prefWidth="423.0" promptText="Enter Your Password">
+                                                   <StackPane.margin>
+                                                      <Insets />
+                                                   </StackPane.margin>
+                                                </PasswordField>
+                                                <AnchorPane fx:id="maskedPane" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#maskedIconClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="30.0" prefWidth="0.0" StackPane.alignment="CENTER_RIGHT">
+                                                   <StackPane.margin>
+                                                      <Insets right="15.0" />
+                                                   </StackPane.margin>
+                                                   <children>
+                                                      <SVGPath content="M 14.58,14.83           C 14.03,15.32 13.30,15.63 12.50,15.63             10.77,15.63 9.38,14.23 9.38,12.50             9.38,11.64 9.72,10.86 10.28,10.30M 6.99,7.00           C 3.82,9.16 2.08,12.50 2.08,12.50             2.08,12.50 5.87,19.79 12.50,19.79             14.64,19.79 16.48,19.03 17.99,18.01M 11.46,5.27           C 11.80,5.23 12.14,5.21 12.50,5.21             19.13,5.21 22.92,12.50 22.92,12.50             22.92,12.50 22.20,13.89 20.83,15.45M 2.08,2.08           C 2.08,2.08 22.92,22.92 22.92,22.92" AnchorPane.topAnchor="5.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </children>
+                                          </StackPane>
+                                       </children>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
+                                    </StackPane>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="12.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox prefHeight="59.0" prefWidth="267.0">
+                                 <children>
+                                    <HBox prefHeight="61.0" prefWidth="423.0">
+                                       <children>
+                                          <Text fx:id="confirmPwdText" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fx:id="errConfirmPwd" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Text>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </HBox>
+                                    <StackPane fx:id="confirmPwdStackPane" prefHeight="150.0" prefWidth="200.0">
+                                       <children>
+                                          <StackPane fx:id="confirmMaskedStackPane" prefHeight="45.0" prefWidth="423.0">
+                                             <children>
+                                                <TextField fx:id="unmaskedConfirmPwdInput" prefHeight="94.0" prefWidth="423.0" promptText="Enter your Password" />
+                                                <AnchorPane fx:id="unmaskedConfirmPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#unmaskedConfirmIconClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="30.0" prefWidth="30.0" StackPane.alignment="CENTER_RIGHT">
+                                                   <children>
+                                                      <SVGPath content="M 12.50,16.13           C 10.43,16.13 8.79,14.50 8.79,12.42             8.79,10.35 10.42,8.71 12.50,8.71             14.57,8.71 16.21,10.34 16.21,12.42             16.21,14.50 14.57,16.13 12.50,16.13 Z           M 12.50,10.21           C 11.32,10.21 10.27,11.24 10.27,12.43             10.27,13.62 11.32,14.65 12.50,14.65             13.68,14.65 14.73,13.61 14.73,12.42             14.73,11.23 13.68,10.21 12.50,10.21 Z           M 12.50,20.58           C 8.50,20.58 4.79,18.06 1.08,13.02             0.94,12.72 0.94,12.42 1.08,12.13             1.23,11.83 6.12,4.42 12.79,4.42             16.80,4.42 20.50,6.94 23.91,12.13             24.05,12.42 24.05,12.72 23.91,12.87             23.61,13.32 19.17,20.58 12.50,20.58 Z           M 2.57,12.58           C 5.83,16.88 9.09,19.10 12.50,19.10             17.54,19.10 21.39,14.06 22.29,12.58             19.32,8.27 16.05,6.05 12.79,6.05             7.75,6.05 3.61,11.09 2.57,12.58 Z" />
+                                                   </children>
+                                                   <StackPane.margin>
+                                                      <Insets right="10.0" />
+                                                   </StackPane.margin>
+                                                </AnchorPane>
+                                             </children>
+                                          </StackPane>
+                                          <StackPane fx:id="confirmUnmaskedStackPane" prefHeight="150.0" prefWidth="200.0">
+                                             <children>
+                                                <PasswordField fx:id="confirmPwdInput" prefHeight="75.0" prefWidth="423.0" promptText="Enter Your Password">
+                                                   <StackPane.margin>
+                                                      <Insets />
+                                                   </StackPane.margin>
+                                                </PasswordField>
+                                                <AnchorPane fx:id="maskedConfirmPane" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#maskedConfirmIconClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="30.0" prefWidth="0.0" StackPane.alignment="CENTER_RIGHT">
+                                                   <StackPane.margin>
+                                                      <Insets right="15.0" />
+                                                   </StackPane.margin>
+                                                   <children>
+                                                      <SVGPath fx:id="maskedIcon1" content="M 14.58,14.83           C 14.03,15.32 13.30,15.63 12.50,15.63             10.77,15.63 9.38,14.23 9.38,12.50             9.38,11.64 9.72,10.86 10.28,10.30M 6.99,7.00           C 3.82,9.16 2.08,12.50 2.08,12.50             2.08,12.50 5.87,19.79 12.50,19.79             14.64,19.79 16.48,19.03 17.99,18.01M 11.46,5.27           C 11.80,5.23 12.14,5.21 12.50,5.21             19.13,5.21 22.92,12.50 22.92,12.50             22.92,12.50 22.20,13.89 20.83,15.45M 2.08,2.08           C 2.08,2.08 22.92,22.92 22.92,22.92" AnchorPane.topAnchor="5.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </children>
+                                          </StackPane>
+                                       </children>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
+                                    </StackPane>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="12.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <StackPane prefHeight="53.0" prefWidth="267.0">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <Button fx:id="registerBtn" mnemonicParsing="false" onMouseClicked="#registerBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="38.0" prefWidth="267.0" style="-fx-background-color: #a276ff;" text="Register" textFill="WHITE">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </StackPane>
+                              <FlowPane alignment="CENTER" prefHeight="41.0" prefWidth="423.0">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <children>
+                                    <Text fx:id="alreadyHaveAccount" strokeType="OUTSIDE" strokeWidth="0.0" text="Already have an Account?">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fx:id="loginLabel" fill="#a276ff" onMouseClicked="#loginLabelClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Log In">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                       <FlowPane.margin>
+                                          <Insets left="5.0" />
+                                       </FlowPane.margin>
+                                    </Text>
+                                 </children>
+                              </FlowPane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+               <FlowPane.margin>
+                  <Insets left="30.0" top="30.0" />
+               </FlowPane.margin>
+            </Pane>
+         </children>
+      </FlowPane>
+   </center>
+   <right>
+      <VBox alignment="TOP_RIGHT" prefHeight="570.0" prefWidth="506.0" styleClass="box-right">
+         <children>
+            <Button fx:id="backBtn" mnemonicParsing="false" onMouseClicked="#backBtnClick" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefHeight="47.0" prefWidth="140.0" style="-fx-background-color: #a276ff;" text="Back" textFill="WHITE">
+               <VBox.margin>
+                  <Insets right="30.0" top="30.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="399.0" fitWidth="496.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/small-team-discussing-ideas-2194220-0.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+   </right>
+</BorderPane>
