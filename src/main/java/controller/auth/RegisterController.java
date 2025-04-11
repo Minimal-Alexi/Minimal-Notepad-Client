@@ -131,7 +131,7 @@ public class RegisterController extends PageController {
 
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
 
         Platform.runLater(()-> super.updateDisplay());
     }
@@ -288,7 +288,7 @@ public class RegisterController extends PageController {
         httpRequest.updateJsonRequest("username", username);
         httpRequest.updateJsonRequest("email", email);
         httpRequest.updateJsonRequest("password", password);
-        String languageCode = RESOURCE_FACTORY.getResources().getLocale().getLanguage();
+        String languageCode = RESOURCE_FACTORY.getResourceBundle().getLocale().getLanguage();
         httpRequest.updateJsonRequest("language", languageCode);
         httpRequest.setRequestBody();
         HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();

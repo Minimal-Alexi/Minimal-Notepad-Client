@@ -356,7 +356,7 @@ public class MainPageController extends PageController {
 
     private void updateEdittedTimeLabel(){
         SimpleDateFormat currentTimeFormat = Utils.getTheCurrentLocaleDateTimeFormatString();
-        String edittedTimeStr = RESOURCE_FACTORY.getResources().getString("edittedTime");
+        String edittedTimeStr = RESOURCE_FACTORY.getResourceBundle().getString("edittedTime");
 
     }
 

@@ -98,7 +98,7 @@ public class HelloController extends PageController {
 
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
 //        setupLanguageBox();
         Platform.runLater(()->{
             Utils.setupLanguageBox(
