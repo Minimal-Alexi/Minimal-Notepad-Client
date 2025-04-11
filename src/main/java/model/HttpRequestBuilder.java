@@ -84,6 +84,10 @@ public class HttpRequestBuilder {
         this.jsonRequest = jsonObject;
     }
 
+    public void addHeader(String name, String value) {
+        httpRequest.addHeader(name, value);
+    }
+
     public void setRequestBody() throws UnsupportedEncodingException {
         if (!this.methodName.equals("GET") && !this.methodName.equals("DELETE")) {
             this.stringEntity = new StringEntity(this.jsonRequest.toString());
