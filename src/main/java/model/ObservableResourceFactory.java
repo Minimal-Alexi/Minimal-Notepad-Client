@@ -102,6 +102,43 @@ public class ObservableResourceFactory {
         }
 
         ResourceBundle newBundle = ResourceBundle.getBundle("messages", locale);
+        LanguageLabel languageLabel = getLanguageLabel(key);
+        setSelectedLanguage(languageLabel);
         setResources(newBundle);
+    }
+
+    public LanguageLabel getLanguageLabel(String languageKey){
+        String languageKeyFromResourceBundle = mapToLanguageKeyInResourceBundle(languageKey);
+        String languageValueFromResourceBundle = getResources().getString(languageKeyFromResourceBundle);
+        return  new LanguageLabel(languageKeyFromResourceBundle, languageValueFromResourceBundle);
+//        switch (languageKey){
+//            case "en":
+////                Strin
+//                return new LanguageLabel("en","en");
+//            case "ru":
+//                return new LanguageLabel("ru","ru");
+//            case "zh":
+//                return new LanguageLabel("zh","zh");
+//            case "fi":
+//                return new LanguageLabel("fi","fi");
+//                default:
+//                    return new LanguageLabel("en","en");
+//        }
+
+    }
+
+    public String mapToLanguageKeyInResourceBundle(String key){
+        switch (key.toLowerCase()){
+            case "en":
+                return "english";
+            case "ru":
+                return "russian";
+            case "zh":
+                return "chinese";
+            case "fi":
+                return "finnish";
+            default:
+                return "english";
+        }
     }
 }
