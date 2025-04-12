@@ -294,6 +294,7 @@ public class LogInController extends PageController {
                 String savedUsername = TokenStorage.getUser();
                 String savedToken = TokenStorage.getToken();
                 String languageCode = (String) object.get("languageCode");
+                System.out.println("languageCode: " + languageCode);
                 ObservableResourceFactory.getInstance().changeLanguage(languageCode);
                 goToMainPage();
 

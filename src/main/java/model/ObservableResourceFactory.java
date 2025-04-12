@@ -85,36 +85,60 @@ public class ObservableResourceFactory {
 
     public ResourceBundle findResourcebundle(String key) {
         Locale locale = switch (key.toLowerCase()) { // Use lowercase for consistency
-            case "chinese" -> new Locale("zh", "CN");
-            case "finnish" -> new Locale("fi", "FI");
-            case "russian" -> new Locale("ru", "RU");
+            case "zh" -> new Locale("zh", "CN");
+            case "fi" -> new Locale("fi", "FI");
+            case "ru" -> new Locale("ru", "RU");
             default -> new Locale("en", "US"); // Default to English
         };
         return ResourceBundle.getBundle("messages", locale);
     }
 
     public void changeLanguage(String key) {
-        Locale locale;
+//        Locale locale;
+//
+//        switch (key.toLowerCase()) {
+//            case "chinese":
+//            case "zh":
+//                locale = new Locale("zh", "CN");
+//                break;
+//            case "finnish":
+//            case "fi":
+//                locale = new Locale("fi", "FI");
+//                break;
+//            case "russian":
+//            case "ru":
+//                locale = new Locale("ru", "RU");
+//                break;
+//            default:
+//                locale = new Locale("en", "US");
+//                break;
+//        }
 
-        switch (key.toLowerCase()) {
-            case "chinese":
-            case "zh":
-                locale = new Locale("zh", "CN");
-                break;
-            case "finnish":
-            case "fi":
-                locale = new Locale("fi", "FI");
-                break;
-            case "russian":
-            case "ru":
-                locale = new Locale("ru", "RU");
-                break;
-            default:
-                locale = new Locale("en", "US");
-                break;
-        }
-
-        ResourceBundle newBundle = ResourceBundle.getBundle("messages", locale);
+//        ResourceBundle newBundle = ResourceBundle.getBundle("messages", locale);
+        ResourceBundle newBundle = findResourcebundle(key);
+        LanguageLabel languageLabel = getLanguageLabel(key);
+        setSelectedLanguage(languageLabel);
         setResources(newBundle);
     }
+
+    public LanguageLabel getLanguageLabel(String languageKey){
+//        String languageKeyFromResourceBundle = mapToLanguageKeyInResourceBundle(languageKey);
+        String languageValueFromResourceBundle = getResourceBundle().getString(languageKey);
+        return  new LanguageLabel(languageKey, languageValueFromResourceBundle);
+//        switch (languageKey){
+//            case "en":
+////                Strin
+//                return new LanguageLabel("en","en");
+//            case "ru":
+//                return new LanguageLabel("ru","ru");
+//            case "zh":
+//                return new LanguageLabel("zh","zh");
+//            case "fi":
+//                return new LanguageLabel("fi","fi");
+//                default:
+//                    return new LanguageLabel("en","en");
+//        }
+
+    }
+
 }
