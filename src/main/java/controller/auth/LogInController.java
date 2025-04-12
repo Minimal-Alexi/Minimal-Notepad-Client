@@ -272,7 +272,7 @@ public class LogInController extends PageController {
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI);
         httpRequest.updateJsonRequest("username", username);
         httpRequest.updateJsonRequest("password", password);
-        String languageCode = RESOURCE_FACTORY.getResources().getLocale().getLanguage();
+        String languageCode = RESOURCE_FACTORY.getResourceBundle().getLocale().getLanguage();
         httpRequest.addHeader("Accept-Language", languageCode);
         httpRequest.setRequestBody();
         HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();

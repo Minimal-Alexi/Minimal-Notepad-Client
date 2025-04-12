@@ -158,7 +158,7 @@ public class GroupInfoEditController extends PageController {
         this.httpResponseService = new HttpResponseServiceImpl();
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        RESOURCE_FACTORY.getResources();
+        RESOURCE_FACTORY.getResourceBundle();
 
         Platform.runLater(()-> super.updateDisplay());
 

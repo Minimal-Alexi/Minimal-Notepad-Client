@@ -367,7 +367,7 @@ public class EditNoteController extends PageController {
     }
 
     public String getLocalizedActionColOneName(){
-        ResourceBundle rb = RESOURCE_FACTORY.getResources();
+        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         return rb.getString("actionColOneName");
     }
     @Override
