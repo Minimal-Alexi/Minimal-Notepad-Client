@@ -78,7 +78,7 @@ public class AccountInfoPageController extends PageController {
     @FXML private
     ComboBox<LanguageLabel> languageBox;
 
-    private ObservableResourceFactory RESOURCE_FACTORY ;
+    private ObservableResourceFactory RESOURCE_FACTORY;
     private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
 
 
@@ -169,12 +169,10 @@ public class AccountInfoPageController extends PageController {
 
     }
 
-    public void handleSaveLanguage(CloseableHttpResponse response, Object jsonResponse){
-        // save selected language to client
+    public void handleSaveLanguage(CloseableHttpResponse response, Object jsonResponse){// save selected language to client
         System.out.println("Update UI after saving language from User Detail Page successful");
         String languageKey = RESOURCE_FACTORY.getSelectedLanguage().getKey();
         TokenStorage.saveInfo("lang", languageKey);
-
     }
 
     @FXML
