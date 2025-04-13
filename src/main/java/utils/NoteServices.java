@@ -46,9 +46,13 @@ public class NoteServices {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("Response Status Code: " + response.statusCode());
             System.out.println("Response Body: " + response.body());
-        } catch (IOException | InterruptedException e) {
-            System.err.println(e.getMessage());
-//            throw new RuntimeException(e);
+        } catch (IOException e) {
+            System.err.println("IO error occurred: " + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println("Thread was interrupted: " + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
     }
 
@@ -72,9 +76,13 @@ public class NoteServices {
 
                 return JsonToNote(result);
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             System.err.println(e.getMessage());
-//            throw new RuntimeException(e);
+            throw new RuntimeException(e); // Rethrow as RuntimeException
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
         return null;
     }
@@ -94,10 +102,13 @@ public class NoteServices {
             System.out.println("Response Status Code: " + response.statusCode());
 
             response.statusCode();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             System.err.println(e.getMessage());
-
-//            throw new RuntimeException(e);
+            throw new RuntimeException(e); // Rethrow as RuntimeException
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
     }
 
@@ -123,8 +134,11 @@ public class NoteServices {
                 }
                 return categories;
             }
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e); // Rethrow as RuntimeException
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
         return null;
     }
@@ -258,10 +272,13 @@ public class NoteServices {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("Response Status Code: " + response.statusCode());
             System.out.println("Response Body: " + response.body());
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             System.err.println(e.getMessage());
-
-//            throw new RuntimeException(e);
+            throw new RuntimeException(e); // Rethrow as RuntimeException
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
     }
 }
