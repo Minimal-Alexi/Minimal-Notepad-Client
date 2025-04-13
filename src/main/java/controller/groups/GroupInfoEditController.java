@@ -512,7 +512,7 @@ public class GroupInfoEditController extends PageController {
 
     @Override
     public void bindUIComponents() {
-        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
+//        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
         //errGeneral.textProperty().bind(RESOURCE_FACTORY.getStringBinding(""));
         GroupNameId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupNameId"));
         GroupDescId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupDescId"));
@@ -524,7 +524,7 @@ public class GroupInfoEditController extends PageController {
         accountBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("accountBtn"));
 
         logOutBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("logOutBtn"));
-        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
+//        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
 
 //      since this label only appear after user press the button,
 //      not from the begining of page, so using bind method will not wor
