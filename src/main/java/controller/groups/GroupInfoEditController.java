@@ -147,7 +147,6 @@ public class GroupInfoEditController extends PageController {
         return jsonArray;
     }
 
-
     public void initialize() {
         TokenStorage.getIntance();
         this.memberList = new ArrayList<>();
@@ -172,10 +171,6 @@ public class GroupInfoEditController extends PageController {
         }
 
         TokenStorage.getIntance();
-
-
-
-
 
         root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
@@ -232,7 +227,6 @@ public class GroupInfoEditController extends PageController {
 
         this.group = new Group(id, name, description, groupOwner, userList);
 
-        //updatedAllGroups.add(newGroup);
         this.memberList = this.group.getUserList();
 
         // setup, display data to table with processed data
@@ -261,7 +255,6 @@ public class GroupInfoEditController extends PageController {
         groupMembers = FXCollections.observableArrayList(this.memberList);
         table1.setItems(groupMembers);
         transformUsername();
-//        table1.getItems();
     }
 
 
@@ -501,44 +494,20 @@ public class GroupInfoEditController extends PageController {
         return RESOURCE_FACTORY.getString("notiLabel1SuccessText");
     }
 
-
-    // this method is to let the page render all the component to their localized
-    // form from the moment the user load the page
-    // not after loading the page
-    // to retrieve localized form of component displayed based on the user's interaction
-    // (eg: user click button, display error message),
-    // it will be easier to create a method to retrieve the localized string and use it in editedGroupNameLabel.setText in line  402
-    // see getLocalizedEdittedGroupName()
-
     @Override
     public void bindUIComponents() {
-//        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
-        //errGeneral.textProperty().bind(RESOURCE_FACTORY.getStringBinding(""));
+
         GroupNameId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupNameId"));
         GroupDescId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupDescId"));
-        //myGroupsBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupsBtn"));
         editmygroupid.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editmygroupid"));
-        //errConfirmPwd.textProperty().bind(RESOURCE_FACTORY.getStringBinding("passwordText"));
-
         allGroupsBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("allGroupsBtn"));
         accountBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("accountBtn"));
-
         logOutBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("logOutBtn"));
-//        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
-
-//      since this label only appear after user press the button,
-//      not from the begining of page, so using bind method will not wor
-
         groupNameInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("groupNameInput"));
-
         groupDescInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("groupDescInput"));
-        //unmaskedPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedPwdInputPrompt"));
-        //unmaskedConfirmPwdInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("unmaskedConfirmPwdInputPrompt"));
-
         group1.textProperty().bind(RESOURCE_FACTORY.getStringBinding("group1"));
         category1.textProperty().bind(RESOURCE_FACTORY.getStringBinding("category1"));
         editGroupBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editGroupBtn"));
-
         membersid.textProperty().bind(RESOURCE_FACTORY.getStringBinding("membersid"));
     }
 }
