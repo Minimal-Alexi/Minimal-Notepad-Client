@@ -123,7 +123,6 @@ public class AccountInfoPageController extends PageController {
         TokenStorage.getIntance();//
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
-//        updateLocalTime(localTime,RESOURCE_FACTORY);
         updateLocalTime(localTime);
         httpInstance = HttpClientSingleton.getInstance();
         httpClient = httpInstance.getHttpClient();
@@ -131,7 +130,7 @@ public class AccountInfoPageController extends PageController {
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
         RESOURCE_FACTORY.getResourceBundle();
-//        setupLanguageBox();
+
         Platform.runLater(()->{
             Utils.setupLanguageBox(
                     languageBox,
@@ -243,7 +242,6 @@ public class AccountInfoPageController extends PageController {
                 this::handleGetUserInfoResponse);
     }
 
-    //    private void handleGetUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
     private void handleGetUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
 
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
@@ -253,7 +251,6 @@ public class AccountInfoPageController extends PageController {
             emailInput.setText(email);
             usernameInput.setText(username);
         } catch (JSONException e) {
-            // TODO: update to use resource bundle, add key to the GeneralErrorKey
             String errMessage = (String) object.get(messageKey);
 
             generalErrorKey.setKey(serverExceptionErrorKey);
@@ -261,7 +258,6 @@ public class AccountInfoPageController extends PageController {
         }
     }
 
-    // TODO: update to use resource bundle, by adding the key to the GeneralErrorKey
     private void handleInput(String email, String username) {
         ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         generalErrLabel.setText("");
@@ -289,13 +285,11 @@ public class AccountInfoPageController extends PageController {
         generalErrLabel.setText("");
     }
 
-    // TODO: update to use resource bundle
     private void displayGeneralErrMessages(String errMessage) {
         resetAllErrMessages();
         this.generalErrLabel.setText(errMessage);
     }
 
-    // TODO: update to use resource bundle
     private void displayEmptyErrorMessage() {
         ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         String emailInputText = emailInput.getText();
@@ -317,7 +311,6 @@ public class AccountInfoPageController extends PageController {
         }
     }
 
-    // TODO: add a refresh error message method when the language is changed
     private void updateEmptyErrorMessagesWhenLanguageChange() {
         ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
 
@@ -375,7 +368,6 @@ public class AccountInfoPageController extends PageController {
                 }
 
                 // 2. if username is not the same, token in response body
-                // TODO: update to use resource bundle
                 generalErrLabel.setTextFill(Color.GREEN);
 
 //                generalErrLabel.setText("User Information updates successfully");
@@ -393,8 +385,6 @@ public class AccountInfoPageController extends PageController {
 //                generalErrLabel.setUserData(generalErrorKey);
             }
         } catch (JSONException e) {
-            // TODO: update to use resource bundle
-
 //            generalErrLabel.setText("Unable to save information");
             String unabletoSaveMessage = rb.getString("unableToSaveText");
             generalErrorKey.setKey(unableToSaveKey);
@@ -414,7 +404,6 @@ public class AccountInfoPageController extends PageController {
 
 
 
-    // TODO: update to use resource bundle
     @FXML
     public void deleteBtnClick() {
 
@@ -450,12 +439,9 @@ public class AccountInfoPageController extends PageController {
     //
     @Override
     public void updateAllUIComponents() {
-//        resetAllErrMessages();
         updateLocalTime(localTime);
-//        displayEmptyErrorMessage();
         updateEmptyErrorMessagesWhenLanguageChange();
         updateGeneralErrorMessageWhenLanguageChange();
-
 
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);

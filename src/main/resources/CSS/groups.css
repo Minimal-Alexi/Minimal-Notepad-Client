@@ -13,10 +13,10 @@
 /*    !*-fx-text-fill: #FFFFFF; !* Ensure text color turns white when hovering *!*!*/
 /*}*/
 
-#groupMenu:focused {
-    -fx-background-color: #A276FF;
-    -fx-text-fill: #FFFFFF; /* Ensure white text when focused */
-}
+/*#groupMenu:focused {*/
+/*    -fx-background-color: #A276FF;*/
+/*    -fx-text-fill: #FFFFFF; !* Ensure white text when focused *!*/
+/*}*/
 
 .menu-item {
     -fx-padding: 15 0 15 10;
@@ -31,10 +31,10 @@
     -fx-text-fill: #FFFFFF; /* Text color white when hovered */
 }
 
-.menu-item:focused{
-    -fx-background-color: #A276FF;
-    -fx-text-fill: #FFFFFF; /* Text color white when focused */
-}
+/*.menu-item:focused{*/
+/*    -fx-background-color: #A276FF;*/
+/*    -fx-text-fill: #FFFFFF; !* Text color white when focused *!*/
+/*}*/
 
 /*.menu-item .graphic {*/
 /*    -fx-alignment: CENTER_LEFT; !* Aligns the icon to the left *!*/
