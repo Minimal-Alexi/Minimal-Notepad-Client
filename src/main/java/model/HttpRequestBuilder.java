@@ -10,109 +10,87 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class HttpRequestBuilder {
-    private boolean isAuthenthicated;
-    private String uri;
-    //    private TokenStorage tokenStorage;
-    HttpClientSingleton httpClientSingleton;
-    CloseableHttpClient httpClient;
-    JSONObject jsonRequest;
-    HttpRequestBase httpRequest;
-    String methodName;
-    ControllerUtils controllerUtils;
-    StringEntity stringEntity;
-
+    private final boolean isAuthenthicated;
+    private final String uri;
+    private final CloseableHttpClient httpClient;
+    private final JSONObject jsonRequest;
+    private final HttpRequestBase httpRequest;
+    private final String methodName;
+    private StringEntity stringEntity;
 
     public HttpRequestBuilder(String methodName, String uri, boolean isAuthenthicated) {
         this.methodName = methodName;
         this.uri = uri;
-
         this.isAuthenthicated = isAuthenthicated;
-        this.controllerUtils = new ControllerUtils();
-        TokenStorage.getIntance();
-        this.getHttpMethod();
+
+        TokenStorage.getIntance(); // Ensure token is loaded
         this.jsonRequest = new JSONObject();
-        this.httpClientSingleton = HttpClientSingleton.getInstance();
-        this.httpClient = this.httpClientSingleton.getHttpClient();
-        this.setHeader();
+        this.httpRequest = resolveHttpMethod(methodName, uri);
+        this.httpClient = HttpClientSingleton.getInstance().getHttpClient();
+        setHeaders();
     }
 
-    // without isAuthentication field, have default value = false
     public HttpRequestBuilder(String methodName, String uri) {
         this(methodName, uri, false);
     }
 
-    private void getHttpMethod() {
-        switch (this.methodName) {
-            case "POST":
-                this.httpRequest = new HttpPost(this.uri);
-                break;
-            case "GET":
-                this.httpRequest = new HttpGet(this.uri);
-                break;
-            case "PUT":
-                this.httpRequest = new HttpPut(this.uri);
-                break;
-            case "PATCH":
-                this.httpRequest = new HttpPatch(this.uri);
-                break;
-            case "DELETE":
-                this.httpRequest = new HttpDelete(this.uri);
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported HTTP method: "+ this.methodName);
+    private HttpRequestBase resolveHttpMethod(String method, String uri) {
+        return switch (method.toUpperCase()) {
+            case "POST" -> new HttpPost(uri);
+            case "GET" -> new HttpGet(uri);
+            case "PUT" -> new HttpPut(uri);
+            case "PATCH" -> new HttpPatch(uri);
+            case "DELETE" -> new HttpDelete(uri);
+            default -> throw new IllegalArgumentException("Unsupported HTTP method: " + method);
+        };
+    }
+
+    private void setHeaders() {
+        httpRequest.addHeader("Accept", "application/json");
+        httpRequest.addHeader("Content-Type", "application/json");
+
+        if (isAuthenthicated) {
+            httpRequest.addHeader("Authorization", "Bearer " + TokenStorage.getToken());
         }
     }
 
-    private void setHeader() {
-        this.httpRequest.addHeader("Accept", "application/json");
-        this.httpRequest.addHeader("Content-Type", "application/json");
-        if (this.isAuthenthicated) {
-            this.httpRequest.addHeader("Authorization", "Bearer " + TokenStorage.getToken());
-        }
+    // Add/Update a string field in JSON request
+    public HttpRequestBuilder updateJsonRequest(String key, String value) {
+        jsonRequest.put(key, value);
+        return this;
     }
 
-    public boolean isRequestAuthenticated() {
-        return this.isAuthenthicated;
+    // Add/Update a list field in JSON request
+    public HttpRequestBuilder updateJsonRequest(String key, List<String> values) {
+        jsonRequest.put(key, values);
+        return this;
     }
 
-    public void updateJsonRequest(String key, String value) {
-        this.jsonRequest.put(key, value);
-    }
-    public void updateJsonRequest(String key, List<String> values){
-        this.jsonRequest.put(key,values);
-    }
-
-    public void setJsonRequest(JSONObject jsonObject) {
-        this.jsonRequest = jsonObject;
+    public HttpRequestBuilder setJsonRequest(JSONObject jsonObject) {
+        jsonRequest.clear();
+        jsonObject.keySet().forEach(k -> jsonRequest.put(k, jsonObject.get(k)));
+        return this;
     }
 
-    public void addHeader(String name, String value) {
+    public HttpRequestBuilder addHeader(String name, String value) {
         httpRequest.addHeader(name, value);
+        return this;
     }
 
     public void setRequestBody() throws UnsupportedEncodingException {
-        if (!this.methodName.equals("GET") && !this.methodName.equals("DELETE")) {
-            this.stringEntity = new StringEntity(this.jsonRequest.toString());
-
-            // set entity only work with HttpEntityEnclosingRequestBase, which is POST,PUT,
-            if (this.httpRequest instanceof HttpEntityEnclosingRequestBase) {
-                ((HttpEntityEnclosingRequestBase)this.httpRequest).setEntity(this.stringEntity);
+        if (!methodName.equalsIgnoreCase("GET") && !methodName.equalsIgnoreCase("DELETE")) {
+            stringEntity = new StringEntity(jsonRequest.toString());
+            if (httpRequest instanceof HttpEntityEnclosingRequestBase entityRequest) {
+                entityRequest.setEntity(stringEntity);
             }
-
         }
     }
 
     public HttpRequestBase getHttpRequestBase() {
-        return this.httpRequest;
+        return httpRequest;
     }
 
     public CloseableHttpClient getHttpClient() {
-        return this.httpClient;
+        return httpClient;
     }
-
-    public HttpClientSingleton getHttpClientSingleton(){
-        return this.httpClientSingleton;
-    }
-
-
 }

@@ -16,7 +16,7 @@ public class Group {
     private SimpleIntegerProperty numberOfMembers;
     private GroupOwner groupOwner;
     private List<AppUser> userList;
-    private List<GroupMember> members;  // Add a list of GroupMembers
+    private List<GroupMember> members;
 
     public Group(int id, String name, String description, GroupOwner groupOwner, List<AppUser> userList) {
         this.id = new SimpleIntegerProperty(id);
@@ -41,19 +41,9 @@ public class Group {
 
 
     public int getNumberOfUsers() {
-        // return number of user participating in the group + 1 (owner)
-//        if (numberOfMembers.get() != 0) {
-//            return numberOfMembers.get() + 1;
-//        } else {
-//            return userList.size() + 1;
-//
-//        }
-        // in case Group has no userList
-        // in api/groups/my-groups/
         if (userList == null) {
             return numberOfMembers.get();
-
-        } else { // in case there is userList, in api/groups/all
+        } else {
             return userList.size();
         }
     }
@@ -131,8 +121,6 @@ public class Group {
 
     private List<GroupMember> userGroupParticipationsList;  // This list will hold participating users
 
-    // Existing constructor and methods...
-
     public List<GroupMember> getUserGroupParticipationsList() {
         return userGroupParticipationsList;
     }
@@ -141,15 +129,12 @@ public class Group {
         this.userGroupParticipationsList = userGroupParticipationsList;
     }
 
-
-
-    // Add this method to parse and return members
     public List<GroupMember> parseMembers(JSONArray membersArray) {
         List<GroupMember> membersList = new ArrayList<>();
         for (int i = 0; i < membersArray.length(); i++) {
             JSONObject memberObject = membersArray.getJSONObject(i);
             GroupMember member = new GroupMember(
-                    String.valueOf(id.get()),  // Convert SimpleIntegerProperty id to String
+                    String.valueOf(id.get()),
                     memberObject.getString("username"),
                     memberObject.getString("email")
             );

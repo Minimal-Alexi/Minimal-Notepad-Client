@@ -4,7 +4,6 @@ import model.Group;
 
 public class SelectedGroup {
     private static SelectedGroup selectedGroup;
-//    private Group group;
     private Integer id;
 
     private SelectedGroup() {
