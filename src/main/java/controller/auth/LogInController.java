@@ -94,8 +94,8 @@ public class LogInController extends PageController {
     private ObservableResourceFactory RESOURCE_FACTORY ;
 
     // String Key from resource bundle
-    private static final String  usernameKey = "username";
-    private static final String passwordKey = "password";
+    private static final String  USERNAME_KEY = "username";
+    private static final String PASSWORD_KEY = "password";
 
 
 
@@ -110,9 +110,9 @@ public class LogInController extends PageController {
         httpResponseService = new HttpResponseServiceImpl();
         pwdIsHidden = true;
 
-        String username = TokenStorage.getInfo(usernameKey);
+        String username = TokenStorage.getInfo(USERNAME_KEY);
         if (username != null) {
-            String password = TokenStorage.getInfo(passwordKey);
+            String password = TokenStorage.getInfo(PASSWORD_KEY);
             loginUserInput.setText(username);
             loginPassInput.setText(password);
             this.rememberBox.setSelected(true);
@@ -187,12 +187,12 @@ public class LogInController extends PageController {
 
         String isRemembered = "isRemember";
         if (isRememberBoxChecked()) {
-            TokenStorage.saveInfo(usernameKey, username);
-            TokenStorage.saveInfo(passwordKey, password);
+            TokenStorage.saveInfo(USERNAME_KEY, username);
+            TokenStorage.saveInfo(PASSWORD_KEY, password);
             TokenStorage.saveToken(isRemembered, "true");
         } else {
-            TokenStorage.clearData(usernameKey);
-            TokenStorage.clearData(passwordKey);
+            TokenStorage.clearData(USERNAME_KEY);
+            TokenStorage.clearData(PASSWORD_KEY);
             TokenStorage.clearData(isRemembered);
         }
     }
@@ -235,8 +235,8 @@ public class LogInController extends PageController {
         String URI = "http://localhost:8093/api/users-authentication/login";
 
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI);
-        httpRequest.updateJsonRequest(usernameKey, username);
-        httpRequest.updateJsonRequest("password", password);
+        httpRequest.updateJsonRequest(USERNAME_KEY, username);
+        httpRequest.updateJsonRequest(PASSWORD_KEY, password);
         String languageCode = RESOURCE_FACTORY.getResourceBundle().getLocale().getLanguage();
         httpRequest.addHeader("Accept-Language", languageCode);
         httpRequest.setRequestBody();
@@ -253,7 +253,7 @@ public class LogInController extends PageController {
         JSONObject object = controllerUtil.toJSonObject(jsonResponse);
             try {
                 String token = (String) object.get("token");
-                String username = (String) object.get(usernameKey);
+                String username = (String) object.get(USERNAME_KEY);
                 TokenStorage.saveToken(username, token);
                 String languageCode = (String) object.get("languageCode");
                 ObservableResourceFactory.getInstance().changeLanguage(languageCode);
@@ -327,10 +327,6 @@ public class LogInController extends PageController {
         return password;
     }
 
-    // implement when localization of general err in BE is done
-//    @Override
-//    public void updateAllUIComponents() {
-//    }
 
     @Override
     public void bindUIComponents() {

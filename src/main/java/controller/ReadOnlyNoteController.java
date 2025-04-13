@@ -54,7 +54,7 @@ public class ReadOnlyNoteController extends PageController {
     @FXML private Button accountBtn;
     @FXML private Button logOutBtn;
 
-    private static final String findNoteByIdURL = "http://localhost:8093/api/note/";
+    private static final String NOTE_BY_ID_URL = "http://localhost:8093/api/note/";
     private final SelectedReadOnlyNote selectedReadOnlyNote = SelectedReadOnlyNote.getInstance();
 
     private final ControllerUtils controllerUtils = new ControllerUtils();
@@ -74,7 +74,7 @@ public class ReadOnlyNoteController extends PageController {
         RESOURCE_FACTORY.getResourceBundle();
         Platform.runLater(this::updateUI);
 
-        note = findNoteById(findNoteByIdURL, selectedReadOnlyNote.getId(), TokenStorage.getToken());
+        note = findNoteById(NOTE_BY_ID_URL, selectedReadOnlyNote.getId(), TokenStorage.getToken());
         assert note != null;
 
         populateNoteFields();

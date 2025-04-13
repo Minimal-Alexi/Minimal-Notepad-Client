@@ -96,15 +96,15 @@ public class AccountInfoPageController extends PageController {
 
     // variable to store key of generalError key and keyValue
     private GeneralErrorKey generalErrorKey;
-    private static final String wrongEmailFormatKey = "wrongEmailFormatText";
-    private static final String updateSuccessKey = "updateSuccessText";
-    private static final  String unableToSaveKey = "unableToUpdateText";
-    private static final String serverExceptionErrorKey = "serverExeptionText";
-    private static final String serverErrorKey = "serverErrorText";
-    private static final String messageKey = "message";
+    private static final String WRONG_EMAIL_FORMAT_KEY = "wrongEmailFormatText";
+    private static final String UPDATE_SUCCESS_KEY = "updateSuccessText";
+    private static final  String UPDATE_TO_SAVE_KEY = "unableToUpdateText";
+    private static final String SERVER_EXCEPTION_ERROR_KEY = "serverExeptionText";
+    private static final String SERVER_ERROR_KEY = "serverErrorText";
+    private static final String MESSAGE_KEY = "message";
 
     // key to storage in StorageKey
-    private static final String usernameKey = "username";
+    private static final String USERNAME_KEY = "username";
 
 
 
@@ -247,13 +247,13 @@ public class AccountInfoPageController extends PageController {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
             String email = (String) object.get("email");
-            String username = (String) object.get(usernameKey);
+            String username = (String) object.get(USERNAME_KEY);
             emailInput.setText(email);
             usernameInput.setText(username);
         } catch (JSONException e) {
-            String errMessage = (String) object.get(messageKey);
+            String errMessage = (String) object.get(MESSAGE_KEY);
 
-            generalErrorKey.setKey(serverExceptionErrorKey);
+            generalErrorKey.setKey(SERVER_EXCEPTION_ERROR_KEY);
             displayGeneralErrMessages(errMessage);
         }
     }
@@ -264,8 +264,8 @@ public class AccountInfoPageController extends PageController {
         if (username.equals("") || email.equals("")) {
             displayEmptyErrorMessage();
         } else if (!controllerUtils.validEmail(email)) {
-            String wrongEmailFormatMessage = rb.getString(wrongEmailFormatKey);
-            generalErrorKey.setKey(wrongEmailFormatKey);
+            String wrongEmailFormatMessage = rb.getString(WRONG_EMAIL_FORMAT_KEY);
+            generalErrorKey.setKey(WRONG_EMAIL_FORMAT_KEY);
 //            displayGeneralErrMessages("Wrong email format. Should follow xyz@mail.com");
             displayGeneralErrMessages(wrongEmailFormatMessage);
 //            generalErrLabel.setUserData(generalErrorKey);
@@ -338,7 +338,7 @@ public class AccountInfoPageController extends PageController {
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("PUT", URI, true);
 
         // set JSON
-        httpRequest.updateJsonRequest(usernameKey, username);
+        httpRequest.updateJsonRequest(USERNAME_KEY, username);
         httpRequest.updateJsonRequest("email", email);
 
         // call this method only if you have body in your request
@@ -357,37 +357,37 @@ public class AccountInfoPageController extends PageController {
 
             String statusLine = response.getStatusLine().toString();
             if (statusLine.contains("200")) {
-                String newUsername = (String) object.get(usernameKey);
+                String newUsername = (String) object.get(USERNAME_KEY);
                 String curUsername = TokenStorage.getUser();
                 // check if username is the same
                 // 1. if the same, email change, no token in the response body
                 if (!newUsername.equals(curUsername)) {
                     String newToken = (String) object.get("token");
                     TokenStorage.saveToken(newUsername, newToken);
-                    TokenStorage.saveInfo(usernameKey, newUsername);
+                    TokenStorage.saveInfo(USERNAME_KEY, newUsername);
                 }
 
                 // 2. if username is not the same, token in response body
                 generalErrLabel.setTextFill(Color.GREEN);
 
 //                generalErrLabel.setText("User Information updates successfully");
-                String updateSuccessMessage = rb.getString(updateSuccessKey);
+                String updateSuccessMessage = rb.getString(UPDATE_SUCCESS_KEY);
                 generalErrLabel.setText(updateSuccessMessage);
-                generalErrorKey.setKey(updateSuccessKey);
+                generalErrorKey.setKey(UPDATE_SUCCESS_KEY);
 //                generalErrLabel.setUserData(generalErrorKey);
 //                generalErrLabel.setTextFill(Color.RED);
             } else {
                 // get message from generic response
 
-                String message = (String) object.get(messageKey);
-                generalErrorKey.setKey(serverErrorKey);
+                String message = (String) object.get(MESSAGE_KEY);
+                generalErrorKey.setKey(SERVER_ERROR_KEY);
                 generalErrLabel.setText(message);
 //                generalErrLabel.setUserData(generalErrorKey);
             }
         } catch (JSONException e) {
 //            generalErrLabel.setText("Unable to save information");
             String unabletoSaveMessage = rb.getString("unableToSaveText");
-            generalErrorKey.setKey(unableToSaveKey);
+            generalErrorKey.setKey(UPDATE_TO_SAVE_KEY);
             generalErrLabel.setText(rb.getString(unabletoSaveMessage));
 //            generalErrLabel.setUserData(generalErrorKey);
 

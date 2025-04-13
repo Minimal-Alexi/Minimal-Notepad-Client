@@ -108,8 +108,8 @@ public class ReadOnlyGroupController extends PageController {
     private static final String CSS_SOURCE = "/CSS";
 
     // common String key that is common
-    private static final String emailKey = "email";
-    private static final String usernameKey = "username";
+    private static final String EMAIL_KEY = "email";
+    private static final String USERNAME_KEY = "username";
 
 
     public void initialize() {
@@ -141,8 +141,6 @@ public class ReadOnlyGroupController extends PageController {
         }
 
         TokenStorage.getIntance();
-        String username = TokenStorage.getUser();
-        String password = TokenStorage.getToken();
         System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
         updateNameLabel(nameLabel, TokenStorage.getUser());
@@ -185,13 +183,13 @@ public class ReadOnlyGroupController extends PageController {
         System.out.println("Group Object " + groupObject);
 
         JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-        String ownerEmail = owner.getString(emailKey);
-        GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get(usernameKey), ownerEmail);
+        String ownerEmail = owner.getString(EMAIL_KEY);
+        GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get(USERNAME_KEY), ownerEmail);
         int id = (int) ((JSONObject) groupObject).get("id");
         String name = (String) ((JSONObject) groupObject).get("name");
         String description = (String) ((JSONObject) groupObject).get("description");
         JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).get("userGroupParticipationsList");
-        AppUser currentOwner = new AppUser((int) owner.get("id"), (String) owner.get(usernameKey), ownerEmail);
+        AppUser currentOwner = new AppUser((int) owner.get("id"), (String) owner.get(USERNAME_KEY), ownerEmail);
         List<AppUser> userList = createUserList(userListObj);
         userList.add(currentOwner);
 
@@ -211,8 +209,8 @@ public class ReadOnlyGroupController extends PageController {
         for (Object userObject : userObjectArray) {
             JSONObject converted = (JSONObject) userObject;
             int id = (int) converted.get("id");
-            String name = (String) converted.get(usernameKey);
-            String email = (String) converted.get(emailKey);
+            String name = (String) converted.get(USERNAME_KEY);
+            String email = (String) converted.get(EMAIL_KEY);
             userList.add(new AppUser(id, name, email));
         }
         return userList;
@@ -252,8 +250,8 @@ public class ReadOnlyGroupController extends PageController {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
             System.out.println(object);
-            String email = (String) object.get(emailKey);
-            String username = (String) object.get(usernameKey);
+            String email = (String) object.get(EMAIL_KEY);
+            String username = (String) object.get(USERNAME_KEY);
             usernameCol.setText(email);
             emailCol.setText(username);
         } catch (JSONException e) {

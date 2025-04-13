@@ -127,10 +127,10 @@ public class GroupInfoEditController extends PageController {
     private static final String CSS_SOURCE = "/CSS";
 
     // common used key, both for object as well as for resource bundle
-    private static final String usernameKey = "username";
-    private static final String emailKey = "email";
-    private static final String idKey = "id";
-    private static final String editedGroupNameLabelEmptyKey =  "editedGroupNameLabelEmpty";
+    private static final String USERNAME_KEY = "username";
+    private static final String EMAIL_KEY = "email";
+    private static final String ID_KEY = "id";
+    private static final String EDITTED_GROUP_NAME_LABEL_EMPTY_KEY =  "editedGroupNameLabelEmpty";
 
     // style const
     private static final String  RED_TEXT = "-fx-text-fill: red;";
@@ -142,9 +142,9 @@ public class GroupInfoEditController extends PageController {
         JSONArray jsonArray = new JSONArray();
         for (GroupMember member : groupMembers) {
             JSONObject memberObject = new JSONObject();
-            memberObject.put(idKey, member.getId());
-            memberObject.put(usernameKey, member.getUsername());
-            memberObject.put(emailKey, member.getEmail());
+            memberObject.put(ID_KEY, member.getId());
+            memberObject.put(USERNAME_KEY, member.getUsername());
+            memberObject.put(EMAIL_KEY, member.getEmail());
             jsonArray.put(memberObject);
         }
         return jsonArray;
@@ -216,13 +216,13 @@ public class GroupInfoEditController extends PageController {
         JSONObject groupObject = controllerUtils.toJSonObject(jsonResponse);
 
         JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-        String ownerEmail = owner.getString(emailKey);
-        GroupOwner groupOwner = new GroupOwner((int) owner.get(idKey), (String) owner.get(usernameKey), ownerEmail);
-        int id = (int) ((JSONObject) groupObject).get(idKey);
+        String ownerEmail = owner.getString(EMAIL_KEY);
+        GroupOwner groupOwner = new GroupOwner((int) owner.get(ID_KEY), (String) owner.get(USERNAME_KEY), ownerEmail);
+        int id = (int) ((JSONObject) groupObject).get(ID_KEY);
         String name = (String) ((JSONObject) groupObject).get("name");
         String description = (String) ((JSONObject) groupObject).get("description");
         JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).get("userGroupParticipationsList");
-        AppUser currentOwner = new AppUser((int) owner.get(idKey), (String) owner.get(usernameKey), ownerEmail);
+        AppUser currentOwner = new AppUser((int) owner.get(ID_KEY), (String) owner.get(USERNAME_KEY), ownerEmail);
         List<AppUser> userList = createUserList(userListObj);
         userList.add(currentOwner);
 
@@ -239,9 +239,9 @@ public class GroupInfoEditController extends PageController {
         List<AppUser> userList = new ArrayList<>();
         for (Object userObject : userObjectArray) {
             JSONObject converted = (JSONObject) userObject;
-            int id = (int) converted.get(idKey);
-            String name = (String) converted.get(usernameKey);
-            String email = (String) converted.get(emailKey);
+            int id = (int) converted.get(ID_KEY);
+            String name = (String) converted.get(USERNAME_KEY);
+            String email = (String) converted.get(EMAIL_KEY);
             userList.add(new AppUser(id, name, email));
         }
         return userList;
@@ -384,7 +384,7 @@ public class GroupInfoEditController extends PageController {
 
             System.out.println("Group Id 8/3 " + groupId);
             JSONObject jsonRequest = new JSONObject();
-            jsonRequest.put(idKey, groupId);
+            jsonRequest.put(ID_KEY, groupId);
             jsonRequest.put("name", editedGroupName);
             jsonRequest.put("description", editedDescInput);
 
@@ -462,11 +462,11 @@ public class GroupInfoEditController extends PageController {
         notiLabel1.setText("");
         if( groupNameInput.getText().isEmpty()){
             editedGroupNameLabel.setStyle(RED_TEXT);
-            editedGroupNameLabel.setText(RESOURCE_FACTORY.getString(editedGroupNameLabelEmptyKey));
+            editedGroupNameLabel.setText(RESOURCE_FACTORY.getString(EDITTED_GROUP_NAME_LABEL_EMPTY_KEY));
         }
         if( groupDescInput.getText().isEmpty()){
             editedGroupDescLabel.setStyle(RED_TEXT);
-            editedGroupDescLabel.setText(RESOURCE_FACTORY.getString(editedGroupNameLabelEmptyKey));
+            editedGroupDescLabel.setText(RESOURCE_FACTORY.getString(EDITTED_GROUP_NAME_LABEL_EMPTY_KEY));
         }
     }
 
