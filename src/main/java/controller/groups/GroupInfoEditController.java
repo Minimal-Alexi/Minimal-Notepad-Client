@@ -134,6 +134,13 @@ public class GroupInfoEditController extends PageController {
     private final String usernameKey = "username";
     private final String emailKey = "email";
     private final String idKey = "id";
+    private final String editedGroupNameLabelEmptyKey =  "editedGroupNameLabelEmpty";
+
+    // style const
+    private final String  RED_TEXT = "-fx-text-fill: red;";
+    private final String  BLACK_TEXT = "-fx-text-fill: black;";
+    private final String GREEN_TEXT = "-fx-text-fill: green;";
+
 
     public JSONArray convertToJSONArray(List<GroupMember> groupMembers) {
         JSONArray jsonArray = new JSONArray();
@@ -269,11 +276,11 @@ public class GroupInfoEditController extends PageController {
         String logginedUsername = TokenStorage.getUser();
         for (AppUser user : curMemberList) {
             String username = user.getUsername();
-            System.out.println(user);
+//            System.out.println(user);
             if (username.equals(logginedUsername)) {
                 user.setUsername("owner - " + username);
             }
-            System.out.println(user);
+//            System.out.println(user);
         }
     }
 
@@ -462,35 +469,35 @@ public class GroupInfoEditController extends PageController {
         editedGroupNameLabel.setText("");
         notiLabel1.setText("");
         if( groupNameInput.getText().isEmpty()){
-            editedGroupNameLabel.setStyle("-fx-text-fill: red;");
-            editedGroupNameLabel.setText(RESOURCE_FACTORY.getString("editedGroupNameLabelEmpty"));
+            editedGroupNameLabel.setStyle(RED_TEXT);
+            editedGroupNameLabel.setText(RESOURCE_FACTORY.getString(editedGroupNameLabelEmptyKey));
         }
         if( groupDescInput.getText().isEmpty()){
-            editedGroupDescLabel.setStyle("-fx-text-fill: red;");
-            editedGroupDescLabel.setText(RESOURCE_FACTORY.getString("editedGroupDescLabelEmpty"));
+            editedGroupDescLabel.setStyle(RED_TEXT);
+            editedGroupDescLabel.setText(RESOURCE_FACTORY.getString(editedGroupNameLabelEmptyKey));
         }
     }
 
     public String getLocalizedEditedGroupName(String editedGroupName) {
         editedGroupNameLabel.setText("");
-        editedGroupNameLabel.setStyle("-fx-text-fill: black;");
+        editedGroupNameLabel.setStyle(BLACK_TEXT);
 
         return RESOURCE_FACTORY.getString("editedGroupNameLabel") + " "+ editedGroupName;
     }
 
     public String getLocalizedEditedGroupDesc(String editedGroupDesc) {
         editedGroupDescLabel.setText("");
-        editedGroupDescLabel.setStyle("-fx-text-fill: black;");
+        editedGroupDescLabel.setStyle(BLACK_TEXT);
         return RESOURCE_FACTORY.getString("editedGroupDescLabel") + " "+ editedGroupDesc;
     }
 
     public String getLocalizedFailNotiLabelText(){
-        notiLabel1.setStyle("-fx-text-fill: red;");
+        notiLabel1.setStyle(RED_TEXT);
         return RESOURCE_FACTORY.getString("notiLabel1FailText");
     }
 
     public String getLocalizedSucessNotiLabelText(){
-        notiLabel1.setStyle("-fx-text-fill: green;");
+        notiLabel1.setStyle(GREEN_TEXT);
         return RESOURCE_FACTORY.getString("notiLabel1SuccessText");
     }
 
