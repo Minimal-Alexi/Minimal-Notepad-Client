@@ -122,7 +122,6 @@ public class AccountInfoPwdController extends PageController {
 
         httpInstance = HttpClientSingleton.getInstance();
         httpClient = httpInstance.getHttpClient();
-//        getUserInfo();
 
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
@@ -133,11 +132,8 @@ public class AccountInfoPwdController extends PageController {
     @FXML
     public void deleteBtnClick() throws IOException {
         String yesTxt = "Yes";
-//        Optional<ButtonType> result = displayDeleteWarningDialog();
         Optional<ButtonType> result = Utils.displayDeleteWarningDialog();
-        System.out.println("result of dialog " + result.get().getText());
         if (result.get().getText().equals(yesTxt)) {
-            System.out.println("Deleting user");
 
 
             HttpRequestBuilder httpRequest = new HttpRequestBuilder("DELETE", URI, true);
@@ -162,22 +158,11 @@ public class AccountInfoPwdController extends PageController {
             TokenStorage.clearToken();
             controllerUtils.goPage(stage, deleteBtn, helloPage);
         } catch (JSONException e) {
-//            String errMessage = (String) jsonResponse.get("message");
             displayGeneralErrMessages(e.getMessage());
         }
     }
 
-//    @FXML
-//    public void groupsClicked(ActionEvent event) throws IOException {
-////        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
-//        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
-//
-//    }
 
-    @FXML
-    public void groupsClicked() {
-
-    }
 
     @FXML
     void mouseEnter(MouseEvent event) {
@@ -189,7 +174,6 @@ public class AccountInfoPwdController extends PageController {
         this.controllerUtils.setHandCursor(logOutBtn);
 
         this.controllerUtils.setHandCursor(deleteBtn);
-//        this.controllerUtils.setHandCursor(groupsBtn);
         this.controllerUtils.setHandCursor(saveBtn);
 
 
@@ -204,44 +188,34 @@ public class AccountInfoPwdController extends PageController {
         this.controllerUtils.setDefaultCursor(allGroupsBtn);
         this.controllerUtils.setDefaultCursor(accountBtn);
         this.controllerUtils.setDefaultCursor(logOutBtn);
-
         this.controllerUtils.setDefaultCursor(deleteBtn);
         this.controllerUtils.setDefaultCursor(saveBtn);
-//        this.controllerUtils.setDefaultCursor(groupsBtn);
     }
 
 
     // sidebar
     @FXML
     public void myGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
         ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
-
-//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
         ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
-//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
-        System.out.println("Go to share notes page");
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
         ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
         ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
-//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
         ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
@@ -257,9 +231,6 @@ public class AccountInfoPwdController extends PageController {
         String curPwd = curPwdInput.getText();
         String newPwd = newPwdInput.getText();
         String repeatNewPwd = repeatPwdInput.getText();
-        System.out.println("cur pwd: " + curPwd);
-        System.out.println("new pwd: " + newPwd);
-        System.out.println("repeat new pwd: " + repeatNewPwd);
         handleInput(curPwd, newPwd, repeatNewPwd);
     }
 
@@ -367,8 +338,6 @@ public class AccountInfoPwdController extends PageController {
 
     }
     private void updateEmptyErrorMessagesWhenLanguageChange() {
-        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
-
         if (!errCurPwd.getText().isEmpty()) {
             errCurPwd.setText(getEmptyCurPwdErrorMessage());
         }
