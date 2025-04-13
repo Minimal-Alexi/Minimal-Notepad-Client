@@ -38,6 +38,10 @@ public class GroupInfoEditController extends PageController {
     private static final String EMAIL_KEY = "email";
     private static final String ID_KEY = "id";
 
+    private static final String  RED_TEXT = "-fx-text-fill: red;";
+    private static final String  BLACK_TEXT = "-fx-text-fill: black;";
+    private static final String GREEN_TEXT = "-fx-text-fill: green;";
+
     // Sidebar
     @FXML private Button myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn;
 
@@ -269,33 +273,33 @@ public class GroupInfoEditController extends PageController {
         notiLabel1.setText("");
 
         if (groupNameInput.getText().isEmpty()) {
-            editedGroupNameLabel.setStyle("-fx-text-fill: red;");
+            editedGroupNameLabel.setStyle(RED_TEXT);
             editedGroupNameLabel.setText(RESOURCE_FACTORY.getString("editedGroupNameLabelEmpty"));
         }
 
         if (groupDescInput.getText().isEmpty()) {
-            editedGroupDescLabel.setStyle("-fx-text-fill: red;");
+            editedGroupDescLabel.setStyle(RED_TEXT);
             editedGroupDescLabel.setText(RESOURCE_FACTORY.getString("editedGroupDescLabelEmpty"));
         }
     }
 
     public String getLocalizedEditedGroupName(String name) {
-        editedGroupNameLabel.setStyle("-fx-text-fill: black;");
+        editedGroupNameLabel.setStyle(BLACK_TEXT);
         return RESOURCE_FACTORY.getString("editedGroupNameLabel") + " " + name;
     }
 
     public String getLocalizedEditedGroupDesc(String desc) {
-        editedGroupDescLabel.setStyle("-fx-text-fill: black;");
+        editedGroupDescLabel.setStyle(BLACK_TEXT);
         return RESOURCE_FACTORY.getString("editedGroupDescLabel") + " " + desc;
     }
 
     public String getLocalizedFailNotiLabelText() {
-        notiLabel1.setStyle("-fx-text-fill: red;");
+        notiLabel1.setStyle(RED_TEXT);
         return RESOURCE_FACTORY.getString("notiLabel1FailText");
     }
 
     public String getLocalizedSucessNotiLabelText() {
-        notiLabel1.setStyle("-fx-text-fill: green;");
+        notiLabel1.setStyle(GREEN_TEXT);
         return RESOURCE_FACTORY.getString("notiLabel1SuccessText");
     }
 
@@ -326,7 +330,7 @@ public class GroupInfoEditController extends PageController {
 
     @Override
     public void bindUIComponents() {
-        nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
+
         GroupNameId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupNameId"));
         GroupDescId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupDescId"));
         editmygroupid.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editmygroupid"));
