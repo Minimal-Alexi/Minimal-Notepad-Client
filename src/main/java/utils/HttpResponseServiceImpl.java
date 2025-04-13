@@ -23,7 +23,7 @@ public class HttpResponseServiceImpl implements HttpResponseService {
         new Thread(() -> {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 HttpEntity responseEntity = response.getEntity();
-                System.out.println("response entity " + responseEntity);
+
                 Object jsonResponse;
                 if (responseEntity != null) {
 

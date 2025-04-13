@@ -16,6 +16,8 @@ import model.HttpRequestBuilder;
 import model.ObservableResourceFactory;
 import model.TokenStorage;
 import model.selected.SelectedGroup;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -28,10 +30,11 @@ import java.util.ResourceBundle;
 
 import static utils.MainPageServices.setSidebarLanguages;
 import static utils.MainPageServices.updateNameLabel;
-
+import java.util.logging.Logger;
 
 public class GroupInfoCreateController extends PageController {
 
+    private static final Log log = LogFactory.getLog(GroupInfoCreateController.class);
     @FXML
     private BorderPane root;
 
@@ -81,11 +84,13 @@ public class GroupInfoCreateController extends PageController {
     // properties
     private Stage stage;
 
+
 //    private
 
     private ControllerUtils controllerUtils;
     private HttpResponseService httpResponseService;
     private ObservableResourceFactory RESOURCE_FACTORY;
+    private Logger logger;
 
 
 
@@ -99,6 +104,8 @@ public class GroupInfoCreateController extends PageController {
 
     public void initialize() {
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+        logger = Logger.getLogger(GroupInfoCreateController.class.getName());
+
 
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
@@ -187,7 +194,7 @@ public class GroupInfoCreateController extends PageController {
                 displayEmptyErrorMessages(groupName, groupDesc);
             }
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            logger.warning("Exception " + e.getMessage());
         }
 
     }
@@ -240,16 +247,15 @@ public class GroupInfoCreateController extends PageController {
                 this::handleCreateGroup);
     }
 
-    //    private void handleCreateGroup(CloseableHttpResponse response, JSONObject jsonResponse) {
     private void handleCreateGroup(CloseableHttpResponse response, Object jsonResponse) {
 
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
-            System.out.println("response " + response);
-            this.controllerUtils.goPage(stage,createGroupBtn,FXML_SOURCE+"/main_pages/groups/my_groups.fxml");
+//            this.controllerUtils.goPage(stage,createGroupBtn,FXML_SOURCE+"/main_pages/groups/my_groups.fxml");
+            ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
         } catch (JSONException e) {
             String message = (String) object.get("message");
-            System.err.println(message);
+            logger.severe("JSONException " + message);
         }
     }
 

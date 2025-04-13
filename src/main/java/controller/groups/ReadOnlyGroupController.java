@@ -134,7 +134,6 @@ public class ReadOnlyGroupController extends PageController {
         }
 
         TokenStorage.getIntance();
-        System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
 
         updateNameLabel(nameLabel, TokenStorage.getUser());
         MainPageServices.updateLocalTime(localTime);

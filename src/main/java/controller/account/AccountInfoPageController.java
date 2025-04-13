@@ -111,7 +111,6 @@ public class AccountInfoPageController extends PageController {
 
     // this method must be public so javafx can use it
     public void initialize() {
-        System.out.println("start Account User Page");
         this.mainPageServices = new MainPageServices();
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
@@ -120,8 +119,7 @@ public class AccountInfoPageController extends PageController {
 
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        TokenStorage.getIntance();//
-        System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
+        TokenStorage.getIntance();
 
         updateLocalTime(localTime);
         httpInstance = HttpClientSingleton.getInstance();

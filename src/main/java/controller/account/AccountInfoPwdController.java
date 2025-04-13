@@ -115,8 +115,7 @@ public class AccountInfoPwdController extends PageController {
         this.httpResponseService = new HttpResponseServiceImpl();
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        TokenStorage.getIntance();//
-        System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
+        TokenStorage.getIntance();
 
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
         updateLocalTime(localTime);
