@@ -1,0 +1,1 @@
+D 2cssXDhr%src/main/resources/CSS/table_view.css

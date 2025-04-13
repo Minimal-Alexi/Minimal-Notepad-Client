@@ -5,6 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -88,6 +90,7 @@ public class MainPageController extends PageController {
     private Button newNoteBtn;
 
 
+
     private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
     private ObservableList<Note> noteObservableList;
@@ -95,7 +98,7 @@ public class MainPageController extends PageController {
     private HashMap<Integer, String> categoryList;
 
     // set language
-    private ObservableResourceFactory RESOURCE_FACTORY;
+     private ObservableResourceFactory RESOURCE_FACTORY ;
 
 
     public void initialize() {
@@ -133,22 +136,24 @@ public class MainPageController extends PageController {
      */
     private Stage stage;
     private Scene scene;
+    private Parent root;
 
     /*
     Click the content in table
     */
     public void tableClicked(MouseEvent event) throws IOException {
         int id = 0;
-        if (event.getClickCount() == 1 && table.getSelectionModel().getSelectedItem() != null) {
-            id = table.getSelectionModel().getSelectedItem().getId();
-            System.out.println("id: " + id);
-            System.out.println(table.getSelectionModel().getSelectedItem());
+        if (event.getClickCount() == 1) {
+            if (table.getSelectionModel().getSelectedItem() != null) {
+                id = table.getSelectionModel().getSelectedItem().getId();
+                System.out.println("id: " + id);
+                System.out.println(table.getSelectionModel().getSelectedItem());
 
-            SelectedNote selectedNote = SelectedNote.getInstance();
-            selectedNote.setId(id);
-            goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
+                SelectedNote selectedNote = SelectedNote.getInstance();
+                selectedNote.setId(id);
+                goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
+            }
         }
-
     }
 
     public void newNoteClicked(ActionEvent event) throws IOException {
@@ -157,6 +162,8 @@ public class MainPageController extends PageController {
 
     // go to myGroupPage
     public void groupsClicked(ActionEvent event) throws IOException {
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
+//        goToPage(stage, scene, event, "/fxml/main_pages/groups/group_info.fxml");
         String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
         this.controllerUtils.goPage(stage, myGroupsBtn, pageLink);
     }
@@ -164,27 +171,34 @@ public class MainPageController extends PageController {
     // side bar button
     @FXML
     public void myGroupsBtnClick() {
+//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
         ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
+
+//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
         ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
+//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
         System.out.println("Go to share notes page");
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
         ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
+//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
         ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
+//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
         ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
@@ -238,6 +252,7 @@ public class MainPageController extends PageController {
                 noteObservableList.clear();
                 for (int i = 0; i < jsonResponse.length(); i++) {
                     JSONObject result = (JSONObject) jsonResponse.get(i);
+                    // Process and add each note
                     Note note = JsonToNote(result);
                     noteObservableList.add(note);
                 }
@@ -258,22 +273,22 @@ public class MainPageController extends PageController {
 
     private void filterChoiceSetup() {
         categoryList = new HashMap<>();
-        for (Note note : noteArrayList) {
+        for (Note note : noteArrayList)
+        {
             categoryList.putAll(note.getCategory());
         }
-        categoryList.put(-1, RESOURCE_FACTORY.getString("noCategoryOption"));
+        categoryList.put(-1,RESOURCE_FACTORY.getString("noCategoryOption"));
         filterChoice.getItems().addAll(categoryList.values());
         filterChoice.getItems().add(RESOURCE_FACTORY.getString("anyCategoryOption"));
         filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString("anyCategoryOption"));
         filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue) && !isResetting) {
+            if(newValue != null && !newValue.equals(oldValue) && !isResetting)
+            {
                 performFilter();
             }
         });
     }
-
-    private void performSearch() {
-        String inputText = searchBar.getText();
+    private void performSearch() {        String inputText = searchBar.getText();
         if (!inputText.isEmpty()) {
             HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/search", true);
             JSONObject searchRequest = new JSONObject();
@@ -287,10 +302,10 @@ public class MainPageController extends PageController {
             performFilter();
         }
     }
-
     private JSONArray arrayInitializer(List<Note> usedList) {
         JSONArray noteArray = new JSONArray();
-        for (Note note : usedList) {
+        for(Note note : usedList)
+        {
             JSONObject noteJson = NoteToJson(note);
             noteArray.put(noteJson);
         }
@@ -301,14 +316,14 @@ public class MainPageController extends PageController {
         httpRequestBuilder.setJsonRequest(request);
         HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
-        try {
+        try
+        {
             httpRequestBuilder.setRequestBody();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        responseService.handleReponse(filterRequestHttp, httpClient, this::handleGetSearchResults);
+        responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetSearchResults);
     }
-
     private void performFilter() {
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/filter", true);
         JSONObject filterRequest = new JSONObject();
@@ -327,14 +342,24 @@ public class MainPageController extends PageController {
     }
 
 
-    private int getCategoryViaFilter() {
-        for (Map.Entry<Integer, String> entry : categoryList.entrySet()) {
-            if (entry.getValue().equals(filterChoice.getSelectionModel().getSelectedItem())) {
+    private int getCategoryViaFilter(){
+        for(Map.Entry<Integer,String> entry : categoryList.entrySet())
+        {
+            if(entry.getValue().equals(filterChoice.getSelectionModel().getSelectedItem()))
+            {
                 return entry.getKey();
             }
         }
         return -1;
     }
+
+    private void updateEdittedTimeLabel(){
+        SimpleDateFormat currentTimeFormat = Utils.getTheCurrentLocaleDateTimeFormatString();
+        String edittedTimeStr = RESOURCE_FACTORY.getResourceBundle().getString("edittedTime");
+
+    }
+
+
 
     @Override
     public void bindUIComponents() {
