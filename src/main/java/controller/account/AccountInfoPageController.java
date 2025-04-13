@@ -96,15 +96,15 @@ public class AccountInfoPageController extends PageController {
 
     // variable to store key of generalError key and keyValue
     private GeneralErrorKey generalErrorKey;
-    private final String wrongEmailFormatKey = "wrongEmailFormatText";
-    private final String updateSuccessKey = "updateSuccessText";
-    private final  String unableToSaveKey = "unableToUpdateText";
-    private final String serverExceptionErrorKey = "serverExeptionText";
-    private final String serverErrorKey = "serverErrorText";
-    private final String messageKey = "message";
+    private static final String wrongEmailFormatKey = "wrongEmailFormatText";
+    private static final String updateSuccessKey = "updateSuccessText";
+    private static final  String unableToSaveKey = "unableToUpdateText";
+    private static final String serverExceptionErrorKey = "serverExeptionText";
+    private static final String serverErrorKey = "serverErrorText";
+    private static final String messageKey = "message";
 
     // key to storage in StorageKey
-    private final String usernameKey = "username";
+    private static final String usernameKey = "username";
 
 
 
@@ -343,10 +343,10 @@ public class AccountInfoPageController extends PageController {
 
         // call this method only if you have body in your request
         httpRequest.setRequestBody();
-        HttpRequestBase httpPut = httpRequest.getHttpRequestBase();
-        CloseableHttpClient httpClient = httpRequest.getHttpClient();
-
-        httpResponseService.handleReponse(httpRequest.getHttpRequestBase(), httpRequest.getHttpClient(), this::handleSaveUserInfoResponse);
+        httpResponseService.handleReponse(
+                httpRequest.getHttpRequestBase(),
+                httpRequest.getHttpClient(),
+                this::handleSaveUserInfoResponse);
     }
 
     public void handleSaveUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
@@ -426,7 +426,6 @@ public class AccountInfoPageController extends PageController {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
 
         try {
-            String message = (String) object.get(messageKey);
             this.controllerUtils.logout(stage, deleteBtn);
         } catch (JSONException e) {
             displayGeneralErrMessages(e.getMessage());

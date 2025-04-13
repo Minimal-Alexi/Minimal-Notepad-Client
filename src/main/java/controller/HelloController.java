@@ -94,7 +94,7 @@ public class HelloController extends PageController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/logIn_view.fxml"));
             Parent root = fxmlLoader.load();
 
-            Stage stage = getStage();
+            stage = getStage();
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();

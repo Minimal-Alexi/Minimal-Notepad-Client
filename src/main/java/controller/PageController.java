@@ -9,7 +9,9 @@ public abstract class PageController {
     }
 
     // store the custom localization (eg press save button and display message)
-    public void updateAllUIComponents() {};
+    public void updateAllUIComponents() {
+        // default behavior of Page Controller, do nothing
+    };
 
     // bind the fix UI with the key
     public abstract  void bindUIComponents();

@@ -54,7 +54,7 @@ public class ReadOnlyNoteController extends PageController {
     @FXML private Button accountBtn;
     @FXML private Button logOutBtn;
 
-    private final String findNoteByIdURL = "http://localhost:8093/api/note/";
+    private static final String findNoteByIdURL = "http://localhost:8093/api/note/";
     private final SelectedReadOnlyNote selectedReadOnlyNote = SelectedReadOnlyNote.getInstance();
 
     private final ControllerUtils controllerUtils = new ControllerUtils();

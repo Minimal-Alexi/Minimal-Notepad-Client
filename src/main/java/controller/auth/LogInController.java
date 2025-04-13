@@ -94,8 +94,8 @@ public class LogInController extends PageController {
     private ObservableResourceFactory RESOURCE_FACTORY ;
 
     // String Key from resource bundle
-    final String  usernameKey = "username";
-    final String passwordKey = "password";
+    private static final String  usernameKey = "username";
+    private static final String passwordKey = "password";
 
 
 
