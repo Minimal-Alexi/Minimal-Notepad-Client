@@ -193,6 +193,14 @@ public class MainPageServices {
         stage.show();
     }
 
+    public static void goToPage(Stage stage, String url) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(MainPageServices.class.getResource(url)));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
     /*
     Update the name label after log in
      */

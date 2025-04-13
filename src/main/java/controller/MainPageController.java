@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -14,95 +14,57 @@ import javafx.stage.Stage;
 import model.*;
 import model.selected.SelectedNote;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import utils.*;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
 import static utils.MainPageServices.*;
 import static utils.NoteJson.JsonToNote;
 import static utils.NoteJson.NoteToJson;
 
 public class MainPageController extends PageController {
 
-    @FXML
-    private Label localTime;
-    @FXML
-    private Label nameLabel;
+    @FXML private Label localTime;
+    @FXML private Label nameLabel;
+
     // Note table
-    @FXML
-    private TableView<Note> table;
-    @FXML
-    private TableColumn<Note, Void> icon;
-    @FXML
-    private TableColumn<Note, String> title;
-    @FXML
-    private TableColumn<Note, String> group;
-    @FXML
-    private TableColumn<Note, String> owner;
-    @FXML
-    private TableColumn<Note, String> category;
-    @FXML
-    private TableColumn<Note, String> createTime;
+    @FXML private TableView<Note> table;
+    @FXML private TableColumn<Note, Void> icon;
+    @FXML private TableColumn<Note, String> title;
+    @FXML private TableColumn<Note, String> group;
+    @FXML private TableColumn<Note, String> owner;
+    @FXML private TableColumn<Note, String> category;
+    @FXML private TableColumn<Note, String> createTime;
+
     // Recently edited
-    @FXML
-    private HBox recentlyEditedHBox;
+    @FXML private HBox recentlyEditedHBox;
 
+    // Search bar
+    @FXML private TextField searchBar;
+    @FXML private ChoiceBox<String> filterChoice;
+    @FXML private Button searchReset;
 
-    // search bar
-    @FXML
-    private TextField searchBar;
-    @FXML
-    private ChoiceBox<String> filterChoice;
-    @FXML
-    private Button searchReset;
+    // Side bar
+    @FXML private Button myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn;
+
+    @FXML private Label recentlyEditedLabel, yourNotesLabel;
+    @FXML private Button newNoteBtn;
 
     private boolean isResetting = false;
-
-    //side bar
-    @FXML
-    private Button myNotesBtn;
-    @FXML
-    private Button shareNotesBtn;
-    @FXML
-    private Button myGroupsBtn;
-    @FXML
-    private Button allGroupsBtn;
-    @FXML
-    private Button accountBtn;
-    @FXML
-    private Button logOutBtn;
-
-    @FXML
-    private Label recentlyEditedLabel;
-    @FXML
-    private Label yourNotesLabel;
-    @FXML
-    private Button newNoteBtn;
-
-
     private HttpResponseService responseService;
     private ControllerUtils controllerUtils;
     private ObservableList<Note> noteObservableList;
     private ArrayList<Note> noteArrayList;
     private HashMap<Integer, String> categoryList;
 
-    // set language
     private ObservableResourceFactory RESOURCE_FACTORY;
-
 
     public void initialize() {
         this.controllerUtils = new ControllerUtils();
         this.responseService = new HttpResponseServiceImpl();
-
-        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+        this.RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         noteObservableList = FXCollections.observableArrayList();
         noteArrayList = findAllMyNotes("http://localhost:8093/api/note/", TokenStorage.getToken());
@@ -113,104 +75,60 @@ public class MainPageController extends PageController {
         }
 
         updateNoteTable(noteObservableList, table, title, group, owner, category, createTime, icon);
-
         if (noteArrayList != null) {
             updateRecentlyEdited(recentlyEditedHBox, noteArrayList, RESOURCE_FACTORY);
         }
+
         filterChoiceSetup();
         searchBarSetup();
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
 
-        // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
-        // localize happen
         Platform.runLater(super::updateDisplay);
     }
 
-    /*
-    Go to another page
-     */
-    private Stage stage;
-    private Scene scene;
-
-    /*
-    Click the content in table
-    */
+    @FXML
     public void tableClicked(MouseEvent event) throws IOException {
-        int id = 0;
         if (event.getClickCount() == 1 && table.getSelectionModel().getSelectedItem() != null) {
-            id = table.getSelectionModel().getSelectedItem().getId();
-            System.out.println("id: " + id);
-            System.out.println(table.getSelectionModel().getSelectedItem());
+            int id = table.getSelectionModel().getSelectedItem().getId();
+            SelectedNote.getInstance().setId(id);
 
-            SelectedNote selectedNote = SelectedNote.getInstance();
-            selectedNote.setId(id);
-            goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            goToPage(stage, "/fxml/main_pages/edit_note_page.fxml");
         }
-
     }
 
+    @FXML
     public void newNoteClicked(ActionEvent event) throws IOException {
-        goToPage(stage, scene, event, "/fxml/main_pages/create_note_page.fxml");
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        goToPage(stage, "/fxml/main_pages/create_note_page.fxml");
     }
 
-    // go to myGroupPage
+    @FXML
     public void groupsClicked(ActionEvent event) throws IOException {
-        String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
-        this.controllerUtils.goPage(stage, myGroupsBtn, pageLink);
+        controllerUtils.goPage((Stage) ((Node) event.getSource()).getScene().getWindow(), myGroupsBtn,
+                "/fxml/main_pages/groups/group_info_create_group.fxml");
     }
 
-    // side bar button
-    @FXML
-    public void myGroupsBtnClick() {
-        ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
-    }
+    // Sidebar navigation
+    @FXML public void myGroupsBtnClick() { ControllerUtils_v2.goToMyGroupsPage(getStage(myGroupsBtn), myGroupsBtn); }
+    @FXML public void myNotesBtnClick() { ControllerUtils_v2.goToMyNotesPage(getStage(myNotesBtn), myNotesBtn); }
+    @FXML public void shareNotesBtnClick() { ControllerUtils_v2.goToMyGroupNotesPage(getStage(shareNotesBtn), shareNotesBtn); }
+    @FXML public void allGroupsBtnClick() { ControllerUtils_v2.goToAllGroupsPage(getStage(allGroupsBtn), allGroupsBtn); }
+    @FXML public void accountBtnClick() { ControllerUtils_v2.goToAccountPage(getStage(accountBtn), accountBtn); }
+    @FXML public void logOutBtnClick() { controllerUtils.logout(getStage(logOutBtn), logOutBtn); }
 
-    @FXML
-    public void myNotesBtnClick() {
-        ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
-    }
+    // Cursor styling
+    @FXML void mouseEnter() { setCursorStyle(true); }
+    @FXML void mouseExit() { setCursorStyle(false); }
 
-    @FXML
-    public void shareNotesBtnClick() {
-        System.out.println("Go to share notes page");
-        ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
-    }
-
-    @FXML
-    public void allGroupsBtnClick() {
-        ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
-    }
-
-    @FXML
-    public void accountBtnClick() {
-        ControllerUtils_v2.goToAccountPage(stage, accountBtn);
-    }
-
-    @FXML
-    public void logOutBtnClick() {
-        this.controllerUtils.logout(stage, logOutBtn);
-    }
-
-    @FXML
-    void mouseEnter() {
-        this.controllerUtils.setHandCursor(myNotesBtn);
-        this.controllerUtils.setHandCursor(shareNotesBtn);
-        this.controllerUtils.setHandCursor(myGroupsBtn);
-        this.controllerUtils.setHandCursor(allGroupsBtn);
-        this.controllerUtils.setHandCursor(accountBtn);
-        this.controllerUtils.setHandCursor(logOutBtn);
-    }
-
-    @FXML
-    void mouseExit() {
-        this.controllerUtils.setDefaultCursor(myNotesBtn);
-        this.controllerUtils.setDefaultCursor(shareNotesBtn);
-        this.controllerUtils.setDefaultCursor(myGroupsBtn);
-        this.controllerUtils.setDefaultCursor(allGroupsBtn);
-        this.controllerUtils.setDefaultCursor(accountBtn);
-        this.controllerUtils.setDefaultCursor(logOutBtn);
+    private void setCursorStyle(boolean hand) {
+        Button[] buttons = { myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn };
+        for (Button btn : buttons) {
+            if (hand) controllerUtils.setHandCursor(btn);
+            else controllerUtils.setDefaultCursor(btn);
+        }
     }
 
     private void searchBarSetup() {
@@ -219,54 +137,27 @@ public class MainPageController extends PageController {
                 performSearch();
             }
         });
+
         searchReset.setOnAction(event -> {
             isResetting = true;
             searchBar.setText("");
             filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString("anyCategoryOption"));
             isResetting = false;
-            noteObservableList.clear();
-            noteObservableList.addAll(noteArrayList);
+            noteObservableList.setAll(noteArrayList);
         });
-    }
-
-    private void handleGetSearchResults(CloseableHttpResponse response, Object responseObject) {
-        System.out.println(response.getStatusLine().getStatusCode());
-        if (response.getStatusLine().getStatusCode() == 200) {
-            JSONArray jsonResponse = (JSONArray) responseObject;
-            try {
-                System.out.println(response.getStatusLine().getStatusCode() + "\n" + jsonResponse);
-                noteObservableList.clear();
-                for (int i = 0; i < jsonResponse.length(); i++) {
-                    JSONObject result = (JSONObject) jsonResponse.get(i);
-                    Note note = JsonToNote(result);
-                    noteObservableList.add(note);
-                }
-            } catch (JSONException e) {
-                System.out.println(e);
-            }
-        } else {
-            JSONObject jsonResponse = (JSONObject) responseObject;
-            if (response.getStatusLine().getStatusCode() == 404) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText(jsonResponse.getString("message"));
-                alert.showAndWait();
-            }
-        }
     }
 
     private void filterChoiceSetup() {
         categoryList = new HashMap<>();
-        for (Note note : noteArrayList) {
-            categoryList.putAll(note.getCategory());
-        }
+        for (Note note : noteArrayList) categoryList.putAll(note.getCategory());
         categoryList.put(-1, RESOURCE_FACTORY.getString("noCategoryOption"));
+
         filterChoice.getItems().addAll(categoryList.values());
         filterChoice.getItems().add(RESOURCE_FACTORY.getString("anyCategoryOption"));
         filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString("anyCategoryOption"));
-        filterChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.equals(oldValue) && !isResetting) {
+
+        filterChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && !newVal.equals(oldVal) && !isResetting) {
                 performFilter();
             }
         });
@@ -275,65 +166,84 @@ public class MainPageController extends PageController {
     private void performSearch() {
         String inputText = searchBar.getText();
         if (!inputText.isEmpty()) {
-            HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/search", true);
             JSONObject searchRequest = new JSONObject();
-            JSONArray noteArray = arrayInitializer(noteObservableList);
             searchRequest.put("query", inputText);
-            searchRequest.put("notes", noteArray);
-            requestBuilder(httpRequestBuilder, searchRequest);
+            searchRequest.put("notes", arrayInitializer(noteObservableList));
+
+            HttpRequestBuilder builder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/search", true);
+            builder.setJsonRequest(searchRequest);
+            buildAndSendRequest(builder);
         } else {
-            noteObservableList.clear();
-            noteObservableList.addAll(noteArrayList);
+            noteObservableList.setAll(noteArrayList);
             performFilter();
         }
     }
 
-    private JSONArray arrayInitializer(List<Note> usedList) {
-        JSONArray noteArray = new JSONArray();
-        for (Note note : usedList) {
-            JSONObject noteJson = NoteToJson(note);
-            noteArray.put(noteJson);
-        }
-        return noteArray;
-    }
-
-    private void requestBuilder(HttpRequestBuilder httpRequestBuilder, JSONObject request) {
-        httpRequestBuilder.setJsonRequest(request);
-        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequestBase();
-        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
-        try {
-            httpRequestBuilder.setRequestBody();
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-        responseService.handleReponse(filterRequestHttp, httpClient, this::handleGetSearchResults);
-    }
-
     private void performFilter() {
-        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/filter", true);
         JSONObject filterRequest = new JSONObject();
-        JSONArray noteArray = arrayInitializer(noteObservableList);
-        JSONObject filterCategory = new JSONObject();
+        filterRequest.put("notes", arrayInitializer(noteObservableList));
 
         int category = getCategoryViaFilter();
         if (category != -1) {
-            filterCategory.put("id", category);
-            filterRequest.put("category", filterCategory);
+            JSONObject catObj = new JSONObject();
+            catObj.put("id", category);
+            filterRequest.put("category", catObj);
         } else {
             filterRequest.put("category", JSONObject.NULL);
         }
-        filterRequest.put("notes", noteArray);
-        requestBuilder(httpRequestBuilder, filterRequest);
+
+        HttpRequestBuilder builder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/filter", true);
+        builder.setJsonRequest(filterRequest);
+        buildAndSendRequest(builder);
     }
 
+    private JSONArray arrayInitializer(List<Note> notes) {
+        JSONArray array = new JSONArray();
+        for (Note note : notes) array.put(NoteToJson(note));
+        return array;
+    }
 
     private int getCategoryViaFilter() {
-        for (Map.Entry<Integer, String> entry : categoryList.entrySet()) {
-            if (entry.getValue().equals(filterChoice.getSelectionModel().getSelectedItem())) {
-                return entry.getKey();
-            }
+        return categoryList.entrySet().stream()
+                .filter(e -> e.getValue().equals(filterChoice.getSelectionModel().getSelectedItem()))
+                .map(Map.Entry::getKey)
+                .findFirst().orElse(-1);
+    }
+
+    private void buildAndSendRequest(HttpRequestBuilder builder) {
+        try {
+            builder.setRequestBody();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
-        return -1;
+
+        responseService.handleReponse(
+                builder.getHttpRequestBase(),
+                builder.getHttpClient(),
+                this::handleGetSearchResults
+        );
+    }
+
+    private void handleGetSearchResults(CloseableHttpResponse response, Object responseObject) {
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == 200) {
+            JSONArray results = (JSONArray) responseObject;
+            noteObservableList.clear();
+            for (int i = 0; i < results.length(); i++) {
+                noteObservableList.add(JsonToNote(results.getJSONObject(i)));
+            }
+        } else if (statusCode == 404) {
+            JSONObject jsonResponse = (JSONObject) responseObject;
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(jsonResponse.getString("message"));
+            alert.showAndWait();
+        }
+    }
+
+    private Stage getStage(Button button) {
+        return (Stage) button.getScene().getWindow();
     }
 
     @Override

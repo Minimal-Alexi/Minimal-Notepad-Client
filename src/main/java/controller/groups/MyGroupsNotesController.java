@@ -30,116 +30,64 @@ import static utils.MainPageServices.*;
 
 public class MyGroupsNotesController extends PageController {
 
+    @FXML private Label localTime, nameLabel, myGroupNotesLabel;
+    @FXML private TableView<Note> table;
+    @FXML private TableColumn<Note, Void> icon, actionCol;
+    @FXML private TableColumn<Note, String> title, group, owner, category, createTime;
+    @FXML private Button myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn;
 
-    @FXML
-    private Label localTime;
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private TableView<Note> table;
-    @FXML
-    private TableColumn<Note, Void> icon;
-    @FXML
-    private TableColumn<Note, String> title;
-    @FXML
-    private TableColumn<Note, String> group;
-    @FXML
-    private TableColumn<Note, String> owner;
-    @FXML
-    private TableColumn<Note, String> category;
-    @FXML
-    private TableColumn<Note, String> createTime;
-    @FXML
-    private TableColumn<Note, Void> actionCol;
-
-    //side bar
-    @FXML
-    private Button myNotesBtn;
-    @FXML
-    private Button shareNotesBtn;
-    @FXML
-    private Button myGroupsBtn;
-    @FXML
-    private Button allGroupsBtn;
-    @FXML
-    private Button accountBtn;
-    @FXML
-    private Button logOutBtn;
-
-    private HttpResponseService responseService;
+    private final ObservableList<Note> notes = FXCollections.observableArrayList();
+    private ObservableResourceFactory resourceFactory;
     private ControllerUtils controllerUtils;
-    private ObservableList<Note> noteObservableList;
-    private ArrayList<Note> noteArrayList;
-    private HashMap<Integer, String> categoryList;
+    private HttpResponseService responseService;
 
-
-    private ObservableList<Note> notes = FXCollections.observableArrayList();
-
-    private ObservableResourceFactory RESOURCE_FACTORY;
-
-    public void initialize() {
-        this.controllerUtils = new ControllerUtils();
-        this.responseService = new HttpResponseServiceImpl();
-
-        noteObservableList = FXCollections.observableArrayList();
-        noteArrayList = findAllMyNotes("http://localhost:8093/api/note/my-groups", TokenStorage.getToken());
-        if (noteArrayList != null) {
-            noteObservableList.addAll(noteArrayList);
-        } else {
-            System.out.println("Connection failed");
-        }
-
-        //updateNoteTable(noteObservableList, table, title, group, owner, category, createTime, icon);
-        updateNoteTableWithAction(noteObservableList, table, title, group, owner, category, createTime, icon, actionCol, "Read");
-
-        updateLocalTime(localTime);
-        updateNameLabel(nameLabel, TokenStorage.getUser());
-
-        // set sidebar language
-        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
-        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
-        Platform.runLater(super::updateDisplay);
-
-    }
-
-    /*
-Go to another page
- */
     private Stage stage;
     private Scene scene;
     private Parent root;
 
-    public void tableClicked(MouseEvent event) throws IOException {
-        int id = 0;
-        if (event.getClickCount() == 1) {
-            if (table.getSelectionModel().getSelectedItem() != null) {
-                id = table.getSelectionModel().getSelectedItem().getId();
-                System.out.println("id: " + id);
-                System.out.println(table.getSelectionModel().getSelectedItem());
+    public void initialize() {
+        controllerUtils = new ControllerUtils();
+        responseService = new HttpResponseServiceImpl();
+        resourceFactory = ObservableResourceFactory.getInstance();
 
-                SelectedNote selectedNote = SelectedNote.getInstance();
-                selectedNote.setId(id);
-                goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
-            }
-        }
+        initializeNoteData();
+        initializeTable();
+        bindUIComponents();
 
+        updateLocalTime(localTime);
+        updateNameLabel(nameLabel, TokenStorage.getUser());
+
+        setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+
+        Platform.runLater(super::updateDisplay);
     }
 
-    public static void updateNoteTableWithAction(ObservableList<Note> notes, TableView<Note> table, TableColumn<Note, String> title, TableColumn<Note, String> group, TableColumn<Note, String> owner, TableColumn<Note, String> category, TableColumn<Note, String> createTime, TableColumn<Note, Void> icon, TableColumn<Note, Void> actionCol, String buttonName) {
+    private void initializeNoteData() {
+        ArrayList<Note> fetchedNotes = findAllMyNotes("http://localhost:8093/api/note/my-groups", TokenStorage.getToken());
+        if (fetchedNotes != null) {
+            notes.setAll(fetchedNotes);
+        } else {
+            System.err.println("Failed to fetch notes.");
+        }
+    }
+
+    private void initializeTable() {
         table.setItems(notes);
-        title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
-        group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
-        owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
-        category.setCellValueFactory(cellData -> {
-            HashMap<Integer, String> catMap = cellData.getValue().getCategory();
-            String categoriesListString = "";
-            if (catMap != null && !catMap.isEmpty()) {
-                categoriesListString = String.join(", ", catMap.values());
-            }
-            return new ReadOnlyStringWrapper(categoriesListString);
+        title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        group.setCellValueFactory(new PropertyValueFactory<>("group"));
+        owner.setCellValueFactory(new PropertyValueFactory<>("owner"));
+        category.setCellValueFactory(cell -> {
+            HashMap<Integer, String> catMap = cell.getValue().getCategory();
+            return new ReadOnlyStringWrapper(catMap != null ? String.join(", ", catMap.values()) : "");
         });
-        createTime.setCellValueFactory(new PropertyValueFactory<Note, String>("createdAt"));
-        icon.setCellFactory(param -> new TableCell<Note, Void>() {
+        createTime.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
+
+        setupIconColumn();
+        setupActionColumn("Read");
+    }
+
+    private void setupIconColumn() {
+        icon.setCellFactory(param -> new TableCell<>() {
             private final ImageView imageView = new ImageView(
                     new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/icon/FileText.png")))
             );
@@ -152,38 +100,19 @@ Go to another page
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(imageView);
-                }
+                setGraphic(empty ? null : imageView);
             }
         });
+    }
 
+    private void setupActionColumn(String buttonLabel) {
         actionCol.setCellFactory(param -> new TableCell<>() {
-            private final Button actionButton = new Button(buttonName);
+            private final Button actionButton = new Button(buttonLabel);
 
             {
                 actionButton.setOnAction(event -> {
                     Note selectedNote = getTableView().getItems().get(getIndex());
-
-                    if ("Read".equals(buttonName)) {
-                        SelectedReadOnlyNote selectedReadOnlyNote = SelectedReadOnlyNote.getInstance();
-                        selectedReadOnlyNote.setId(selectedNote.getId());
-
-                        System.out.println("Reading note: " + selectedNote.getId() + " " + selectedNote.getTitle());
-
-                        String pageLink = "/fxml/main_pages/readonly_note_page.fxml";
-                        ControllerUtils c = new ControllerUtils();
-                        Stage stage = (Stage) actionButton.getScene().getWindow();
-                        c.goPage(stage, actionButton, pageLink);
-                    } else if ("Delete".equals(buttonName)) {
-                        System.out.println("Deleting note: " + selectedNote.getId());
-                        // Implement delete logic here
-                    } else if ("Join".equals(buttonName)) {
-                        System.out.println("Joining note: " + selectedNote.getId());
-                        // Implement join logic here
-                    }
+                    handleAction(selectedNote, buttonLabel);
                 });
             }
 
@@ -196,74 +125,84 @@ Go to another page
         });
     }
 
-    //sidebar
-    public void myGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
+    private void handleAction(Note note, String action) {
+        switch (action) {
+            case "Read" -> {
+                SelectedReadOnlyNote selectedReadOnlyNote = SelectedReadOnlyNote.getInstance();
+                selectedReadOnlyNote.setId(note.getId());
+
+                System.out.println("Reading note: " + note.getId() + " - " + note.getTitle());
+                ControllerUtils c = new ControllerUtils();
+                c.goPage((Stage) table.getScene().getWindow(), table, "/fxml/main_pages/readonly_note_page.fxml");
+            }
+            case "Delete" -> System.out.println("Delete note: " + note.getId());
+            case "Join" -> System.out.println("Join note: " + note.getId());
+        }
+    }
+
+    @FXML
+    private void tableClicked(MouseEvent event) throws IOException {
+        if (event.getClickCount() == 1 && table.getSelectionModel().getSelectedItem() != null) {
+            int noteId = table.getSelectionModel().getSelectedItem().getId();
+            System.out.println("Selected note ID: " + noteId);
+
+            SelectedNote.getInstance().setId(noteId);
+            goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
+        }
+    }
+
+    // Sidebar Navigation
+    @FXML private void myGroupsBtnClick() {
         ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
-    @FXML
-    public void myNotesBtnClick() {
-
-//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
+    @FXML private void myNotesBtnClick() {
         ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
-    @FXML
-    public void shareNotesBtnClick() {
-//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
-        System.out.println("Go to share notes page");
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+    @FXML private void shareNotesBtnClick() {
         ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
-    @FXML
-    public void allGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
+    @FXML private void allGroupsBtnClick() {
         ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
-    @FXML
-    public void accountBtnClick() {
-//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
+    @FXML private void accountBtnClick() {
         ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
-    @FXML
-    public void logOutBtnClick() {
-        this.controllerUtils.logout(stage, logOutBtn);
+    @FXML private void logOutBtnClick() {
+        controllerUtils.logout(stage, logOutBtn);
     }
 
-    @FXML
-    void mouseEnter() {
-        this.controllerUtils.setHandCursor(myNotesBtn);
-        this.controllerUtils.setHandCursor(shareNotesBtn);
-        this.controllerUtils.setHandCursor(myGroupsBtn);
-        this.controllerUtils.setHandCursor(allGroupsBtn);
-        this.controllerUtils.setHandCursor(accountBtn);
-        this.controllerUtils.setHandCursor(logOutBtn);
+    // Cursor style handlers
+    @FXML private void mouseEnter() {
+        setCursorStyle(true);
     }
 
-    @FXML
-    void mouseExit() {
-        this.controllerUtils.setDefaultCursor(myNotesBtn);
-        this.controllerUtils.setDefaultCursor(shareNotesBtn);
-        this.controllerUtils.setDefaultCursor(myGroupsBtn);
-        this.controllerUtils.setDefaultCursor(allGroupsBtn);
-        this.controllerUtils.setDefaultCursor(accountBtn);
-        this.controllerUtils.setDefaultCursor(logOutBtn);
+    @FXML private void mouseExit() {
+        setCursorStyle(false);
     }
 
+    private void setCursorStyle(boolean isHand) {
+        Button[] buttons = { myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn };
+        for (Button btn : buttons) {
+            if (isHand) {
+                controllerUtils.setHandCursor(btn);
+            } else {
+                controllerUtils.setDefaultCursor(btn);
+            }
+        }
+    }
 
-
-    @FXML private Label myGroupNotesLabel;
     @Override
     public void bindUIComponents() {
-        myGroupNotesLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesLabel"));
-        title.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesTitleCol"));
-        group.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesGroupCol"));
-        owner.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesOwnerCol"));
-        category.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesCategoryCol"));
-        createTime.textProperty().bind(RESOURCE_FACTORY.getStringBinding("myGroupNotesCreateTimeCol"));
+        myGroupNotesLabel.textProperty().bind(resourceFactory.getStringBinding("myGroupNotesLabel"));
+        title.textProperty().bind(resourceFactory.getStringBinding("myGroupNotesTitleCol"));
+        group.textProperty().bind(resourceFactory.getStringBinding("myGroupNotesGroupCol"));
+        owner.textProperty().bind(resourceFactory.getStringBinding("myGroupNotesOwnerCol"));
+        category.textProperty().bind(resourceFactory.getStringBinding("myGroupNotesCategoryCol"));
+        createTime.textProperty().bind(resourceFactory.getStringBinding("myGroupNotesCreateTimeCol"));
     }
 }

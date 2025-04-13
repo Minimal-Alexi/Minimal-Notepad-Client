@@ -2,12 +2,9 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,63 +19,49 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.*;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
 import static utils.MainPageServices.*;
 import static utils.NoteServices.findNoteById;
 
 public class ReadOnlyNoteController extends PageController {
 
-    @FXML private Label groupName;
-    @FXML private Label localTime;
-    @FXML private Label nameLabel;
-    @FXML private VBox textVBox;
-    @FXML private Label titleTextArea;
+    // UI elements
+    @FXML private Label groupName, localTime, nameLabel, titleTextArea, colorPicker, backToAllNotes;
     @FXML private TextArea textArea1;
+    @FXML private VBox textVBox;
     @FXML private HBox categoryHBox;
-    @FXML private Label colorPicker;
-    @FXML private Label backToAllNotes;
     @FXML private Rectangle noteBackground;
+    @FXML private Button myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn;
 
-    @FXML private Button myNotesBtn;
-    @FXML private Button shareNotesBtn;
-    @FXML private Button myGroupsBtn;
-    @FXML private Button allGroupsBtn;
-    @FXML private Button accountBtn;
-    @FXML private Button logOutBtn;
-
-    private final String findNoteByIdURL = "http://localhost:8093/api/note/";
-    private final SelectedReadOnlyNote selectedReadOnlyNote = SelectedReadOnlyNote.getInstance();
-
+    // Services and helpers
     private final ControllerUtils controllerUtils = new ControllerUtils();
     private final HttpResponseService responseService = new HttpResponseServiceImpl();
     private final ObservableResourceFactory RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-    private Note note;
+    // Note and related data
+    private final SelectedReadOnlyNote selectedNote = SelectedReadOnlyNote.getInstance();
     private final HashMap<Integer, String> groupList = new HashMap<>();
     private final ArrayList<String> figureList = new ArrayList<>();
-
+    private Note note;
     private Stage stage;
 
-    // Initialization logic
+    private static final String FIND_NOTE_URL = "http://localhost:8093/api/note/";
+
+    // Init method
     public void initialize() {
         TokenStorage.getIntance();
-
         RESOURCE_FACTORY.getResourceBundle();
         Platform.runLater(this::updateUI);
 
-        note = findNoteById(findNoteByIdURL, selectedReadOnlyNote.getId(), TokenStorage.getToken());
-        assert note != null;
+        note = findNoteById(FIND_NOTE_URL, selectedNote.getId(), TokenStorage.getToken());
+        if (note == null) throw new RuntimeException("Note not found");
 
         populateNoteFields();
-        groupSharingFetching();
+        fetchGroupSharingData();
 
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
     }
@@ -88,94 +71,81 @@ public class ReadOnlyNoteController extends PageController {
     }
 
     private void populateNoteFields() {
-        textArea1.setText(note.getText());
         titleTextArea.setText(note.getTitle());
+        textArea1.setText(note.getText());
         figureList.addAll(note.getFigure());
 
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
         loadFigures();
-        colorSetUp();
+        setupColor();
     }
 
     private void loadFigures() {
-        Platform.runLater(() -> {
-            figureList.forEach(figure -> {
-                try {
-                    Image image = new Image(new FileInputStream(figure));
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(200);
-                    imageView.setFitWidth(200);
-                    imageView.setPreserveRatio(true);
-                    textVBox.getChildren().add(imageView);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        });
+        Platform.runLater(() -> figureList.forEach(figure -> {
+            try {
+                Image image = new Image(new FileInputStream(figure));
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(200);
+                imageView.setFitWidth(200);
+                imageView.setPreserveRatio(true);
+                textVBox.getChildren().add(imageView);
+            } catch (FileNotFoundException e) {
+                System.err.println("Image file not found: " + figure);
+            }
+        }));
     }
 
-    private void colorSetUp() {
+    private void setupColor() {
         noteBackground.setFill(Color.web(note.getColor()));
-        colorPicker.setText("");  // Display-only
+        colorPicker.setText(""); // Read-only
     }
 
-    private void groupSharingSetUp() {
-        groupName.setText(note.getGroup());
-    }
-
-    private void groupSharingFetching() {
+    private void fetchGroupSharingData() {
         HttpRequestBuilder builder = new HttpRequestBuilder("GET", "http://localhost:8093/api/groups/my-groups", true);
         HttpRequestBase request = builder.getHttpRequestBase();
         CloseableHttpClient client = builder.getHttpClient();
 
         try {
             builder.setRequestBody();
+            responseService.handleReponse(request, client, this::handleGroupResponse);
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+            System.err.println("Failed to set request body: " + e.getMessage());
         }
-
-        responseService.handleReponse(request, client, this::handleGetOwnGroups);
     }
 
-    private void handleGetOwnGroups(CloseableHttpResponse response, Object responseObject) {
+    private void handleGroupResponse(CloseableHttpResponse response, Object responseObject) {
         int statusCode = response.getStatusLine().getStatusCode();
-        if (statusCode == 200) {
-            JSONArray jsonArray = (JSONArray) responseObject;
+        if (statusCode == 200 && responseObject instanceof JSONArray jsonArray) {
             try {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject group = jsonArray.getJSONObject(i);
                     groupList.put(group.getInt("id"), group.getString("name"));
                 }
-                groupList.put(-1, "No Group");
-                groupSharingSetUp();
             } catch (JSONException e) {
-                System.out.println(e.getMessage());
+                System.err.println("Failed to parse group list: " + e.getMessage());
             }
-        } else if (statusCode == 404) {
-            groupList.put(-1, "No Group");
         }
+        groupList.put(-1, "No Group");
+        groupName.setText(note.getGroup());
     }
 
-    // Navigation logic
-    @FXML public void myGroupsBtnClick() { ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn); }
+    // Sidebar navigation
     @FXML public void myNotesBtnClick() { ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn); }
     @FXML public void shareNotesBtnClick() { ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn); }
+    @FXML public void myGroupsBtnClick() { ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn); }
     @FXML public void allGroupsBtnClick() { ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn); }
     @FXML public void accountBtnClick() { ControllerUtils_v2.goToAccountPage(stage, accountBtn); }
     @FXML public void logOutBtnClick() { controllerUtils.logout(stage, logOutBtn); }
 
+    // Navigation
     @FXML public void backToAllNotesClick() {
         controllerUtils.goPage(stage, backToAllNotes, "/fxml/main_pages/groups/my_groups_notes.fxml");
     }
 
-    @FXML void mouseEnter() {
-        setCursor(true);
-    }
-
-    @FXML void mouseExit() {
-        setCursor(false);
-    }
+    // Cursor UI feedback
+    @FXML void mouseEnter() { setCursor(true); }
+    @FXML void mouseExit() { setCursor(false); }
 
     private void setCursor(boolean hand) {
         if (hand) {
@@ -190,7 +160,6 @@ public class ReadOnlyNoteController extends PageController {
             );
         }
     }
-
 
     @Override
     public void bindUIComponents() {
