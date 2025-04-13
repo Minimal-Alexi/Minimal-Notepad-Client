@@ -11,22 +11,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import controller.PageController;
-import utils.ControllerUtils;
-
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.HttpRequestBuilder;
-import model.Note;
-import model.ObservableResourceFactory;
-import model.TokenStorage;
+import model.*;
 import model.selected.SelectedNote;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,140 +28,67 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static utils.MainPageServices.*;
 import static utils.NoteServices.*;
-import static utils.MainPageServices.setSidebarLanguages;
-import static utils.MainPageServices.updateNameLabel;
-
 
 public class EditNoteController extends PageController {
 
     @FXML private ChoiceBox<String> groupSharingChoiceBox;
-    @FXML
-    private Label localTime;
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private VBox textVBox;
-    @FXML
-    private TextField titleTextArea;
-    @FXML
-    private TextArea textArea1;
-    @FXML
-    private Button saveNoteBtn;
-    @FXML
-    private Button deleteNoteBtn;
-    @FXML
-    private HBox categoryHBox;
-    @FXML
-    private Label addCategory;
-    @FXML
-    private Button uploadPicBtn;
-    @FXML
-    private ColorPicker colorPicker;
-    @FXML
-    private Rectangle noteBackground;
-    @FXML
-    private Text welcomeText;
-
-    @FXML
-    private Label editingNoteLabel;
-
-    @FXML
-    private Label categoriesId;
-
-    @FXML
-    private Label GroupsId;
-
-    @FXML
-    private Button myNotesBtn;
-    @FXML
-    private Button shareNotesBtn;
-    @FXML
-    private Button myGroupsBtn;
-    @FXML
-    private Button allGroupsBtn;
-    @FXML
-    private Button accountBtn;
-    @FXML
-    private Button logOutBtn;
+    @FXML private Label localTime, nameLabel, editingNoteLabel, categoriesId, GroupsId;
+    @FXML private VBox textVBox;
+    @FXML private TextField titleTextArea;
+    @FXML private TextArea textArea1;
+    @FXML private Button saveNoteBtn, deleteNoteBtn, uploadPicBtn;
+    @FXML private HBox categoryHBox;
+    @FXML private Label addCategory;
+    @FXML private ColorPicker colorPicker;
+    @FXML private Rectangle noteBackground;
+    @FXML private Text welcomeText;
+    @FXML private Button myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn;
 
     private ControllerUtils controllerUtils;
-
-
+    private ObservableResourceFactory RESOURCE_FACTORY;
     private HttpResponseService responseService;
     private SelectedNote selectedNote = SelectedNote.getInstance();
     private Note note;
     private HashMap<Integer, String> categoryList = new HashMap<>();
     private HashMap<Integer, String> groupList = new HashMap<>();
     private ArrayList<String> figureList = new ArrayList<>();
-    private ObservableResourceFactory RESOURCE_FACTORY ;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
-
-    // Initialize
     public void initialize() {
         TokenStorage.getIntance();
         responseService = new HttpResponseServiceImpl();
-        this.controllerUtils = new ControllerUtils();
+        controllerUtils = new ControllerUtils();
 
-
-        System.out.println(selectedNote.getId());
-        String findNoteByIdURL = "http://localhost:8093/api/note/";
-
-        note = findNoteById(findNoteByIdURL, selectedNote.getId(), TokenStorage.getToken());
+        String noteUrl = "http://localhost:8093/api/note/";
+        note = findNoteById(noteUrl, selectedNote.getId(), TokenStorage.getToken());
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
-
         RESOURCE_FACTORY.getResourceBundle();
 
-        Platform.runLater(()-> super.updateDisplay());
+        Platform.runLater(() -> super.updateDisplay());
 
-        assert note != null;
-        textArea1.setText(note.getText());
+        if (note == null) return;
+
         titleTextArea.setText(note.getTitle());
+        textArea1.setText(note.getText());
         categoryList = note.getCategory();
         figureList = note.getFigure();
 
         colorSetUp();
         groupSharingFetching();
-
-        // query the categoryList to add categories to the ui
         updateCategory(categoryList, categoryHBox);
-
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
 
-        // add pictures to the ui
-        /*
         Platform.runLater(() -> {
             figureList.forEach(figure -> {
-                GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
-                ImageView imageView = new ImageView();
                 try {
-                    Image image = googleDriveUploader.download(figure);
-                    imageView.setImage(image);
-                    imageView.setFitHeight(200);
-                    imageView.setFitWidth(200);
-                    imageView.setPreserveRatio(true);
-                    textVBox.getChildren().add(imageView);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        });
-
-         */
-        Platform.runLater(() -> {
-            figureList.forEach(figure -> {
-                ImageView imageView = new ImageView();
-                try {
-                    Image image = new Image(new FileInputStream(figure));
-                    imageView.setImage(image);
+                    ImageView imageView = new ImageView(new Image(new FileInputStream(figure)));
                     imageView.setFitHeight(200);
                     imageView.setFitWidth(200);
                     imageView.setPreserveRatio(true);
@@ -180,206 +99,136 @@ public class EditNoteController extends PageController {
             });
         });
 
-        // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
-
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {
-        //Disable the button
         saveNoteBtn.setDisable(true);
-        Note updatedNote= new Note(selectedNote.getId(), titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), note.getCreatedAt(), note.getUpdatedAt(), TokenStorage.getUser(), getGroupId(), getGroupName(), categoryList, figureList);
-        NoteServices.updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), updatedNote);
+        Note updatedNote = new Note(
+                selectedNote.getId(),
+                titleTextArea.getText(),
+                textArea1.getText(),
+                colorPicker.getValue().toString(),
+                note.getCreatedAt(),
+                note.getUpdatedAt(),
+                TokenStorage.getUser(),
+                getGroupId(),
+                getGroupName(),
+                categoryList,
+                figureList
+        );
+
+        updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), updatedNote);
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
 
     public void deleteNoteClicked(ActionEvent event) throws IOException {
-        //Disable the button
         deleteNoteBtn.setDisable(true);
-        NoteServices.deleteNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
+        deleteNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
         goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
     }
 
     public void addCategoryClicked(MouseEvent mouseEvent) {
         addCategory.setDisable(true);
-
-        // Create a context menu of categories for the user to choose
         HashMap<Integer, String> categories = getAllCategories("http://localhost:8093/api/categories", TokenStorage.getToken());
+
         ContextMenu contextMenu = new ContextMenu();
-
-        assert categories != null;
-        addCategory(categories, categoryList, categoryHBox, contextMenu);
-
-        if (!contextMenu.isShowing()) {
-            contextMenu.show(addCategory, mouseEvent.getScreenX(), mouseEvent.getScreenY());
-        } else {
-            contextMenu.hide();
+        if (categories != null) {
+            addCategory(categories, categoryList, categoryHBox, contextMenu);
+            if (!contextMenu.isShowing()) {
+                contextMenu.show(addCategory, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+            } else {
+                contextMenu.hide();
+            }
         }
-
-        // The adding behavior is over, enable the add button
         addCategory.setDisable(false);
+    }
 
-    }
-    public void groupSharingSetUp(){
-        groupSharingChoiceBox.getItems().addAll(groupList.values());
-        if(note.getGroupId() == -1)
-        {
-            groupSharingChoiceBox.getSelectionModel().select("No Group");
-        }
-        else
-        {
-            groupSharingChoiceBox.getSelectionModel().select(note.getGroup());
-        }
-    }
-    public void groupSharingFetching(){
-        HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET","http://localhost:8093/api/groups/my-groups",true);
-        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequestBase();
-        CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
-        try
-        {
-            httpRequestBuilder.setRequestBody();
+    public void groupSharingFetching() {
+        HttpRequestBuilder builder = new HttpRequestBuilder("GET", "http://localhost:8093/api/groups/my-groups", true);
+        HttpRequestBase request = builder.getHttpRequestBase();
+        try {
+            builder.setRequestBody();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        responseService.handleReponse(filterRequestHttp,httpClient,this::handleGetOwnGroups);
+
+        responseService.handleReponse(request, builder.getHttpClient(), this::handleGetOwnGroups);
+    }
+
+    private void handleGetOwnGroups(CloseableHttpResponse response, Object responseObject) {
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == 200) {
+            JSONArray array = (JSONArray) responseObject;
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                groupList.put(obj.getInt("id"), obj.getString("name"));
+            }
+            groupList.put(-1, "No Group");
+            groupSharingSetUp();
+        } else if (statusCode == 404) {
+            groupList.put(-1, "No Group");
+        }
+    }
+
+    public void groupSharingSetUp() {
+        groupSharingChoiceBox.getItems().addAll(groupList.values());
+        if (note.getGroupId() == -1) {
+            groupSharingChoiceBox.getSelectionModel().select("No Group");
+        } else {
+            groupSharingChoiceBox.getSelectionModel().select(note.getGroup());
+        }
     }
 
     public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
         uploadPictureLocal(uploadPicBtn, figureList, textVBox);
     }
 
-    /*
-    Go to another page
-     */
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
-
-//    public void groupsClicked(ActionEvent event) throws IOException {
-//        goToPage(stage, scene, event, "/fxml/main_pages/groups_page.fxml");
-//    }
-
     private void colorSetUp() {
         noteBackground.setFill(Color.web(note.getColor()));
         colorPicker.setValue(Color.web(note.getColor()));
-        colorPicker.setOnAction(event -> {
-            noteBackground.setFill(colorPicker.getValue());
-        });
+        colorPicker.setOnAction(e -> noteBackground.setFill(colorPicker.getValue()));
     }
-    private void handleGetOwnGroups(CloseableHttpResponse response, Object responseObject){
-        System.out.println(response.getStatusLine().getStatusCode());
-        if (response.getStatusLine().getStatusCode() == 200) {
-            JSONArray jsonResponse = (JSONArray) responseObject;
-            try {
-                for(int i = 0; i < jsonResponse.length(); i++){
-                    JSONObject jsonObject = jsonResponse.getJSONObject(i);
-                    groupList.put(jsonObject.getInt("id"), jsonObject.getString("name"));
-                }
-                groupList.put(-1,"No Group");
-                groupSharingSetUp();
-            } catch (JSONException e) {
-                System.out.println(e);
-            }
-        } else {
-            JSONObject jsonResponse = (JSONObject) responseObject;
-            if (response.getStatusLine().getStatusCode() == 404) {
-                groupList.put(-1,"No Group");
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("Error");
-//                alert.setHeaderText(null);
-//                alert.setContentText(jsonResponse.getString("message"));
-//                alert.showAndWait();
-            }
-        }
+
+    private int getGroupId() {
+        return groupList.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(groupSharingChoiceBox.getValue()))
+                .map(Map.Entry::getKey)
+                .findFirst().orElse(-1);
     }
-    private int getGroupId(){
-        for(Map.Entry<Integer,String> entry:groupList.entrySet())
-        {
-            if(entry.getValue().equals(groupSharingChoiceBox.getValue()))
-            {
-                return entry.getKey();
-            }
-        }
-        return -1;
-    }
-    private String getGroupName(){
+
+    private String getGroupName() {
         return groupSharingChoiceBox.getValue();
     }
 
-    // side bar button
-    @FXML
-    public void myGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
-        ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
+    public String getLocalizedActionColOneName() {
+        return RESOURCE_FACTORY.getResourceBundle().getString("actionColOneName");
     }
 
-    // sidebar
+    // Sidebar Navigation
+    @FXML public void myNotesBtnClick() { ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn); }
+    @FXML public void shareNotesBtnClick() { ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn); }
+    @FXML public void myGroupsBtnClick() { ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn); }
+    @FXML public void allGroupsBtnClick() { ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn); }
+    @FXML public void accountBtnClick() { ControllerUtils_v2.goToAccountPage(stage, accountBtn); }
+    @FXML public void logOutBtnClick() { controllerUtils.logout(stage, logOutBtn); }
 
-    @FXML
-    public void myNotesBtnClick() {
-
-//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
-        ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
+    @FXML void mouseEnter() {
+        List<Button> buttons = List.of(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+        buttons.forEach(controllerUtils::setHandCursor);
     }
 
-    @FXML
-    public void shareNotesBtnClick() {
-//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
-        System.out.println("Go to share notes page");
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
-        ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
+    @FXML void mouseExit() {
+        List<Button> buttons = List.of(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+        buttons.forEach(controllerUtils::setDefaultCursor);
     }
-
-    @FXML
-    public void allGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
-        ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
-    }
-
-    @FXML
-    public void accountBtnClick() {
-//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
-        ControllerUtils_v2.goToAccountPage(stage, accountBtn);
-    }
-
-    @FXML
-    public void logOutBtnClick() {
-        this.controllerUtils.logout(stage, logOutBtn);
-    }
-
-    @FXML
-    void mouseEnter() {
-        this.controllerUtils.setHandCursor(myNotesBtn);
-        this.controllerUtils.setHandCursor(shareNotesBtn);
-        this.controllerUtils.setHandCursor(myGroupsBtn);
-        this.controllerUtils.setHandCursor(allGroupsBtn);
-        this.controllerUtils.setHandCursor(accountBtn);
-        this.controllerUtils.setHandCursor(logOutBtn);
-    }
-
-    @FXML
-    void mouseExit() {
-        this.controllerUtils.setDefaultCursor(myNotesBtn);
-        this.controllerUtils.setDefaultCursor(shareNotesBtn);
-        this.controllerUtils.setDefaultCursor(myGroupsBtn);
-        this.controllerUtils.setDefaultCursor(allGroupsBtn);
-        this.controllerUtils.setDefaultCursor(accountBtn);
-        this.controllerUtils.setDefaultCursor(logOutBtn);
-    }
-
-    public String getLocalizedActionColOneName(){
-        ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
-        return rb.getString("actionColOneName");
-    }
-
-
 
     @Override
     public void bindUIComponents() {
         editingNoteLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editingNoteLabel"));
         saveNoteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("saveNoteBtn"));
         deleteNoteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("deleteNoteBtn"));
-        titleTextArea.textProperty().bind(RESOURCE_FACTORY.getStringBinding("titleTextArea"));
+        titleTextArea.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("titleTextArea"));
         uploadPicBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("uploadPicBtn"));
         categoriesId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("categoriesId"));
         GroupsId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupsId"));

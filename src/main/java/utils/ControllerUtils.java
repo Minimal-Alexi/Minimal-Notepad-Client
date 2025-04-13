@@ -2,6 +2,7 @@ package utils;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,97 +16,82 @@ import model.TokenStorage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-//import java.awt.*;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ControllerUtils {
 
-    Cursor handCursor = Cursor.HAND;
-    Cursor defaultCursor = Cursor.DEFAULT;
+    private static final Cursor HAND_CURSOR = Cursor.HAND;
+    private static final Cursor DEFAULT_CURSOR = Cursor.DEFAULT;
 
+    /**
+     * Load an FXML and set it to a stage.
+     */
     public void updateStage(Stage stage, FXMLLoader fxmlLoader) {
         try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/logIn_view.fxml"));
             Parent root = fxmlLoader.load();
-
-//            var stage = getStage();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to load FXML: " + fxmlLoader.getLocation(), e);
         }
     }
 
-    public Stage getStage(Button btn, Stage stage) {
-        if (stage == null) {
-            stage = (Stage) btn.getScene().getWindow();
+    /**
+     * Generic method to get the stage from any Node.
+     */
+    public Stage getStage(Node node, Stage stage) {
+        return (stage == null && node != null) ? (Stage) node.getScene().getWindow() : stage;
+    }
+
+    /**
+     * Navigation helpers.
+     */
+    public void goPage(Stage stage, Node node, String fxmlPath) {
+        stage = getStage(node, stage);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        updateStage(stage, loader);
+    }
+
+    /**
+     * Sets default cursor on any node.
+     */
+    public void setDefaultCursor(Node node) {
+        if (node != null) node.setCursor(DEFAULT_CURSOR);
+    }
+
+    /**
+     * Sets hand cursor on any node.
+     */
+    public void setHandCursor(Node node) {
+        if (node != null) node.setCursor(HAND_CURSOR);
+    }
+
+    public void setHandCursor(Node... nodes) {
+        for (Node node : nodes) {
+            setHandCursor(node);
         }
-        return stage;
     }
 
-    public Stage getStage(Label label, Stage stage) {
-        if (stage == null) {
-            stage = (Stage) label.getScene().getWindow();
+    public void setDefaultCursor(Node... nodes) {
+        for (Node node : nodes) {
+            setDefaultCursor(node);
         }
-        return stage;
-    }
-
-    public void goPage(Stage stage, Button btn, String fxmlPage) {
-        stage = getStage(btn, stage);
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPage));
-        updateStage(stage, fxmlLoader);
-    }
-
-    public void goPage(Stage stage, Label label, String fxmlPage) {
-        stage = getStage(label, stage);
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPage));
-        updateStage(stage, fxmlLoader);
     }
 
 
-    public void setDefaultCursor(Button btn) {
-        btn.setCursor(defaultCursor);
+    /**
+     * Adds default/hand cursor behavior on hover for any Button.
+     */
+    public void setDefaultAndHandCursorBehaviour(Button button) {
+        button.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> setHandCursor(button));
+        button.addEventHandler(MouseEvent.MOUSE_EXITED, e -> setDefaultCursor(button));
     }
 
-    public void setDefaultCursor(Text txt) {
-        txt.setCursor(defaultCursor);
-    }
-
-    public void setDefaultCursor(Label label) {
-        label.setCursor(defaultCursor);
-    }
-
-    public void setDefaultCursor(SVGPath svgPath) {
-        svgPath.setCursor(defaultCursor);
-    }
-
-    public void setDefaultCursor(Pane pane) {
-        pane.setCursor(defaultCursor);
-    }
-
-
-    public void setHandCursor(Button btn) {
-        btn.setCursor(handCursor);
-    }
-
-    public void setHandCursor(Text txt) {
-        txt.setCursor(handCursor);
-    }
-
-    public void setHandCursor(Label label) {
-        label.setCursor(handCursor);
-    }
-
-    public void setHandCursor(SVGPath svgPath) {
-        svgPath.setCursor(handCursor);
-    }
-
-    public void setHandCursor(Pane pane) {
-        pane.setCursor(handCursor);
-    }
-
+    /**
+     * Validates email with regex.
+     */
     public boolean validEmail(String email) {
         String regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
@@ -113,32 +99,32 @@ public class ControllerUtils {
         return matcher.matches();
     }
 
-    public void logout(Stage stage, Button btn) {
-        String helloPage = "/fxml/hello_view.fxml";
+    /**
+     * Checks for empty input.
+     */
+    public boolean isInputEmpty(String input) {
+        return input == null || input.trim().isEmpty();
+    }
+
+    /**
+     * Converts Object to JSONObject if possible.
+     */
+    public JSONObject toJSonObject(Object response) {
+        return response instanceof JSONObject ? (JSONObject) response : null;
+    }
+
+    /**
+     * Converts Object to JSONArray if possible.
+     */
+    public JSONArray toJSONArray(Object response) {
+        return response instanceof JSONArray ? (JSONArray) response : null;
+    }
+
+    /**
+     * Logout and go to login screen.
+     */
+    public void logout(Stage stage, Button triggerBtn) {
         TokenStorage.clearToken();
-        goPage(stage, btn, helloPage);
-    }
-
-    public boolean isInputEmpty(String input){
-        return input.trim().equals("");
-    }
-
-    public JSONObject toJSonObject(Object response){
-        if (response instanceof JSONObject){
-            return (JSONObject) response;
-        }
-        return null;
-    }
-
-    public JSONArray toJSONArray(Object response){
-        if(response instanceof JSONArray){
-            return (JSONArray) response;
-        }
-        return null;
-    }
-
-    public void setDefaultAndHandCursorBehaviour(Button button) {
-        button.addEventHandler(MouseEvent.MOUSE_ENTERED, (e -> setHandCursor((Button) e.getSource())));
-        button.addEventHandler(MouseEvent.MOUSE_EXITED, (e -> setDefaultCursor((Button) e.getSource())));
+        goPage(stage, triggerBtn, "/fxml/hello_view.fxml");
     }
 }
