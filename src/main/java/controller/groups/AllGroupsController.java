@@ -72,7 +72,7 @@ public class AllGroupsController extends PageController implements Initializable
     // properties
     private Stage stage;
     private Scene scene;
-    private Parent parent;
+
 //    private
 
     // others
@@ -89,38 +89,25 @@ public class AllGroupsController extends PageController implements Initializable
     TableColumn<Group, Group> actionTwoCol;
 
 
-    //    private static final String URI = "http://localhost:8093/api/groups/my-groups";
-    private static final String URI = "http://localhost:8093/api/groups";
 
-
-    //URI API
-
-    private static final String FXML_SOURCE = "/fxml";
-    private static final String CSS_SOURCE = "/CSS";
 
 
 //myTableView.setPlaceholder(new Label("My table is empty message"));
 
 
     public void initialize(URL location, ResourceBundle resourceBundle) {
-        System.out.println("start Create Group  Page");
 
-        System.out.println("scene " + scene);
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        TokenStorage.getIntance();//
-        String username = TokenStorage.getUser();
-        String password = TokenStorage.getToken();
-        System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
+        TokenStorage.getIntance();
+
 
         updateNameLabel(nameLabel, TokenStorage.getUser());
         MainPageServices.updateLocalTime(localTime);
 
 
-//        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
         ControllerUtils_v2.addStyle(root,"/button.css");
         ControllerUtils_v2.addStyle(root,"/text_input.css");
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
@@ -219,8 +206,6 @@ public class AllGroupsController extends PageController implements Initializable
                 this::handleJoinOrLeaveOrDeleteResponse
         );
     }
-
-
 
 
     @Override
