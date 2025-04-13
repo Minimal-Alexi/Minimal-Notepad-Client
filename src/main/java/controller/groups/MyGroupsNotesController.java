@@ -254,10 +254,7 @@ Go to another page
         this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
-    @Override
-    public void updateAllUIComponents() {
 
-    }
 
     @FXML private Label myGroupNotesLabel;
     @Override

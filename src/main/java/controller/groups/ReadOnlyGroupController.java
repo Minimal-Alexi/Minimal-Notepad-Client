@@ -125,8 +125,8 @@ public class ReadOnlyGroupController extends PageController {
     }
 
     String URI = getGroupUri();
-    private static final String FXMLSource = "/fxml";
-    private static final String CSSSOURCE = "/CSS";
+    private static final String FXML_SOURCE = "/fxml";
+    private static final String CSS_SOURCE = "/CSS";
 
 
 
@@ -166,10 +166,10 @@ public class ReadOnlyGroupController extends PageController {
         updateNameLabel(nameLabel, TokenStorage.getUser());
         MainPageServices.updateLocalTime(localTime);
 
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
 
-//        editGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
+//        editGroupBtn.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/groups.css").toExternalForm());
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
 
@@ -196,7 +196,7 @@ public class ReadOnlyGroupController extends PageController {
     public void getGroupUserInfoByGroupId() {
         String ALL_GROUP_URI = URI;
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", ALL_GROUP_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, this::handleGroupUserInfoByGroupId);
 //        return null;
@@ -401,7 +401,7 @@ public class ReadOnlyGroupController extends PageController {
         String REMOVE_URI = URI + "/remove/" + appUserId;
         System.out.println(REMOVE_URI);
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("DELETE", REMOVE_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, this::handleRemoveUser);
     }

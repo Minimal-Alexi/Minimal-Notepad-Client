@@ -145,7 +145,7 @@ public class AccountInfoPwdController extends PageController {
 
             // call this method only if you have body in your request
 
-            HttpRequestBase httpDelete = httpRequest.getHttpRequest();
+            HttpRequestBase httpDelete = httpRequest.getHttpRequestBase();
             CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
             httpResponseService.handleReponse(httpDelete, httpClient, this::handleDeleteResponse);
@@ -298,8 +298,8 @@ public class AccountInfoPwdController extends PageController {
 
         // call this method only if you have body in your request
         httpRequest.setRequestBody();
-//            HttpDelete httpDelete = (HttpDelete) httpRequest.getHttpRequest();
-        HttpRequestBase httpPut = httpRequest.getHttpRequest();
+//            HttpDelete httpDelete = (HttpDelete) httpRequest.getHttpRequestBase();
+        HttpRequestBase httpPut = httpRequest.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
         this.httpResponseService.handleReponse(httpPut, httpClient, this::handleSaveUserinfoResponse);

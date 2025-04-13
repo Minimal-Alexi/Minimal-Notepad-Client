@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 public class ViewUtils {
 
-    private static final String CSSSOURCE = "/CSS";
+    private static final String CSS_SOURCE = "/CSS";
 
 
     public static  <S, T> TableColumn<S, T> column(String title, Function<S, ObservableValue<T>> property, double width) {
@@ -20,10 +20,10 @@ public class ViewUtils {
     }
 
     public static void addStyle(BorderPane root, String styleLink){
-        root.getStylesheets().add(ViewUtils.class.getResource(CSSSOURCE + styleLink).toExternalForm());
+        root.getStylesheets().add(ViewUtils.class.getResource(CSS_SOURCE + styleLink).toExternalForm());
     }
 
     public static void addStyle(Button button, String styleLink){
-        button.getStylesheets().add(ViewUtils.class.getResource(CSSSOURCE + styleLink).toExternalForm());
+        button.getStylesheets().add(ViewUtils.class.getResource(CSS_SOURCE + styleLink).toExternalForm());
     }
 }

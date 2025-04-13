@@ -134,9 +134,6 @@ public class HelloController extends PageController {
 
 
     @Override
-    public void updateAllUIComponents() {
-    }
-    @Override
     public void bindUIComponents() {
         logIn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("logInNowLabel"));
         registerLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerHereLabel"));

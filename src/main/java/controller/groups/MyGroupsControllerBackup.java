@@ -89,8 +89,8 @@ public class MyGroupsControllerBackup {
     private final List<Group> joinedGroups = new ArrayList<>();
     private final List<Group> canJoinGroups = new ArrayList<>();
 
-    private static final String FXMLSource = "/fxml";
-    private static final String CSSSOURCE = "/CSS";
+    private static final String FXML_SOURCE = "/fxml";
+    private static final String CSS_SOURCE = "/CSS";
 
     public void initialize() {
 
@@ -141,9 +141,9 @@ public class MyGroupsControllerBackup {
             });
         }).start();
 
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/table_view.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/table_view.css").toExternalForm());
     }
 
 

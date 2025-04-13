@@ -100,7 +100,7 @@ public class HttpRequestBuilder {
         }
     }
 
-    public HttpRequestBase getHttpRequest() {
+    public HttpRequestBase getHttpRequestBase() {
         return this.httpRequest;
     }
 

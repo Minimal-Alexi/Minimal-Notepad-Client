@@ -54,7 +54,7 @@ public class HttpResponseServiceImpl implements HttpResponseService {
                 a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
                 a.show();
             } catch (JSONException e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
                 System.out.println(e.getMessage());
             }
         }).start();

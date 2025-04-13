@@ -105,6 +105,10 @@ public class AccountInfoPageController extends PageController {
     private final  String unableToSaveKey = "unableToUpdateText";
     private final String serverExceptionErrorKey = "serverExeptionText";
     private final String serverErrorKey = "serverErrorText";
+    private final String messageKey = "message";
+
+    // key to storage in StorageKey
+    private final String usernameKey = "username";
 
 
 
@@ -159,10 +163,10 @@ public class AccountInfoPageController extends PageController {
 
 
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("PUT", savingLanguageURI, true);
-//        HttpRequestBase httpPut = httpRequest.getHttpRequest();
+//        HttpRequestBase httpPut = httpRequest.getHttpRequestBase();
 //        CloseableHttpClient httpClient = httpRequest.getHttpClient();
         httpResponseService.handleReponse(
-                httpRequest.getHttpRequest(),
+                httpRequest.getHttpRequestBase(),
                 httpRequest.getHttpClient(),
                 this::handleSaveLanguage
         );
@@ -253,17 +257,11 @@ public class AccountInfoPageController extends PageController {
 
 
     private void getUserInfo() {
-        String username = TokenStorage.getUser();
-        String token = TokenStorage.getToken();
-
-
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("GET", URI, true);
-
-
-        HttpRequestBase httpGet = httpRequest.getHttpRequest();
-        CloseableHttpClient httpClient = httpRequest.getHttpClient();
-
-        httpResponseService.handleReponse(httpGet, httpClient, this::handleGetUserInfoResponse);
+        httpResponseService.handleReponse(
+                httpRequest.getHttpRequestBase(),
+                httpRequest.getHttpClient(),
+                this::handleGetUserInfoResponse);
     }
 
     //    private void handleGetUserInfoResponse(CloseableHttpResponse response, JSONObject jsonResponse) {
@@ -272,12 +270,12 @@ public class AccountInfoPageController extends PageController {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
             String email = (String) object.get("email");
-            String username = (String) object.get("username");
+            String username = (String) object.get(usernameKey);
             emailInput.setText(email);
             usernameInput.setText(username);
         } catch (JSONException e) {
             // TODO: update to use resource bundle, add key to the GeneralErrorKey
-            String errMessage = (String) object.get("message");
+            String errMessage = (String) object.get(messageKey);
 
             generalErrorKey.setKey(serverExceptionErrorKey);
             displayGeneralErrMessages(errMessage);
@@ -324,19 +322,15 @@ public class AccountInfoPageController extends PageController {
         String emailInputText = emailInput.getText();
         String usernameInputText = usernameInput.getText();
 
-
         if (usernameInputText.equals("")) {
-//            String result = MessageFormat.format(rb.getString("name"), input);
             String userErrMessage = rb.getString("userErrLabel");
             this.userErrLabel.setText(userErrMessage);
-//            this.userErrLabel.setText("Username is empty");
-//            String userErrMessage = rb.
+
         } else {
             this.userErrLabel.setText("");
         }
         if (emailInputText.equals("")) {
             String emailErrMessage = rb.getString("emailErrLabel");
-//            this.emailErrLabel.setText("Email is empty");
             this.emailErrLabel.setText(emailErrMessage);
 
         } else {
@@ -362,16 +356,6 @@ public class AccountInfoPageController extends PageController {
     private void updateGeneralErrorMessageWhenLanguageChange(){
         if ( !generalErrLabel.getText().isEmpty()){
         ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
-//        System.out.println(generalErrLabel.getText());
-//        GeneralErrorKey errGeneralKey = (GeneralErrorKey) generalErrLabel.getUserData();
-//        String key = errGeneralKey.getKey();
-//        System.out.println("key"+key);
-//            private final String wrongEmailFormatKey = "wrongEmailFormatText";
-//            private final String updateSuccessKey = "updateSuccessText";
-//            private final  String unableToSaveKey = "unableToUpdateText";
-//            private final String serverExceptionErrorKey = "serverExeptionText";
-//            private final String serverErrorKey = "serverErrorText";
-
         }
     }
 
@@ -382,17 +366,15 @@ public class AccountInfoPageController extends PageController {
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("PUT", URI, true);
 
         // set JSON
-        httpRequest.updateJsonRequest("username", username);
+        httpRequest.updateJsonRequest(usernameKey, username);
         httpRequest.updateJsonRequest("email", email);
 
         // call this method only if you have body in your request
         httpRequest.setRequestBody();
-//            HttpDelete httpDelete = (HttpDelete) httpRequest.getHttpRequest();
-        HttpRequestBase httpPut = httpRequest.getHttpRequest();
+        HttpRequestBase httpPut = httpRequest.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
-
-        httpResponseService.handleReponse(httpPut, httpClient, this::handleSaveUserInfoResponse);
+        httpResponseService.handleReponse(httpRequest.getHttpRequestBase(), httpRequest.getHttpClient(), this::handleSaveUserInfoResponse);
     }
 
     public void handleSaveUserInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
@@ -403,15 +385,14 @@ public class AccountInfoPageController extends PageController {
 
             String statusLine = response.getStatusLine().toString();
             if (statusLine.contains("200")) {
-                String newUsername = (String) object.get("username");
+                String newUsername = (String) object.get(usernameKey);
                 String curUsername = TokenStorage.getUser();
                 // check if username is the same
                 // 1. if the same, email change, no token in the response body
                 if (!newUsername.equals(curUsername)) {
                     String newToken = (String) object.get("token");
-                    System.out.println("New: username: " + newUsername + ", token: " + newToken);
                     TokenStorage.saveToken(newUsername, newToken);
-                    TokenStorage.saveInfo("username", newUsername);
+                    TokenStorage.saveInfo(usernameKey, newUsername);
                 }
 
                 // 2. if username is not the same, token in response body
@@ -427,7 +408,7 @@ public class AccountInfoPageController extends PageController {
             } else {
                 // get message from generic response
 
-                String message = (String) object.get("message");
+                String message = (String) object.get(messageKey);
                 generalErrorKey.setKey(serverErrorKey);
                 generalErrLabel.setText(message);
 //                generalErrLabel.setUserData(generalErrorKey);
@@ -446,11 +427,6 @@ public class AccountInfoPageController extends PageController {
     }
 
     @FXML
-    public void groupsClicked() {
-
-    }
-
-    @FXML
     public void changePwdClick() {
         this.stage = controllerUtils.getStage(saveBtn, this.stage);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/account_user_password_page.fxml"));
@@ -464,10 +440,8 @@ public class AccountInfoPageController extends PageController {
     public void deleteBtnClick() {
 
         ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
-//        String yesTxt = "Yes";
         String yesTxt =rb.getString("yesText");
 
-//        Optional<ButtonType> result = displayDeleteWarningDialog();
         Optional<ButtonType> result = Utils.displayDeleteWarningDialog();
         System.out.println("result of dialog " + result.get().getText());
         if (result.get().getText().equals(yesTxt)) {
@@ -475,11 +449,7 @@ public class AccountInfoPageController extends PageController {
             HttpRequestBuilder httpRequest = new HttpRequestBuilder("DELETE", URI, true);
 
             // call this method only if you have body in your request
-
-            HttpRequestBase httpDelete = httpRequest.getHttpRequest();
-            CloseableHttpClient httpClient = httpRequest.getHttpClient();
-
-            this.httpResponseService.handleReponse(httpDelete, httpClient, this::handleDeleteResponse);
+            this.httpResponseService.handleReponse(httpRequest.getHttpRequestBase(), httpRequest.getHttpClient(), this::handleDeleteResponse);
 
         }
     }
@@ -488,14 +458,9 @@ public class AccountInfoPageController extends PageController {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
 
         try {
-            String message = (String) object.get("message");
-            System.out.println("message: " + message);
-//            String helloPage = "/fxml/hello_view.fxml";
-//            TokenStorage.clearToken();
-//            controllerUtils.goPage(stage, deleteBtn, helloPage);
+            String message = (String) object.get(messageKey);
             this.controllerUtils.logout(stage, deleteBtn);
         } catch (JSONException e) {
-
             displayGeneralErrMessages(e.getMessage());
         }
     }
@@ -511,7 +476,7 @@ public class AccountInfoPageController extends PageController {
 //        displayEmptyErrorMessage();
         updateEmptyErrorMessagesWhenLanguageChange();
         updateGeneralErrorMessageWhenLanguageChange();
-//        dis
+
 
         // set sidebar language
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
@@ -523,7 +488,6 @@ public class AccountInfoPageController extends PageController {
     // example, sidebar, page title, page labels/ input, save button, etc
     @Override
     public void bindUIComponents() {
-
         editYourAccountLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editYourAccountLabel"));
         deleteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("deleteBtn"));
         changeLanguageLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("changeLanguageLabel"));

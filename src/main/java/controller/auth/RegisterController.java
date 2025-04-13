@@ -291,9 +291,9 @@ public class RegisterController extends PageController {
         String languageCode = RESOURCE_FACTORY.getResourceBundle().getLocale().getLanguage();
         httpRequest.updateJsonRequest("language", languageCode);
         httpRequest.setRequestBody();
-        HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
+        HttpPost httpPost = (HttpPost) httpRequest.getHttpRequestBase();
         // implement later, need to work with handleReponse method
-//        HttpRequestBase httpPost =  httpRequest.getHttpRequest();
+//        HttpRequestBase httpPost =  httpRequest.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
 
@@ -344,9 +344,7 @@ public class RegisterController extends PageController {
         int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
         int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
         String maskedPwd = pwdInput.getText();
-        System.out.println("masked pwd input: " + maskedPwd);
 
-        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
 
         if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
 
@@ -369,8 +367,6 @@ public class RegisterController extends PageController {
         int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
         String unmaskedPwd = unmaskedPwdInput.getText();
 
-        System.out.println("unmasked pwd input: " + unmaskedPwd);
-        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
 
         if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
 
@@ -389,9 +385,6 @@ public class RegisterController extends PageController {
         int maskedPaneIndex = confirmPwdStackPane.getChildren().indexOf(confirmMaskedStackPane);
         int unmaskedPaneIndex = confirmPwdStackPane.getChildren().indexOf(confirmUnmaskedStackPane);
         String maskedConfirmPwd = confirmPwdInput.getText();
-        System.out.println("masked pwd input: " + maskedConfirmPwd);
-
-        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
 
         if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
 
@@ -413,9 +406,6 @@ public class RegisterController extends PageController {
         int maskedPaneIndex = confirmPwdStackPane.getChildren().indexOf(confirmMaskedStackPane);
         int unmaskedPaneIndex = confirmPwdStackPane.getChildren().indexOf(confirmUnmaskedStackPane);
         String unmaskedConfirmPwd = unmaskedConfirmPwdInput.getText();
-
-        System.out.println("unmasked pwd input: " + unmaskedConfirmPwd);
-        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
 
         if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
 
@@ -471,9 +461,10 @@ public class RegisterController extends PageController {
         return password;
     }
 
-    @Override
-    public void updateAllUIComponents() {
-    }
+    // will be implement when localation of err in BE is finished
+//    @Override
+//    public void updateAllUIComponents() {
+//    }
 
     @Override
     public void bindUIComponents() {

@@ -95,8 +95,8 @@ public class AllGroupsController extends PageController implements Initializable
 
     //URI API
 
-    private static final String FXMLSource = "/fxml";
-    private static final String CSSSOURCE = "/CSS";
+    private static final String FXML_SOURCE = "/fxml";
+    private static final String CSS_SOURCE = "/CSS";
 
 
 //myTableView.setPlaceholder(new Label("My table is empty message"));
@@ -119,8 +119,8 @@ public class AllGroupsController extends PageController implements Initializable
         MainPageServices.updateLocalTime(localTime);
 
 
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
-//        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
+//        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
+//        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
         ControllerUtils_v2.addStyle(root,"/button.css");
         ControllerUtils_v2.addStyle(root,"/text_input.css");
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
@@ -221,10 +221,7 @@ public class AllGroupsController extends PageController implements Initializable
     }
 
 
-    @Override
-    public void updateAllUIComponents() {
 
-    }
 
     @Override
     public void bindUIComponents() {

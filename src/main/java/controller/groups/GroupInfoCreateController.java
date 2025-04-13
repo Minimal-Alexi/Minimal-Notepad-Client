@@ -96,8 +96,8 @@ public class GroupInfoCreateController extends PageController {
 
     //URI API
 
-    private static final String FXMLSource = "/fxml";
-    private static final String CSSSOURCE = "/CSS";
+    private static final String FXML_SOURCE = "/fxml";
+    private static final String CSS_SOURCE = "/CSS";
 
     public void initialize() {
         System.out.println("start Create Group Page");
@@ -110,23 +110,20 @@ public class GroupInfoCreateController extends PageController {
             System.out.println("selected group id: " + selectedGroup.getId());
 
         } catch (NullPointerException e) {
-            System.out.println("there is no selected group id");
+//            System.out.println("there is no selected group id");
+            System.err.println("there is no selected group id");
         } finally {
 
-            System.out.println("scene " + scene);
             this.controllerUtils = new ControllerUtils();
             this.httpResponseService = new HttpResponseServiceImpl();
 
-            TokenStorage.getIntance();//
-            String username = TokenStorage.getUser();
-            String password = TokenStorage.getToken();
-            System.out.println("User: " + TokenStorage.getUser() + ", token: " + TokenStorage.getToken());
+            TokenStorage.getIntance();
 
             updateNameLabel(nameLabel, TokenStorage.getUser());
             MainPageServices.updateLocalTime(localTime);
-            root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
-            root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
-            createGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
+            root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
+            root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
+            createGroupBtn.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/groups.css").toExternalForm());
             ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
         }
@@ -213,7 +210,7 @@ public class GroupInfoCreateController extends PageController {
                 displayEmptyErrorMessages(groupName, groupDesc);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
     }
@@ -259,7 +256,7 @@ public class GroupInfoCreateController extends PageController {
         httpRequest.updateJsonRequest("name", groupName);
         httpRequest.updateJsonRequest("description", groupDesc);
         httpRequest.setRequestBody();
-        HttpRequestBase request = httpRequest.getHttpRequest();
+        HttpRequestBase request = httpRequest.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, this::handleCreateGroup);
     }
@@ -271,7 +268,7 @@ public class GroupInfoCreateController extends PageController {
         String statusCode = response.getStatusLine().toString();
         try {
             System.out.println("response " + response);
-            this.controllerUtils.goPage(stage,createGroupBtn,FXMLSource+"/main_pages/groups/my_groups.fxml");
+            this.controllerUtils.goPage(stage,createGroupBtn,FXML_SOURCE+"/main_pages/groups/my_groups.fxml");
         } catch (JSONException e) {
             String message = (String) object.get("message");
         }
