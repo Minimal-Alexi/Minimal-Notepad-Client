@@ -104,8 +104,8 @@ public class MyGroupsController extends PageController {
     private List<Group> joinedGroups = new ArrayList<>();
     private List<Group> canJoinGroups = new ArrayList<>();
 
-    private static final String FXMLSource = "/fxml";
-    private static final String CSSSOURCE = "/CSS";
+    private static final String FXML_SOURCE = "/fxml";
+    private static final String CSS_SOURCE = "/CSS";
     private static final String URI = "http://localhost:8093/api/groups";
 
     private ObservableResourceFactory RESOURCE_FACTORY;
@@ -191,9 +191,9 @@ public class MyGroupsController extends PageController {
 //            });
 //        }).start();
 //
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/table_view.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/table_view.css").toExternalForm());
 //        logOutBtn.getStylesheets().add(g)
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
@@ -345,13 +345,10 @@ public class MyGroupsController extends PageController {
 
     @FXML
     private void tableClicked() {
-
+        // this do nothing
     }
 
-    @Override
-    public void updateAllUIComponents() {
 
-    }
 
 
     @FXML private Label joinedLabel;

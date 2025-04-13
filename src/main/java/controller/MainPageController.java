@@ -315,7 +315,7 @@ public class MainPageController extends PageController {
 
     private void requestBuilder(HttpRequestBuilder httpRequestBuilder, JSONObject request) {
         httpRequestBuilder.setJsonRequest(request);
-        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         try
         {
@@ -360,10 +360,7 @@ public class MainPageController extends PageController {
 
     }
 
-    @Override
-    public void updateAllUIComponents() {
 
-    }
 
     @Override
     public void bindUIComponents() {

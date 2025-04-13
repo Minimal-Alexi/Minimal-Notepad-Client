@@ -207,7 +207,7 @@ public class GroupControllerUtils {
         String JOIN_URI = URI + "/" + groupId + "/join";
         System.out.println(JOIN_URI);
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("POST", JOIN_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, callback);
     }
@@ -218,7 +218,7 @@ public class GroupControllerUtils {
         String DELETE_URI = URI + "/" + groupId;
         System.out.println(DELETE_URI);
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("DELETE", DELETE_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, callback);
     }
@@ -229,7 +229,7 @@ public class GroupControllerUtils {
         String LEAVE_URI = URI + "/" + groupId + "/leave";
         System.out.println(LEAVE_URI);
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("DELETE", LEAVE_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, callback);
     }
@@ -257,7 +257,7 @@ public class GroupControllerUtils {
     public static void getJoinedGroup(HttpResponseService httpResponseService, HandleResponseCallback callback) {
         String JOIN_GROUP_URI = URI + "/my-groups";
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", JOIN_GROUP_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, callback);
 //        return null;
@@ -266,7 +266,7 @@ public class GroupControllerUtils {
     public static void getAllgroups(HttpResponseService httpResponseService, HandleResponseCallback callback) {
         String ALL_GROUP_URI = URI + "/all";
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", ALL_GROUP_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, callback);
 //        return null;
@@ -283,7 +283,7 @@ public class GroupControllerUtils {
     public static void getCanJoinGroup(HttpResponseService httpResponseService, HandleResponseCallback callback) {
         String CAN_JOIN_URI = URI + "/available";
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", CAN_JOIN_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, callback);
 //        return null;

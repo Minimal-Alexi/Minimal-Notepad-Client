@@ -255,7 +255,7 @@ public class MainPageServices {
 
                 REHBox.getChildren().add(pane);
             } catch (ParseException e){
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
         }
     }

@@ -78,10 +78,6 @@ public class ObservableResourceFactory {
         return rb.getString(key);
     }
 
-    public void getCurrentResourceBundle(){
-
-    }
-
 
     public ResourceBundle findResourcebundle(String key) {
         Locale locale = switch (key.toLowerCase()) { // Use lowercase for consistency
@@ -94,27 +90,6 @@ public class ObservableResourceFactory {
     }
 
     public void changeLanguage(String key) {
-//        Locale locale;
-//
-//        switch (key.toLowerCase()) {
-//            case "chinese":
-//            case "zh":
-//                locale = new Locale("zh", "CN");
-//                break;
-//            case "finnish":
-//            case "fi":
-//                locale = new Locale("fi", "FI");
-//                break;
-//            case "russian":
-//            case "ru":
-//                locale = new Locale("ru", "RU");
-//                break;
-//            default:
-//                locale = new Locale("en", "US");
-//                break;
-//        }
-
-//        ResourceBundle newBundle = ResourceBundle.getBundle("messages", locale);
         ResourceBundle newBundle = findResourcebundle(key);
         LanguageLabel languageLabel = getLanguageLabel(key);
         setSelectedLanguage(languageLabel);
@@ -122,23 +97,8 @@ public class ObservableResourceFactory {
     }
 
     public LanguageLabel getLanguageLabel(String languageKey){
-//        String languageKeyFromResourceBundle = mapToLanguageKeyInResourceBundle(languageKey);
         String languageValueFromResourceBundle = getResourceBundle().getString(languageKey);
         return  new LanguageLabel(languageKey, languageValueFromResourceBundle);
-//        switch (languageKey){
-//            case "en":
-////                Strin
-//                return new LanguageLabel("en","en");
-//            case "ru":
-//                return new LanguageLabel("ru","ru");
-//            case "zh":
-//                return new LanguageLabel("zh","zh");
-//            case "fi":
-//                return new LanguageLabel("fi","fi");
-//                default:
-//                    return new LanguageLabel("en","en");
-//        }
-
     }
 
 }

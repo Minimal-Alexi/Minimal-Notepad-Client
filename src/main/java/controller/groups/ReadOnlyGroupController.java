@@ -125,9 +125,12 @@ public class ReadOnlyGroupController extends PageController {
     }
 
     String URI = getGroupUri();
-    private static final String FXMLSource = "/fxml";
-    private static final String CSSSOURCE = "/CSS";
+    private static final String FXML_SOURCE = "/fxml";
+    private static final String CSS_SOURCE = "/CSS";
 
+    // common String key that is common
+    private final String emailKey = "email";
+    private final String usernameKey = "username";
 
 
     public void initialize() {
@@ -166,10 +169,10 @@ public class ReadOnlyGroupController extends PageController {
         updateNameLabel(nameLabel, TokenStorage.getUser());
         MainPageServices.updateLocalTime(localTime);
 
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/button.css").toExternalForm());
-        root.getStylesheets().add(getClass().getResource(CSSSOURCE + "/text_input.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
 
-//        editGroupBtn.getStylesheets().add(getClass().getResource(CSSSOURCE + "/groups.css").toExternalForm());
+//        editGroupBtn.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/groups.css").toExternalForm());
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
 
@@ -196,7 +199,7 @@ public class ReadOnlyGroupController extends PageController {
     public void getGroupUserInfoByGroupId() {
         String ALL_GROUP_URI = URI;
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", ALL_GROUP_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, this::handleGroupUserInfoByGroupId);
 //        return null;
@@ -209,13 +212,13 @@ public class ReadOnlyGroupController extends PageController {
 //        System.out.println(array);
 //               System.out.println(groupObject);
         JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
-        String ownerEmail = owner.getString("email");
-        GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get("username"), ownerEmail);
+        String ownerEmail = owner.getString(emailKey);
+        GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get(usernameKey), ownerEmail);
         int id = (int) ((JSONObject) groupObject).get("id");
         String name = (String) ((JSONObject) groupObject).get("name");
         String description = (String) ((JSONObject) groupObject).get("description");
         JSONArray userListObj = (JSONArray) ((JSONObject) groupObject).get("userGroupParticipationsList");
-        AppUser currentOwner = new AppUser((int) owner.get("id"), (String) owner.get("username"), ownerEmail);
+        AppUser currentOwner = new AppUser((int) owner.get("id"), (String) owner.get(usernameKey), ownerEmail);
         List<AppUser> userList = createUserList(userListObj);
         userList.add(currentOwner);
 
@@ -239,8 +242,8 @@ public class ReadOnlyGroupController extends PageController {
         for (Object userObject : userObjectArray) {
             JSONObject converted = (JSONObject) userObject;
             int id = (int) converted.get("id");
-            String name = (String) converted.get("username");
-            String email = (String) converted.get("email");
+            String name = (String) converted.get(usernameKey);
+            String email = (String) converted.get(emailKey);
             userList.add(new AppUser(id, name, email));
         }
         return userList;
@@ -287,8 +290,8 @@ public class ReadOnlyGroupController extends PageController {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
             System.out.println(object);
-            String email = (String) object.get("email");
-            String username = (String) object.get("username");
+            String email = (String) object.get(emailKey);
+            String username = (String) object.get(usernameKey);
             usernameCol.setText(email);
             emailCol.setText(username);
         } catch (JSONException e) {
@@ -401,7 +404,7 @@ public class ReadOnlyGroupController extends PageController {
         String REMOVE_URI = URI + "/remove/" + appUserId;
         System.out.println(REMOVE_URI);
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("DELETE", REMOVE_URI, true);
-        HttpRequestBase request = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, this::handleRemoveUser);
     }

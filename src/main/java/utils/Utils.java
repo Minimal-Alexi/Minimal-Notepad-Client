@@ -212,22 +212,13 @@ public class Utils {
         }
 //        return selected != null ? selected.getKey() : preservedLabel != null ? preservedLabel.getKey() : "en";
     }
-    public static String getselectedLanguageKey(LanguageLabel preservedLabel){
-        String selectedLanguageKey =  getSelectedLanguageKey(null, preservedLabel);
-        return selectedLanguageKey;
-    }
+
 
     public static SimpleDateFormat getTheCurrentLocaleDateTimeFormatString() {
         Locale currentLocale = RESOURCE_FACTORY.getResourceBundle().getLocale();
         return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, currentLocale);
     }
 
-
-    public static void displayTime(Label lblTime) {
-        String formattedTime = getTheCurrentLocaleDateTimeFormatString().format(new Date());
-        lblTime.setText(formattedTime);
-
-    }
 
     public static Optional<ButtonType> displayDeleteWarningDialog() {
         // add alert dialog

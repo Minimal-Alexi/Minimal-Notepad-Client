@@ -188,7 +188,7 @@ public class GroupServices {
             }
         } catch (Exception e) {
             System.err.println("Error finding group: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return null;
     }

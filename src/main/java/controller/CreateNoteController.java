@@ -243,7 +243,7 @@ public class CreateNoteController {
     }
     public void groupSharingFetching(){
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET","http://localhost:8093/api/groups/my-groups",true);
-        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         try
         {

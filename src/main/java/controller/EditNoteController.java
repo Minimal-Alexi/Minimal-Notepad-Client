@@ -120,8 +120,9 @@ public class EditNoteController extends PageController {
 
 
         System.out.println(selectedNote.getId());
+        String findNoteByIdURL = "http://localhost:8093/api/note/";
 
-        note = findNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
+        note = findNoteById(findNoteByIdURL, selectedNote.getId(), TokenStorage.getToken());
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         RESOURCE_FACTORY.getResourceBundle();
@@ -232,7 +233,7 @@ public class EditNoteController extends PageController {
     }
     public void groupSharingFetching(){
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET","http://localhost:8093/api/groups/my-groups",true);
-        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequest();
+        HttpRequestBase filterRequestHttp = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         try
         {
@@ -370,9 +371,7 @@ public class EditNoteController extends PageController {
         ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         return rb.getString("actionColOneName");
     }
-    @Override
-    public void updateAllUIComponents() {
-    }
+
 
 
     @Override

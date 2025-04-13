@@ -72,9 +72,6 @@ public class LogInController extends PageController {
     private Text DontHaveAccountText;
 
 
-
-
-
     @FXML
     private Text usernameText;
     private Stage stage;
@@ -95,7 +92,10 @@ public class LogInController extends PageController {
 
     private boolean pwdIsHidden;
     private ObservableResourceFactory RESOURCE_FACTORY ;
-    private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
+
+    // String Key from resource bundle
+    final String  usernameKey = "username";
+    final String passwordKey = "password";
 
 
 
@@ -110,10 +110,9 @@ public class LogInController extends PageController {
         httpResponseService = new HttpResponseServiceImpl();
         pwdIsHidden = true;
 
-        System.out.println(TokenStorage.getIntance());
-        String username = TokenStorage.getInfo("username");
+        String username = TokenStorage.getInfo(usernameKey);
         if (username != null) {
-            String password = TokenStorage.getInfo("password");
+            String password = TokenStorage.getInfo(passwordKey);
             loginUserInput.setText(username);
             loginPassInput.setText(password);
             this.rememberBox.setSelected(true);
@@ -122,8 +121,6 @@ public class LogInController extends PageController {
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
         RESOURCE_FACTORY.getResourceBundle();
         Platform.runLater(()-> super.updateDisplay());
-
-
 
     }
 
@@ -140,18 +137,7 @@ public class LogInController extends PageController {
         String password = getPassword();
         handleInput(username, password);
         handleRememberBox(username, password);
-        System.out.println("username: " + TokenStorage.getInfo("username") + ", password: " + TokenStorage.getInfo("password"));
 
-    }
-
-
-    @FXML
-    private void loginPageBtnPress(KeyEvent ke) {
-        if (ke.getCode() == KeyCode.ENTER) {
-            String username = loginUserInput.getText();
-            String password = getPassword();
-            handleInput(username, password);
-        }
     }
 
 
@@ -188,12 +174,6 @@ public class LogInController extends PageController {
         return this.stage;
     }
 
-//    @FXML
-//    private void rememberBoxClick() {
-//        String username = loginUserInput.getText();
-//        String password = getPassword();
-//        handleRememberBox(username, password);
-//    }
 
     private boolean isRememberBoxChecked() {
         if (this.rememberBox.isSelected()) {
@@ -204,9 +184,7 @@ public class LogInController extends PageController {
 
     // working on it
     private void handleRememberBox(String username, String password) {
-        System.out.println("remember box is check: " + isRememberBoxChecked());
-        String usernameKey = "username";
-        String passwordKey = "password";
+
         String isRemembered = "isRemember";
         if (isRememberBoxChecked()) {
             TokenStorage.saveInfo(usernameKey, username);
@@ -238,7 +216,7 @@ public class LogInController extends PageController {
                 login(username, password);
 
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
             }
         }
     }
@@ -254,47 +232,30 @@ public class LogInController extends PageController {
         this.errPwd.setText("");
         this.errGeneral.setText("");
 
-//        HttpClientSingleton instance = HttpClientSingleton.getInstance();
-//        CloseableHttpClient httpClient = instance.getHttpClient();
-
         String URI = "http://localhost:8093/api/users-authentication/login";
-//        HttpPost httpPost = new HttpPost(URI);
-//        httpPost.addHeader("accept", "application/json");
-//        httpPost.addHeader("Content-Type", "application/json");
-//
-//        JSONObject json = new JSONObject();
-//        json.put("username", username);
-//        json.put("password", password);
-//
-//        StringEntity entity = new StringEntity(json.toString());
-//        httpPost.setEntity(entity);
 
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI);
-        httpRequest.updateJsonRequest("username", username);
+        httpRequest.updateJsonRequest(usernameKey, username);
         httpRequest.updateJsonRequest("password", password);
         String languageCode = RESOURCE_FACTORY.getResourceBundle().getLocale().getLanguage();
         httpRequest.addHeader("Accept-Language", languageCode);
         httpRequest.setRequestBody();
-        HttpPost httpPost = (HttpPost) httpRequest.getHttpRequest();
+        HttpPost httpPost = (HttpPost) httpRequest.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequest.getHttpClient();
 
         httpResponseService.handleReponse(httpPost, httpClient, this::handleLoginReponse);
 
-
     }
 
     private void handleLoginReponse(CloseableHttpResponse response, Object jsonResponse) {
-        String statusCode = response.getStatusLine().toString();
+
 
         JSONObject object = controllerUtil.toJSonObject(jsonResponse);
             try {
                 String token = (String) object.get("token");
-                String username = (String) object.get("username");
+                String username = (String) object.get(usernameKey);
                 TokenStorage.saveToken(username, token);
-                String savedUsername = TokenStorage.getUser();
-                String savedToken = TokenStorage.getToken();
                 String languageCode = (String) object.get("languageCode");
-                System.out.println("languageCode: " + languageCode);
                 ObservableResourceFactory.getInstance().changeLanguage(languageCode);
                 goToMainPage();
 
@@ -307,32 +268,21 @@ public class LogInController extends PageController {
 
     private void goToMainPage() {
         String mainPageLink = "/fxml/main_pages/main_page.fxml";
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main_pages/main_page.fxml"));
-//        this.stage = this.getStage();
-//        controllerUtil.updateStage(stage, fxmlLoader);
         controllerUtil.goPage(stage,loginBtn,mainPageLink);
     }
 
 
     @FXML
     private void maskedIconClick() {
-        System.out.println("click masked icon");
-        System.out.println(pwdStackPane.getChildren());
         int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
         int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
         String maskedPwd = loginPassInput.getText();
-        System.out.println("masked pwd input: " + maskedPwd);
-
-        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
-
         if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
 
             Platform.runLater(() -> {
-//
                 pwdStackPane.getChildren().remove(maskedStackPane);
                 pwdStackPane.getChildren().add(unmaskedPaneIndex, maskedStackPane);
                 showPassword(maskedPwd);
-
             });
 
         }
@@ -340,14 +290,10 @@ public class LogInController extends PageController {
 
     @FXML
     private void unmaskedIconClick() {
-        System.out.println("click unmasked icon");
-        System.out.println(pwdStackPane.getChildren());
+
         int maskedPaneIndex = pwdStackPane.getChildren().indexOf(maskedStackPane);
         int unmaskedPaneIndex = pwdStackPane.getChildren().indexOf(unmaskedStackPane);
         String unmaskedPwd = loginPassTxtInput.getText();
-
-        System.out.println("unmasked pwd input: " + unmaskedPwd);
-        System.out.println("masked Pane Index: " + maskedPaneIndex + ", unmasked Pane index: " + unmaskedPaneIndex);
 
         if (maskedPaneIndex != -1 && unmaskedPaneIndex != -1) {
 
@@ -381,9 +327,10 @@ public class LogInController extends PageController {
         return password;
     }
 
-    @Override
-    public void updateAllUIComponents() {
-    }
+    // implement when localization of general err in BE is done
+//    @Override
+//    public void updateAllUIComponents() {
+//    }
 
     @Override
     public void bindUIComponents() {
@@ -404,7 +351,6 @@ public class LogInController extends PageController {
         loginBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("loginBtn"));
         DontHaveAccountText.textProperty().bind(RESOURCE_FACTORY.getStringBinding("DontHaveAccountText"));
         registerLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("registerLabel"));
-
         backBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("backBtn"));
     }
 
