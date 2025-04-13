@@ -68,8 +68,6 @@ public class AccountInfoPageController extends PageController {
     private Label usernameLabel;
 
 
-
-
     @FXML
     private TextField usernameInput;
     @FXML
@@ -84,8 +82,6 @@ public class AccountInfoPageController extends PageController {
 
     // properties
     private Stage stage;
-    private Scene scene;
-    private Parent parent;
 //    private
 
     private MainPageServices mainPageServices;
@@ -154,17 +150,11 @@ public class AccountInfoPageController extends PageController {
     }
 
     public void saveLanguage(){
-//        System.out.println("saving language from User Detail Page");
-
         String languageKey = RESOURCE_FACTORY.getSelectedLanguage().getKey();
         String savingLanguageURI = URI+ "change-language?lang=" + languageKey;
-//        System.out.println(savingLanguageURI);
-//        {{host}}/api/user/change-language?lang=fi
-
 
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("PUT", savingLanguageURI, true);
-//        HttpRequestBase httpPut = httpRequest.getHttpRequestBase();
-//        CloseableHttpClient httpClient = httpRequest.getHttpClient();
+
         httpResponseService.handleReponse(
                 httpRequest.getHttpRequestBase(),
                 httpRequest.getHttpClient(),
@@ -206,40 +196,31 @@ public class AccountInfoPageController extends PageController {
         this.controllerUtils.setDefaultCursor(saveBtn);
         this.controllerUtils.setDefaultCursor(changePwdBtn);
         this.controllerUtils.setDefaultCursor(deleteBtn);
-//        this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
     // sidebar
     @FXML
     public void myGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
         ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
-
-//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
         ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
-//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
-        System.out.println("Go to share notes page");
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
         ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
         ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
-//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
         ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 

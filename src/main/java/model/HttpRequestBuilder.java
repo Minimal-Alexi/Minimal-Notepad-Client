@@ -58,6 +58,8 @@ public class HttpRequestBuilder {
             case "DELETE":
                 this.httpRequest = new HttpDelete(this.uri);
                 break;
+            default:
+                throw new IllegalArgumentException("Unsupported HTTP method: "+ this.methodName);
         }
     }
 
