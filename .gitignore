@@ -43,3 +43,12 @@ build/
 .report-task.txt
 /.scannerwork
 /sonar-project.properties
+
+
+
+
+### sonar setting
+.sonar-project.properties
+.report-task.txt
+/.scannerwork
+/sonar-project.properties
