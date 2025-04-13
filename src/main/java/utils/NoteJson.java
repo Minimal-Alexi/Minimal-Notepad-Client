@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import static utils.MainPageServices.*;
 
 public class NoteJson {
+    private static final String GROUP_KEY = "group";
+
     public static JSONObject NoteToJson(Note note) {
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("id", note.getId());
@@ -21,11 +23,11 @@ public class NoteJson {
             JSONObject group = new JSONObject();
             group.put("id", note.getGroupId());
             group.put("name", note.getGroup());
-            jsonBody.put("group", group);
+            jsonBody.put(GROUP_KEY, group);
         }
         else
         {
-            jsonBody.put("group", JSONObject.NULL);
+            jsonBody.put(GROUP_KEY, JSONObject.NULL);
         }
         JSONObject user = new JSONObject();
         user.put("username",note.getOwner());
@@ -35,14 +37,14 @@ public class NoteJson {
     public static Note JsonToNote(JSONObject noteJson) {
         int groupId;
         String groupName;
-        if(noteJson.isNull("group"))
+        if(noteJson.isNull(GROUP_KEY))
         {
             groupId = -1;
             groupName = "N/A";
         }
         else
         {
-            JSONObject group = noteJson.getJSONObject("group");
+            JSONObject group = noteJson.getJSONObject(GROUP_KEY);
             groupId = group.getInt("id");
             groupName = group.getString("name");
         }
