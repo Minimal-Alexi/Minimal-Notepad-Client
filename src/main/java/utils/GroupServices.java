@@ -20,6 +20,8 @@ import java.util.List;
 
 public class GroupServices {
 
+    static final String THREAD_IS_INTERUPTED = "Thread was interrupted:";
+
     /*
      * Fetch groups from API
      */
@@ -59,7 +61,7 @@ public class GroupServices {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Re-interrupt the thread
-            System.err.println("Thread was interrupted: " + e.getMessage());
+            System.err.println(THREAD_IS_INTERUPTED + e.getMessage());
             throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error fetching groups: " + e.getMessage());
@@ -98,7 +100,7 @@ public class GroupServices {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Re-interrupt the thread
-            System.err.println("Thread was interrupted: " + e.getMessage());
+            System.err.println(THREAD_IS_INTERUPTED + e.getMessage());
             throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error fetching group members: " + e.getMessage());
@@ -177,8 +179,8 @@ public class GroupServices {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Response Status Code: " + response.statusCode());
-            System.out.println("Response Body: " + response.body());
+//            System.out.println("Response Status Code: " + response.statusCode());
+//            System.out.println("Response Body: " + response.body());
 
             if (response.statusCode() == 200) {
                 String responseBody = response.body();
@@ -196,7 +198,7 @@ public class GroupServices {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Re-interrupt the thread
-            System.err.println("Thread was interrupted: " + e.getMessage());
+            System.err.println(THREAD_IS_INTERUPTED + e.getMessage());
             throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error finding group: " + e.getMessage());
@@ -218,13 +220,10 @@ public class GroupServices {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Update Response Status: " + response.statusCode());
-            System.out.println("Update Response Body: " + response.body());
-
             return response.statusCode() == 200; // Return true if update is successful
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Re-interrupt the thread
-            System.err.println("Thread was interrupted: " + e.getMessage());
+            System.err.println(THREAD_IS_INTERUPTED + e.getMessage());
             return false;
         } catch (Exception e) {
             System.err.println("Error updating group: " + e.getMessage());
