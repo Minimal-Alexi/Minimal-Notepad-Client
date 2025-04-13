@@ -20,7 +20,11 @@ import java.util.List;
 
 public class GroupServices {
 
-    static final String THREAD_IS_INTERUPTED = "Thread was interrupted:";
+    private static final String THREAD_IS_INTERUPTED = "Thread was interrupted:";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String BEARER = "Bearer ";
 
     /*
      * Fetch groups from API
@@ -30,8 +34,8 @@ public class GroupServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .GET()
                 .build();
 
@@ -74,8 +78,8 @@ public class GroupServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/" + groupId + "/members")) // Assuming the API has an endpoint to fetch members for a specific group
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .GET()
                 .build();
 
@@ -171,8 +175,8 @@ public class GroupServices {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + id))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .GET()
                 .build();
 
@@ -209,8 +213,8 @@ public class GroupServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + groupId)) // URL with group ID
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .PUT(HttpRequest.BodyPublishers.ofString(requestBody)) // Send updated data
                 .build();
 
