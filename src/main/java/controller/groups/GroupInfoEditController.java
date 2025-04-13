@@ -467,8 +467,9 @@ public class GroupInfoEditController extends PageController {
     // not after loading the page
     // to retrieve localized form of component displayed based on the user's interaction
     // (eg: user click button, display error message),
-    // it will be easier to create a method to retrieve the localized string and use it in editedGroupNameLabel.setText
+    // it will be easier to create a method to retrieve the localized string and use it in editedGroupNameLabel.setText in line  402
     // see getLocalizedEdittedGroupName()
+
     @Override
     public void bindUIComponents() {
         nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
@@ -486,7 +487,7 @@ public class GroupInfoEditController extends PageController {
         nameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("nameLabel"));
 
 //      since this label only appear after user press the button,
-//      not from the begining of page, so using bind method will not work
+//      not from the begining of page, so using bind method will not wor
         editedGroupNameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editedGroupNameLabel"));
 
         groupNameInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("groupNameInput"));
