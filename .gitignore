@@ -45,4 +45,4 @@ build/
 /sonar-project.properties
 
 ### service-account.json
-#src/main/resources/service-account.json
+src/main/resources/service-account.json
