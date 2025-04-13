@@ -423,7 +423,7 @@ public class AccountInfoPageController extends PageController {
     }
 
     private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {
-        JSONObject object = controllerUtils.toJSonObject(jsonResponse);
+
 
         try {
             this.controllerUtils.logout(stage, deleteBtn);

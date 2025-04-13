@@ -86,11 +86,8 @@ public class ReadOnlyGroupController extends PageController {
 
     private ObservableList<AppUser> groupMembers ;
 
-
-
     private Group group;
     private Stage stage;
-    private Scene scene;
 
     private ControllerUtils controllerUtils;
     private List<AppUser> memberList;
@@ -99,7 +96,6 @@ public class ReadOnlyGroupController extends PageController {
 
     SelectedGroup selectedGroup = SelectedGroup.getInstance(); ;
     private HttpResponseService httpResponseService;
-//    private HttpClientSingleton httpInstance;
 
     TableColumn<AppUser, AppUser> actionOneCol;
 
@@ -114,13 +110,10 @@ public class ReadOnlyGroupController extends PageController {
 
     public void initialize() {
         this.memberList = new ArrayList<>();
-
-//        selectedGroup = SelectedGroup.getInstance();
         groupMembers = FXCollections.observableArrayList();
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        System.out.println("Start Edit Group Page");
-        System.out.println("scene " + scene);
+
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
 

@@ -12,6 +12,7 @@
     -fx-background-color: white, white;
     -fx-background-insets: 0, 1;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+    -fx-text-fill: -fx-text-inner-color;
 }
 
 .combo-box-popup .list-view .list-cell
@@ -21,11 +22,11 @@
     -fx-background-color: white;
 }
 
-.combo-box-popup .list-view
-{
-    -fx-background-color: white;
-    -fx-text-fill: -fx-text-inner-color;
-}
+/*.combo-box-popup .list-view*/
+/*{*/
+/*    -fx-background-color: white;*/
+/*    */
+/*}*/
 
 .combo-box-base
 {

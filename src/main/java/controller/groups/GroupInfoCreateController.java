@@ -100,21 +100,6 @@ public class GroupInfoCreateController extends PageController {
     public void initialize() {
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
-        // try to get id from selected group
-//        try {
-//            SelectedGroup selectedGroup = SelectedGroup.getInstance();
-//
-//            System.out.println("selected group id: " + selectedGroup.getId());
-//
-//        } catch (NullPointerException e) {
-////            System.out.println("there is no selected group id");
-//            System.err.println("there is no selected group id");
-//        } finally {
-//
-//
-//
-//        }
-
         this.controllerUtils = new ControllerUtils();
         this.httpResponseService = new HttpResponseServiceImpl();
 

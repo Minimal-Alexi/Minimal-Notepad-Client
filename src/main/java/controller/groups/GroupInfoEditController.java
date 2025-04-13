@@ -163,7 +163,6 @@ public class GroupInfoEditController extends PageController {
         Platform.runLater(()-> super.updateDisplay());
 
         // Fetch the group from the server
-//        Group group = findGroupById(baseURI, selectedGroup.getId(), TokenStorage.getToken());
         group = findGroupById(baseURI, selectedGroup.getId(), TokenStorage.getToken());
 
         if (group != null) {
@@ -212,7 +211,6 @@ public class GroupInfoEditController extends PageController {
     }
 
     public void handleGroupUserInfoByGroupId(CloseableHttpResponse response, Object jsonResponse) {
-//        List<Group> updatedAllGroups = new ArrayList<>();
         JSONObject groupObject = controllerUtils.toJSonObject(jsonResponse);
 
         JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
