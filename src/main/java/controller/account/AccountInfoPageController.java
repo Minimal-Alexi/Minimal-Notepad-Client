@@ -261,7 +261,9 @@ public class AccountInfoPageController extends PageController {
 
     @Override
     public void updateAllUIComponents() {
+//        resetAllErrMessages();
         updateLocalTime(localTime);
+//        displayEmptyErrorMessage();
         updateEmptyErrorMessagesWhenLanguageChange();
         updateGeneralErrorMessageWhenLanguageChange();
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);

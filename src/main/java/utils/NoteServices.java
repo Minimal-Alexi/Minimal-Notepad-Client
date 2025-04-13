@@ -47,7 +47,8 @@ public class NoteServices {
             System.out.println("Response Status Code: " + response.statusCode());
             System.out.println("Response Body: " + response.body());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+//            throw new RuntimeException(e);
         }
     }
 
@@ -72,7 +73,8 @@ public class NoteServices {
                 return JsonToNote(result);
             }
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+//            throw new RuntimeException(e);
         }
         return null;
     }
@@ -93,7 +95,9 @@ public class NoteServices {
 
             response.statusCode();
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+
+//            throw new RuntimeException(e);
         }
     }
 
@@ -255,7 +259,9 @@ public class NoteServices {
             System.out.println("Response Status Code: " + response.statusCode());
             System.out.println("Response Body: " + response.body());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+
+//            throw new RuntimeException(e);
         }
     }
 }

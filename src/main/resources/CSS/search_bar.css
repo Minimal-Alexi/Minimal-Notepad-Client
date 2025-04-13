@@ -6,9 +6,9 @@
     -fx-background-radius: 5;
 }
 
-.search-box:focused {
-    -fx-border-color: #66afe9;
-}
+/*.search-box:focused {*/
+/*    -fx-border-color: #66afe9;*/
+/*}*/
 
 .search-box .text-field {
     -fx-prompt-text-fill: #999;

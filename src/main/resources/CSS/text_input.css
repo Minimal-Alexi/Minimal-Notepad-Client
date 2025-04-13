@@ -6,9 +6,9 @@
     -fx-background-radius: 5;
 }
 
-.text-input:focused {
-    -fx-border-color: #66afe9;
-}
+/*.text-input:focused {*/
+/*    -fx-border-color: #66afe9;*/
+/*}*/
 
 .text-input .text-field {
     -fx-prompt-text-fill: #999;
