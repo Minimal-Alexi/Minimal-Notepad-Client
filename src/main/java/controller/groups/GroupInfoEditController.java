@@ -213,7 +213,6 @@ public class GroupInfoEditController extends PageController {
         String ALL_GROUP_URI = URI;
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("GET", ALL_GROUP_URI, true);
         httpResponseService.handleReponse(httpRequest.getHttpRequestBase(), httpRequest.getHttpClient(), this::handleGroupUserInfoByGroupId);
-//        return null;
     }
 
     public void handleGroupUserInfoByGroupId(CloseableHttpResponse response, Object jsonResponse) {
@@ -385,25 +384,29 @@ public class GroupInfoEditController extends PageController {
         // Get edited values
         String editedGroupName = groupNameInput.getText();
         String editedDescInput = groupDescInput.getText();
-        int groupId = selectedGroup.getId();
-        // Create JSON request body
+        if (isInputEmpty()){
+            displayEmptyErrMessages();
+        } else{
+            int groupId = selectedGroup.getId();
+            // Create JSON request body
 
-        System.out.println("Group Id 8/3 " + groupId);
-        JSONObject jsonRequest = new JSONObject();
-        jsonRequest.put(idKey, groupId);
-        jsonRequest.put("name", editedGroupName);
-        jsonRequest.put("description", editedDescInput);
+            System.out.println("Group Id 8/3 " + groupId);
+            JSONObject jsonRequest = new JSONObject();
+            jsonRequest.put(idKey, groupId);
+            jsonRequest.put("name", editedGroupName);
+            jsonRequest.put("description", editedDescInput);
 
-        // Send update request
-        boolean updateSuccess = updateGroup(baseURI, groupId, jsonRequest.toString(), TokenStorage.getToken());
+            // Send update request
+            boolean updateSuccess = updateGroup(baseURI, groupId, jsonRequest.toString(), TokenStorage.getToken());
 
-        if (updateSuccess) {
-            notiLabel1.setText("You've successfully edited group information.");
-            editedGroupNameLabel.setText("Edited group name: " + editedGroupName);
-            editedGroupDescLabel.setText("Edited group description: " + editedDescInput);
+            if (updateSuccess) {
+                notiLabel1.setText(getLocalizedSucessNotiLabelText());
+                editedGroupNameLabel.setText(getLocalizedEditedGroupName(editedGroupName));
+                editedGroupDescLabel.setText(getLocalizedEditedGroupDesc(editedDescInput));
 
-        } else {
-            notiLabel1.setText("Failed to edit group. Please try again.");
+            } else {
+                notiLabel1.setText(getLocalizedFailNotiLabelText());
+            }
         }
     }
 
@@ -457,10 +460,47 @@ public class GroupInfoEditController extends PageController {
         this.controllerUtils.setDefaultCursor(logOutBtn);
     }
 
-    public String getLocalizedEditedGroupName(String editedGroupName) {
-        return RESOURCE_FACTORY.getString("editedGroupNameLabel") + " "+ editedGroupName;
-
+    public boolean isInputEmpty(){
+        return this.groupNameInput.getText().isEmpty() || this.groupDescInput.getText().isEmpty();
     }
+
+    public void displayEmptyErrMessages(){
+        editedGroupDescLabel.setText("");
+        editedGroupNameLabel.setText("");
+        notiLabel1.setText("");
+        if( groupNameInput.getText().isEmpty()){
+            editedGroupNameLabel.setStyle("-fx-text-fill: red;");
+            editedGroupNameLabel.setText(RESOURCE_FACTORY.getString("editedGroupNameLabelEmpty"));
+        }
+        if( groupDescInput.getText().isEmpty()){
+            editedGroupDescLabel.setStyle("-fx-text-fill: red;");
+            editedGroupDescLabel.setText(RESOURCE_FACTORY.getString("editedGroupDescLabelEmpty"));
+        }
+    }
+
+    public String getLocalizedEditedGroupName(String editedGroupName) {
+        editedGroupNameLabel.setText("");
+        editedGroupNameLabel.setStyle("-fx-text-fill: black;");
+
+        return RESOURCE_FACTORY.getString("editedGroupNameLabel") + " "+ editedGroupName;
+    }
+
+    public String getLocalizedEditedGroupDesc(String editedGroupDesc) {
+        editedGroupDescLabel.setText("");
+        editedGroupDescLabel.setStyle("-fx-text-fill: black;");
+        return RESOURCE_FACTORY.getString("editedGroupDescLabel") + " "+ editedGroupDesc;
+    }
+
+    public String getLocalizedFailNotiLabelText(){
+        notiLabel1.setStyle("-fx-text-fill: red;");
+        return RESOURCE_FACTORY.getString("notiLabel1FailText");
+    }
+
+    public String getLocalizedSucessNotiLabelText(){
+        notiLabel1.setStyle("-fx-text-fill: green;");
+        return RESOURCE_FACTORY.getString("notiLabel1SuccessText");
+    }
+
 
     // this method is to let the page render all the component to their localized
     // form from the moment the user load the page
@@ -488,7 +528,6 @@ public class GroupInfoEditController extends PageController {
 
 //      since this label only appear after user press the button,
 //      not from the begining of page, so using bind method will not wor
-        editedGroupNameLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("editedGroupNameLabel"));
 
         groupNameInput.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("groupNameInput"));
 
