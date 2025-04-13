@@ -33,17 +33,6 @@ import static utils.MainPageServices.updateNameLabel;
 public class ReadOnlyGroupController extends PageController {
 
 
-    // group detail
-//    @FXML
-//    private Button editGroupBtn;
-
-//    @FXML
-////    private TextField groupDescInput;
-
-//    @FXML
-//    private TextField groupNameInput;
-
-
     //sidebar
     @FXML
     private Button myNotesBtn;
@@ -68,11 +57,6 @@ public class ReadOnlyGroupController extends PageController {
     @FXML
     private BorderPane root;
 
-    @FXML
-    private Label editedGroupNameid;
-
-    @FXML
-    private Label membersInGroup;
 
     @FXML
     private Label notiLabel1;
@@ -107,7 +91,7 @@ public class ReadOnlyGroupController extends PageController {
     private Group group;
     private Stage stage;
     private Scene scene;
-    private Parent parent;
+
     private ControllerUtils controllerUtils;
     private List<AppUser> memberList;
 
@@ -119,18 +103,13 @@ public class ReadOnlyGroupController extends PageController {
 
     TableColumn<AppUser, AppUser> actionOneCol;
 
-    private String getGroupUri() {
-        int groupId = selectedGroup.getId();
-        return "http://localhost:8093/api/groups/" + groupId;
-    }
+    String SELECTED_GROUP_URI = GroupControllerUtils.getSelectGroupURI(selectedGroup);
 
-    String URI = getGroupUri();
-    private static final String FXML_SOURCE = "/fxml";
     private static final String CSS_SOURCE = "/CSS";
 
     // common String key that is common
-    private final String emailKey = "email";
-    private final String usernameKey = "username";
+    private static final String emailKey = "email";
+    private static final String usernameKey = "username";
 
 
     public void initialize() {
@@ -172,14 +151,11 @@ public class ReadOnlyGroupController extends PageController {
         root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
 
-//        editGroupBtn.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/groups.css").toExternalForm());
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
-
 
         table1.setItems(groupMembers);
 
         // create action column with default button
-//        String localizedActionOneColName =
         actionOneCol = addAppUserCol(getLocalizedActionColOneName());
 
         // update Table View with updated action button
@@ -187,7 +163,6 @@ public class ReadOnlyGroupController extends PageController {
         // 2. update user table with the groups's member list
         // 3. update the button in the user table based on the member role
         getGroupUserInfoByGroupId();
-        //        updateTableView();
         // Optional: You can refresh the table or set listeners here if necessary
         //setUpTableListeners();
 
@@ -197,20 +172,18 @@ public class ReadOnlyGroupController extends PageController {
     }
 
     public void getGroupUserInfoByGroupId() {
-        String ALL_GROUP_URI = URI;
+        String ALL_GROUP_URI = SELECTED_GROUP_URI;
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("GET", ALL_GROUP_URI, true);
         HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
         httpResponseService.handleReponse(request, httpClient, this::handleGroupUserInfoByGroupId);
-//        return null;
     }
 
     public void handleGroupUserInfoByGroupId(CloseableHttpResponse response, Object jsonResponse) {
         List<Group> updatedAllGroups = new ArrayList<>();
         JSONObject groupObject = controllerUtils.toJSonObject(jsonResponse);
         System.out.println("Group Object " + groupObject);
-//        System.out.println(array);
-//               System.out.println(groupObject);
+
         JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
         String ownerEmail = owner.getString(emailKey);
         GroupOwner groupOwner = new GroupOwner((int) owner.get("id"), (String) owner.get(usernameKey), ownerEmail);
@@ -225,13 +198,9 @@ public class ReadOnlyGroupController extends PageController {
         this.group = new Group(id, name, description, groupOwner, userList);
 
 
-        System.out.println("Current Owner " + currentOwner);
 
-        System.out.println("User list " + userList);
-        //updatedAllGroups.add(newGroup);
         this.memberList = this.group.getUserList();
 
-        System.out.println("Member List " + memberList);
         // setup, display data to table with processed data
         displayUserTable();
         updateColumnOne();
@@ -251,17 +220,12 @@ public class ReadOnlyGroupController extends PageController {
 
     public void displayUserTable() {
 
-//        idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         // usernameCol í column name, "Name" is the property name of the AppUser
         usernameCol.setCellValueFactory(new PropertyValueFactory<>("Username"));
-//        System.out.println("name: "+ usernameCol.getCellValueFactory().equals(TokenStorage.getUser()));
         emailCol.setCellValueFactory(new PropertyValueFactory<>("Email"));
-//        numOfMembersCol.setCellValueFactory(new PropertyValueFactory<>("NumberOfMembers"));
-
         groupMembers = FXCollections.observableArrayList(this.memberList);
         table1.setItems(groupMembers);
         transformUsername();
-//        table1.getItems();
     }
 
 
@@ -273,7 +237,6 @@ public class ReadOnlyGroupController extends PageController {
     }
 
     public void transformUsername() {
-        System.out.println("Items: " + table1.getItems().getClass());
         List<AppUser> curMemberList = table1.getItems();
         String logginedUsername = TokenStorage.getUser();
         for (AppUser user : curMemberList) {
@@ -282,7 +245,6 @@ public class ReadOnlyGroupController extends PageController {
             if (username.equals(logginedUsername)) {
                 user.setUsername("owner - " + username);
             }
-            System.out.println(user);
         }
     }
 
@@ -328,8 +290,7 @@ public class ReadOnlyGroupController extends PageController {
     private void updateColumnOne() {
         String owner = TokenStorage.getUser();
         String groupOwner = this.group.getGroupOwnerName();
-        System.out.println("Group Owner: " + groupOwner);
-        System.out.println("Loggined user: " + owner);
+
 
 
 //        String fName = "Jacob";
@@ -347,19 +308,15 @@ public class ReadOnlyGroupController extends PageController {
                         setGraphic(null);
                     } else {
                         // if loggined user != group owner
-//                        if (!owner.equals(groupOwner)) {
                         if (!owner.equals(groupOwner)) {
                             setGraphic(null);
                         } else {
                             // if current member is the same as loggined user
-//                            if (owner.equals(appUser.getUsername())) {
                             if (isOwner(appUser.getUsername())) {
-//                            setGraphic(null);
                                 setGraphic(editButton);
                                 ViewUtils.addStyle(editButton, "/edit-button.css");
                                 // if current member is not the loggined user
                             } else {
-//                            setGraphic(null);
                                 setGraphic(removeButton);
                                 ViewUtils.addStyle(removeButton, "/delete-button.css");
                             }
@@ -367,13 +324,11 @@ public class ReadOnlyGroupController extends PageController {
                     }
                 }
             };
-            // updatedCell.getItem() == group object
             //edit my own info
             editButton.setOnAction(e -> {
                 Button source = (Button) e.getSource();
                 System.out.println("is button " + source);
                 editAccountInfo(source);
-                //                edit(updatedCell.getItem(), (source));
             });
 
             removeButton.setOnAction((e -> {
@@ -399,10 +354,8 @@ public class ReadOnlyGroupController extends PageController {
     }
 
     public void removeUser(AppUser appUser) {
-        System.out.println("delete group");
         int appUserId = appUser.getId();
-        String REMOVE_URI = URI + "/remove/" + appUserId;
-        System.out.println(REMOVE_URI);
+        String REMOVE_URI = SELECTED_GROUP_URI + "/remove/" + appUserId;
         HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder("DELETE", REMOVE_URI, true);
         HttpRequestBase request = httpRequestBuilder.getHttpRequestBase();
         CloseableHttpClient httpClient = httpRequestBuilder.getHttpClient();
@@ -410,107 +363,34 @@ public class ReadOnlyGroupController extends PageController {
     }
 
     public void handleRemoveUser(CloseableHttpResponse response, Object object) {
-        System.out.println("response " + response);
-//        updateTableView();
+
         // get a updated group info from database after remove member
         getGroupUserInfoByGroupId();
     }
 
-//    @FXML
-//    void accountBtnClick() {
-//
-//    }
-//
-//    @FXML
-//    void allGroupsBtnClick() {
-//        String pageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
-//        this.controllerUtils.goPage(stage, editGroupBtn, pageLink);
-//    }
-
-//    @FXML
-//    void editGroupBtnClick() {
-//        // Get edited values
-//        String editedGroupName = groupNameInput.getText();
-//        String editedDescInput = groupDescInput.getText();
-//        int groupId = selectedGroup.getId();
-//
-//        System.out.println("Edited group name: " + editedGroupName);
-//        System.out.println("Edited group description: " + editedDescInput);
-//        System.out.println("Edit button clicked!");
-//
-//        // Create JSON request body
-//
-//        System.out.println("Group Id 8/3 " + groupId);
-//        JSONObject jsonRequest = new JSONObject();
-//        jsonRequest.put("id", groupId);
-//        jsonRequest.put("name", editedGroupName);
-//        jsonRequest.put("description", editedDescInput);
-//
-//        // Send update request
-//        boolean updateSuccess = updateGroup("http://localhost:8093/api/groups/", groupId, jsonRequest.toString(), TokenStorage.getToken());
-//
-//        System.out.println("Group ID at update success for edit group " + groupId);
-//
-//        if (updateSuccess) {
-//            notiLabel1.setText("You've successfully edited group information.");
-//            editedGroupNameLabel.setText("Edited group name: " + editedGroupName);
-//            editedGroupDescLabel.setText("Edited group description: " + editedDescInput);
-//            //refreshGroupList();
-//            //controllerUtils.goPage(stage, button, FXMLString);
-//        } else {
-//            notiLabel1.setText("Failed to edit group. Please try again.");
-//        }
-//    }
-
-/*    private void refreshGroupList() {
-        // Fetch updated group from the server
-        Group updatedGroup = findGroupById("http://localhost:8093/api/groups/", selectedGroup.getId(), TokenStorage.getToken());
-
-        if (updatedGroup != null) {
-            // Update UI fields
-            groupNameInput.setText(updatedGroup.getName());
-            groupDescInput.setText(updatedGroup.getDescription());
-
-            // Update the TableView with the latest members
-            groupMembers.clear();
-            groupMembers.addAll(updatedGroup.getMembers()); // Ensure Group class has `getMembers()`
-
-            table1.refresh();  // Refresh TableView UI
-        } else {
-            System.out.println("Failed to refresh group details.");
-        }
-    }*/
-
     //sidebar
     public void myGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
         ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
-
-//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
         ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
-//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
-        System.out.println("Go to share notes page");
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+
         ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
         ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
-//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
         ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
@@ -559,6 +439,5 @@ public class ReadOnlyGroupController extends PageController {
         membersInThisGroupLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("membersInThisGroupLabel"));
         usernameCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("usernameCol"));
         emailCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("emailCol"));
-//        actionOneCol.textProperty().bind(RESOURCE_FACTORY.getStringBinding("actionOneCol"));
     }
 }

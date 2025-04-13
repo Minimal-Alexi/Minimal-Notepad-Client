@@ -121,12 +121,8 @@ public class GroupInfoEditController extends PageController {
     TableColumn<AppUser, AppUser> actionOneCol;
     private static String baseURI = "http://localhost:8093/api/groups/";
 
-    private String getGroupUri() {
-        int groupId = selectedGroup.getId();
-        return baseURI + groupId;
-    }
 
-    String GROUP_URI = getGroupUri();
+    String SELECTED_GROUP_URI = GroupControllerUtils.getSelectGroupURI(selectedGroup);
 
     private static final String CSS_SOURCE = "/CSS";
 
@@ -210,7 +206,7 @@ public class GroupInfoEditController extends PageController {
     }
 
     public void getGroupUserInfoByGroupId() {
-        String GROUP_OWNER_INFO = GROUP_URI;
+        String GROUP_OWNER_INFO = SELECTED_GROUP_URI;
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("GET", GROUP_OWNER_INFO, true);
         httpResponseService.handleReponse(httpRequest.getHttpRequestBase(), httpRequest.getHttpClient(), this::handleGroupUserInfoByGroupId);
     }
@@ -365,7 +361,7 @@ public class GroupInfoEditController extends PageController {
 
     public void removeUser(AppUser appUser) {
         int appUserId = appUser.getId();
-        String REMOVE_URI = GROUP_URI + "/remove/" + appUserId;
+        String REMOVE_URI = SELECTED_GROUP_URI + "/remove/" + appUserId;
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("DELETE", REMOVE_URI, true);
         httpResponseService.handleReponse(httpRequest.getHttpRequestBase(), httpRequest.getHttpClient(), this::handleRemoveUser);
     }

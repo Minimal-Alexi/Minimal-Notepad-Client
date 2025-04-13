@@ -43,10 +43,7 @@ public class MyGroupsController extends PageController {
     @FXML
     private TableColumn<Group, Integer> idCol;
 
-//    @FXML
-//    private TableColumn<Group, Void> editCol;
-//    @FXML
-//    private TableColumn<Group, Void> deleteCol;
+
 
     @FXML
     private TableColumn<Group, String> groupNameCol;
@@ -64,8 +61,7 @@ public class MyGroupsController extends PageController {
     private TableView<Group> canJoinGroupTable;
     @FXML
     private TableColumn<Group, Integer> idCol1;
-    //    @FXML
-//    private TableColumn<Group, Void> joinCol1;
+
     @FXML
     private TableColumn<Group, String> groupNameCol1;
     @FXML
@@ -98,15 +94,10 @@ public class MyGroupsController extends PageController {
 
     Stage stage;
 
-
-    //    private final List<Group> joinedGroups = new ArrayList<>();
-//    private final List<Group> canJoinGroups = new ArrayList<>();
     private List<Group> joinedGroups = new ArrayList<>();
     private List<Group> canJoinGroups = new ArrayList<>();
 
-    private static final String FXML_SOURCE = "/fxml";
     private static final String CSS_SOURCE = "/CSS";
-    private static final String URI = "http://localhost:8093/api/groups";
 
     private ObservableResourceFactory RESOURCE_FACTORY;
 
@@ -146,7 +137,6 @@ public class MyGroupsController extends PageController {
         root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
         root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/table_view.css").toExternalForm());
-//        logOutBtn.getStylesheets().add(g)
         ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
         // set sidebar language
@@ -160,7 +150,6 @@ public class MyGroupsController extends PageController {
     public void handleGetJoinedGroupsResponse(CloseableHttpResponse response, Object jsonResponse) {
         JSONArray array = controllerUtils.toJSONArray(jsonResponse);
         if (array != null) {
-
             this.joinedGroups = GroupControllerUtils.getGroupListInfoFromJSONArray(array);
             GroupControllerUtils.setupGroupTable(
                     joinedGroupTable,
@@ -182,7 +171,6 @@ public class MyGroupsController extends PageController {
                 httpResponseService,
                 // get joined groups from db
                 this::handleGetJoinedGroupsResponse,
-//                this::handleJoinOrLeaveOrDeleteResponseOfJoinedTable);
                 this::handleResponseFromBothTable);
     }
 
@@ -289,9 +277,6 @@ public class MyGroupsController extends PageController {
     private void tableClicked() {
         // this do nothing
     }
-
-
-
 
     @FXML private Label joinedLabel;
     @FXML private Label suggestedLabel;

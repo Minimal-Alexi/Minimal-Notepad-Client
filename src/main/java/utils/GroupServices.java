@@ -179,9 +179,6 @@ public class GroupServices {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-//            System.out.println("Response Status Code: " + response.statusCode());
-//            System.out.println("Response Body: " + response.body());
-
             if (response.statusCode() == 200) {
                 String responseBody = response.body();
 
