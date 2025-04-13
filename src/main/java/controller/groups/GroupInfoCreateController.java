@@ -80,15 +80,13 @@ public class GroupInfoCreateController extends PageController {
 
     // properties
     private Stage stage;
-    private Scene scene;
-    private Parent parent;
+
 //    private
 
     private ControllerUtils controllerUtils;
     private HttpResponseService httpResponseService;
     private ObservableResourceFactory RESOURCE_FACTORY;
-//    private ResourceBundle rb;
-//    private HttpClientSingleton httpInstance;
+
 
 
     private static final String URI = "http://localhost:8093/api/groups";
@@ -100,33 +98,34 @@ public class GroupInfoCreateController extends PageController {
     private static final String CSS_SOURCE = "/CSS";
 
     public void initialize() {
-        System.out.println("start Create Group Page");
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
 
         // try to get id from selected group
-        try {
-            SelectedGroup selectedGroup = SelectedGroup.getInstance();
+//        try {
+//            SelectedGroup selectedGroup = SelectedGroup.getInstance();
+//
+//            System.out.println("selected group id: " + selectedGroup.getId());
+//
+//        } catch (NullPointerException e) {
+////            System.out.println("there is no selected group id");
+//            System.err.println("there is no selected group id");
+//        } finally {
+//
+//
+//
+//        }
 
-            System.out.println("selected group id: " + selectedGroup.getId());
+        this.controllerUtils = new ControllerUtils();
+        this.httpResponseService = new HttpResponseServiceImpl();
 
-        } catch (NullPointerException e) {
-//            System.out.println("there is no selected group id");
-            System.err.println("there is no selected group id");
-        } finally {
+        TokenStorage.getIntance();
 
-            this.controllerUtils = new ControllerUtils();
-            this.httpResponseService = new HttpResponseServiceImpl();
-
-            TokenStorage.getIntance();
-
-            updateNameLabel(nameLabel, TokenStorage.getUser());
-            MainPageServices.updateLocalTime(localTime);
-            root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
-            root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
-            createGroupBtn.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/groups.css").toExternalForm());
-            ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
-
-        }
+        updateNameLabel(nameLabel, TokenStorage.getUser());
+        MainPageServices.updateLocalTime(localTime);
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/button.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/text_input.css").toExternalForm());
+        createGroupBtn.getStylesheets().add(getClass().getResource(CSS_SOURCE + "/groups.css").toExternalForm());
+        ControllerUtils_v2.addStyle(logOutBtn,"/logout-button.css");
 
 
         // set sidebar language
@@ -140,34 +139,27 @@ public class GroupInfoCreateController extends PageController {
 
     //sidebar
     public void myGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, myGroupsBtn, "/fxml/main_pages/groups/my_groups.fxml");
         ControllerUtils_v2.goToMyGroupsPage(stage, myGroupsBtn);
     }
 
     @FXML
     public void myNotesBtnClick() {
-
-//        this.controllerUtils.goPage(stage, myNotesBtn, "/fxml/main_pages/main_page.fxml");
         ControllerUtils_v2.goToMyNotesPage(stage, myNotesBtn);
     }
 
     @FXML
     public void shareNotesBtnClick() {
-//        this.controllerUtils.goPage(stage,shareNoteBtn,"");
-        System.out.println("Go to share notes page");
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/my_groups_notes.fxml");
+
         ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 
     @FXML
     public void allGroupsBtnClick() {
-//        this.controllerUtils.goPage(stage, allGroupsBtn, "/fxml/main_pages/groups/all_groups.fxml");
         ControllerUtils_v2.goToAllGroupsPage(stage, allGroupsBtn);
     }
 
     @FXML
     public void accountBtnClick() {
-//        this.controllerUtils.goPage(stage, accountBtn, "/fxml/main_pages/account_user_info_page.fxml");
         ControllerUtils_v2.goToAccountPage(stage, accountBtn);
     }
 
@@ -256,25 +248,25 @@ public class GroupInfoCreateController extends PageController {
         httpRequest.updateJsonRequest("name", groupName);
         httpRequest.updateJsonRequest("description", groupDesc);
         httpRequest.setRequestBody();
-        HttpRequestBase request = httpRequest.getHttpRequestBase();
-        CloseableHttpClient httpClient = httpRequest.getHttpClient();
-        httpResponseService.handleReponse(request, httpClient, this::handleCreateGroup);
+
+        httpResponseService.handleReponse(
+                httpRequest.getHttpRequestBase(),
+                httpRequest.getHttpClient(),
+                this::handleCreateGroup);
     }
 
     //    private void handleCreateGroup(CloseableHttpResponse response, JSONObject jsonResponse) {
     private void handleCreateGroup(CloseableHttpResponse response, Object jsonResponse) {
 
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
-        String statusCode = response.getStatusLine().toString();
         try {
             System.out.println("response " + response);
             this.controllerUtils.goPage(stage,createGroupBtn,FXML_SOURCE+"/main_pages/groups/my_groups.fxml");
         } catch (JSONException e) {
             String message = (String) object.get("message");
+            System.err.println(message);
         }
     }
-
-
 
     @Override
     public void updateAllUIComponents() {
