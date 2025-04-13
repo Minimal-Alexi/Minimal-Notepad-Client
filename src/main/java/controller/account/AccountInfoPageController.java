@@ -41,13 +41,13 @@ public class AccountInfoPageController extends PageController {
     // Constants
     private static final String URI = "http://localhost:8093/api/user/";
     private final LanguageLabel[] supportedLanguages = new LanguageLabel[4];
-    private final String usernameKey = "username";
-    private final String messageKey = "message";
-    private final String wrongEmailFormatKey = "wrongEmailFormatText";
-    private final String updateSuccessKey = "updateSuccessText";
-    private final String unableToSaveKey = "unableToUpdateText";
-    private final String serverExceptionErrorKey = "serverExeptionText";
-    private final String serverErrorKey = "serverErrorText";
+    private final String USERNAME_KEY = "username";
+    private final String MESSAGE_KEY = "message";
+    private final String WRONG_EMAIL_FORMAT_KEY = "wrongEmailFormatText";
+    private final String UPDATE_SUCCESS_KEY = "updateSuccessText";
+    private final String UPDATE_TO_SAVE_KEY = "unableToUpdateText";
+    private final String SERVER_EXCEPTION_ERROR_KEY = "serverExeptionText";
+    private final String SERVER_ERROR_KEY = "serverErrorText";
 
     // Services
     private ObservableResourceFactory RESOURCE_FACTORY;
@@ -144,10 +144,10 @@ public class AccountInfoPageController extends PageController {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
             emailInput.setText(object.getString("email"));
-            usernameInput.setText(object.getString(usernameKey));
+            usernameInput.setText(object.getString(USERNAME_KEY));
         } catch (JSONException e) {
-            generalErrorKey.setKey(serverExceptionErrorKey);
-            displayGeneralErrMessages(object.optString(messageKey));
+            generalErrorKey.setKey(SERVER_EXCEPTION_ERROR_KEY);
+            displayGeneralErrMessages(object.optString(MESSAGE_KEY));
         }
     }
 
@@ -158,8 +158,8 @@ public class AccountInfoPageController extends PageController {
         if (username.isEmpty() || email.isEmpty()) {
             displayEmptyErrorMessage();
         } else if (!controllerUtils.validEmail(email)) {
-            generalErrorKey.setKey(wrongEmailFormatKey);
-            displayGeneralErrMessages(rb.getString(wrongEmailFormatKey));
+            generalErrorKey.setKey(WRONG_EMAIL_FORMAT_KEY);
+            displayGeneralErrMessages(rb.getString(WRONG_EMAIL_FORMAT_KEY));
         } else {
             try {
                 saveUserInfo(email, username);
@@ -172,7 +172,7 @@ public class AccountInfoPageController extends PageController {
     private void saveUserInfo(String email, String username) throws IOException {
         resetAllErrMessages();
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("PUT", URI, true);
-        httpRequest.updateJsonRequest(usernameKey, username);
+        httpRequest.updateJsonRequest(USERNAME_KEY, username);
         httpRequest.updateJsonRequest("email", email);
         httpRequest.setRequestBody();
 
@@ -185,30 +185,30 @@ public class AccountInfoPageController extends PageController {
 
         try {
             if (response.getStatusLine().toString().contains("200")) {
-                String newUsername = object.getString(usernameKey);
+                String newUsername = object.getString(USERNAME_KEY);
                 if (!newUsername.equals(TokenStorage.getUser())) {
                     String token = object.getString("token");
                     TokenStorage.saveToken(newUsername, token);
-                    TokenStorage.saveInfo(usernameKey, newUsername);
+                    TokenStorage.saveInfo(USERNAME_KEY, newUsername);
                 }
 
                 generalErrLabel.setTextFill(Color.GREEN);
-                generalErrLabel.setText(rb.getString(updateSuccessKey));
-                generalErrorKey.setKey(updateSuccessKey);
+                generalErrLabel.setText(rb.getString(UPDATE_SUCCESS_KEY));
+                generalErrorKey.setKey(UPDATE_SUCCESS_KEY);
             } else {
-                generalErrorKey.setKey(serverErrorKey);
-                generalErrLabel.setText(object.getString(messageKey));
+                generalErrorKey.setKey(SERVER_ERROR_KEY);
+                generalErrLabel.setText(object.getString(MESSAGE_KEY));
             }
         } catch (JSONException e) {
-            generalErrorKey.setKey(unableToSaveKey);
-            generalErrLabel.setText(rb.getString(unableToSaveKey));
+            generalErrorKey.setKey(UPDATE_TO_SAVE_KEY);
+            generalErrLabel.setText(rb.getString(UPDATE_TO_SAVE_KEY));
         }
     }
 
     private void handleDeleteResponse(CloseableHttpResponse response, Object jsonResponse) {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
-            object.getString(messageKey);
+            object.getString(MESSAGE_KEY);
             controllerUtils.logout(stage, deleteBtn);
         } catch (JSONException e) {
             displayGeneralErrMessages(e.getMessage());
