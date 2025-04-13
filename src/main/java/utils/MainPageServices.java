@@ -123,8 +123,13 @@ public class MainPageServices {
                 }
                 return notes;
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
+            System.err.println("IO error occurred: " + e.getMessage());
             throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println("Thread was interrupted: " + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
         return null;
     }

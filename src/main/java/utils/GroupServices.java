@@ -48,7 +48,7 @@ public class GroupServices {
                     int id = jsonGroup.getInt("id");
                     String name = jsonGroup.getString("name");
                     String description = jsonGroup.getString("description");
-                    int numberOfMembers = jsonGroup.has("numberOfMembers")? jsonGroup.getInt("numberOfMembers") : jsonGroup.getJSONArray("userGroupParticipationsList").length();
+                    int numberOfMembers = jsonGroup.has("numberOfMembers") ? jsonGroup.getInt("numberOfMembers") : jsonGroup.getJSONArray("userGroupParticipationsList").length();
 
                     Group newGroup = new Group(id, name, description, groupOwner, numberOfMembers);
                     System.out.println(newGroup);
@@ -57,6 +57,10 @@ public class GroupServices {
             } else {
                 System.out.println("Failed to fetch groups: " + response.statusCode());
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println("Thread was interrupted: " + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error fetching groups: " + e.getMessage());
             throw new RuntimeException(e);
@@ -92,6 +96,10 @@ public class GroupServices {
             } else {
                 System.out.println("Failed to fetch group members: " + response.statusCode());
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println("Thread was interrupted: " + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error fetching group members: " + e.getMessage());
             throw new RuntimeException(e);
@@ -186,6 +194,10 @@ public class GroupServices {
                 GroupOwner groupOwner = new GroupOwner(ownerId, ownerUsername, ownerEmail);
                 return new Group(groupId, name, description, groupOwner, 0);
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println("Thread was interrupted: " + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error finding group: " + e.getMessage());
             System.err.println(e.getMessage());
@@ -210,6 +222,10 @@ public class GroupServices {
             System.out.println("Update Response Body: " + response.body());
 
             return response.statusCode() == 200; // Return true if update is successful
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println("Thread was interrupted: " + e.getMessage());
+            return false;
         } catch (Exception e) {
             System.err.println("Error updating group: " + e.getMessage());
             return false;
