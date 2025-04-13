@@ -119,27 +119,27 @@ public class GroupInfoEditController extends PageController {
     private HttpResponseService httpResponseService;
 
     TableColumn<AppUser, AppUser> actionOneCol;
-    String baseURI = "http://localhost:8093/api/groups/";
+    private static String baseURI = "http://localhost:8093/api/groups/";
 
     private String getGroupUri() {
         int groupId = selectedGroup.getId();
         return baseURI + groupId;
     }
 
-    String URI = getGroupUri();
-    private static final String FXML_SOURCE = "/fxml";
+    String GROUP_URI = getGroupUri();
+
     private static final String CSS_SOURCE = "/CSS";
 
     // common used key, both for object as well as for resource bundle
-    private final String usernameKey = "username";
-    private final String emailKey = "email";
-    private final String idKey = "id";
-    private final String editedGroupNameLabelEmptyKey =  "editedGroupNameLabelEmpty";
+    private static final String usernameKey = "username";
+    private static final String emailKey = "email";
+    private static final String idKey = "id";
+    private static final String editedGroupNameLabelEmptyKey =  "editedGroupNameLabelEmpty";
 
     // style const
-    private final String  RED_TEXT = "-fx-text-fill: red;";
-    private final String  BLACK_TEXT = "-fx-text-fill: black;";
-    private final String GREEN_TEXT = "-fx-text-fill: green;";
+    private static final String  RED_TEXT = "-fx-text-fill: red;";
+    private static final String  BLACK_TEXT = "-fx-text-fill: black;";
+    private static final String GREEN_TEXT = "-fx-text-fill: green;";
 
 
     public JSONArray convertToJSONArray(List<GroupMember> groupMembers) {
@@ -167,7 +167,8 @@ public class GroupInfoEditController extends PageController {
         Platform.runLater(()-> super.updateDisplay());
 
         // Fetch the group from the server
-        Group group = findGroupById(baseURI, selectedGroup.getId(), TokenStorage.getToken());
+//        Group group = findGroupById(baseURI, selectedGroup.getId(), TokenStorage.getToken());
+        group = findGroupById(baseURI, selectedGroup.getId(), TokenStorage.getToken());
 
         if (group != null) {
             groupNameInput.setText(group.getName());
@@ -204,21 +205,18 @@ public class GroupInfoEditController extends PageController {
         // set sidebar language and localtime and header
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
         MainPageServices.updateLocalTime(localTime);
-        Platform.runLater(()->{
-
-        MainPageServices.updateNameLabel(nameLabel, TokenStorage.getUser());
-        });
+        Platform.runLater(()-> MainPageServices.updateNameLabel(nameLabel, TokenStorage.getUser()));
 
     }
 
     public void getGroupUserInfoByGroupId() {
-        String ALL_GROUP_URI = URI;
-        HttpRequestBuilder httpRequest = new HttpRequestBuilder("GET", ALL_GROUP_URI, true);
+        String GROUP_OWNER_INFO = GROUP_URI;
+        HttpRequestBuilder httpRequest = new HttpRequestBuilder("GET", GROUP_OWNER_INFO, true);
         httpResponseService.handleReponse(httpRequest.getHttpRequestBase(), httpRequest.getHttpClient(), this::handleGroupUserInfoByGroupId);
     }
 
     public void handleGroupUserInfoByGroupId(CloseableHttpResponse response, Object jsonResponse) {
-        List<Group> updatedAllGroups = new ArrayList<>();
+//        List<Group> updatedAllGroups = new ArrayList<>();
         JSONObject groupObject = controllerUtils.toJSonObject(jsonResponse);
 
         JSONObject owner = (JSONObject) ((JSONObject) groupObject).get("owner");
@@ -276,11 +274,9 @@ public class GroupInfoEditController extends PageController {
         String logginedUsername = TokenStorage.getUser();
         for (AppUser user : curMemberList) {
             String username = user.getUsername();
-//            System.out.println(user);
             if (username.equals(logginedUsername)) {
                 user.setUsername("owner - " + username);
             }
-//            System.out.println(user);
         }
     }
 
@@ -369,7 +365,7 @@ public class GroupInfoEditController extends PageController {
 
     public void removeUser(AppUser appUser) {
         int appUserId = appUser.getId();
-        String REMOVE_URI = URI + "/remove/" + appUserId;
+        String REMOVE_URI = GROUP_URI + "/remove/" + appUserId;
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("DELETE", REMOVE_URI, true);
         httpResponseService.handleReponse(httpRequest.getHttpRequestBase(), httpRequest.getHttpClient(), this::handleRemoveUser);
     }
