@@ -148,7 +148,7 @@ public class MyGroupsNotesController extends PageController {
             System.out.println("Selected note ID: " + noteId);
 
             SelectedNote.getInstance().setId(noteId);
-            goToPage(stage, scene, event, "/fxml/main_pages/edit_note_page.fxml");
+            goToPage(event, "/fxml/main_pages/edit_note_page.fxml");
         }
     }
 

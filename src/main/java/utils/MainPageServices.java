@@ -195,7 +195,9 @@ public class MainPageServices {
     /*
     Update the stage
      */
-    public static <T extends Event> void goToPage(Stage stage, Scene scene, T event, String url) throws IOException {
+    public static <T extends Event> void goToPage(T event, String url) throws IOException {
+        Stage stage;
+        Scene scene;
         Parent root = FXMLLoader.load(Objects.requireNonNull(MainPageServices.class.getResource(url)));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);

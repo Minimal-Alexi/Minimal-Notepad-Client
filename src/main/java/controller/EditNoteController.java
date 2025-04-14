@@ -120,13 +120,13 @@ public class EditNoteController extends PageController {
         );
 
         updateNote("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken(), updatedNote);
-        goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
+        goToPage(event, "/fxml/main_pages/main_page.fxml");
     }
 
     public void deleteNoteClicked(ActionEvent event) throws IOException {
         deleteNoteBtn.setDisable(true);
         deleteNoteById("http://localhost:8093/api/note/", selectedNote.getId(), TokenStorage.getToken());
-        goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
+        goToPage(event, "/fxml/main_pages/main_page.fxml");
     }
 
     public void addCategoryClicked(MouseEvent mouseEvent) {

@@ -97,7 +97,7 @@ public class CreateNoteController {
         saveNoteBtn.setDisable(true);
         Note note = new Note(0, titleTextArea.getText(), textArea1.getText(), colorPicker.getValue().toString(), "1970-01-01", "1970-01-01", TokenStorage.getUser(),getGroupId() ,getGroupName(), categoryList, figureList);
         NoteServices.createNote("http://localhost:8093/api/note/", note, TokenStorage.getToken());
-        goToPage(stage, scene, event, "/fxml/main_pages/main_page.fxml");
+        goToPage(event, "/fxml/main_pages/main_page.fxml");
     }
 
     public void uploadPicClicked() {

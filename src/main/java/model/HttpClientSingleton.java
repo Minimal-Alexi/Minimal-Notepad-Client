@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class HttpClientSingleton {
     //    private static final CloseableHttpClient httpClient;
-    private static volatile HttpClientSingleton instance;  // get instance of this class
+    private static HttpClientSingleton instance;  // get instance of this class
     private final CloseableHttpClient httpClient; // get the opent client
 
     private final RequestConfig requestConfig;
