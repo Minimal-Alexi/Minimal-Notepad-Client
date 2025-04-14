@@ -203,6 +203,11 @@ public class MainPageController extends PageController {
         buildAndSendRequest(builder);
     }
 
+    private JSONArray arrayInitializer(List<Note> notes) {
+        JSONArray array = new JSONArray();
+        for (Note note : notes) array.put(NoteToJson(note));
+        return array;
+    }
 
     private int getCategoryViaFilter() {
         return categoryList.entrySet().stream()

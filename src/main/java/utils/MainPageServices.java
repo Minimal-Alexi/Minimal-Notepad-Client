@@ -50,10 +50,15 @@ public class MainPageServices {
     /*
     Update the note table
      */
+
+    private static final String TITLE_TEXT = "title";
+    private static final String GROUP_TEXT = "group";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+
     public static void updateNoteTable(ObservableList<Note> notes, TableView<Note> table, TableColumn<Note, String> title, TableColumn<Note, String> group, TableColumn<Note, String> owner, TableColumn<Note, String> category, TableColumn<Note, String> createTime, TableColumn<Note, Void> icon) {
         table.setItems(notes);
-        title.setCellValueFactory(new PropertyValueFactory<Note, String>("title"));
-        group.setCellValueFactory(new PropertyValueFactory<Note, String>("group"));
+        title.setCellValueFactory(new PropertyValueFactory<Note, String>(TITLE_TEXT));
+        group.setCellValueFactory(new PropertyValueFactory<Note, String>(GROUP_TEXT));
         owner.setCellValueFactory(new PropertyValueFactory<Note, String>("owner"));
         category.setCellValueFactory(cellData -> {
             HashMap<Integer, String> catMap = cellData.getValue().getCategory();
@@ -108,14 +113,14 @@ public class MainPageServices {
                 for (int i = 0; i < result.length(); i++) {
                     JSONObject noteJson = result.getJSONObject(i);
                     Note note = new Note(noteJson.getInt("id"),
-                            noteJson.getString("title"),
+                            noteJson.getString(TITLE_TEXT),
                             noteJson.getString("text"),
                             noteJson.getString("colour"),
                             timestampToString(noteJson.getString("createdAt")),
                             timestampToString(noteJson.getString("updatedAt")),
                             noteJson.getJSONObject("user").getString("username"),
                             -1,
-                            noteJson.isNull("group") ? "N/A" : noteJson.getJSONObject("group").getString("name"),
+                            noteJson.isNull(GROUP_TEXT) ? "N/A" : noteJson.getJSONObject(GROUP_TEXT).getString("name"),
                             jsonArrayToHashMap(noteJson.getJSONArray("categoriesList")),
                             jsonArrayToFigureList(noteJson.getJSONArray("figures"))
                     );
@@ -184,7 +189,7 @@ public class MainPageServices {
      */
     public static String timestampToString(String timestamp) {
         OffsetDateTime odt = OffsetDateTime.parse(timestamp);
-        return odt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return odt.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
     /*
@@ -238,7 +243,7 @@ public class MainPageServices {
             AnchorPane pane = getAnchorPane(noteArrayList.get(j).getColor());
             Label title = new Label();
             title.setText(noteArrayList.get(j).getTitle());
-            title.getStyleClass().add("title");
+            title.getStyleClass().add(TITLE_TEXT);
             pane.getChildren().add(title);
             Label editAt = new Label();
             // TODO: need to add the time localization
@@ -249,13 +254,13 @@ public class MainPageServices {
             try{
 //                2025-03-28
                 // convert the dateString into a Date object ( fixed locale is 'us')
-                String baseDateFormatString = "yyyy-MM-dd";
+                String baseDateFormatString = DATE_FORMAT;
                 SimpleDateFormat baseSDF = new SimpleDateFormat(baseDateFormatString);
                 Date inputDate = baseSDF.parse(dateString);
 
                 // localize by convert the Date object into the localized version
                 Locale currentLocale = RESOURCE_FACTORY.getResourceBundle().getLocale();
-                String outputDateTimeFormatString = "yyyy-MM-dd";
+                String outputDateTimeFormatString = DATE_FORMAT;
                 SimpleDateFormat outputSdf = new SimpleDateFormat(outputDateTimeFormatString, currentLocale);
 
                 String localizedDateStr = outputSdf.format(inputDate);

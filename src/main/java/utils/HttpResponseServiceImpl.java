@@ -60,10 +60,4 @@ public class HttpResponseServiceImpl implements HttpResponseService {
         }).start();
     }
 
-
-
-//    @Override
-//    public void handleGetResponse(HttpGet httpGet, CloseableHttpClient httpClient, HandleResponseCallback callback) {
-//
-//    }
 }

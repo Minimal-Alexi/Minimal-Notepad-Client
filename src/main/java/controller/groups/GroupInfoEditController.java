@@ -86,6 +86,7 @@ public class GroupInfoEditController extends PageController {
 
         MainPageServices.updateLocalTime(localTime);
         Platform.runLater(() -> updateNameLabel(nameLabel, TokenStorage.getUser()));
+        ControllerUtils_v2.setDefaultAndHandCursorBehaviour(editGroupBtn);
     }
 
     private void loadGroupDetails() {

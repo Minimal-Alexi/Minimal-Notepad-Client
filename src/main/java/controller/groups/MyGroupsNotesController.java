@@ -137,6 +137,7 @@ public class MyGroupsNotesController extends PageController {
             }
             case "Delete" -> System.out.println("Delete note: " + note.getId());
             case "Join" -> System.out.println("Join note: " + note.getId());
+            default -> throw new UnsupportedOperationException("Action not implemented: " + action);
         }
     }
 
