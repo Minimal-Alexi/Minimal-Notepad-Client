@@ -60,8 +60,8 @@ public class ReadOnlyGroupController extends PageController {
     private static final String CSS_SOURCE = "/CSS";
     private static final String BASE_GROUP_URI = "http://localhost:8093/api/groups/";
 
-    private final String emailKey = "email";
-    private final String usernameKey = "username";
+    private final String EMAIL_KEY = "email";
+    private final String USERNAME_KEY = "username";
 
     public void initialize() {
         setupInitialUI();
@@ -107,10 +107,10 @@ public class ReadOnlyGroupController extends PageController {
     private void handleGroupInfoResponse(CloseableHttpResponse response, Object jsonResponse) {
         JSONObject groupObject = controllerUtils.toJSonObject(jsonResponse);
         JSONObject ownerJson = groupObject.getJSONObject("owner");
-        GroupOwner groupOwner = new GroupOwner(ownerJson.getInt("id"), ownerJson.getString(usernameKey), ownerJson.getString(emailKey));
+        GroupOwner groupOwner = new GroupOwner(ownerJson.getInt("id"), ownerJson.getString(USERNAME_KEY), ownerJson.getString(EMAIL_KEY));
 
         JSONArray userListObj = groupObject.getJSONArray("userGroupParticipationsList");
-        AppUser currentOwner = new AppUser(ownerJson.getInt("id"), ownerJson.getString(usernameKey), ownerJson.getString(emailKey));
+        AppUser currentOwner = new AppUser(ownerJson.getInt("id"), ownerJson.getString(USERNAME_KEY), ownerJson.getString(EMAIL_KEY));
 
         List<AppUser> users = createUserList(userListObj);
         users.add(currentOwner);
@@ -127,7 +127,7 @@ public class ReadOnlyGroupController extends PageController {
         List<AppUser> users = new ArrayList<>();
         for (Object obj : userArray) {
             JSONObject userJson = (JSONObject) obj;
-            users.add(new AppUser(userJson.getInt("id"), userJson.getString(usernameKey), userJson.getString(emailKey)));
+            users.add(new AppUser(userJson.getInt("id"), userJson.getString(USERNAME_KEY), userJson.getString(EMAIL_KEY)));
         }
         return users;
     }

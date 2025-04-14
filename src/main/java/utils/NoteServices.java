@@ -28,6 +28,14 @@ import static utils.NoteJson.*;
 
 public class NoteServices {
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String BEARER = "Bearer ";
+    private static final String RESPONSE_STATUS_CODE_TEXT = "Response Status Code: ";
+    private static final String RESPONSE_BODY_TEXT = "Response Body: ";
+    private static final String UPLOAD_PICTURE_TEXT = "Upload picture";
+
     public static void createNote(String url, Note note, String token) {
         JSONObject jsonBody = NoteToJson(note);
 
@@ -37,17 +45,22 @@ public class NoteServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
                 .build();
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Response Status Code: " + response.statusCode());
-            System.out.println("Response Body: " + response.body());
-        } catch (IOException | InterruptedException e) {
+            System.out.println(RESPONSE_STATUS_CODE_TEXT + response.statusCode());
+            System.out.println(RESPONSE_BODY_TEXT + response.body());
+        } catch (IOException e) {
+            System.err.println("IO error occurred: " + e.getMessage());
             throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println("Thread was interrupted: " + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
     }
 
@@ -56,23 +69,28 @@ public class NoteServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + id))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .GET()
                 .build();
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Response Status Code: " + response.statusCode());
-            System.out.println("Response Body: " + response.body());
+            System.out.println(RESPONSE_STATUS_CODE_TEXT + response.statusCode());
+            System.out.println(RESPONSE_BODY_TEXT + response.body());
 
             if (response.statusCode() == 200) {
                 JSONObject result = new JSONObject(response.body());
 
                 return JsonToNote(result);
             }
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Rethrow as RuntimeException
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
         return null;
     }
@@ -82,18 +100,23 @@ public class NoteServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + id))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .DELETE()
                 .build();
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Response Status Code: " + response.statusCode());
+            System.out.println(RESPONSE_STATUS_CODE_TEXT + response.statusCode());
 
             response.statusCode();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Rethrow as RuntimeException
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
     }
 
@@ -102,8 +125,8 @@ public class NoteServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .GET()
                 .build();
 
@@ -119,8 +142,11 @@ public class NoteServices {
                 }
                 return categories;
             }
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e); // Rethrow as RuntimeException
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
         return null;
     }
@@ -172,7 +198,7 @@ public class NoteServices {
         Stage stage = new Stage();
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Upload picture");
+        fileChooser.setTitle(UPLOAD_PICTURE_TEXT);
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg", "*.png", "*.jpeg"));
         fileChooser.setInitialDirectory(new File("C:"));
 
@@ -195,7 +221,7 @@ public class NoteServices {
             textVBox.getChildren().add(imageView);
 
             uploadPicBtn.setDisable(false);
-            uploadPicBtn.setText("Upload picture");
+            uploadPicBtn.setText(UPLOAD_PICTURE_TEXT);
         } else {
             System.out.println("no file selected");
             uploadPicBtn.setDisable(false);
@@ -209,7 +235,7 @@ public class NoteServices {
         Stage stage = new Stage();
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Upload picture");
+        fileChooser.setTitle(UPLOAD_PICTURE_TEXT);
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PICTURES", "*.jpg", "*.png", "*.jpeg"));
         fileChooser.setInitialDirectory(new File("C:"));
 
@@ -230,7 +256,7 @@ public class NoteServices {
             textVBox.getChildren().add(imageView);
 
             uploadPicBtn.setDisable(false);
-            uploadPicBtn.setText("Upload picture");
+            uploadPicBtn.setText(UPLOAD_PICTURE_TEXT);
         } else  {
             System.out.println("no file selected");
             uploadPicBtn.setDisable(false);
@@ -246,16 +272,21 @@ public class NoteServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + id))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Response Status Code: " + response.statusCode());
-            System.out.println("Response Body: " + response.body());
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println(RESPONSE_STATUS_CODE_TEXT + response.statusCode());
+            System.out.println(RESPONSE_BODY_TEXT + response.body());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Rethrow as RuntimeException
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
     }
 }

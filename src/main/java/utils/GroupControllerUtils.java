@@ -332,5 +332,9 @@ public class GroupControllerUtils {
 
     }
 
+    public static String getSelectGroupURI(SelectedGroup selectedGroup) {
+        int groupId = selectedGroup.getId();
+        return "http://localhost:8093/api/groups/" + groupId;
+    }
 
 }

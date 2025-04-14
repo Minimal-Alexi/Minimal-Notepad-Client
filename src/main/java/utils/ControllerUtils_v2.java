@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 public class ControllerUtils_v2 {
 
-    private static final String FXML_SOURCE = "/fxml";
+
     private static final String CSS_SOURCE = "/CSS";
 
     final static Cursor handCursor = Cursor.HAND;

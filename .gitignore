@@ -43,3 +43,6 @@ build/
 .report-task.txt
 /.scannerwork
 /sonar-project.properties
+
+### service-account.json
+src/main/resources/service-account.json

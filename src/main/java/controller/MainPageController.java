@@ -61,6 +61,12 @@ public class MainPageController extends PageController {
 
     private ObservableResourceFactory RESOURCE_FACTORY;
 
+    // STRING KEY
+    private final static String ANY_CATEGORY_OPTION = "anyCategoryOption";
+    private final static String NOTES_KEY = "notes";
+    private final static String CATEGORY_KEY = "category";
+
+
     public void initialize() {
         this.controllerUtils = new ControllerUtils();
         this.responseService = new HttpResponseServiceImpl();
@@ -141,7 +147,7 @@ public class MainPageController extends PageController {
         searchReset.setOnAction(event -> {
             isResetting = true;
             searchBar.setText("");
-            filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString("anyCategoryOption"));
+            filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString(ANY_CATEGORY_OPTION));
             isResetting = false;
             noteObservableList.setAll(noteArrayList);
         });
@@ -153,8 +159,8 @@ public class MainPageController extends PageController {
         categoryList.put(-1, RESOURCE_FACTORY.getString("noCategoryOption"));
 
         filterChoice.getItems().addAll(categoryList.values());
-        filterChoice.getItems().add(RESOURCE_FACTORY.getString("anyCategoryOption"));
-        filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString("anyCategoryOption"));
+        filterChoice.getItems().add(RESOURCE_FACTORY.getString(ANY_CATEGORY_OPTION));
+        filterChoice.getSelectionModel().select(RESOURCE_FACTORY.getString(ANY_CATEGORY_OPTION));
 
         filterChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.equals(oldVal) && !isResetting) {
@@ -168,7 +174,7 @@ public class MainPageController extends PageController {
         if (!inputText.isEmpty()) {
             JSONObject searchRequest = new JSONObject();
             searchRequest.put("query", inputText);
-            searchRequest.put("notes", arrayInitializer(noteObservableList));
+            searchRequest.put(NOTES_KEY, arrayInitializer(noteObservableList));
 
             HttpRequestBuilder builder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/search", true);
             builder.setJsonRequest(searchRequest);
@@ -181,15 +187,15 @@ public class MainPageController extends PageController {
 
     private void performFilter() {
         JSONObject filterRequest = new JSONObject();
-        filterRequest.put("notes", arrayInitializer(noteObservableList));
+        filterRequest.put(NOTES_KEY, arrayInitializer(noteObservableList));
 
         int category = getCategoryViaFilter();
         if (category != -1) {
             JSONObject catObj = new JSONObject();
             catObj.put("id", category);
-            filterRequest.put("category", catObj);
+            filterRequest.put(CATEGORY_KEY, catObj);
         } else {
-            filterRequest.put("category", JSONObject.NULL);
+            filterRequest.put(CATEGORY_KEY, JSONObject.NULL);
         }
 
         HttpRequestBuilder builder = new HttpRequestBuilder("POST", "http://localhost:8093/api/note/filter", true);

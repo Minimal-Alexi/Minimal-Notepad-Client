@@ -104,7 +104,7 @@ public class LogInController extends PageController {
 
         HttpRequestBuilder httpRequest = new HttpRequestBuilder("POST", URI)
                 .updateJsonRequest(USERNAME_KEY, username)
-                .updateJsonRequest("password", password)
+                .updateJsonRequest(PASSWORD_KEY, password)
                 .addHeader("Accept-Language", RESOURCE_FACTORY.getResourceBundle().getLocale().getLanguage());
 
         httpRequest.setRequestBody();
