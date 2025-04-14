@@ -25,6 +25,12 @@ public class Utils {
     public static ObservableResourceFactory RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
     public static PageService pageService = new PageService();
 
+    private static final String RESROUCE_BUNDLE_NAME = "messages";
+    private static final String EN_KEY = "en";
+    private static final String FI_KEY = "fi";
+    private static final String RU_KEY = "ru";
+    private static final String ZH_KEY = "zh";
+
     public  static void gotoPage(String pageName, Button btn){
 
         FXMLLoader fxmlLoader = new FXMLLoader(Utils.class.getResource(pageName));
@@ -129,7 +135,7 @@ public class Utils {
 
     //    public LanguageLabel[] getSupportedLanguages() {
     public static void getAndSetSupportedLanguages(LanguageLabel[] supportedLanguages, ObservableResourceFactory RESOURCE_FACTORY) {
-        String[] keys = {"en", "fi", "zh", "ru"};
+        String[] keys = {EN_KEY, FI_KEY, ZH_KEY, RU_KEY};
         ResourceBundle rb = RESOURCE_FACTORY.getResourceBundle();
         for (int i = 0; i < keys.length; i++) {
             String key  = keys[i];
@@ -140,11 +146,11 @@ public class Utils {
 
     private static ResourceBundle getResourceBundleFromKey(String key) {
         return switch (key) {
-            case "en"-> ResourceBundle.getBundle("messages", new Locale("en", "US"));
-            case "fi" -> ResourceBundle.getBundle("messages", new Locale("fi", "FI"));
-            case "zh" -> ResourceBundle.getBundle("messages", new Locale("zh", "CN"));
-            case "ru" -> ResourceBundle.getBundle("messages", new Locale("ru", "RU"));
-            default -> ResourceBundle.getBundle("messages", new Locale("en", "US"));
+            case EN_KEY-> ResourceBundle.getBundle(RESROUCE_BUNDLE_NAME, new Locale(EN_KEY, "US"));
+            case FI_KEY -> ResourceBundle.getBundle(RESROUCE_BUNDLE_NAME, new Locale(FI_KEY, "FI"));
+            case ZH_KEY -> ResourceBundle.getBundle(RESROUCE_BUNDLE_NAME, new Locale(ZH_KEY, "CN"));
+            case RU_KEY -> ResourceBundle.getBundle(RESROUCE_BUNDLE_NAME, new Locale(RU_KEY, "RU"));
+            default -> ResourceBundle.getBundle(RESROUCE_BUNDLE_NAME, new Locale(EN_KEY, "US"));
         };
     }
 
@@ -166,10 +172,10 @@ public class Utils {
 
         // Rebuild language items with translated labels
         LanguageLabel[] updatedLanguages = {
-                new LanguageLabel("en", rb.getString("en")),
-                new LanguageLabel("fi", rb.getString("fi")),
-                new LanguageLabel("zh", rb.getString("zh")),
-                new LanguageLabel("ru", rb.getString("ru"))
+                new LanguageLabel(EN_KEY, rb.getString(EN_KEY)),
+                new LanguageLabel(FI_KEY, rb.getString(FI_KEY)),
+                new LanguageLabel(ZH_KEY, rb.getString(ZH_KEY)),
+                new LanguageLabel(RU_KEY, rb.getString(RU_KEY))
         };
 
         // Temporarily remove event handler to avoid recursion
@@ -208,26 +214,17 @@ public class Utils {
         } else if (preservedLabel != null) {
             return preservedLabel.getKey();
         } else {
-            return "en";
+            return EN_KEY;
         }
-//        return selected != null ? selected.getKey() : preservedLabel != null ? preservedLabel.getKey() : "en";
+//        return selected != null ? selected.getKey() : preservedLabel != null ? preservedLabel.getKey() : EN_KEY;
     }
-    public static String getselectedLanguageKey(LanguageLabel preservedLabel){
-        String selectedLanguageKey =  getSelectedLanguageKey(null, preservedLabel);
-        return selectedLanguageKey;
-    }
+
 
     public static SimpleDateFormat getTheCurrentLocaleDateTimeFormatString() {
         Locale currentLocale = RESOURCE_FACTORY.getResourceBundle().getLocale();
         return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, currentLocale);
     }
 
-
-    public static void displayTime(Label lblTime) {
-        String formattedTime = getTheCurrentLocaleDateTimeFormatString().format(new Date());
-        lblTime.setText(formattedTime);
-
-    }
 
     public static Optional<ButtonType> displayDeleteWarningDialog() {
         // add alert dialog

@@ -20,6 +20,12 @@ import java.util.List;
 
 public class GroupServices {
 
+    private static final String THREAD_IS_INTERUPTED = "Thread was interrupted:";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String BEARER = "Bearer ";
+
     /*
      * Fetch groups from API
      */
@@ -28,8 +34,8 @@ public class GroupServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .GET()
                 .build();
 
@@ -48,7 +54,7 @@ public class GroupServices {
                     int id = jsonGroup.getInt("id");
                     String name = jsonGroup.getString("name");
                     String description = jsonGroup.getString("description");
-                    int numberOfMembers = jsonGroup.has("numberOfMembers")? jsonGroup.getInt("numberOfMembers") : jsonGroup.getJSONArray("userGroupParticipationsList").length();
+                    int numberOfMembers = jsonGroup.has("numberOfMembers") ? jsonGroup.getInt("numberOfMembers") : jsonGroup.getJSONArray("userGroupParticipationsList").length();
 
                     Group newGroup = new Group(id, name, description, groupOwner, numberOfMembers);
                     System.out.println(newGroup);
@@ -57,6 +63,10 @@ public class GroupServices {
             } else {
                 System.out.println("Failed to fetch groups: " + response.statusCode());
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(THREAD_IS_INTERUPTED + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error fetching groups: " + e.getMessage());
             throw new RuntimeException(e);
@@ -68,8 +78,8 @@ public class GroupServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/" + groupId + "/members")) // Assuming the API has an endpoint to fetch members for a specific group
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .GET()
                 .build();
 
@@ -92,6 +102,10 @@ public class GroupServices {
             } else {
                 System.out.println("Failed to fetch group members: " + response.statusCode());
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(THREAD_IS_INTERUPTED + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error fetching group members: " + e.getMessage());
             throw new RuntimeException(e);
@@ -161,16 +175,13 @@ public class GroupServices {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + id))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .GET()
                 .build();
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            System.out.println("Response Status Code: " + response.statusCode());
-            System.out.println("Response Body: " + response.body());
 
             if (response.statusCode() == 200) {
                 String responseBody = response.body();
@@ -186,9 +197,13 @@ public class GroupServices {
                 GroupOwner groupOwner = new GroupOwner(ownerId, ownerUsername, ownerEmail);
                 return new Group(groupId, name, description, groupOwner, 0);
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(THREAD_IS_INTERUPTED + e.getMessage());
+            throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         } catch (Exception e) {
             System.err.println("Error finding group: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return null;
     }
@@ -198,18 +213,19 @@ public class GroupServices {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + groupId)) // URL with group ID
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(AUTHORIZATION, BEARER + token)
                 .PUT(HttpRequest.BodyPublishers.ofString(requestBody)) // Send updated data
                 .build();
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Update Response Status: " + response.statusCode());
-            System.out.println("Update Response Body: " + response.body());
-
             return response.statusCode() == 200; // Return true if update is successful
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt the thread
+            System.err.println(THREAD_IS_INTERUPTED + e.getMessage());
+            return false;
         } catch (Exception e) {
             System.err.println("Error updating group: " + e.getMessage());
             return false;

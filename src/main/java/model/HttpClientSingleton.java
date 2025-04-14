@@ -7,14 +7,10 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.IOException;
 
 public class HttpClientSingleton {
-    //    private static final CloseableHttpClient httpClient;
-    private static volatile HttpClientSingleton instance;  // get instance of this class
+    private static HttpClientSingleton instance;  // get instance of this class
     private final CloseableHttpClient httpClient; // get the opent client
 
     private final RequestConfig requestConfig;
-//    static {
-////
-//    }
 
     // create a singleton object with timeout incase request take too long
     private HttpClientSingleton() {
@@ -29,14 +25,10 @@ public class HttpClientSingleton {
 
     }
 
-    public static HttpClientSingleton getInstance() {
-        if (instance == null) {
-            synchronized (HttpClientSingleton.class) {
+    public static synchronized HttpClientSingleton getInstance() {
                 if (instance == null) {
                     instance = new HttpClientSingleton();
                 }
-            }
-        }
         return instance;
     }
 
@@ -54,7 +46,7 @@ public class HttpClientSingleton {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
     }

@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 
 public class ControllerUtils_v2 {
 
-    private static final String FXMLSource = "/fxml";
-    private static final String CSSSOURCE = "/CSS";
+
+    private static final String CSS_SOURCE = "/CSS";
 
     final static Cursor handCursor = Cursor.HAND;
     final static Cursor defaultCursor = Cursor.DEFAULT;
@@ -179,11 +179,11 @@ public class ControllerUtils_v2 {
     }
 
     public static void addStyle(Button btn, String styleLink){
-        btn.getStylesheets().add(btn.getClass().getResource(CSSSOURCE + styleLink).toExternalForm());
+        btn.getStylesheets().add(btn.getClass().getResource(CSS_SOURCE + styleLink).toExternalForm());
     }
 
     public static void addStyle(BorderPane root, String styleLink){
-        root.getStylesheets().add(root.getClass().getResource(CSSSOURCE + styleLink).toExternalForm());
+        root.getStylesheets().add(root.getClass().getResource(CSS_SOURCE + styleLink).toExternalForm());
     }
 
 }

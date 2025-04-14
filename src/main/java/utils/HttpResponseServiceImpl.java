@@ -23,7 +23,7 @@ public class HttpResponseServiceImpl implements HttpResponseService {
         new Thread(() -> {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 HttpEntity responseEntity = response.getEntity();
-                System.out.println("response entity " + responseEntity);
+
                 Object jsonResponse;
                 if (responseEntity != null) {
 
@@ -54,16 +54,10 @@ public class HttpResponseServiceImpl implements HttpResponseService {
                 a.setContentText("Unable to connect to server. Check your connection or try at a later time. To report this error please contact admin.");
                 a.show();
             } catch (JSONException e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
                 System.out.println(e.getMessage());
             }
         }).start();
     }
 
-
-
-//    @Override
-//    public void handleGetResponse(HttpGet httpGet, CloseableHttpClient httpClient, HandleResponseCallback callback) {
-//
-//    }
 }

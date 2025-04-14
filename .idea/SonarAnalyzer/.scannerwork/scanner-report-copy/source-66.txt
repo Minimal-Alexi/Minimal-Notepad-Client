@@ -1,0 +1,20 @@
+.search-box {
+    -fx-padding: 10 10 10 45;
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.search-box:focused {
+    -fx-border-color: #66afe9;
+}
+
+.search-box .text-field {
+    -fx-prompt-text-fill: #999;
+    -fx-text-fill: #333;
+}
+
+.search-box .input-text {
+    -fx-padding: 10 10 10 45;
+}

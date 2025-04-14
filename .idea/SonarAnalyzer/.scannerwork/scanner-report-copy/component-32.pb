@@ -1,0 +1,1 @@
+  2javaXhr6src/main/java/model/selected/SelectedReadOnlyNote.java

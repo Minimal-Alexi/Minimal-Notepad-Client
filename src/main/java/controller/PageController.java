@@ -2,16 +2,12 @@ package controller;
 
 public abstract class PageController {
 
-    // this will be call in initialize() method to localize all the page
     public void updateDisplay(){
         updateAllUIComponents();
         bindUIComponents();
     }
 
-    // store the custom localization (eg press save button and display message)
-    public abstract void updateAllUIComponents();
-
-    // bind the fix UI with the key
+    public void updateAllUIComponents() {};
     public abstract  void bindUIComponents();
 
 

@@ -1,0 +1,74 @@
+Plugins:
+Bundled analyzers:
+  - JaCoCo 1.3.0.1538 (jacoco)
+  - IaC Code Quality and Security 1.44.0.14670 (iac)
+  - Text Code Quality and Security 2.21.1.5779 (text)
+  - Clean as You Code 2.4.0.2018 (cayc)
+Global server settings:
+  - sonar.azureresourcemanager.file.suffixes=.bicep
+  - sonar.core.id=147B411E-AZYfpelXuZa9VwbEdfCc
+  - sonar.core.startTime=2025-04-13T11:25:31+0300
+  - sonar.cs.file.suffixes=.cs,.razor
+  - sonar.css.file.suffixes=.css,.less,.scss,.sass
+  - sonar.docker.file.patterns=Dockerfile,*.dockerfile
+  - sonar.flex.file.suffixes=as
+  - sonar.forceAuthentication=true
+  - sonar.go.file.suffixes=.go
+  - sonar.html.file.suffixes=.html,.xhtml,.cshtml,.vbhtml,.aspx,.ascx,.rhtml,.erb,.shtm,.shtml,.cmp,.twig
+  - sonar.ipynb.file.suffixes=ipynb
+  - sonar.java.file.suffixes=.java,.jav
+  - sonar.java.jvmframeworkconfig.file.patterns=**/src/main/resources/**/*app*.properties,**/src/main/resources/**/*app*.yaml,**/src/main/resources/**/*app*.yml
+  - sonar.javascript.file.suffixes=.js,.jsx,.cjs,.mjs,.vue
+  - sonar.json.file.suffixes=.json
+  - sonar.jsp.file.suffixes=.jsp,.jspf,.jspx
+  - sonar.kotlin.file.suffixes=.kt,.kts
+  - sonar.multi-quality-mode.enabled=true
+  - sonar.php.file.suffixes=php,php3,php4,php5,phtml,inc
+  - sonar.python.file.suffixes=py
+  - sonar.qualityProfiles.allowDisableInheritedRules=true
+  - sonar.ruby.file.suffixes=.rb
+  - sonar.scala.file.suffixes=.scala
+  - sonar.terraform.file.suffixes=.tf
+  - sonar.typescript.file.suffixes=.ts,.tsx,.cts,.mts
+  - sonar.vbnet.file.suffixes=.vb
+  - sonar.xml.file.suffixes=.xml,.xsd,.xsl,.config
+  - sonar.yaml.file.suffixes=.yaml,.yml
+Project server settings:
+  - sonar.azureresourcemanager.file.suffixes=.bicep
+  - sonar.cs.file.suffixes=.cs,.razor
+  - sonar.css.file.suffixes=.css,.less,.scss,.sass
+  - sonar.docker.file.patterns=Dockerfile,*.dockerfile
+  - sonar.flex.file.suffixes=as
+  - sonar.go.file.suffixes=.go
+  - sonar.html.file.suffixes=.html,.xhtml,.cshtml,.vbhtml,.aspx,.ascx,.rhtml,.erb,.shtm,.shtml,.cmp,.twig
+  - sonar.ipynb.file.suffixes=ipynb
+  - sonar.java.file.suffixes=.java,.jav
+  - sonar.java.jvmframeworkconfig.file.patterns=**/src/main/resources/**/*app*.properties,**/src/main/resources/**/*app*.yaml,**/src/main/resources/**/*app*.yml
+  - sonar.javascript.file.suffixes=.js,.jsx,.cjs,.mjs,.vue
+  - sonar.json.file.suffixes=.json
+  - sonar.jsp.file.suffixes=.jsp,.jspf,.jspx
+  - sonar.kotlin.file.suffixes=.kt,.kts
+  - sonar.php.file.suffixes=php,php3,php4,php5,phtml,inc
+  - sonar.python.file.suffixes=py
+  - sonar.ruby.file.suffixes=.rb
+  - sonar.scala.file.suffixes=.scala
+  - sonar.terraform.file.suffixes=.tf
+  - sonar.typescript.file.suffixes=.ts,.tsx,.cts,.mts
+  - sonar.vbnet.file.suffixes=.vb
+  - sonar.xml.file.suffixes=.xml,.xsd,.xsl,.config
+  - sonar.yaml.file.suffixes=.yaml,.yml
+Project scanner properties:
+  - sonar.host.url=http://localhost:9000/
+  - sonar.java.binaries=D:/wenjian/123/2nd_2/Minimal-Notepad-Client/target/classes
+  - sonar.java.libraries=C:\Users\Admin\.m2\repository\org\openjfx\javafx-graphics\20.0.1\javafx-graphics-20.0.1.jar,C:\Users\Admin\.m2\repository\org\openjfx\javafx-graphics\20.0.1\javafx-graphics-20.0.1-win.jar,C:\Users\Admin\.m2\repository\org\openjfx\javafx-base\20.0.1\javafx-base-20.0.1.jar,C:\Users\Admin\.m2\repository\org\openjfx\javafx-base\20.0.1\javafx-base-20.0.1-win.jar,C:\Users\Admin\.m2\repository\org\openjfx\javafx-fxml\20.0.1\javafx-fxml-20.0.1.jar,C:\Users\Admin\.m2\repository\org\openjfx\javafx-fxml\20.0.1\javafx-fxml-20.0.1-win.jar,C:\Users\Admin\.m2\repository\org\openjfx\javafx-controls\20.0.1\javafx-controls-20.0.1.jar,C:\Users\Admin\.m2\repository\org\openjfx\javafx-controls\20.0.1\javafx-controls-20.0.1-win.jar,C:\Users\Admin\.m2\repository\org\kordamp\bootstrapfx\bootstrapfx-core\0.4.0\bootstrapfx-core-0.4.0.jar,C:\Users\Admin\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar,C:\Users\Admin\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4...
+  - sonar.java.source=8
+  - sonar.login=******
+  - sonar.projectBaseDir=D:\wenjian\123\2nd_2\Minimal-Notepad-Client
+  - sonar.projectKey=SonarAnalyzer:Minimal-Notepad-Client
+  - sonar.scanner.app=Intellij Sonar plugin
+  - sonar.scanner.appVersion=0.2.2
+  - sonar.scanner.home=D:\wenjian\123\2nd_2\Software-Engineering-Project-2\sonarscanner
+  - sonar.sourceEncoding=UTF-8
+  - sonar.sources=D:/wenjian/123/2nd_2/Minimal-Notepad-Client/src/main/java,D:/wenjian/123/2nd_2/Minimal-Notepad-Client/src/main/resources
+  - sonar.tests=
+  - sonar.working.directory=D:\wenjian\123\2nd_2\Minimal-Notepad-Client\.idea\SonarAnalyzer\.scannerwork

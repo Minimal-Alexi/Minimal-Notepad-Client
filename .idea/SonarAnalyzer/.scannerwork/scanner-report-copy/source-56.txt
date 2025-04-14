@@ -1,0 +1,23 @@
+.category {
+    -fx-background-color: lightgray;
+    -fx-background-insets: 0 10 0 0;
+    -fx-padding: 5 15 5 5;
+    -fx-font-size: 16px;
+    -fx-background-radius: 15;
+    -fx-content-display: right;
+}
+
+.add-category:hover {
+    -fx-text-fill: red;
+}
+
+.remove-category {
+    -fx-text-fill: #00000080;
+}
+
+.remove-category:hover {
+    -fx-text-fill: #ff000080;
+}
+
+.category-HBox{
+}

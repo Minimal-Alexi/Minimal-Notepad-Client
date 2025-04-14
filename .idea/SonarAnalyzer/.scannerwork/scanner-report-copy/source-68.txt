@@ -1,0 +1,68 @@
+.table-view{
+    -fx-background-color: transparent;
+}
+
+.table-view:focused{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #f6f7f9;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: #000000;
+    -fx-font-size: 15;
+    -fx-font-weight: normal;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-pref-height: 50;
+}
+
+.table-view .column-header .label {
+    -fx-alignment: center-left;
+    -fx-padding: 10 10 10 10;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: #000000;
+    -fx-font-size: 15;
+    -fx-padding: 10 10 10 10;
+    -fx-border-width: 0px;
+}
+
+.table-view .table-row-cell{
+    -fx-background-color: -fx-table-cell-border-color, #FFFFFF;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.table-view .table-row-cell:empty {
+    -fx-background-insets: 0, 0 0 0 0;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #F6F7F9;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background,
+.table-view > .virtual-flow > .scroll-bar:horizontal,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
+}
+
+
+
+.table-view > .virtual-flow > .scroll-bar > .increment-button,
+.table-view > .virtual-flow > .scroll-bar > .decrement-button {
+    -fx-opacity: 0;
+}
