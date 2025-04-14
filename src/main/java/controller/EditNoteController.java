@@ -3,7 +3,6 @@ package controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -20,7 +19,6 @@ import model.selected.SelectedNote;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import utils.*;
 
@@ -36,11 +34,17 @@ import static utils.NoteServices.*;
 public class EditNoteController extends PageController {
 
     @FXML private ChoiceBox<String> groupSharingChoiceBox;
-    @FXML private Label localTime, nameLabel, editingNoteLabel, categoriesId, GroupsId;
+    @FXML private Label localTime;
+    @FXML private Label nameLabel;
+    @FXML private Label editingNoteLabel;
+    @FXML private Label categoriesId;
+    @FXML private Label GroupsId;
     @FXML private VBox textVBox;
     @FXML private TextField titleTextArea;
     @FXML private TextArea textArea1;
-    @FXML private Button saveNoteBtn, deleteNoteBtn, uploadPicBtn;
+    @FXML private Button saveNoteBtn;
+    @FXML private Button deleteNoteBtn;
+    @FXML private Button uploadPicBtn;
     @FXML private HBox categoryHBox;
     @FXML private Label addCategory;
     @FXML private ColorPicker colorPicker;
@@ -58,7 +62,6 @@ public class EditNoteController extends PageController {
     private ArrayList<String> figureList = new ArrayList<>();
     private Stage stage;
     private Scene scene;
-    private Parent root;
 
     public void initialize() {
         TokenStorage.getIntance();
@@ -70,7 +73,7 @@ public class EditNoteController extends PageController {
         RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
         RESOURCE_FACTORY.getResourceBundle();
 
-        Platform.runLater(() -> super.updateDisplay());
+        Platform.runLater(super::updateDisplay);
 
         if (note == null) return;
 
@@ -85,8 +88,7 @@ public class EditNoteController extends PageController {
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
 
-        Platform.runLater(() -> {
-            figureList.forEach(figure -> {
+        Platform.runLater(() -> figureList.forEach(figure -> {
                 try {
                     ImageView imageView = new ImageView(new Image(new FileInputStream(figure)));
                     imageView.setFitHeight(200);
@@ -96,8 +98,7 @@ public class EditNoteController extends PageController {
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-            });
-        });
+            }));
 
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
     }
@@ -180,7 +181,7 @@ public class EditNoteController extends PageController {
         }
     }
 
-    public void uploadPicClicked(MouseEvent mouseEvent) throws IOException {
+    public void uploadPicClicked() {
         uploadPictureLocal(uploadPicBtn, figureList, textVBox);
     }
 
