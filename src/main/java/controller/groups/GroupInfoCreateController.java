@@ -73,10 +73,10 @@ public class GroupInfoCreateController extends PageController {
         updateNameLabel(nameLabel, TokenStorage.getUser());
         MainPageServices.updateLocalTime(localTime);
 
-        ControllerUtils_v2.addStyle(root, CSS_SOURCE + "/button.css");
-        ControllerUtils_v2.addStyle(root, CSS_SOURCE + "/text_input.css");
-        ControllerUtils_v2.addStyle(createGroupBtn, CSS_SOURCE + "/groups.css");
-        ControllerUtils_v2.addStyle(logOutBtn, CSS_SOURCE + "/logout-button.css");
+        ControllerUtils_v2.addStyle(root,  "/button.css");
+        ControllerUtils_v2.addStyle(root,  "/text_input.css");
+        ControllerUtils_v2.addStyle(createGroupBtn,  "/groups.css");
+        ControllerUtils_v2.addStyle(logOutBtn,  "/logout-button.css");
     }
 
     // Sidebar Navigation
