@@ -178,6 +178,11 @@ public class ControllerUtils_v2 {
         goPage(stage, btn, helloPage);
     }
 
+    public static void goToCreateGroupPage(Stage stage, Button btn) {
+        String createGroupPageLink = "/fxml/main_pages/groups/group_info_create_group.fxml";
+        goPage(stage, btn, createGroupPageLink);
+    }
+
     public static void addStyle(Button btn, String styleLink){
         btn.getStylesheets().add(btn.getClass().getResource(CSS_SOURCE + styleLink).toExternalForm());
     }
