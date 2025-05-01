@@ -147,7 +147,7 @@
                               <Insets bottom="20.0" top="23.0" />
                            </VBox.margin>
                            <left>
-                              <CheckBox fx:id="rememberBox" mnemonicParsing="false" prefHeight="37.0" prefWidth="142.0" text="Remember me" BorderPane.alignment="CENTER">
+                              <CheckBox fx:id="rememberBox" mnemonicParsing="false" prefHeight="26.0" prefWidth="245.0" text="Remember me" BorderPane.alignment="CENTER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
