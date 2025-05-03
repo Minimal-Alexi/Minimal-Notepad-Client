@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.Figure;
 import model.HttpRequestBuilder;
 import model.Note;
 import model.TokenStorage;
@@ -72,7 +73,8 @@ public class CreateNoteController {
     private Button logOutBtn;
 
     private final HashMap<Integer, String> categoryList = new HashMap<>();
-    private final ArrayList<String> figureList = new ArrayList<>();
+//    private final ArrayList<String> figureList = new ArrayList<>();
+    private final ArrayList<Figure> figureList = new ArrayList<>();
     private final HashMap<Integer, String> groupList = new HashMap<>();
 
     private ControllerUtils controllerUtils;

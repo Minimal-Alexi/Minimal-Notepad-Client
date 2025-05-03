@@ -14,10 +14,11 @@ public class Note {
     private int groupId;
     private String group;
     private HashMap<Integer, String> category;
-    private ArrayList<String> figure;
+//    private ArrayList<String> figure;
+    private ArrayList<Figure> figure;
 
 
-    public Note(int id, String title, String text, String color, String createdAt, String updatedAt, String owner, int groupId, String group, HashMap<Integer, String> category, ArrayList<String> figure) {
+    public Note(int id, String title, String text, String color, String createdAt, String updatedAt, String owner, int groupId, String group, HashMap<Integer, String> category, ArrayList<Figure> figure) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -91,10 +92,10 @@ public class Note {
     public void setCategory(HashMap<Integer, String> category) {
         this.category = category;
     }
-    public void setFigure(ArrayList<String> figure) {
+    public void setFigure(ArrayList<Figure> figure) {
         this.figure = figure;
     }
-    public ArrayList<String> getFigure() {
+    public ArrayList<Figure> getFigure() {
         return figure;
     }
 }

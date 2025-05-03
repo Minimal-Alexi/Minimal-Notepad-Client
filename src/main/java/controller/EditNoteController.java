@@ -59,7 +59,7 @@ public class EditNoteController extends PageController {
     private Note note;
     private HashMap<Integer, String> categoryList = new HashMap<>();
     private HashMap<Integer, String> groupList = new HashMap<>();
-    private ArrayList<String> figureList = new ArrayList<>();
+    private ArrayList<Figure> figureList = new ArrayList<>();
     private Stage stage;
     private Scene scene;
 
@@ -77,6 +77,8 @@ public class EditNoteController extends PageController {
 
         if (note == null) return;
 
+        System.out.println("Note "+ note.getFigure());
+
         titleTextArea.setText(note.getTitle());
         textArea1.setText(note.getText());
         categoryList = note.getCategory();
@@ -90,7 +92,7 @@ public class EditNoteController extends PageController {
 
         Platform.runLater(() -> figureList.forEach(figure -> {
                 try {
-                    ImageView imageView = new ImageView(new Image(new FileInputStream(figure)));
+                    ImageView imageView = new ImageView(new Image(new FileInputStream(figure.getPath())));
                     imageView.setFitHeight(200);
                     imageView.setFitWidth(200);
                     imageView.setPreserveRatio(true);
@@ -101,6 +103,16 @@ public class EditNoteController extends PageController {
             }));
 
         setSidebarLanguages(myNotesBtn, shareNotesBtn, myGroupsBtn, allGroupsBtn, accountBtn, logOutBtn);
+    }
+
+    public List<Figure> convertToFigureList(ArrayList<String> figureList) {
+        List<Figure> figures = new ArrayList<>();
+        for (String figure : figureList) {
+            Figure fig = new Figure(figure);
+//            fig.setLink(figure);
+            figures.add(fig);
+        }
+        return figures;
     }
 
     public void saveNoteClicked(ActionEvent event) throws IOException {

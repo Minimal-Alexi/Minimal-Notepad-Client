@@ -45,7 +45,7 @@ public class ReadOnlyNoteController extends PageController {
     // Note and related data
     private final SelectedReadOnlyNote selectedNote = SelectedReadOnlyNote.getInstance();
     private final HashMap<Integer, String> groupList = new HashMap<>();
-    private final ArrayList<String> figureList = new ArrayList<>();
+    private final ArrayList<Figure> figureList = new ArrayList<>();
     private Note note;
     private Stage stage;
 
@@ -84,7 +84,7 @@ public class ReadOnlyNoteController extends PageController {
     private void loadFigures() {
         Platform.runLater(() -> figureList.forEach(figure -> {
             try {
-                Image image = new Image(new FileInputStream(figure));
+                Image image = new Image(new FileInputStream(figure.getPath()));
                 ImageView imageView = new ImageView(image);
                 imageView.setFitHeight(200);
                 imageView.setFitWidth(200);
