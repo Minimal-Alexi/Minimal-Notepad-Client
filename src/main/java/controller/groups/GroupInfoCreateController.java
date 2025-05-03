@@ -50,7 +50,6 @@ public class GroupInfoCreateController extends PageController {
     private static final String FXML_SOURCE = "/fxml";
 
     public void initialize() {
-        System.out.println("Initializing Create Group Page");
 
         controllerUtils = new ControllerUtils();
         httpResponseService = new HttpResponseServiceImpl();
@@ -58,7 +57,6 @@ public class GroupInfoCreateController extends PageController {
 
         try {
             SelectedGroup selectedGroup = SelectedGroup.getInstance();
-            System.out.println("Selected group ID: " + selectedGroup.getId());
         } catch (NullPointerException e) {
             System.err.println("No selected group found.");
         }
@@ -130,7 +128,6 @@ public class GroupInfoCreateController extends PageController {
     private void handleCreateGroupResponse(CloseableHttpResponse response, Object jsonResponse) {
         JSONObject object = controllerUtils.toJSonObject(jsonResponse);
         try {
-            System.out.println("Group creation response: " + response);
             controllerUtils.goPage(stage, createGroupBtn, FXML_SOURCE + "/main_pages/groups/my_groups.fxml");
         } catch (JSONException e) {
             System.err.println("Failed to parse response message: " + object.opt("message"));

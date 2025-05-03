@@ -125,7 +125,6 @@ public class CreateNoteController {
 
     @FXML
     public void shareNotesBtnClick() {
-        System.out.println("Go to share notes page");
         ControllerUtils_v2.goToMyGroupNotesPage(stage, shareNotesBtn);
     }
 

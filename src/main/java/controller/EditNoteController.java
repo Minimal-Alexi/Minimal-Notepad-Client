@@ -77,8 +77,6 @@ public class EditNoteController extends PageController {
 
         if (note == null) return;
 
-        System.out.println("Note "+ note.getFigure());
-
         titleTextArea.setText(note.getTitle());
         textArea1.setText(note.getText());
         categoryList = note.getCategory();
