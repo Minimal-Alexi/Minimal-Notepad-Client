@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.Figure;
 import model.Note;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -81,7 +82,7 @@ public class NoteServices {
 
             if (response.statusCode() == 200) {
                 JSONObject result = new JSONObject(response.body());
-
+                System.out.println("result from API: "+result);
                 return JsonToNote(result);
             }
         } catch (IOException e) {
@@ -191,8 +192,10 @@ public class NoteServices {
         });
     }
 
-    public static void uploadPicture(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) throws IOException {
-        uploadPicBtn.setDisable(true);
+//    public static void uploadPicture(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) throws IOException {
+        public static void uploadPicture(Button uploadPicBtn, ArrayList<Figure> figureList, VBox textVBox) throws IOException {
+
+            uploadPicBtn.setDisable(true);
         uploadPicBtn.setText("Uploading... ");
 
         Stage stage = new Stage();
@@ -208,7 +211,8 @@ public class NoteServices {
             String filePath = file.getAbsolutePath();
             GoogleDriveUploader googleDriveUploader = new GoogleDriveUploader();
             String googlePath = googleDriveUploader.upload(filePath);
-            figureList.add(googlePath);
+            Figure newPic = new Figure(googlePath);
+            figureList.add(newPic);
             System.out.println(googlePath);
 
             // Get the picture from Google Drive
@@ -228,7 +232,8 @@ public class NoteServices {
         }
     }
 
-    public static void uploadPictureLocal(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) {
+//    public static void uploadPictureLocal(Button uploadPicBtn, ArrayList<String> figureList, VBox textVBox) {
+    public static void uploadPictureLocal(Button uploadPicBtn, ArrayList<Figure> figureList, VBox textVBox) {
         uploadPicBtn.setDisable(true);
         uploadPicBtn.setText("Uploading... ");
 
@@ -243,7 +248,8 @@ public class NoteServices {
 
         if (file != null) {
             String filePath = file.getAbsolutePath();
-            figureList.add(filePath);
+            Figure newPic = new Figure(filePath);
+            figureList.add(newPic);
             System.out.println(filePath);
 
             // Get the picture from local disk

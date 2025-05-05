@@ -42,7 +42,7 @@ public class AccountInfoPwdController extends PageController {
     private final HttpResponseService httpResponseService = new HttpResponseServiceImpl();
 
     public void initialize() {
-        System.out.println("Initializing AccountInfoPwdController");
+
 
         resourceFactory = ObservableResourceFactory.getInstance();
         ControllerUtils_v2.addStyle(logOutBtn, "/logout-button.css");

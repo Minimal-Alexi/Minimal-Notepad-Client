@@ -131,7 +131,6 @@ public class MyGroupsNotesController extends PageController {
                 SelectedReadOnlyNote selectedReadOnlyNote = SelectedReadOnlyNote.getInstance();
                 selectedReadOnlyNote.setId(note.getId());
 
-                System.out.println("Reading note: " + note.getId() + " - " + note.getTitle());
                 ControllerUtils c = new ControllerUtils();
                 c.goPage((Stage) table.getScene().getWindow(), table, "/fxml/main_pages/readonly_note_page.fxml");
             }
@@ -145,7 +144,6 @@ public class MyGroupsNotesController extends PageController {
     private void tableClicked(MouseEvent event) throws IOException {
         if (event.getClickCount() == 1 && table.getSelectionModel().getSelectedItem() != null) {
             int noteId = table.getSelectionModel().getSelectedItem().getId();
-            System.out.println("Selected note ID: " + noteId);
 
             SelectedNote.getInstance().setId(noteId);
             goToPage(event, "/fxml/main_pages/edit_note_page.fxml");

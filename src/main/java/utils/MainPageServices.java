@@ -25,14 +25,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.LanguageLabel;
-import model.Note;
-import model.ObservableResourceFactory;
-import model.TokenStorage;
+import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -110,6 +108,8 @@ public class MainPageServices {
             if (response.statusCode() == 200) {
                 ArrayList<Note> notes = new ArrayList<>();
                 JSONArray result = new JSONArray(response.body());
+                System.out.println("Result: " + result);
+
                 for (int i = 0; i < result.length(); i++) {
                     JSONObject noteJson = result.getJSONObject(i);
                     Note note = new Note(noteJson.getInt("id"),
@@ -122,6 +122,7 @@ public class MainPageServices {
                             -1,
                             noteJson.isNull(GROUP_TEXT) ? "N/A" : noteJson.getJSONObject(GROUP_TEXT).getString("name"),
                             jsonArrayToHashMap(noteJson.getJSONArray("categoriesList")),
+
                             jsonArrayToFigureList(noteJson.getJSONArray("figures"))
                     );
                     notes.add(note);
@@ -137,6 +138,17 @@ public class MainPageServices {
             throw new RuntimeException(e); // Optionally rethrow as RuntimeException
         }
         return null;
+    }
+
+    public static ArrayList<Figure> convertToFigureList(JSONArray jsonArray) {
+        ArrayList<Figure> figureList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            Figure figure = new Figure(jsonObject.getString("link"));
+            figureList.add(figure);
+        }
+        return figureList;
     }
 
     /*
@@ -339,22 +351,27 @@ public class MainPageServices {
         return jsonArray;
     }
 
-    public static ArrayList<String> jsonArrayToFigureList(JSONArray jsonArray) {
-        ArrayList<String> figureList = new ArrayList<>();
-
+    public static ArrayList<Figure> jsonArrayToFigureList(JSONArray jsonArray) {
+//        ArrayList<String> figureList = new ArrayList<>();
+        ArrayList<Figure> figureList = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
+            int id = jsonObject.getInt("id");
             String link = jsonObject.getString("link");
-            figureList.add(link);
+            Figure figure = new Figure(id,link);
+            figureList.add(figure);
         }
         return figureList;
     }
 
-    public static JSONArray figureListToJSONArray(ArrayList<String> figureList) {
+    public static JSONArray figureListToJSONArray(ArrayList<Figure> figureList) {
         JSONArray jsonArray = new JSONArray();
-        for (String s : figureList) {
+        for (Figure s : figureList) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("link", s);
+
+            jsonObject.put("id", s.getId());
+            jsonObject.put("link", s.getPath());
+
             jsonArray.put(jsonObject);
         }
         return jsonArray;
