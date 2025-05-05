@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -12,6 +13,7 @@ import javafx.stage.Stage;
 import model.Figure;
 import model.HttpRequestBuilder;
 import model.Note;
+import model.ObservableResourceFactory;
 import model.TokenStorage;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -31,7 +33,7 @@ import static utils.MainPageServices.*;
 import static utils.NoteServices.*;
 
 
-public class CreateNoteController {
+public class CreateNoteController extends PageController {
 
     @FXML
     private Label localTime;
@@ -78,12 +80,20 @@ public class CreateNoteController {
     private final HashMap<Integer, String> groupList = new HashMap<>();
 
     private ControllerUtils controllerUtils;
-
-
+    private ObservableResourceFactory RESOURCE_FACTORY;
+    @FXML private Label createNoteLabel;
+    @FXML private Label categoriesId;
+    @FXML private Label GroupsId;
 
     public void initialize() {
         responseService = new HttpResponseServiceImpl();
         this.controllerUtils = new ControllerUtils();
+
+        // set localization
+        RESOURCE_FACTORY = ObservableResourceFactory.getInstance();
+        RESOURCE_FACTORY.getResourceBundle();
+
+        Platform.runLater(super::updateDisplay);
 
         updateLocalTime(localTime);
         updateNameLabel(nameLabel, TokenStorage.getUser());
@@ -257,5 +267,15 @@ public class CreateNoteController {
                 groupList.put(-1,"No Group");
             }
         }
+    }
+
+    @Override
+    public void bindUIComponents() {
+        createNoteLabel.textProperty().bind(RESOURCE_FACTORY.getStringBinding("createNoteLabel"));
+        saveNoteBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("saveNoteBtn"));
+        titleTextArea.promptTextProperty().bind(RESOURCE_FACTORY.getStringBinding("titleTextArea"));
+        uploadPicBtn.textProperty().bind(RESOURCE_FACTORY.getStringBinding("uploadPicBtn"));
+        categoriesId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("categoriesId"));
+        GroupsId.textProperty().bind(RESOURCE_FACTORY.getStringBinding("GroupsId"));
     }
 }

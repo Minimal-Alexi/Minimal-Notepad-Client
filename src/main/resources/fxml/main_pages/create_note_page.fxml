@@ -49,7 +49,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label text="Creating Note" HBox.hgrow="ALWAYS">
+                        <Label fx:id="createNoteLabel" text="Creating Note" HBox.hgrow="ALWAYS">
                            <font>
                               <Font name="Gadugi Bold" size="20.0" />
                            </font>
@@ -92,7 +92,7 @@
                         </HBox>
                         <HBox fx:id="categoryHBox" alignment="CENTER_LEFT" styleClass="category-HBox" stylesheets="@../../CSS/category.css" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label text="  Categories: " HBox.hgrow="ALWAYS">
+                              <Label fx:id="categoriesId" text="  Categories: " HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -109,7 +109,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="666.0" stylesheets="@../../CSS/category.css" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label text="  Groups: " HBox.hgrow="ALWAYS">
+                              <Label fx:id="GroupsId" text="  Groups: " HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
