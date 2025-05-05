@@ -184,12 +184,14 @@ public class LogInController extends PageController {
     private void togglePasswordVisibility(boolean hide, String password) {
         Platform.runLater(() -> {
             if (hide) {
-                pwdStackPane.getChildren().remove(unmaskedStackPane);
-                pwdStackPane.getChildren().add(pwdStackPane.getChildren().indexOf(maskedStackPane), unmaskedPane);
+                maskedStackPane.setVisible(false);
+                unmaskedStackPane.setVisible(true);
                 loginPassInput.setText(password);
+                loginPassTxtInput.setText(password);
             } else {
-                pwdStackPane.getChildren().remove(maskedStackPane);
-                pwdStackPane.getChildren().add(pwdStackPane.getChildren().indexOf(unmaskedStackPane), maskedPane);
+                maskedStackPane.setVisible(true);
+                unmaskedStackPane.setVisible(false);
+                loginPassInput.setText(password);
                 loginPassTxtInput.setText(password);
             }
             pwdIsHidden = hide;
